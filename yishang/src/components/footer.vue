@@ -2,10 +2,10 @@
  <div >  
    <div class="container footer" >
       <div class="foot-info">
-        <span v-for="item in certificate" key="index">{{item}}</span>
+        <span v-for="(item, index)  in certificate" :key="index">{{item}}</span>
       </div>
       <div class="foot-info">
-        <span v-for="item in records" key="index">{{item}}</span>
+        <span v-for="(item, index)  in records" :key="index">{{item}}</span>
       </div>
     </div>
  </div>

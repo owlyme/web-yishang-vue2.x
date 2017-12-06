@@ -5,15 +5,19 @@ import App from './App'
 import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
+
 Vue.use(BootstrapVue)
+
+const VueImgUpload = require("vue-img-upload")
+    Vue.use(VueImgUpload)
 
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-Vue.use( VueAwesomeSwiper )
-import 'swiper/dist/css/swiper.css'
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
+// Vue.use( VueAwesomeSwiper )
+// import 'swiper/dist/css/swiper.css'
 
 Vue.config.productionTip = false
 
