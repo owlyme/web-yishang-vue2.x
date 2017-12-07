@@ -5,17 +5,17 @@ import App from './App'
 import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
-
 Vue.use(BootstrapVue)
-
-
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// import VueAwesomeSwiper from 'vue-awesome-swiper'
-// Vue.use( VueAwesomeSwiper )
-// import 'swiper/dist/css/swiper.css'
+import { Upload,  DatePicker,Collapse, CollapseItem } from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(Upload)  
+Vue.use( DatePicker )
+Vue.use( Collapse )
+Vue.use( CollapseItem )
 
 Vue.config.productionTip = false
 
