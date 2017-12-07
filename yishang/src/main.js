@@ -10,12 +10,12 @@ Vue.use(BootstrapVue)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import { Upload,  DatePicker,Collapse, CollapseItem } from 'element-ui'
+import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-Vue.use(Upload)  
-Vue.use( DatePicker )
-Vue.use( Collapse )
-Vue.use( CollapseItem )
+Vue.use(ElementUI)  
+
+
+
 
 Vue.config.productionTip = false
 
