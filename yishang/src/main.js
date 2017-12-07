@@ -8,8 +8,6 @@ import BootstrapVue from 'bootstrap-vue'
 
 Vue.use(BootstrapVue)
 
-const VueImgUpload = require("vue-img-upload")
-    Vue.use(VueImgUpload)
 
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -26,5 +24,5 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  render: (createElement) => createElement(App)
 })
