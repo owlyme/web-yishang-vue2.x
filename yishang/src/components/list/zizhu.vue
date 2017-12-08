@@ -1,47 +1,93 @@
 <template>
 	<div id="zizhu">
+		<!-- 加工单编辑 -->
 		<h3>加工单编辑</h3>
-		<b-container fluid>
-		    <b-row class="my-1" v-for="type in types" :key="type">
-		      <b-col cols="3"><label :for="`type-${type}`">Type {{ type }}:</label></b-col>
-		      <b-col cols="9"><b-form-input :id="`type-${type}`" :type="type"></b-form-input></b-col>
-		    </b-row>
-		</b-container>
-	
-		<h5>颜色数量</h5>
-		<ColorAndNumber></ColorAndNumber>
-		
-		<el-upload
-			class="avatar-uploader"
-			action="https://jsonplaceholder.typicode.com/posts/"
-			:show-file-list="false"
-			:on-success="handleAvatarSuccess"
-			:before-upload="beforeAvatarUpload">
-			<img v-if="imageUrl" :src="imageUrl" class="avatar">
-			<i v-else class="avatar-uploader-icon">点击上传</i>
-		</el-upload>
+		<el-form ref="form" :model="form" label-width="16.667%">
+		  <el-form-item label="订单名称">
+		    <el-input v-model="form.name" placeholder="建议类目+面料+公司+日期"></el-input>
+		  </el-form-item>
+		  <el-form-item label="面料属性大类" >
+		    <el-select v-model="form.region" placeholder="面料属性大类" style="width:100%">
+		      <el-option label="针织" value="zhengzhi"></el-option>
+		      <el-option label="梭织" value="suozhi"></el-option>
+		      <el-option label="毛衫" value="maoshan"></el-option>
+		      <el-option label="牛仔" value="liuzai"></el-option>
+		    </el-select>
+		  </el-form-item>
+		  <el-form-item label="服装品类类目" >
+		    <el-select v-model="form.region" placeholder="服装品类类目" style="width:100%">
+		      <el-option label="针织" value="zhengzhi"></el-option>
+		      <el-option label="梭织" value="suozhi"></el-option>
+		      <el-option label="毛衫" value="maoshan"></el-option>
+		      <el-option label="牛仔" value="liuzai"></el-option>
+		    </el-select>
+		  </el-form-item>
+		  <el-form-item label="加工模式">
+		    <el-radio-group v-model="form.resource">
+		      <el-radio label="前加工"></el-radio>
+		      <el-radio label="全加工"></el-radio>
+		      <el-radio label="后加工"></el-radio>
+		    </el-radio-group>
+		  </el-form-item>
+		<!-- 颜色数量 -->		
+		<ColorAndNumber ></ColorAndNumber>		
+		<!-- 加工详情与信息-->
+		<Date></Date>
+		<!-- 上传图片 -->
+		<Imgupload></Imgupload>		
+		<!-- 品质要求 quality -->
+		<Quality></Quality>	
+		<!-- 面料 -->
+		<Fabric></Fabric>
+		<!-- 其他要求1 -->
+		<About></About>
+		<!-- 收货人信息 -->
+		<Pay></Pay>
+		<!-- 提交订单 -->
+		<div class="submit">
+			<el-button type="primary" @click="onSubmit">立即创建</el-button>
+		    <el-button>取消</el-button>
+		  </el-form-item>
+		</div>
+		   
+		</el-form>		
 
-		<div class="block">
-		    <span class="demonstration">默认</span>
-		    <el-date-picker
-		      v-model="value"
-				      type="date"
-				      placeholder="选择日期">
-				    </el-date-picker>
-				  </div>
-		</el-upload>
+		
 	</div>
 </template>
 
 <script>
 
 import ColorAndNumber from "../colorAndNumber"
+import Quality from "../quality"
+import Date from "../date"
+import Imgupload from "../imgupload"
+import Pay from "../payAndAddr"
+import Fabric from "../fabric"
+import About from "../about"
+
 
 export default {
 name: "zizhu",
-components: { ColorAndNumber },
+components: { ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
 data () {
 	return {
+		form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formInline: {
+          user: '',
+          region: ''
+        },
+       
+
 		imageUrl: null,
 		types: [
 	        'text', 'password', 'email', 'number', 'url',
@@ -51,22 +97,14 @@ data () {
 	   	value:null,
 	}
 },
+mounted(){
+	
+},
 methods:{
-     handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
+	
+      onSubmit() {
+        console.log('submit!');
+      }
      
 
 }
@@ -75,28 +113,7 @@ methods:{
 
 </script>
 <style scoped>
-	.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+
+
 
 </style>

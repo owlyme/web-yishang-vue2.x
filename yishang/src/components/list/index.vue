@@ -1,24 +1,46 @@
 <template>
- <div >
-  <div class="container" >
-    <!-- header -->
-    <div class="login-sucess clearfix">
+ <div class="bg">
+  <!-- header -->
+  <div class="container head-height">
+     <div class="login-sucess clearfix">
       <div class="fl">欢迎登陆亿尚智能平台</div>
       <div class="fr">退出登录</div>
     </div>
-    <!-- nav -->
-    <div class="pages-nav">
-       <b-nav>
-        <b-nav-item active><b-link href="/">Link</b-link></b-nav-item>
-        <b-nav-item  href="/">首页</b-nav-item> 
-        <b-nav-item  href="/zizhu">自主发单</b-nav-item>
-        <b-nav-item  href="/wuyou">无忧发单</b-nav-item>
-        <b-nav-item  href="/indent">我的订单</b-nav-item>
-      </b-nav>
+  </div>
+  <!-- nav -->
+  <div class="bg-white pages-nav">
+    <div class="container clearfix">
+        <el-row>
+          <el-col :span="6">
+            <div class="logomin">
+             <img src="">
+           </div>
+         </el-col>
+          <el-col :span="14">
+              <div class="link-nav">
+                <el-menu :default-active="activeIndex"              
+                class="el-menu-demo" mode="horizontal" 
+                @select="handleSelect">
+                    <el-menu-item index="1">
+                      <router-link to="/">首页</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                      <router-link to="/zizhu">自主发单</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                      <router-link to="/wuyou">无忧发单</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                      <router-link to="/indent">我的订单</router-link>
+                    </el-menu-item>
+                </el-menu>
+              </div>
+          </el-col>
+        </el-row>  
     </div>
-
-    <keep-alive> <router-view/> </keep-alive> 
-    
+  </div>
+  <div class="container bg-white" >
+    <keep-alive> <router-view/> </keep-alive>     
   </div>
   <Footerinfo/>
  </div>
@@ -31,10 +53,13 @@ export default {
   components: { Footerinfo},
   data () {
     return {
-     
+      activeIndex:''
     }
   },
   methods:{
+    activeIndex(){
+      // this.$router.push(this.linkName)
+    },
     focused ( val){
       this.message = val
     },
@@ -51,8 +76,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.bg{  
+  background: rgb(248,248,248);
+}
+.bg-white{
+  background: #fff;
+}
 .container{
-  width: 800px;
+  width: 1200px;  
+}
+.head-height{
+  height: 40px;
 }
 .fl{
   float: left;
@@ -62,10 +96,16 @@ export default {
 }
 .login-sucess{
   height: 44px;
+  line-height: 44px;
+  font-size: 15px;
 }
 .banner{
   height: 360px;
 }
+.pages-nav{
+  margin-bottom: 20px;
+}
+
 
 
 </style>

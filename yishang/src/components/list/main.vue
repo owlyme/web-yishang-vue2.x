@@ -1,30 +1,44 @@
 <template>
 <div>
-	<Carousel />
+	<!-- <Carousel /> -->
     <!-- 过滤订单 -->
-    <div class="list-nav">
-      <b-nav>
-        <b-nav-item v-for="(item, index) in listNav" :key="index +'nav'">{{ item }}</b-nav-item>
-      </b-nav>
-      <div class="list clearfix" >
-      	<ListElemnt v-for="(item, index) in goodsList" :key="index+ 'good'" :goodsMsg="item"></ListElemnt>
+<div class="list-nav">
+  <div>
+    <el-menu
+      :default-active="activeIndex"
+      class=""
+      mode="horizontal"
+      @select="handleSelect"
+      text-color="#555"
+      active-text-color="#FFF"
+      
+      >    
+      <el-menu-item index="1">所有订单</el-menu-item>
+      <el-submenu index="2">
+        <template slot="title">代发前期资料</template>
+        <el-menu-item index="2-1">选项1</el-menu-item>
+        <el-menu-item index="2-2">选项2</el-menu-item>
+        <el-menu-item index="2-3">选项3</el-menu-item>
+      </el-submenu>
+      <el-menu-item :index="3+index" v-for="(item, index) in listNav">{{item}}</el-menu-item>
+    </el-menu>
+  </div>
+
+
+
+
+
+      <div class="list " >
+      	<ListElemnt v-for="(item, index) in goodsList" :key="index+ 'good'"  :goodsMsg="item" class="clearfix"></ListElemnt>
       </div>
     </div>
+
+    
  
   <!-- pagination -->
-  <div class="container pagination" >
-  	
+  <div class="container pagination" >  	
      <b-row align-h="center" align-v="center" >
         <b-col >
-        <!--  <b-pagination-nav 
-         
-         :number-of-pages="10" 
-         	first-text="首页"
-          	prev-text="上一页"
-          	next-text="下一页"
-         	last-text="末页"
-          v-model="currentPage" /> -->
-
           <b-pagination  
           :total-rows="totalRows" 
           v-model="currentPage" 
@@ -48,7 +62,8 @@ export default{
 	components: {Carousel,ListElemnt },
 	data(){
 		return{
-			listNav: ["所有订单","代发前期资料","延误", "抢单中", "加工中", "代付款收货", "待评价", "取消订单", "已完成", "管理员关闭", "已退货/退款"],
+      activeIndex: '1',
+			listNav: ["延误", "抢单中", "加工中", "代付款收货", "待评价", "取消订单", "已完成", "管理员关闭", "已退货/退款"],
 			totalRows: 500,
 			perPage : 10,
      		currentPage: 1,
@@ -85,6 +100,9 @@ export default{
 		currentPage: "getMoreList"
 	},
 	methods:{
+    handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
 		getMoreList (curVal,oldVal) {
 			let page = this.currentPage
 			console.log(page)
