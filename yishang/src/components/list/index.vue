@@ -4,21 +4,23 @@
   <div class="container head-height">
      <div class="login-sucess clearfix">
       <div class="fl">欢迎登陆亿尚智能平台</div>
-      <div class="fr">退出登录</div>
+      <div class="fr">
+        <router-link to="/login"><span></span>退出登录</router-link>
+      </div>
     </div>
   </div>
   <!-- nav -->
   <div class="bg-white pages-nav">
-    <div class="container clearfix">
+    <div class="container">
         <el-row>
-          <el-col :span="6">
-            <div class="logomin">
-             <img src="">
-           </div>
-         </el-col>
+          <el-col :span="4">
+            <router-link to="/">
+               <img src="../../assets/logo-mini.png">    
+            </router-link>                  
+          </el-col>
           <el-col :span="14">
               <div class="link-nav">
-                <el-menu :default-active="activeIndex"              
+                <el-menu :default-active="activeIndex"
                 class="el-menu-demo" mode="horizontal" 
                 @select="handleSelect">
                     <el-menu-item index="1">
@@ -39,9 +41,10 @@
         </el-row>  
     </div>
   </div>
-  <div class="container bg-white" >
-    <keep-alive> <router-view/> </keep-alive>     
-  </div>
+
+    <div class="container bg-white"> 
+      <keep-alive> <router-view/> </keep-alive> 
+    </div>
   <Footerinfo/>
  </div>
 </template>
@@ -53,7 +56,7 @@ export default {
   components: { Footerinfo},
   data () {
     return {
-      activeIndex:''
+      activeIndex: null
     }
   },
   methods:{
@@ -69,6 +72,9 @@ export default {
     },
     getCurrentPages(){
       console.log(this.currentPage)
+    },
+    handleSelect(key, keyPath){
+      console.log(key, keyPath);
     }
   }
 }
@@ -102,6 +108,7 @@ export default {
 .banner{
   height: 360px;
 }
+
 .pages-nav{
   margin-bottom: 20px;
 }

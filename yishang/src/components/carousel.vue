@@ -70,4 +70,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+  #carousel1{
+    height: 400px;
+    overflow: hidden;
+  }
+</style>

@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -31,6 +33,13 @@ export default {
 body{
   background: rgb(248,248,248);
 }
+a:hover{
+  text-decoration: none;
+}
+.container{
+  padding:0;
+  /*margin: 0;*/
+}
 .middle-line{
   margin-bottom:20px;
   text-align: center;
@@ -44,6 +53,24 @@ body{
     text-indent: -1px;
     text-align: center;
 }
+
+/*pagitation */
+.owl .page-item{
+  margin: auto 5px; 
+}
+.owl .page-item .page-link{
+  height: 27px;
+  line-height: 10px;
+}
+.owl .page-item .page-link.btn-primary{
+  border-color: #C44DDC;
+  border-radius: 3px;
+}
+.owl .page-item.active .page-link{
+  background: #C44DDC;
+}
+
+
 
 .el-icon-arrow-up:before {
     content: "▼";
@@ -69,7 +96,7 @@ body{
   color:  #C44DDC;
 }
 
-.list-nav .el-menu,
+/*.list-nav .el-menu,
 .list-nav .el-menu-item,
 .list-nav .el-submenu,
 .list-nav .el-submenu .el-submenu__title{
@@ -83,11 +110,11 @@ body{
   margin:0 15px;
 }
 .list-nav .is-active{
-  background: #C44DDC;
+  background: ;
 }
 .list-nav .el-menu--horizontal .el-submenu>.el-menu{
   top: 30px;
-} 
+} */
 /* __web-inspector-hide-shortcut__*/
 .nav-item a{
   color: #555;

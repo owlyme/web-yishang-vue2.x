@@ -11,7 +11,7 @@
 			<li>单间价格：{{ goodsMsg.price }}元</li>
 			<li>交货时间：{{ goodsMsg.date }}</li>
 		</ul>
-		<div class="plan"> 131</div>
+		<div class="plan danger"> 131 teraetwe</div>
 	</b-media>
 </div>
 </template>
@@ -42,11 +42,25 @@
 }
 .plan{
 	position: absolute;
-	height: 30px;
+	display: flex;
+	justify-content: center ;
+	align-items:center ;
+	height: 46px;
+	width: 153px;
 	right: 0;
-	top: 30px;
+	top: 10px;
+	background: #C44DDC;
+	border-radius: 5px;
+	color: #fff;
+}
+.plan.danger{
+	background: rgb(255,25,27);
 }
 .plan-danger{
 
+}
+.list-element{
+	background: #fff;
+	margin-bottom: 12px;
 }
 </style>

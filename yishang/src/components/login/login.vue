@@ -21,7 +21,8 @@
         </b-col>
         <!-- 登录 -->
         <b-col class="login-form center" >
-          <!-- <keep-alive> -->
+          <keep-alive>
+            <!-- 二维码 -->
             <div class="qr-code" v-if="switchToPC">
               <h4>使用亿尚APP 扫码安全登录</h4>
               <div id="qr-code">
@@ -29,10 +30,12 @@
               </div>
                <b-button :pressed.sync="myToggle" variant="primary" class="refresh">刷新二维码框</b-button>
                <h6 class="remind"><span class="scan" ></span>打开手机端 扫一扫登录</h6>
-            </div>
 
+              <div class="switch-btn" @click="swicthFn"></div>
+            </div>
+            <!-- 账号登录 -->
             <div class="pc" v-else="switchToPC">
-              <div class="input-group"><h4>密码登录</h4></div>
+              <h4>密码登录</h4>
               <div class="input-group">
                 <input class="form-control"
                  v-model="account.name" @focus="focused('请输入账号')" @blur="focused('')"
@@ -49,9 +52,13 @@
                 <input type="checkbox" value="checked" v-model="saveInfo" />记住密码
               </div>              
               <div class="input-group"><span>{{ message }}</span></div>
-              <b-button @click="send" variant="primary" class="refresh login-btn">登录</b-button>               
+              <b-button @click="send" variant="primary" class="refresh login-btn">登录</b-button>
+
+              <div class="switch-btn" @click="swicthFn"></div>
+              <!-- 提示 -->
+              <div class='remind-scan'></div>
             </div>
-          <!-- </keep-alive> -->
+          </keep-alive>
         </b-col>
 
       </b-row>
@@ -85,7 +92,12 @@ export default {
     send(){
       this.account.save= this.saveInfo
       this.account= { name: '', password: '', save : false}
+      // 此处做密码验证校验
+      this.$router.push("./")
 
+    },
+    swicthFn(){
+      this.switchToPC = !this.switchToPC
     }
   }
 }
@@ -167,22 +179,30 @@ text-align: right;
   font-weight: 700;
 }
 
-.login-form{
+.qr-code, .pc{
+  padding-top: 40px;
   position: relative;
-  height: 369px;
-  padding: 20px 0;
-  border: 10px solid rgba(244,244,244,0.9); 
-  background-image: url(/static/login/bg.png);
+  width: 352px;
+  height: 392px;
+  background-image: url(/static/login/login-pc.png);
+  
   background-repeat: no-repeat; 
   background-size: 100% 100%;
 }
-.login-form .swicth{
-  position: relative;
-  width: 60px;
-  height: 60px;
-  background-image: url(/static/login/bg.png);
+.pc{
+  padding: 40px;
+  text-align: left;
+  background-image: url(/static/login/login-qr.png);
   background-repeat: no-repeat; 
   background-size: 100% 100%;
+}
+.switch-btn{
+  position: absolute;
+  right: 0px;
+  bottom: 0;
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
 }
 #qr-code .qr-code-img{
   padding: 20px;
@@ -199,8 +219,17 @@ text-align: right;
 }
 .remind {
   font-size: 12px;
-  color: rgb(51, 51, 51);
-  
+  color: rgb(51, 51, 51);  
+}
+.remind-scan{
+  position: absolute;
+  width: 185px;
+  height: 95px;
+  right: -171px;
+  bottom: 41px;
+  background-image: url(/static/login/remind-scan.png);
+  background-repeat: no-repeat; 
+  background-size: 100% 100%;
 }
 .scan{
   display: inline-block;
@@ -212,10 +241,6 @@ text-align: right;
   background-position:0px -4px;
 }
 
-.pc{
-  padding:  10px 40px;
-  text-align: left;
-}
 .form-control{
   font-size: 0.6rem;
 }
