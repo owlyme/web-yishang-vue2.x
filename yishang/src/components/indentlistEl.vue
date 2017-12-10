@@ -1,4 +1,5 @@
 <template>
+	<!-- xue yao xiang wai gei yi ge suo yin -->
 <div class="list-element">
 	<b-media tag="div" class="goods">
 		<b-img slot="aside" blank blank-color="#abc" width="64" alt="placeholder" />
@@ -7,31 +8,42 @@
 			<span class="status">{{ goodsMsg.status }}</span>
 			</h5>
 		<b-container class="bv-example-row">
-			<b-row align-v="center">
+			<b-row align-v="center" no-gutter="true">
 				<b-col>完成件数：{{ goodsMsg.done }}/{{ goodsMsg.total }} </b-col>
 				<b-col>单间价格：{{ goodsMsg.price }}元 </b-col>
 				<b-col>交货时间：{{ goodsMsg.date }} </b-col>
-				<b-col>  </b-col>
+				<b-col>
+					<b-row align-v="center">
+					<b-col>
+						{{ goodsMsg.plan}} 
+						<br>
+						{{ goodsMsg.tiemPass}}
+					</b-col>
+					<b-col>
+						<el-button type="primary" @click="view">查看</el-button>
+					</b-col>
+					</b-row>
+				</b-col>
 			</b-row>
-    	</b-container>
-		<!-- <ul class="clearfix">
-			<li>完成件数：{{ goodsMsg.done }}/{{ goodsMsg.total }}</li>
-			<li>单间价格：{{ goodsMsg.price }}元</li>
-			<li>交货时间：{{ goodsMsg.date }}</li>
-		</ul> -->
-		<div class="plan danger"> 131 teraetwe</div>
+    	</b-container>		
 	</b-media>
 </div>
 </template>
 <script>
 	export default{
-		name: "listelement",
+		name: "",
 		props: ["goodsMsg"],
 		data(){
 			return{
 				// goodsMsg: goodsMsg
 			}
+		},
+		methods:{
+			view(){
+				console.log('view')
+			}
 		}
+
 	}
 </script>
 <style scoped>
@@ -45,8 +57,13 @@
 
 .goods li{
 	list-style: none;
-	width: 30%;
+	width: 25%;
 	float: left;
+	border-left: 1px solid #e0e0e0;
+	text-align: center;
+}
+.goods li:first-child{
+	border-left: 0px solid #e0e0e0;
 }
 .plan{
 	position: absolute;

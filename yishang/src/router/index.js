@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/login'
-import Index from '@/components/list/index'
+import Indexlist from '@/components/list/index'
 	import Main from '@/components/list/main'
 	import Zizhu from '@/components/list/zizhu'
 	import Wuyou from '@/components/list/wuyou'
 	import Indent from '@/components/list/indent'
-
+    
 Vue.use(Router)
 
 export default new Router({
@@ -19,8 +19,8 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'Index',
-      component: Index,
+      name: 'Indexlist',
+      component: Indexlist,
       children:[
       	{
       		path: "/",
@@ -40,7 +40,8 @@ export default new Router({
       	{
       		path: "/indent",
       		name: "Indent",
-      		component:Indent
+      		component:Indent,
+          
       	},
       ]
     }

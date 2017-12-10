@@ -15,7 +15,7 @@
         <el-row>
           <el-col :span="4">
             <router-link to="/">
-               <img src="../../assets/logo-mini.png">    
+               <!-- <img src="../../assets/logo-mini.png">     -->
             </router-link>                  
           </el-col>
           <el-col :span="14">

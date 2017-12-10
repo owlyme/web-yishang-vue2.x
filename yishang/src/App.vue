@@ -96,6 +96,50 @@ a:hover{
   color:  #C44DDC;
 }
 
+.media-body .col{
+  font-size: 0.8em;
+  border-left: 1px solid #e0e0e0;
+}
+.media-body .col:first-child{
+  border-left: 0px solid #e0e0e0;
+}
+
+.el-button--primary{
+  background: #C44DDC;  
+}
+.el-button--primary:focus, .el-button--primary:hover {
+    background: #C44DDC;
+    border-color:#C44DDC;
+    color: #fff;
+}
+
+
+/*steps*/
+.el-step__line{
+  background-color:#C44DDC;
+}
+.el-step__line-inner{
+      border-color: #C44DDC;
+}
+.is-finish *{
+  color: #C44DDC;
+  background: #C44DDC;
+  border-color: #C44DDC;
+}
+.el-step__icon.is-text{
+  background: #fff;
+  border-color: #C44DDC;
+}
+.is-finish .el-step__icon-inner{
+    display: block;
+    height: 15px;
+    width: 15px;
+    border-radius: 7.5px;
+    background: #C44DDC;
+}
+.el-step__title.is-finish{
+    color: #C44DDC;
+}
 /*.list-nav .el-menu,
 .list-nav .el-menu-item,
 .list-nav .el-submenu,
