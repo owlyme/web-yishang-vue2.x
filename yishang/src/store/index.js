@@ -9,7 +9,40 @@ const state={
 	loadedGoods: [],
 	seletedGoods: [],
 	customInfo: {}
+
+	zizhuIndent:{
+		workSheet:{},
+		colorNum:[],
+		period:{},
+		clothePic:{},
+		quality:{},
+		fabric:{},
+		about:{},
+		newAddr:{}
+	},
+	zizhuIndentList:[],
+
+	wuyouIndent:{
+		workSheet:{},
+		colorNum:{},
+		period:{},
+		clothePic:{},
+		quality:{},
+		fabric:{},
+		about:{},
+		newAddr:{}
+	},
+	wuyouIndentList: []
 }
+
+
+// const state={
+// 	totalPrice: 0,
+// 	goods: [],
+// 	loadedGoods: [],
+// 	seletedGoods: [],
+// 	customInfo: {}
+// }
 /*
 {
 content:"Some quick example.",
@@ -21,18 +54,34 @@ title:"Card Title"
 */
 
 const getters = {
- getTotalPrice (state) {
- 	return state.totalPrice
+getZizhuIndent (state) {
+ 	return state.zizhuIndent
  },
- getGoods( state){
- 	return state.goods
- },
- customInfo( state){
- 	return state.customInfo.name
- },
- loadedGoods( state){
- 	return state.loadedGoods
- }
+getZizhuIndentList(state){
+	return state.zizhuIndentList
+},
+getWuyouIndent (state) {
+ 	return state.wuyouIndent
+},
+getWuyouIndentList(state){
+	return state.wuyouIndentList
+}
+
+
+
+
+ // getTotalPrice (state) {
+ // 	return state.totalPrice
+ // },
+ // getGoods( state){
+ // 	return state.goods
+ // },
+ // customInfo( state){
+ // 	return state.customInfo.name
+ // },
+ // loadedGoods( state){
+ // 	return state.loadedGoods
+ // }
 
 }
 
@@ -50,13 +99,47 @@ const actions = {
 	}) 
 	Vue.http.get('api/profile').then((response) => {
 	  console.log(response.data)
-
 	}) 
   }
 }
 
 
 const mutations = {
+ 
+ addZizhuIndentList(state){
+ 	state.zizhuIndentList.push(state.zizhuIndent);
+ 	state.zizhuIndent = {
+		 		workSheet:{},
+				colorNum:[],
+				period:{},
+				clothePic:{},
+				quality:{},
+				fabric:{},
+				about:{},
+				newAddr:{}
+		 	}
+ },
+ addWuyouIndentList(state){
+ 	state.wuyouIndentList.push(state.wuyouIndent);
+ 	state.wuyouIndent = {
+		 		workSheet:{},
+				colorNum:[],
+				period:{},
+				clothePic:{},
+				quality:{},
+				fabric:{},
+				about:{},
+				newAddr:{}
+		 	}
+ },
+
+
+
+
+
+
+
+
  addGoods(state, good){
  	state.goods.push(good);
  },

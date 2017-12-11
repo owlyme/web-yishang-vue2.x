@@ -118,7 +118,6 @@ export default{
      		]
 		}
 	},
-
 	watch:{
 		currentPage: "getMoreList"
 	},

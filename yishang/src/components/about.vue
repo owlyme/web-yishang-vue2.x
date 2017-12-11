@@ -1,7 +1,8 @@
 <template>
-	<div class="about">
-		<h6>其他要求</h6>
-		<el-row :gutter="10"  class="space" >		 
+	<div class="about border-top">
+		<h5>其他要求</h5>
+		<div v-for="item in requires" class="padding-right add-row">
+		<el-row :gutter="10"  class="space padding-bottom" >		 
 		  <el-col :span="4">
 		  	上传说明图片:
 		  </el-col>	
@@ -18,15 +19,17 @@
 			</el-dialog>
 		  </el-col>	    			  
 		</el-row>
-		<div v-for="item in requires">
+		
 			<el-form-item label="信息要求" >
 			    <el-input type="textarea" v-model="form.desc" placeholder="请填写要求信息"></el-input>
 			</el-form-item>
+			<i class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</div>
 		
-		<div>
-			<el-button type="primary" icon="el-icon-plus" @click="addRequire"></el-button>
+		<div class="middle-line">
+			<el-button type="primary" icon="el-icon-plus" @click="addRequire" class="circle-btn"></el-button>
 		</div>
+		
 	</div>
 </template>
 <script>
@@ -34,12 +37,26 @@
 		name: "quality",
 		data(){
 			return{
-				requires: [0],
+				requires: [
+					{
+						imgSrc : "",
+						info: ""
+					}],
 				form: {
 					desc: ""
 				},
 				dialogVisible: false,
 				dialogImageUrl: false
+			}
+		},
+		watch:{
+			diffKind:{
+				handler(curVal,oldVal){
+		　　　　　　　　//console.log(curVal)
+						// colorNumber = curVal
+						this.$emit("setColor",curVal)
+		　　　　　　},
+		　　　　deep:true
 			}
 		},
 		methods:{
@@ -51,13 +68,37 @@
 		        this.dialogVisible = true;
 		    },
 		    addRequire(){
-		    	this.requires.push(this.requires.length)
-		    }
+		    	let require = {
+					imgSrc : "",
+					info: ""
+				}				
+		    	this.requires.push(require)
+		    },
+		    clickDelete(index){
+		      	this.requires.splice(index,1)
+		    },
 		}
 	}
 </script>
 <style scoped>
-.quality{
-	border: 1px solid #777;
+
+.el-icon-delete:hover{
+	color: #C44DDC;
+}
+.add-row{
+	position: relative;
+}
+.add-row .el-icon-delete{
+	position: absolute;
+	display: none;
+	right: 0px;
+	top: 10px;
+	cursor: pointer;
+}
+.add-row:hover .el-icon-delete {
+	position: absolute;
+	display: block;
+	right: 0px;
+	top: 10px;
 }
 </style>

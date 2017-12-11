@@ -1,6 +1,6 @@
 <template>
 	<div class="quality">
-		<h5>品质要求</h5>
+		<h5 class="padding-bottom">品质要求</h5>
 		<el-form-item label="查获选择" >
 		    <el-select v-model="form.region" placeholder="请选择你的查货模式" style="width:100%">
 		      <el-option label="针织" value="zhengzhi"></el-option>
@@ -17,18 +17,21 @@
 		      <el-option label="牛仔" value="liuzai"></el-option>
 		    </el-select>
 		</el-form-item>
-		<el-row :gutter="10" v-for="(item,index) in details">		 
+
+		<el-row :gutter="10" v-for="(item,index) in details" class='padding-right details-row'>		 
 		  <el-col :span="12">
 		  	<el-form-item :label="'细节部位'+ (index+1)" label-width="33.33%">
-			    <el-input v-model="form.user" placeholder="请输入细节部位"></el-input>
+			    <el-input v-model="item.position" placeholder="请输入细节部位"></el-input>
 			</el-form-item>
-		  </el-col>	
+		  </el-col>
 		  <el-col :span="12">
 		  		<el-form-item :label="'误差标准范围'+ (index+1)" label-width="33.33%">
-			    <el-input v-model="form.user" placeholder="请输入误差标准"></el-input>
+			    <el-input v-model="item.error" placeholder="请输入误差标准"></el-input>
 			  </el-form-item>	
 		  </el-col>
+		  <i class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</el-row>
+
 		<div class="middle-line">
 			<el-button type="primary" icon="el-icon-plus" @click="addDetail" class="circle-btn"></el-button>
 		</div>
@@ -68,18 +71,55 @@
 		          resource: '',
 		          desc: ''
 		        },
-		        details:[0]
+		        details:[{
+					position : "",
+					error: ""
+				}]
+			}
+		},
+		watch:{
+			diffKind:{
+				handler(curVal,oldVal){
+		　　　　　　　　//console.log(curVal)
+						// colorNumber = curVal
+						this.$emit("setColor",curVal)
+		　　　　　　},
+		　　　　deep:true
 			}
 		},
 		methods:{
 			addDetail(){
-				this.details.push(this.details.length)
+				let detail = {
+					position : "",
+					error: ""
+				}
+				this.details.push(detail)
 			},
+		      clickDelete(index){
+		      	this.details.splice(index,1)
+		      },
 		}
 	}
 </script>
 <style scoped>
 .quality{
-	border: 1px solid #777;
+	
+}
+
+.el-icon-delete:hover{
+	color: #C44DDC;
+}
+.details-row .el-icon-delete{
+	position: absolute;
+	display: none;
+	right: 0px;
+	top: 10px;
+	cursor: pointer;
+}
+.details-row:hover .el-icon-delete {
+	position: absolute;
+	display: block;
+	right: 0px;
+	top: 10px;
 }
 </style>

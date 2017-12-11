@@ -94,6 +94,16 @@
 				dialogImageUrl: false
 			}
 		},
+		watch:{
+			diffKind:{
+				handler(curVal,oldVal){
+		　　　　　　　　//console.log(curVal)
+						// colorNumber = curVal
+						this.$emit("setColor",curVal)
+		　　　　　　},
+		　　　　deep:true
+			}
+		},
 		methods:{
 			handleAvatarSuccess(res, file) {
 				this.imageUrl = URL.createObjectURL(file.raw);
@@ -121,7 +131,7 @@
 </script>
 <style scoped>
 .uploadimg{
-	border-top: 1px solid #777;
+
 }
 	.avatar-uploader .el-upload {
 	border: 1px solid #e0e0e0;
@@ -149,6 +159,7 @@
   .remind{
   	font-size: 1.2em;
 	color: #8c939d;
+	line-height: 145px;
   }
   .space{
   	margin-bottom:15px;

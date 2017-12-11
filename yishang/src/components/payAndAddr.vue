@@ -1,17 +1,19 @@
 <template>
 	<div class="pay">
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%" class="demo-ruleForm">
-		<el-form-item label="是否支付定金" prop="resource">
-		    <el-radio-group v-model="ruleForm.resource">
-		      <el-radio label="是"></el-radio>
-		      <el-radio label="否"></el-radio>
+		<el-form-item label="是否支付定金" prop="cash">
+		    <el-radio-group v-model="ruleForm.cash">
+		      <el-radio label="1">是</el-radio>
+		      <el-radio label="0">否</el-radio>
 		    </el-radio-group>
 		</el-form-item>
-		<el-form-item label="确认收货地址" prop="resource">
-		    <el-radio-group v-model="ruleForm.resource">
-		      <el-radio label="是速度发斯蒂芬发斯蒂芬士大夫撒反对"></el-radio>
-		      <br>
-		      <el-radio label="是速度发斯蒂芬发斯蒂芬士大夫"></el-radio>
+		<el-form-item label="确认收货地址" prop="address">
+		    <el-radio-group v-model="ruleForm.address">
+		    	<div v-for="(item, index) in addressList">
+		    		<el-radio :label="item" :key="'address'+ index"></el-radio>
+		      		<br>
+		    	</div>
+		     
 		    </el-radio-group>
 		</el-form-item>
 		<h6>添加新地址</h6>
@@ -19,35 +21,23 @@
 			<el-form-item label="姓名" prop="name">
 			    <el-input v-model="ruleForm.name"></el-input>
 			  </el-form-item>
-			  <el-form-item label="手机" prop="name">
+			  <el-form-item label="手机" prop="mobile">
 			    <el-input v-model="ruleForm.mobile"></el-input>
 			  </el-form-item>
 			  <el-form-item label="详细地址" prop="desc">
-			  <China></China>
+			  	<!-- cheng shi di dian  -->
+			  <China v-on:setCity="getCity"></China>
+
 			  </el-form-item>
 			  <el-form-item label="详细地址" prop="desc">
 			    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
 			  </el-form-item>
 		</div>
-		<el-form :inline="true" :model="formInline" class="demo-form-inline">
-		  <el-form-item label="审批人">
-		    <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-		  </el-form-item>
-		  <el-form-item label="活动区域">
-		    <el-select v-model="formInline.region" placeholder="活动区域">
-		      <el-option label="区域一" value="shanghai"></el-option>
-		      <el-option label="区域二" value="beijing"></el-option>
-		    </el-select>
-		  </el-form-item>
-		  <el-form-item>
-		    <el-button type="primary" @click="onSubmit">查询</el-button>
-		  </el-form-item>
-		</el-form>
 
-		  <el-form-item>
+
+		  <el-form-item class="text-right padding-top">
 		  	<el-button @click="resetForm('ruleForm')">取消</el-button>
 		    <el-button type="primary" @click="submitForm('ruleForm')">确认添加</el-button>
-		    
 		  </el-form-item>
 		</el-form>
 	</div>
@@ -58,40 +48,27 @@ import China from "./address/china.vue"
 		name: "pay",
 		components:{ China},
 		data(){
-			return{
-				formInline: {
-          user: '',
-          region: ''
-        },
+			return{				
 				ruleForm: {
+				  cash:'',
+				  address: '',
 		          name: '',
-		          region: '',
-		          date1: '',
-		          date2: '',
+		          mobile: '',
+		          city: "",
 		          delivery: false,
-		          type: [],
-		          resource: '',
 		          desc: ''
 		        },
+		        addressList:["rwerwerwer","qwerqwrwqerwqe"],
 		        rules: {
+		        	// cash:[  { required: true, message: '请选择是否支付定金'}],
+		        	// address:[  { required: true, message: '请选择地址'}],
 		          name: [
-		            { required: true, message: '请输入活动名称', trigger: 'blur' },
-		            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+		            { required: true, message: '请输入收货人姓名', trigger: 'blur' },
+		            { min: 3, max: 6, message: '长度在 2 到 5 个字符', trigger: 'blur' }
 		          ],
-		          region: [
-		            { required: true, message: '请选择活动区域', trigger: 'change' }
-		          ],
-		          date1: [
-		            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-		          ],
-		          date2: [
-		            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-		          ],
-		          type: [
-		            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-		          ],
-		          resource: [
-		            { required: true, message: '请选择活动资源', trigger: 'change' }
+		          mobile: [
+		            { required: true, message: '请输入手机号码', trigger: 'blur' },
+		            { min: 11, max:11, message: '长度在11个字符', trigger: 'blur' }
 		          ],
 		          desc: [
 		            { required: true, message: '请填写活动形式', trigger: 'blur' }
@@ -99,11 +76,33 @@ import China from "./address/china.vue"
 		        },
 			}
 		},
+		computed(){
+		},
+		mounted(){
+			let self = this;
+			let receiver = { pay : 1, address: self.ruleForm.address}
+			this.$emit('setCity', receiver)
+		},
+		watch:{
+			ruleForm:{
+				handler(curVal,oldVal){
+		　　　　deep//console.log(curVal)
+						// colorNumber = curVal
+						// this.$emit("setNewAddr",curVal)
+		　　　　},
+		　　　　deep:true
+			}
+		},
 		methods:{
 			submitForm(formName) {
 		        this.$refs[formName].validate((valid) => {
 		          if (valid) {
-		            alert('submit!');
+		            let address = this.ruleForm.city+this.ruleForm.desc+' ('+this.ruleForm.name+') '+this.ruleForm.mobile;
+		            	this.addressList.push(address)
+		            	this.ruleForm.desc="";
+		            	this.ruleForm.name=""
+		            	this.ruleForm.mobile=""
+		            	console.log(this.ruleForm)
 		          } else {
 		            console.log('error submit!!');
 		            return false;
@@ -114,13 +113,26 @@ import China from "./address/china.vue"
 		        this.$refs[formName].resetFields();
 		    },
 		    onSubmit() {
-		        console.log('submit!');
+		        console.log(this.ruleForm);
+		        this.$emit("setNewAddr",this.ruleForm)
+		    },
+		    getCity(val){
+		    	// console.log(val)
+		    	let self= this;
+		    	self.$set(self.ruleForm,'city', val)
 		    }
 		}
 	}
 </script>
 <style scoped>
 .pay{
-	border: 1px solid #777;
+	
+}
+.newAddr{
+	border: 1px solid rgb(238,238,238);
+	padding: 10px 40px;
+}
+.btns {
+
 }
 </style>

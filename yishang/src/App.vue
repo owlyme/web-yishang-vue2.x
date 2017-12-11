@@ -140,6 +140,15 @@ a:hover{
 .el-step__title.is-finish{
     color: #C44DDC;
 }
+
+.graph1 .el-step__line,
+.graph3 .el-step__line{
+    display: none;
+  }
+.goods-details .el-steps--vertical .el-step__title,
+.goods-details .el-steps--vertical .el-step__description{
+  display: inline-block;
+}
 /*.list-nav .el-menu,
 .list-nav .el-menu-item,
 .list-nav .el-submenu,
@@ -164,4 +173,41 @@ a:hover{
   color: #555;
   font-weight: 600;
 }
+.border-top{
+  border-top: 1px solid rgb(238,238,238);
+}
+.padding-around{
+  padding: 30px;
+}
+.padding-top{
+  padding-top: 30px ;
+}
+.padding-bottom{
+   padding-bottom: 30px;
+}
+.padding-right{
+  padding-right: 30px;
+}
+.padding-left-right{
+  padding-left: 15% ;
+   padding-right: 15% ;
+}
+.padding-top-bottom{
+   padding-top: 30px ;
+   padding-bottom: 30px ;
+}
+.text-center{
+  text-align: center;
+}
+.text-right{
+  text-align: right;
+}
+/**/
+textarea{
+  height: 80px;
+}
+.el-textarea__inner{
+  height: 66px;
+}
+
 </style>

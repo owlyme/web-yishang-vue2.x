@@ -34,6 +34,16 @@
 		        },
 			}
 		},
+		watch:{
+			diffKind:{
+				handler(curVal,oldVal){
+		　　　　　　　　//console.log(curVal)
+						// colorNumber = curVal
+						this.$emit("setColor",curVal)
+		　　　　　　},
+		　　　　deep:true
+			}
+		},
 		methods:{
 
 		}

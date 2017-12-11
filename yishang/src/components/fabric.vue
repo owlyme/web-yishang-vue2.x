@@ -1,13 +1,13 @@
 <template>
 <div class="fabric">
-  <h6>面料信息</h6>
+  <h5>面料信息</h5>
 
 <el-form ref="form" :model="form" label-width="16.67%">
   <el-form-item label="主面料1名称">
     <el-input v-model="form.name" placeholder="请填写您的面料名称"></el-input>
   </el-form-item>
 
-  <el-row :gutter="10"  class="space" >    
+  <el-row :gutter="10"  class="space padding-bottom" >    
       <el-col :span="4">
         上传说明图片:
       </el-col> 
@@ -64,6 +64,16 @@ export default {
           resource: '',
           desc: ''
         }
+      }
+    },
+    watch:{
+      diffKind:{
+        handler(curVal,oldVal){
+    　　　　　　　　//console.log(curVal)
+            // colorNumber = curVal
+            this.$emit("setColor",curVal)
+    　　　　　　},
+    　　　　deep:true
       }
     },
     methods: {
