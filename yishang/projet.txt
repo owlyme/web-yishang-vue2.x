@@ -1,0 +1,4 @@
+payAddress 需要请求 addressList 一部加载
+			 需要post addressList submit 函数中
+
+about.vue 需要get 上传图片的借口

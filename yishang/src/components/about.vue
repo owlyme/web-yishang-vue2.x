@@ -1,7 +1,7 @@
 <template>
 	<div class="about border-top">
 		<h5>其他要求</h5>
-		<div v-for="item in requires" class="padding-right add-row">
+		<div v-for="(item,index) in aboutList" class="padding-right add-row">
 		<el-row :gutter="10"  class="space padding-bottom" >		 
 		  <el-col :span="4">
 		  	上传说明图片:
@@ -14,20 +14,19 @@
 			  :on-remove="handleRemove">
 			  <span class="remind">点击上传</span>
 			</el-upload>
-			<el-dialog :visible.sync="dialogVisible" size="tiny">
-			  <img width="100%" :src="dialogImageUrl" alt="">
+			<el-dialog :visible.sync="item.dialogVisible" size="tiny">
+			  <img width="100%" :src="item.dialogImageUrl" alt="">
 			</el-dialog>
 		  </el-col>	    			  
-		</el-row>
-		
+		</el-row>		
 			<el-form-item label="信息要求" >
-			    <el-input type="textarea" v-model="form.desc" placeholder="请填写要求信息"></el-input>
+			    <el-input type="textarea" v-model="item.desc" placeholder="请填写要求信息"></el-input>
 			</el-form-item>
 			<i class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</div>
 		
 		<div class="middle-line">
-			<el-button type="primary" icon="el-icon-plus" @click="addRequire" class="circle-btn"></el-button>
+			<el-button type="primary" icon="el-icon-plus" @click="addAbout" class="circle-btn"></el-button>
 		</div>
 		
 	</div>
@@ -37,46 +36,53 @@
 		name: "quality",
 		data(){
 			return{
-				requires: [
+				picId : 0,
+				aboutList:[
 					{
-						imgSrc : "",
-						info: ""
-					}],
-				form: {
-					desc: ""
-				},
-				dialogVisible: false,
-				dialogImageUrl: false
+					id: 0,
+					imgSrc : "",
+					info: "",
+
+					desc:"",
+					dialogVisible: false,
+					dialogImageUrl: false
+					}
+				],
+				
 			}
 		},
 		watch:{
-			diffKind:{
+			aboutList:{
 				handler(curVal,oldVal){
-		　　　　　　　　//console.log(curVal)
-						// colorNumber = curVal
-						this.$emit("setColor",curVal)
+					// console.log(curVal)
+					this.$emit("setAbout",curVal)
 		　　　　　　},
 		　　　　deep:true
-			}
+			},
 		},
 		methods:{
-			 handleRemove(file, fileList) {
+			handleRemove(file, fileList,index) {
 		        console.log(file, fileList);
 		    },
-		    handlePictureCardPreview(file) {
+		    handlePictureCardPreview(file,index) {
 		    	this.dialogImageUrl = file.url;
 		        this.dialogVisible = true;
 		    },
-		    addRequire(){
-		    	let require = {
+		    addAbout(){
+		    	let about = {
+		    		id: this.picId++,
 					imgSrc : "",
-					info: ""
+					info: "",
+					desc:"",
+					dialogVisible: false,
+					dialogImageUrl: false
 				}				
-		    	this.requires.push(require)
+		    	this.aboutList.push(about)
 		    },
 		    clickDelete(index){
-		      	this.requires.splice(index,1)
+		      	this.aboutList.splice(index,1)
 		    },
+
 		}
 	}
 </script>

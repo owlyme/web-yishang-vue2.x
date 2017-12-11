@@ -1,19 +1,17 @@
 <template>
 	<div class="pay">
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%" class="demo-ruleForm">
-		<el-form-item label="是否支付定金" prop="cash">
+		<el-form-item label="是否支付定金">
 		    <el-radio-group v-model="ruleForm.cash">
-		      <el-radio label="1">是</el-radio>
-		      <el-radio label="0">否</el-radio>
+		      <el-radio  :label="1">是</el-radio>
+		      <el-radio  :label="0">否</el-radio>
 		    </el-radio-group>
 		</el-form-item>
-		<el-form-item label="确认收货地址" prop="address">
-		    <el-radio-group v-model="ruleForm.address">
+		<el-form-item label="确认收货地址">
+		    <el-radio-group v-model="ruleForm.address" >
 		    	<div v-for="(item, index) in addressList">
 		    		<el-radio :label="item" :key="'address'+ index"></el-radio>
-		      		<br>
-		    	</div>
-		     
+		    	</div>		     
 		    </el-radio-group>
 		</el-form-item>
 		<h6>添加新地址</h6>
@@ -50,7 +48,7 @@ import China from "./address/china.vue"
 		data(){
 			return{				
 				ruleForm: {
-				  cash:'',
+				  cash:1,
 				  address: '',
 		          name: '',
 		          mobile: '',
@@ -60,8 +58,6 @@ import China from "./address/china.vue"
 		        },
 		        addressList:["rwerwerwer","qwerqwrwqerwqe"],
 		        rules: {
-		        	// cash:[  { required: true, message: '请选择是否支付定金'}],
-		        	// address:[  { required: true, message: '请选择地址'}],
 		          name: [
 		            { required: true, message: '请输入收货人姓名', trigger: 'blur' },
 		            { min: 3, max: 6, message: '长度在 2 到 5 个字符', trigger: 'blur' }
@@ -76,19 +72,18 @@ import China from "./address/china.vue"
 		        },
 			}
 		},
-		computed(){
-		},
 		mounted(){
 			let self = this;
-			let receiver = { pay : 1, address: self.ruleForm.address}
-			this.$emit('setCity', receiver)
+			let receiver = { pay : 1, address: self.addressList[0]}
+			this.$emit('setNewAddr', receiver)
 		},
 		watch:{
 			ruleForm:{
 				handler(curVal,oldVal){
-		　　　　deep//console.log(curVal)
-						// colorNumber = curVal
-						// this.$emit("setNewAddr",curVal)
+					let self = this;
+					let receiver = { pay : self.ruleForm.cash, address: self.ruleForm.address}
+					this.$emit('setNewAddr', receiver)
+					// console.log(receiver)
 		　　　　},
 		　　　　deep:true
 			}
@@ -102,7 +97,7 @@ import China from "./address/china.vue"
 		            	this.ruleForm.desc="";
 		            	this.ruleForm.name=""
 		            	this.ruleForm.mobile=""
-		            	console.log(this.ruleForm)
+		            	// console.log(this.ruleForm)
 		          } else {
 		            console.log('error submit!!');
 		            return false;
@@ -112,15 +107,12 @@ import China from "./address/china.vue"
 		    resetForm(formName) {
 		        this.$refs[formName].resetFields();
 		    },
-		    onSubmit() {
-		        console.log(this.ruleForm);
-		        this.$emit("setNewAddr",this.ruleForm)
-		    },
 		    getCity(val){
 		    	// console.log(val)
 		    	let self= this;
 		    	self.$set(self.ruleForm,'city', val)
-		    }
+		    },
+
 		}
 	}
 </script>

@@ -109,10 +109,10 @@ methods:{
     	console.log(val)
     },    
     getColornumber(val){
-    	console.log(val)
+    	// console.log(val)
     },
     getPeriod(val){
-    	console.log(val)
+    	// console.log(val)
     },
     getUploadImg(val){
     	console.log(val)
@@ -130,7 +130,7 @@ methods:{
     	console.log(val)
     },
     getNewAddr(val){
-    	console.log(val)
+    	// console.log(val)
     },
    
     
