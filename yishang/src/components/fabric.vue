@@ -2,51 +2,54 @@
 <div class="fabric">
   <h5>面料信息</h5>
 
-<el-form ref="form" :model="form" label-width="16.67%">
-  <el-form-item label="主面料1名称">
-    <el-input v-model="form.name" placeholder="请填写您的面料名称"></el-input>
-  </el-form-item>
-
-  <el-row :gutter="10"  class="space padding-bottom" >    
-      <el-col :span="4">
-        上传说明图片:
-      </el-col> 
-      <el-col :span="16">
-      <el-upload
-        action="https://jsonplaceholder.typicode.com/posts/"
-        list-type="picture-card"
-        :on-preview="handlePictureCardPreview"
-        :on-remove="handleRemove">
-        <span class="remind">点击上传</span>
-      </el-upload>
-      <el-dialog :visible.sync="dialogVisible" size="tiny">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-      </el-col>             
+<el-form label-width="16.67%">
+  <div v-for="(item, index) in fabricList">
+    <el-form-item :label="item.label" class="bg">
+      <el-input v-model="item.name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
+      <i  v-if="index > 1" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
+    </el-form-item>
+    <el-row :gutter="10"  class="space padding-bottom" >    
+        <el-col :span="4" class="text-right text-style-sm">
+          面料图片:
+        </el-col> 
+        <el-col :span="16">
+        <el-upload
+          action="https://jsonplaceholder.typicode.com/posts/"
+          list-type="picture-card"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove">
+          <span class="remind">点击上传</span>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible" size="tiny">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+        </el-col>
     </el-row>
-    <el-form-item label="面料成分" >
-        <el-select v-model="form.region" placeholder="请输入您的面料成分" style="width:100%">
-          <el-option label="针织" value="zhengzhi"></el-option>
-          <el-option label="梭织" value="suozhi"></el-option>
-          <el-option label="毛衫" value="maoshan"></el-option>
-          <el-option label="牛仔" value="liuzai"></el-option>
-        </el-select>
-    </el-form-item>
-    <el-form-item label="面料类型" >
-        <el-select v-model="form.region" placeholder="请输入您的面料类型" style="width:100%">
-          <el-option label="针织" value="zhengzhi"></el-option>
-          <el-option label="梭织" value="suozhi"></el-option>
-          <el-option label="毛衫" value="maoshan"></el-option>
-          <el-option label="牛仔" value="liuzai"></el-option>
-        </el-select>
-    </el-form-item>
-    <el-form-item label="面料克重">
-      <el-input v-model="form.name" placeholder="请输入克重">
-        克/平方米
-      </el-input>
-
-    </el-form-item>
+      <el-form-item label="面料成分:" class="padding-right">
+          <el-select v-model="item.component" placeholder="请输入您的面料成分" style="width:100%">
+            <el-option label="针织" value="zhengzhi"></el-option>
+            <el-option label="梭织" value="suozhi"></el-option>
+            <el-option label="毛衫" value="maoshan"></el-option>
+            <el-option label="牛仔" value="liuzai"></el-option>
+          </el-select>
+      </el-form-item>
+      <el-form-item label="面料类型:" class="padding-right">
+          <el-select v-model="item.type" placeholder="请输入您的面料类型" style="width:100%">
+            <el-option label="针织" value="zhengzhi"></el-option>
+            <el-option label="梭织" value="suozhi"></el-option>
+            <el-option label="毛衫" value="maoshan"></el-option>
+            <el-option label="牛仔" value="liuzai"></el-option>
+          </el-select>
+      </el-form-item>
+      <el-form-item label="面料克重:" class="padding-right">
+        <el-input v-model="item.weight" placeholder="请输入克重">  </el-input>
+        <div class="after"> 克/平方米 </div>
+      </el-form-item>
+    </div>
 </el-form>
+  <div class="middle-line">
+      <el-button type="primary" icon="el-icon-plus" @click="addFabric" class="circle-btn"></el-button>
+  </div>
 </div> 
 </template>
 
@@ -54,38 +57,92 @@
 export default {
     data() {
       return {
+        dialogVisible: false,
+        dialogImageUrl: false,
+        index: 2,
         form: {
           name: '',
-          region: '',
-          date1: '',
-          date2: '',
+          component: '',
           delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
+          imgUrl:'',
+          weight:''
+        },
+        fabricList:[
+          {
+            label:'主面料1名称:',
+            name: '',
+            component: '',
+            delivery: false,
+            imgUrl:'',
+            weight:''
+          },
+          {
+            label:'辅面料1名称:',
+            name: '',
+            component: '',
+            delivery: false,
+            imgUrl:'',
+            weight:''
+          }
+        ]
       }
     },
     watch:{
-      diffKind:{
+      fabricList:{
         handler(curVal,oldVal){
-    　　　　　　　　//console.log(curVal)
-            // colorNumber = curVal
-            this.$emit("setColor",curVal)
-    　　　　　　},
-    　　　　deep:true
+            this.$emit("setFabric",curVal)
+    　　　},
+    　　　deep:true
       }
     },
     methods: {
-      onSubmit() {
-        console.log('submit!');
-      }
+      handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePictureCardPreview(file) {
+          this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        addFabric(){
+          let fabric = {
+                label:'',
+                name: '',
+                component: '',
+                delivery: false,
+                imgUrl:'',
+                weight:''
+              }
+              fabric.label= "辅面料" + (this.index++) + "名称:";
+              console.log(fabric)
+          this.fabricList.push(fabric)
+        },
+        deleteFabric(index){
+          this.fabricList.splice(index,1)
+        }
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-
+.after{
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  font-size: 1.1em;
+}
+.bg{
+  background: rgb(204,204,204);
+  padding: 10px;
+  padding-top: 15px;
+}
+ .el-icon-delete{
+  position: absolute;
+  margin-left: 10px;
+  right: 0;
+  top: 10px;
+}
+.el-icon-delete:hover{
+  color: #C44DDC;
+}
 </style>

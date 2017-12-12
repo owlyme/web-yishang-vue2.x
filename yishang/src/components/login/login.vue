@@ -11,7 +11,7 @@
     <b-container class="bv-example-row">
       <b-row align-v="center">
         <!-- 展示图 -->
-        <b-col> <img src="../../assets/clothes.png" /> </b-col>
+        <b-col> <img src="/static/login/clothes.png" /> </b-col>
         <!-- 口号 -->
         <b-col>
           <h2 class="slogan center"><img src="/static/login/app.png" /></h2>
@@ -35,33 +35,38 @@
             </div>
             <!-- 账号登录 -->
             <div class="pc" v-else="switchToPC">
-              <h4>密码登录</h4>
+              <h4 class="padding-bottom">密码登录</h4>
               <div class="input-group">
-                <input class="form-control"
+                <input class="form-control input-text-indent"
                  v-model="account.name" @focus="focused('请输入账号')" @blur="focused('')"
                   type="text"
                   placeholder="请输入手机号码或者账号" />
+                <span class="bg-icon input-account"></span>
               </div>
               <div class="input-group">
-                <input class="form-control"
+                <input class="form-control input-text-indent"
                   v-model="account.password"  @focus="focused('请输入密码')" @blur="focused('')"
+                  @keyup.enter="login"
                   type="password"
                   placeholder="请输入密码" />
+                  <span class="bg-icon input-secret"></span>
               </div>
               <div class="input-group">
-                <input type="checkbox" value="checked" v-model="saveInfo" />记住密码
-              </div>              
-              <div class="input-group"><span>{{ message }}</span></div>
-              <b-button @click="send" variant="primary" class="refresh login-btn">登录</b-button>
+                <input type="checkbox" value="checked" v-model="account.save" />记住密码
+              </div>
 
-              <div class="switch-btn" @click="swicthFn"></div>
+
+              <div class="input-group" ><span :class="{ err : resFalse }">{{ message }}</span></div>
+              <b-button @click="login" variant="primary" class="refresh login-btn">登录</b-button>
+
+              <div class="switch-btn" @click.enter="swicthFn"></div>
               <!-- 提示 -->
               <div class='remind-scan'></div>
             </div>
           </keep-alive>
         </b-col>
 
-      </b-row>
+      </b-row>     
     </b-container>
   </div>
   
@@ -72,28 +77,52 @@
 
 <script>
 import Footerinfo from "../footer"
+
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'login',
   components: { Footerinfo },
-  data () {
+  data() {
     return {
       myToggle: false,
       switchToPC: false,
       account: { name: '', password: '',save : false},
-      qrCodeUrl : "../../static/login/qr-code.png",
+      qrCodeUrl : "../../static/login/qr-code.jpg",
       saveInfo:false,
-      message: ''
+      message: '',
+      resFalse: false
     }
   },
-  methods:{
-    focused ( val){
-      this.message = val
+  created(){
+    // console.log(this.getUrl)
+  },  
+  computed:{
+      ...mapGetters([
+                    'getUrl'
+                  ]),
     },
-    send(){
-      this.account.save= this.saveInfo
-      this.account= { name: '', password: '', save : false}
-      // 此处做密码验证校验
-      this.$router.push("./")
+  methods:{
+    focused (val){
+      this.resFalse = false
+    },
+    login(){
+      let self = this
+      let url= this.getUrl+'Home/User/loginCheck'
+      this.$http.post(url, {
+       phone: self.account.name,
+       password: self.account.password
+      },{emulateJSON:true}).then((res)=>{
+          if(res.data.status == 200){
+            self.$router.push("./")
+            self.account= { name: '', save : false}
+          }else{
+            self.message= res.body.msg
+            self.resFalse = true
+          }          
+      },(err)=>{
+          //console.log(err)
+      })
 
     },
     swicthFn(){
@@ -122,12 +151,10 @@ text-align: right;
 }
 .bgimg{
   padding:  60px 0;
-  background-image: url(/static/login/main-bg.png);
+  background-image: url(/static/login/main-bg.jpg);
   background-repeat: no-repeat;  
   background-size: 100% 100%;
 }
-
-
 
 .body-block { 
   padding: 0 60px;  
@@ -184,7 +211,7 @@ text-align: right;
   position: relative;
   width: 352px;
   height: 392px;
-  background-image: url(/static/login/login-pc.png);
+  background-image: url(/static/login/login-pc.jpg);
   
   background-repeat: no-repeat; 
   background-size: 100% 100%;
@@ -192,7 +219,7 @@ text-align: right;
 .pc{
   padding: 40px;
   text-align: left;
-  background-image: url(/static/login/login-qr.png);
+  background-image: url(/static/login/login-qr.jpg);
   background-repeat: no-repeat; 
   background-size: 100% 100%;
 }
@@ -236,7 +263,7 @@ text-align: right;
   vertical-align: middle;
   width: 29px;
   height: 29px;
-  background-image: url(/static/login/scan.png);
+  background-image: url(/static/login/scan.jpg);
   background-repeat: no-repeat;  
   background-position:0px -4px;
 }
@@ -268,5 +295,40 @@ text-align: right;
   width: 100%;
   margin: 0px; 
   cursor: pointer;
+}
+.input-account{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 32px;
+  width: 32px;
+  background-position: -90px 6px;
+  z-index: 3;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+.input-secret{
+  position: absolute;
+  height: 32px;
+  width: 32px;
+  background-position: -48px 3px;
+  z-index: 3;
+  opacity: 0.4;
+   transition: opacity 0.3s;
+}
+.input-group:hover .input-account,
+.input-group:hover .input-secret{
+  opacity: 0.8;
+}
+.input-text-indent{
+    text-indent: 24px;
+}
+span.err{
+  text-indent: 1em;
+  color: #e60a45;
+  font-style:italic;
+}
+span.err:before{
+  content: '*';
 }
 </style>

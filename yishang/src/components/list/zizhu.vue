@@ -2,37 +2,11 @@
 	<div id="zizhu" >
 		<!-- 加工单编辑 -->
 		<h3 class="text-center padding-top-bottom">加工单编辑</h3>
-		<el-form ref="form" :model="zizhuForm" label-width="16.667%" >
-			<div class="padding-left-right ">
-				<el-form-item label="订单名称">
-				    <el-input v-model="zizhuForm.name" placeholder="建议类目+面料+公司+日期"></el-input>
-				  </el-form-item>
-				  <el-form-item label="面料属性大类" >
-				    <el-select v-model="zizhuForm.region" placeholder="面料属性大类" style="width:100%">
-				      <el-option label="针织" value="zhengzhi"></el-option>
-				      <el-option label="梭织" value="suozhi"></el-option>
-				      <el-option label="毛衫" value="maoshan"></el-option>
-				      <el-option label="牛仔" value="liuzai"></el-option>
-				    </el-select>
-				  </el-form-item>
-				  <el-form-item label="服装品类类目" >
-				    <el-select v-model="zizhuForm.region" placeholder="服装品类类目" style="width:100%">
-				      <el-option label="针织" value="zhengzhi"></el-option>
-				      <el-option label="梭织" value="suozhi"></el-option>
-				      <el-option label="毛衫" value="maoshan"></el-option>
-				      <el-option label="牛仔" value="liuzai"></el-option>
-				    </el-select>
-				  </el-form-item>
-				  <el-form-item label="加工模式">
-				    <el-radio-group v-model="zizhuForm.resource">
-				      <el-radio label="前加工"></el-radio>
-				      <el-radio label="全加工"></el-radio>
-				      <el-radio label="后加工"></el-radio>
-				    </el-radio-group>
-		 		</el-form-item>
-			</div>		  
+		<el-form ref="form" label-width="16.667%" >
+	
+			<Sheet v-on:setWorkSheet="getWorkSheet"></Sheet>
 			<!-- 颜色数量 -->		
-			<ColorAndNumber class="padding-left-right border-top padding-top-bottom" colorNumber="zizhuForm.colorNumber" v-on:setColor="getColornumber"></ColorAndNumber>	
+			<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>	
 			<!-- 加工详情与信息-->
 			<Date class="padding-left-right border-top padding-top-bottom" v-on:setPeriod="getPeriod"></Date>
 			<!-- 上传图片 -->
@@ -56,7 +30,7 @@
 </template>
 
 <script>
-
+import Sheet from "../workSheet"
 import ColorAndNumber from "../colorAndNumber"
 import Quality from "../quality"
 import Date from "../date"
@@ -69,22 +43,18 @@ import { mapGetters } from 'vuex'
 
 export default {
 name: "zizhu",
-components: { ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
+components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
 data () {
 	return {
-		zizhuForm: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: '',
-
-          colorNumber: {},
-
-
+		zizhuIndent: {
+         	workSheet:{},
+			colorNum:{},
+			period:{},
+			clothePic:{},
+			quality:{},
+			fabric:{},
+			about:{},
+			newAddr:{}
         },
         formInline: {
           user: '',
@@ -98,42 +68,78 @@ data () {
 	   	value:null,
 	}
 },
-mounted(){
-	
-},
 methods:{	
-    onSubmit() {
-        console.log(this.zizhuForm.colorNumber);
+    // onSubmit() {
+    // 	// console.log(url)
+    // 	// this.$http.jsonp("http://101.132.187.244:8082/Home/User/qrcode"
+	   //  //   // {//请求参数
+	   //  //   //   params: {
+	   //  //   //     wd:'wo'
+	   //  //   //   },
+	   //  //   //   jsonp:'cb'
+	   //  //   // }
+	   //  //   ).then(function(res){
+	   //  //   	console.log(res)
+	   //  //     // console.log(JSON.parse(res.bodyText).s)
+	   //  //     // this.myData = JSON.parse(res.bodyText).s
+	   //  //     // console.log(this.myData)
+	   //  //   },function(err){
+	   //  //     console.log(err)
+	   //  //   });
+
+    // // 	this.$http.get('http://www.isqzh.com/ajax')
+				// // .then((response) => {
+				// // 	console.log(response)
+				// // 	// this.$set('gridData', response.data)
+				// // })
+				// // .catch(function(response) {
+				// // 	console.log(response)
+				// // })
+    //     console.log(this.zizhuForm.colorNumber);
+    // },
+    onSubmit(){
+    	console.log(this.zizhuIndent)
     },
     getWorkSheet(val){
-    	console.log(val)
+    	let self = this;
+    	self.$set(self.zizhuIndent, 'workSheet', val)
+    	// console.log(val)
     },    
     getColornumber(val){
+    	let self = this;
+    	self.$set(self.zizhuIndent, 'colorNum', val)
     	// console.log(val)
     },
     getPeriod(val){
+    	let self = this;
+    	self.$set(self.zizhuIndent, 'period', val)
     	// console.log(val)
     },
-    getUploadImg(val){
+    getClothePic(val){
+    	// let self = this;
+    	// self.$set(self.zizhuIndent, 'clothePic', val)
     	console.log(val)
     },
     getQuality(val){
-    	console.log(val)
-    },
-    getClothePic(val){
-    	console.log(val)
+    	let self = this;
+    	self.$set(self.zizhuIndent, 'quality', val)
+    	//console.log(val)
     },
     getFabric(val){
-    	console.log(val)
+    	let self = this;
+    	self.$set(self.zizhuIndent, 'fabric', val)
+    	//console.log(val)
     },
     getAbout(val){
-    	console.log(val)
+    	let self = this;
+    	self.$set(self.zizhuIndent, 'about', val)
+    	//console.log(val)
     },
     getNewAddr(val){
+    	let self = this;
+    	self.$set(self.zizhuIndent, 'newAddr', val)
     	// console.log(val)
-    },
-   
-    
+    }
 }
 
 }

@@ -4,11 +4,7 @@ import Vuex from  'vuex'
 Vue.use(Vuex)
 
 const state={
-	totalPrice: 0,
-	goods: [],
-	loadedGoods: [],
-	seletedGoods: [],
-	customInfo: {}
+	url: "http://101.132.187.244:8082/",
 
 	zizhuIndent:{
 		workSheet:{},
@@ -54,6 +50,9 @@ title:"Card Title"
 */
 
 const getters = {
+getUrl (state){
+	return state.url
+},
 getZizhuIndent (state) {
  	return state.zizhuIndent
  },

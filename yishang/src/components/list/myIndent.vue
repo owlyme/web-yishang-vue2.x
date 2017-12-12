@@ -132,7 +132,7 @@ import IndentList from "../indentlistEl"
 		    },
 		    fliter(index){
 		    	let self = this;
-		    	self.listNav.forEach((item, _index)=>{		    		
+		    	self.listNav.forEach((item, _index)=>{
 		    		self.$set(item,"flag",false)
 		    		if(index == _index){
 		    			self.$set(item,"flag",true)

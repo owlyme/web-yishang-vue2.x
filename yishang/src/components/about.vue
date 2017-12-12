@@ -3,7 +3,7 @@
 		<h5>其他要求</h5>
 		<div v-for="(item,index) in aboutList" class="padding-right add-row">
 		<el-row :gutter="10"  class="space padding-bottom" >		 
-		  <el-col :span="4">
+		  <el-col :span="4"  class="text-right text-style-sm">
 		  	上传说明图片:
 		  </el-col>	
 		  <el-col :span="16">
@@ -19,10 +19,10 @@
 			</el-dialog>
 		  </el-col>	    			  
 		</el-row>		
-			<el-form-item label="信息要求" >
+			<el-form-item label="信息要求:" >
 			    <el-input type="textarea" v-model="item.desc" placeholder="请填写要求信息"></el-input>
 			</el-form-item>
-			<i class="el-icon-delete" @click.stop="clickDelete(index)"></i>
+			<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</div>
 		
 		<div class="middle-line">

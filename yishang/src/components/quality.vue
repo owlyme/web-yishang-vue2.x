@@ -1,16 +1,16 @@
 <template>
 	<div class="quality">
 		<h5 class="padding-bottom">品质要求</h5>
-		<el-form-item label="查获选择" >
-		    <el-select v-model="form.region" placeholder="请选择你的查货模式" style="width:100%">
+		<el-form-item label="查获选择:" >
+		    <el-select v-model="form.model" placeholder="请选择你的查货模式" style="width:100%">
 		      <el-option label="针织" value="zhengzhi"></el-option>
 		      <el-option label="梭织" value="suozhi"></el-option>
 		      <el-option label="毛衫" value="maoshan"></el-option>
 		      <el-option label="牛仔" value="liuzai"></el-option>
 		    </el-select>
 		</el-form-item>
-		<el-form-item label="整体允许误差范围" >
-		    <el-select v-model="form.region" placeholder="请选择你的误差标准" style="width:100%">
+		<el-form-item label="整体允许误差范围:" >
+		    <el-select v-model="form.limit1" placeholder="请选择你的误差标准" style="width:100%">
 		      <el-option label="针织" value="zhengzhi"></el-option>
 		      <el-option label="梭织" value="suozhi"></el-option>
 		      <el-option label="毛衫" value="maoshan"></el-option>
@@ -18,18 +18,18 @@
 		    </el-select>
 		</el-form-item>
 
-		<el-row :gutter="10" v-for="(item,index) in details" class='padding-right details-row'>		 
+		<el-row :gutter="10" v-for="(item, index) in form.details" class='padding-right details-row'>		 
 		  <el-col :span="12">
-		  	<el-form-item :label="'细节部位'+ (index+1)" label-width="33.33%">
+		  	<el-form-item :label="'细节部位'+ (index+1)+':'" label-width="33.33%">
 			    <el-input v-model="item.position" placeholder="请输入细节部位"></el-input>
 			</el-form-item>
 		  </el-col>
 		  <el-col :span="12">
-		  		<el-form-item :label="'误差标准范围'+ (index+1)" label-width="33.33%">
-			    <el-input v-model="item.error" placeholder="请输入误差标准"></el-input>
+		  		<el-form-item :label="'误差标准范围'+ (index+1)+':'" label-width="33.33%">
+			    <el-input v-model="item.limit" placeholder="请输入误差标准"></el-input>
 			  </el-form-item>	
 		  </el-col>
-		  <i class="el-icon-delete" @click.stop="clickDelete(index)"></i>
+		  <i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</el-row>
 
 		<div class="middle-line">
@@ -61,42 +61,48 @@
 		name: "quality",
 		data(){
 			return{
+				dialogVisible: false,
+				dialogImageUrl:false,
 				form: {
-		          name: '',
-		          region: '',
-		          date1: '',
-		          date2: '',
-		          delivery: false,
-		          type: [],
-		          resource: '',
-		          desc: ''
+		          model: '',
+		          limit1: '',
+		          delivery: false,	          
+		          desc: '',
+		          imageUrl:"",
+		          details:[
+			          {
+						position : "",
+						limit: "",
+					}]
 		        },
-		        details:[{
-					position : "",
-					error: ""
-				}]
 			}
 		},
 		watch:{
-			diffKind:{
+			form:{
 				handler(curVal,oldVal){
-		　　　　　　　　//console.log(curVal)
-						// colorNumber = curVal
-						this.$emit("setColor",curVal)
-		　　　　　　},
+					// console.log(curVal)
+					this.$emit("setQuality",curVal)
+		　　　　},
 		　　　　deep:true
 			}
 		},
 		methods:{
+			handleRemove(file, fileList) {
+		        console.log(file, fileList);
+		    },
+		    handlePictureCardPreview(file) {
+		    	this.dialogImageUrl = file.url;
+		        this.dialogVisible = true;
+		    },
 			addDetail(){
 				let detail = {
 					position : "",
-					error: ""
+					limit: ""
 				}
-				this.details.push(detail)
+				this.form.details.push(detail)
 			},
-		      clickDelete(index){
-		      	this.details.splice(index,1)
+		    clickDelete(index){
+		      	this.form.details.splice(index,1)
 		      },
 		}
 	}

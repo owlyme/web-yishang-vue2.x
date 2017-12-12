@@ -1,20 +1,20 @@
 <template>
  <div class="city-select">
-   <select v-model="selectedProvince" name="province" class="el-input__inner">
+   <select v-model="selectedProvince" name="province" class="">
      <option v-for="(item, index) in provinces"
        v-if="item.level === 1"
        :value="item">
        {{ item.name }}
      </option>
    </select>
-   <select v-model="selectedCity" name="city" class="el-input__inner">
+   <select v-model="selectedCity" name="city" class="">
      <option
        v-for="(item, index) in cities"
        :value="item">
        {{ item.name }}
      </option>
    </select>
-   <select v-model="selectedBlock" name="block" class="el-input__inner">
+   <select v-model="selectedBlock" name="block" class=" ">
      <option
        v-for="(item, index) in blocks"
        :value="item">
@@ -117,6 +117,22 @@ export default {
 </script>
 <style  scoped>
  .city-select select{
-   width: 30%
+   width: 30%;
+
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #d8dce5;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #5a5e66;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 1;
+    outline: 0;
+    padding: 0 15px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
  }
+
 </style>

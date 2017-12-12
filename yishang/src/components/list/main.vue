@@ -2,7 +2,7 @@
 <div class="main">
    <div class="zIndexe" v-if=" activeIndex == '1' "></div>
    <div class="zIndexf" > 
-      <div class="carousel-box">    <Carousel />   </div>
+      <div class="carousel-box"><Carousel /></div>
       <div class="switch-ziqu-wuyou">
         <el-row  >
           <el-col :span="12">
@@ -12,7 +12,7 @@
               <p>
                 自主发单需自主填写发单信息<br>
                 确定发单以后会将订单直接发送至工厂抢单界面<br>
-                直接与工厂沟通对接<br>
+                直接与工厂沟通对接
               </p>
             </div>
           </el-col>
@@ -24,7 +24,7 @@
                 无忧发单需自主填单信息<br>
                 系统会匹配符合订单信息的专业"M"人员与您对接<br>
                 专业人员为您提供专属服务，省心省时<br>
-                前加工，后加工，全加工更全面<br>
+                前加工，后加工，全加工更全面
               </p>
             </div>
           </el-col>
@@ -49,7 +49,7 @@
               <el-menu-item index="2-2">选项2</el-menu-item>
               <el-menu-item index="2-3">选项3</el-menu-item>
             </el-submenu>
-            <el-menu-item :index="3+index" v-for="(item, index) in listNav">{{item}}</el-menu-item>
+            <el-menu-item :index="(3+index)+''" v-for="(item, index) in listNav">{{item}}</el-menu-item>
           </el-menu>
         </div>
         <div class="list" >
@@ -118,16 +118,19 @@ export default{
      		]
 		}
 	},
+  // created(){
+  //   console.log(this.$route.path)
+  // },
 	watch:{
 		currentPage: "getMoreList"
 	},
 	methods:{
     handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+        //console.log(key, keyPath);
       },
 		getMoreList (curVal,oldVal) {
 			let page = this.currentPage
-			console.log(page)
+			//console.log(page)
 	    }
 	}
 }

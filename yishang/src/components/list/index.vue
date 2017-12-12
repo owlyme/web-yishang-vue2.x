@@ -5,7 +5,7 @@
      <div class="login-sucess clearfix">
       <div class="fl">欢迎登陆亿尚智能平台</div>
       <div class="fr">
-        <router-link to="/login"><span></span>退出登录</router-link>
+        <router-link to="/login" class="router-link"><span></span>退出登录</router-link>
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@
         <el-row>
           <el-col :span="4">
             <router-link to="/">
-               <!-- <img src="../../assets/logo-mini.png">     -->
+               <img src="../../assets/logo-mini.png">    
             </router-link>                  
           </el-col>
           <el-col :span="14">
@@ -56,13 +56,15 @@ export default {
   components: { Footerinfo},
   data () {
     return {
-      activeIndex: null
+      activeIndex: "1"
     }
   },
+  created(){
+     this.activeIndex = this.$route.path == '/' ? '1' : 
+                        this.$route.path == '/zizhu' ?  '2' :
+                        this.$route.path == '/wuyou' ?  '3' : '4';
+  },
   methods:{
-    activeIndex(){
-      // this.$router.push(this.linkName)
-    },
     focused ( val){
       this.message = val
     },
@@ -71,10 +73,10 @@ export default {
       this.account= { name: '', password: '', save : false}
     },
     getCurrentPages(){
-      console.log(this.currentPage)
+      // console.log(this.currentPage)
     },
     handleSelect(key, keyPath){
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     }
   }
 }
@@ -112,7 +114,12 @@ export default {
 .pages-nav{
   margin-bottom: 20px;
 }
-
+.router-link{
+  color: rgb(135, 141, 153);
+}
+.router-link:hover{
+  color: #222;
+}
 
 
 </style>

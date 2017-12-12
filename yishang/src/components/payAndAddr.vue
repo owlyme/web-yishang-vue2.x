@@ -1,13 +1,13 @@
 <template>
 	<div class="pay">
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%" class="demo-ruleForm">
-		<el-form-item label="是否支付定金">
-		    <el-radio-group v-model="ruleForm.cash">
+		<el-form-item label="是否支付定金:">
+		    <el-radio-group v-model="ruleForm.cash" style="padding-top:8px">
 		      <el-radio  :label="1">是</el-radio>
 		      <el-radio  :label="0">否</el-radio>
 		    </el-radio-group>
 		</el-form-item>
-		<el-form-item label="确认收货地址">
+		<el-form-item label="确认收货地址:" >
 		    <el-radio-group v-model="ruleForm.address" >
 		    	<div v-for="(item, index) in addressList">
 		    		<el-radio :label="item" :key="'address'+ index"></el-radio>
@@ -16,18 +16,18 @@
 		</el-form-item>
 		<h6>添加新地址</h6>
 		<div class='newAddr'>
-			<el-form-item label="姓名" prop="name">
+			<el-form-item label="姓名:" prop="name">
 			    <el-input v-model="ruleForm.name"></el-input>
 			  </el-form-item>
-			  <el-form-item label="手机" prop="mobile">
+			  <el-form-item label="手机:" prop="mobile">
 			    <el-input v-model="ruleForm.mobile"></el-input>
 			  </el-form-item>
-			  <el-form-item label="详细地址" prop="desc">
+			  <el-form-item label="所在地区:" prop="desc">
 			  	<!-- cheng shi di dian  -->
 			  <China v-on:setCity="getCity"></China>
 
 			  </el-form-item>
-			  <el-form-item label="详细地址" prop="desc">
+			  <el-form-item label="详细地址:" prop="desc">
 			    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
 			  </el-form-item>
 		</div>

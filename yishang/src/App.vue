@@ -70,8 +70,6 @@ a:hover{
   background: #C44DDC;
 }
 
-
-
 .el-icon-arrow-up:before {
     content: "▼";
 }
@@ -202,6 +200,10 @@ a:hover{
 .text-right{
   text-align: right;
 }
+.text-style-sm{
+  font-size: 14px;
+  color: #5a5e66;
+}
 /**/
 textarea{
   height: 80px;
@@ -209,5 +211,19 @@ textarea{
 .el-textarea__inner{
   height: 66px;
 }
+/*lun bo tu*/
+.carousel-indicators .active {
+    background-color: #e75deb;
+}
 
+
+/* background*/
+.bg-icon{
+  background-image: url(/static/login/icons.png);
+  background-repeat: no-repeat;
+}
+/*res*/
+.err{
+  color: #ff0;
+}
 </style>

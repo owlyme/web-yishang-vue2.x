@@ -53,7 +53,7 @@
 							<div class="rect"></div>
 							<div class="rectp-round"></div>
 						</div>
-					<el-steps :active="3" align-center class="graph1">
+					<el-steps :active="6" align-center class="graph1">
 					  <el-step class="stephidden" title="" description=""></el-step>
 					  <el-step class="stephidden" title="" description=""></el-step>
 					  <el-step title="待发样衣" description=""></el-step>
@@ -64,7 +64,7 @@
 					  <el-step class="stephidden" title="" description=""></el-step>
 					  <el-step class="stephidden" title="" description=""></el-step>
 					</el-steps>
-					<el-steps :active="2" align-center class="graph2">
+					<el-steps :active="6" align-center class="graph2">
 					  <el-step title="等待接单" description=""></el-step>	
 					  <el-step title="待选工厂" description=""></el-step>
 
@@ -77,7 +77,7 @@
 					  <el-step title="等待评价" description=""></el-step>
 					  <el-step title="已评价" description=""></el-step>
 					</el-steps >
-					<el-steps :active="1" align-center class="graph3">
+					<el-steps :active="4" align-center class="graph3">
 					  <el-step class="stephidden" ></el-step>
 					  <el-step class="stephidden" ></el-step>
 					  <el-step title="待发辅料" description=""></el-step>
@@ -93,7 +93,7 @@
 				<div class="goods-details  border-top padding-around" >
 					<h5>订单动态</h5>
 					<div class="padding-top">
-					  <el-steps direction="vertical" :active="1">
+					  <el-steps direction="vertical" :active="3">
 					    <el-step title="步骤 1" description="这是一段很长很长"></el-step>
 					    <el-step title="步骤 2" description="这是一段很长很长"></el-step>
 					    <el-step title="步骤 3" description="这是一段很长很长"></el-step>

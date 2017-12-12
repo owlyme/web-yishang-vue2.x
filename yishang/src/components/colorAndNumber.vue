@@ -11,7 +11,7 @@
 	 		  	<div class="hovershow" @click="clickDisplay(index)"  >
 	 		  		<span class="clickshow"  v-if="item.flag"> 收起 </span> 
 	 		  		<span class="clickclose"  v-else="item.flag"> 展开</span> 
-	 		  		<i class="el-icon-delete" @click.stop="clickDelete(index)"></i>
+	 		  		<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 	 		  	</div>
 	 		  </el-col>
 			</el-row>

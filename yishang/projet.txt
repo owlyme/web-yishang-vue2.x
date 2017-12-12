@@ -1,3 +1,11 @@
+xiaoyaoji  owlyme@yeah.net 1148452777
+http://www.xiaoyaoji.cn/doc/18podjSMqt
+http://101.132.187.244:8082/Home/User/loginCheck?phone=
+18271632203
+&password=
+123456
+
+login get pic
 payAddress 需要请求 addressList 一部加载
 			 需要post addressList submit 函数中
 
