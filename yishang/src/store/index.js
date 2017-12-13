@@ -5,7 +5,11 @@ Vue.use(Vuex)
 
 const state={
 	url: "http://101.132.187.244:8082",
-
+	customer: {
+		avatar: null,
+		id: null
+	},
+	
 	zizhuIndent:{
 		workSheet:{},
 		colorNum:[],
@@ -85,7 +89,21 @@ getWuyouIndentList(state){
 }
 
 const actions = {
-  getCustomInfo (context,info) {  
+ getCustomerInfo( context, info ){
+ 	  let state = context.state;
+ 	  Vue.set(state,'customer',info);
+ 	  console.log(state)
+ },
+ clearCustomer(context, ){
+ 	let state = context.state;
+ 	Vue.set(state,'customer',{
+								avatar: null,
+								id: null
+							});
+ 	console.log(state)
+ },
+
+  getCustomInfo (context,info) {
   	console.log(context.customInfo);
    	context.state.customInfo = info;
    	console.log(context);

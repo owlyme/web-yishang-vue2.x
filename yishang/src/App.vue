@@ -226,4 +226,10 @@ textarea{
 .err{
   color: #ff0;
 }
+*{
+  font-family: "Microsoft YaHei";
+}
+.color{
+   color: rgb(148, 46, 234);
+}
 </style>

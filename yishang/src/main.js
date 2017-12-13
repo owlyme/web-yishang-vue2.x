@@ -12,7 +12,7 @@ import store from './store'
 
 Vue.use(Resource)
 Vue.use(Vuex)
-// Vue.use(VueCookies)
+Vue.use(VueCookies)
 // Vue.use(VueAxios, axios)
 
 

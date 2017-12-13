@@ -2,7 +2,7 @@
  <div >
   <div class="container header" >
      <b-row align-h="center" align-v="center" >
-        <b-col cols="3" class="logo">亿尚智能</b-col>
+        <b-col cols="3" class="logo"><img src="../../assets/logo.png"></b-col>
         <b-col cols="8" class="login">欢迎登录</b-col>
     </b-row>   
   </div>
@@ -11,7 +11,7 @@
     <b-container class="bv-example-row">
       <b-row align-v="center">
         <!-- 展示图 -->
-        <b-col> <img src="/static/login/clothes.png" /> </b-col>
+        <b-col class="clothespic"> <img src="/static/login/clothes.png" /> </b-col>
         <!-- 口号 -->
         <b-col>
           <h2 class="slogan center"><img src="/static/login/app.png" /></h2>
@@ -77,7 +77,7 @@
 import Footerinfo from "../footer"
 
 import { mapGetters } from 'vuex'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'login',
   components: { Footerinfo },
@@ -98,10 +98,14 @@ export default {
   computed:{
       ...mapGetters([
                     'getUrl'
-                  ]),
+        ]),
     },
   methods:{
+    ...mapActions([
+      'getCustomerInfo',
+    ]),
     focused (val){
+      this.message = val
       this.resFalse = false
     },
     login(){
@@ -111,9 +115,14 @@ export default {
        phone: self.account.name,
        password: self.account.password
       }).then((res)=>{
+          console.log(res)
           if(res.data.status == 200){
             self.$router.push("/")
             self.account= { name: '', save : false}
+            self.getCustomerInfo({
+              avatar: res.data.content.avatar,
+              id: res.data.content.id
+            });
           }else{
             self.message= res.body.msg
             self.resFalse = true
@@ -149,17 +158,18 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .header{
-  padding: 10px;
+  padding: 30px;
+  height: 110px;
 }
 .logo {
-text-align: right;
-  font-size: 40px;
-  font-family: "FZHLJW";
+  text-align: right;
   color: rgb(148, 46, 234);
+  padding-right: 34px;
   border-right: 1px solid #e0e0e0;
 }
 .login{
   font-size: 18px;
+  padding-left: 34px;
   font-family: "Microsoft YaHei";
   color: rgb(148, 46, 234);
 }
@@ -175,36 +185,43 @@ text-align: right;
   background-color: rgb(255, 123, 123);
   width: 100%;
 }
-.display-img{
-  text-align: right;
-  margin-top: 30px;
+
+.clothespic{
+  padding: 0 60px;  
+  width: 100%;
 }
-.display-img img{
-  width: 80%;
+.clothespic img{
+  position: relative;
+  display: inline-block;
+  right: -90px;
 }
+
 .tianmao{
   color: #ff0036;
 }
 .yishang{
   color: rgb(148, 46, 234);
 }
+
 .slogan {
-  font-size: 40px;
+  font-size: 50px;
   color: rgb(51, 51, 51);
   line-height: 1.2;
   text-align: center;
 }
 .slogan2 {
   margin-top: 10px;
-   text-align: center;
+  text-align: center;
 }
 .slogan2  span{  
-  width: 270px;
-  font-size: 15px;
+  width: 100%;
+  padding: 0 102px;
+  font-size: 20px;
   font-weight: 500;
   letter-spacing: 2px;
   color: rgb(255, 255, 255);
   background: #111;
+
  
 }
 .foot-info{
@@ -225,17 +242,14 @@ text-align: right;
   position: relative;
   width: 352px;
   height: 392px;
-  background-image: url(/static/login/login-pc.jpg);
-  
-  background-repeat: no-repeat; 
-  background-size: 100% 100%;
+  background-image: url(/static/login/pc-qr.jpg);  
+  background-repeat: no-repeat;   
+  background-position: 0 0;
 }
 .pc{
   padding: 40px;
   text-align: left;
-  background-image: url(/static/login/login-qr.jpg);
-  background-repeat: no-repeat; 
-  background-size: 100% 100%;
+  background-position: -352px 0;
 }
 .switch-btn{
   position: absolute;
