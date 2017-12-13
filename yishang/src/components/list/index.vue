@@ -77,20 +77,17 @@ export default {
       'clearCustomer'
     ]),
     logOut(){
-      let self = this
       let url= this.getUrl+'/Home/User/logOut'
-      this.$http.get(url).then((res)=>{
-          // console.log(res)
-          if(res.data.status == 200){ 
-             self.clearCustomer()        
-            self.$router.push("/login")
+      this.axios.get(url)
+        .then((res)=>{
+            // console.log(res)
+            if(res.data.status == 200){ 
+              this.clearCustomer()        
+              this.$router.push("/login")
+            }else{
 
-          }else{
-
-          }          
-      },(err)=>{
-          //console.log(err)
-      })
+            }          
+        })
     },
     focused ( val){
       this.message = val
@@ -103,14 +100,12 @@ export default {
       // console.log(this.currentPage)
     },
     handleSelect(key, keyPath){
-      let self = this
       let url= this.getUrl+'/Home/User/logOut'
       this.$http.post( 'http://101.132.187.244:8082/Home/Index/getBanner').then((res)=>{
           console.log(res)
           if(res.data.status == 200){ 
-             self.clearCustomer()        
-            self.$router.push("/login")
-
+             this.clearCustomer()        
+            this.$router.push("/login")
           }else{
 
           }          

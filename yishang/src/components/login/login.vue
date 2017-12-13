@@ -75,6 +75,7 @@
 
 <script>
 import Footerinfo from "../footer"
+import qs from 'qs';
 
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
@@ -108,44 +109,38 @@ export default {
       this.message = val
       this.resFalse = false
     },
-    login(){
-      let self = this
+     login(){
       let url= this.getUrl+'/Home/User/loginCheck'
-      this.$http.post(url, {
-       phone: self.account.name,
-       password: self.account.password
-      }).then((res)=>{
-          console.log(res)
-          if(res.data.status == 200){
-            self.$router.push("/")
-            self.account= { name: '', save : false}
-            self.getCustomerInfo({
-              avatar: res.data.content.avatar,
-              id: res.data.content.id
-            });
-          }else{
-            self.message= res.body.msg
-            self.resFalse = true
-          }          
-      },(err)=>{
-          //console.log(err)
+      // let url= '/api/Home/User/loginCheck'
+      let args = {
+                    phone: 18271632203,
+                    password: 123456 
+                  }
+      this.axios.post(url, qs.stringify(args))
+      .then((res)=>{
+            console.log(res)
+            if(res.data.status == 200){
+              this.$router.push("/")
+              this.account= { name: '', save : false}
+              this.getCustomerInfo({
+                avatar: res.data.content.avatar,
+                id: res.data.content.id
+              });
+            }else{
+              this.message= res.data.msg
+              this.resFalse = true
+            }          
       })
     },
     setCookies(){
 
     },
     refreshQr(){
-      let self = this
       let url= this.getUrl+'/Home/User/qrcode'
-      this.$http.post(url,{emulateJSON:true}).then((res)=>{
-          console.log(res.ok)
-          if(res.ok){
-            self.qrCodeUrl =res.data
-          }else{
-            
-          }          
-      },(err)=>{
-          //console.log(err)
+      this.axios.post(url).then((res)=>{
+          if(res.status == 200){
+            this.qrCodeUrl =res.data
+          }         
       })
     },
     swicthFn(){
@@ -155,7 +150,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .header{
   padding: 30px;

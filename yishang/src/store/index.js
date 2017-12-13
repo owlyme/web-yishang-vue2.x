@@ -54,38 +54,21 @@ title:"Card Title"
 */
 
 const getters = {
-getUrl (state){
-	return state.url
-},
-getZizhuIndent (state) {
- 	return state.zizhuIndent
- },
-getZizhuIndentList(state){
-	return state.zizhuIndentList
-},
-getWuyouIndent (state) {
- 	return state.wuyouIndent
-},
-getWuyouIndentList(state){
-	return state.wuyouIndentList
-}
-
-
-
-
- // getTotalPrice (state) {
- // 	return state.totalPrice
- // },
- // getGoods( state){
- // 	return state.goods
- // },
- // customInfo( state){
- // 	return state.customInfo.name
- // },
- // loadedGoods( state){
- // 	return state.loadedGoods
- // }
-
+	getUrl (state){
+		return state.url
+	},
+	getZizhuIndent (state) {
+	 	return state.zizhuIndent
+	 },
+	getZizhuIndentList(state){
+		return state.zizhuIndentList
+	},
+	getWuyouIndent (state) {
+	 	return state.wuyouIndent
+	},
+	getWuyouIndentList(state){
+		return state.wuyouIndentList
+	}
 }
 
 const actions = {
