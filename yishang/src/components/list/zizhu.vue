@@ -6,7 +6,7 @@
 	
 			<Sheet v-on:setWorkSheet="getWorkSheet"></Sheet>
 			<!-- 颜色数量 -->		
-			<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>	
+			<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
 			<!-- 加工详情与信息-->
 			<Date class="padding-left-right border-top padding-top-bottom" v-on:setPeriod="getPeriod"></Date>
 			<!-- 上传图片 -->

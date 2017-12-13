@@ -28,7 +28,7 @@
               <div id="qr-code">
                 <img :src="qrCodeUrl" alt="二维码" class="qr-code-img" />
               </div>
-               <b-button :pressed.sync="myToggle" variant="primary" class="refresh">刷新二维码框</b-button>
+               <b-button @click="refreshQr" variant="primary" class="refresh">刷新二维码框</b-button>
                <h6 class="remind"><span class="scan" ></span>打开手机端 扫一扫登录</h6>
 
               <div class="switch-btn" @click="swicthFn"></div>
@@ -54,8 +54,6 @@
               <div class="input-group">
                 <input type="checkbox" value="checked" v-model="account.save" />记住密码
               </div>
-
-
               <div class="input-group" ><span :class="{ err : resFalse }">{{ message }}</span></div>
               <b-button @click="login" variant="primary" class="refresh login-btn">登录</b-button>
 
@@ -88,14 +86,14 @@ export default {
       myToggle: false,
       switchToPC: false,
       account: { name: '', password: '',save : false},
-      qrCodeUrl : "../../static/login/qr-code.jpg",
+      qrCodeUrl : "",
       saveInfo:false,
       message: '',
       resFalse: false
     }
   },
   created(){
-    // console.log(this.getUrl)
+    this.refreshQr()
   },  
   computed:{
       ...mapGetters([
@@ -108,13 +106,13 @@ export default {
     },
     login(){
       let self = this
-      let url= this.getUrl+'Home/User/loginCheck'
+      let url= this.getUrl+'/Home/User/loginCheck'
       this.$http.post(url, {
        phone: self.account.name,
        password: self.account.password
-      },{emulateJSON:true}).then((res)=>{
+      }).then((res)=>{
           if(res.data.status == 200){
-            self.$router.push("./")
+            self.$router.push("/")
             self.account= { name: '', save : false}
           }else{
             self.message= res.body.msg
@@ -123,7 +121,23 @@ export default {
       },(err)=>{
           //console.log(err)
       })
+    },
+    setCookies(){
 
+    },
+    refreshQr(){
+      let self = this
+      let url= this.getUrl+'/Home/User/qrcode'
+      this.$http.post(url,{emulateJSON:true}).then((res)=>{
+          console.log(res.ok)
+          if(res.ok){
+            self.qrCodeUrl =res.data
+          }else{
+            
+          }          
+      },(err)=>{
+          //console.log(err)
+      })
     },
     swicthFn(){
       this.switchToPC = !this.switchToPC

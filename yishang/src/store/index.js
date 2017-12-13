@@ -4,7 +4,7 @@ import Vuex from  'vuex'
 Vue.use(Vuex)
 
 const state={
-	url: "http://101.132.187.244:8082/",
+	url: "http://101.132.187.244:8082",
 
 	zizhuIndent:{
 		workSheet:{},

@@ -5,7 +5,7 @@
      <div class="login-sucess clearfix">
       <div class="fl">欢迎登陆亿尚智能平台</div>
       <div class="fr">
-        <router-link to="/login" class="router-link"><span></span>退出登录</router-link>
+        <a class="router-link" @click="logOut"><span></span>退出登录</a>
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@
         <el-row>
           <el-col :span="4">
             <router-link to="/">
-               <img src="../../assets/logo-mini.png">    
+              <!--  <img src="../../assets/logo-mini.png">     -->
             </router-link>                  
           </el-col>
           <el-col :span="14">
@@ -51,6 +51,7 @@
 
 <script>
 import Footerinfo from "../footer"
+import { mapGetters } from 'vuex'
 export default {
   name: 'index1',
   components: { Footerinfo},
@@ -64,7 +65,26 @@ export default {
                         this.$route.path == '/zizhu' ?  '2' :
                         this.$route.path == '/wuyou' ?  '3' : '4';
   },
+  computed:{
+      ...mapGetters([
+                    'getUrl'
+                  ]),
+  },
   methods:{
+    logOut(){
+      let self = this
+      let url= this.getUrl+'/Home/User/logOut'
+      this.$http.get(url).then((res)=>{
+          // console.log(res)
+          if(res.data.status == 200){            
+            self.$router.push("/login")
+          }else{
+
+          }          
+      },(err)=>{
+          //console.log(err)
+      })
+    },
     focused ( val){
       this.message = val
     },
@@ -119,6 +139,7 @@ export default {
 }
 .router-link:hover{
   color: #222;
+  cursor: pointer;
 }
 
 

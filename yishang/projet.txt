@@ -10,3 +10,7 @@ payAddress 需要请求 addressList 一部加载
 			 需要post addressList submit 函数中
 
 about.vue 需要get 上传图片的借口
+
+ ajax轮询判断是否确认登录 shi shenme
+
+ https://juejin.im/entry/58a673e1128fe1006cb4f367
