@@ -3,13 +3,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueCookies from 'vue-cookies'
-
+import VueRouter from 'vue-router'
 import App from './App'
 import router from './router'
 import store from './store'
 
+
 Vue.use(Vuex)
 Vue.use(VueCookies)
+Vue.use(VueRouter)
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'

@@ -68,6 +68,12 @@ data () {
 	   	value:null,
 	}
 },
+  mounted(){
+    console.log( 'zhizhu')
+    if( getCookie('phone') == ''){
+      this.$router.push("/login")
+    }
+  },
 methods:{	
     // onSubmit() {
     // 	// console.log(url)

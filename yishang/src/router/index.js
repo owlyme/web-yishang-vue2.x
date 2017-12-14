@@ -40,11 +40,14 @@ export default new Router({
       	{
       		path: "/indent",
       		name: "Indent",
-      		component:Indent,
-          
+      		component:Indent
       	},
       ]
-    }
+    },
+     {
+      path: '*', 
+      component: Login
+    },
   ],
 
 })

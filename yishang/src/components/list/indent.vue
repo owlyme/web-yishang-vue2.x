@@ -112,7 +112,7 @@ import IndentList from "../indentlistEl"
 		components:{ IndentList},
 		data(){
 			return{
-				displayIndent:false,
+				displayIndent:true,
 				isActive: false,
 				activeIndex: '1',
 				listNav: [

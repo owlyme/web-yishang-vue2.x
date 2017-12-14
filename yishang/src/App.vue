@@ -19,6 +19,7 @@ export default {
     box-sizing: border-box;
     font-size: 1.0em;
   }
+  li{list-style: none}
   .clearfix:after {
     visibility: hidden;
     display: block;

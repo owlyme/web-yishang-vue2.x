@@ -33,25 +33,15 @@
 	
         <!-- 过滤订单 -->
       <div class="list-nav">
-        <div>
-          <el-menu
-            :default-active="activeIndex"
-            class=""
-            mode="horizontal"
-            @select="handleSelect"
-            text-color="#555"
-            active-text-color="#FFF"
-            background-color="#C44DDC"     >    
-            <el-menu-item index="1">所有订单</el-menu-item>
-            <el-submenu index="2">
-              <template slot="title">代发前期资料</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-              <el-menu-item index="2-3">选项3</el-menu-item>
-            </el-submenu>
-            <el-menu-item :index="(3+index)+''" v-for="(item, index) in listNav">{{item}}</el-menu-item>
-          </el-menu>
-        </div>
+        <ul class="nav-h clearfix">
+              <li  v-for="(item, index) in listNav"
+                :index="index" 
+                class="muneNav"
+                :class="{active : item.flag}"
+                @click="fliter(index)">
+                {{item.type}} <span v-if="(item.num-0)">( {{item.num}} )</span>
+              </li>
+        </ul>
         <div class="list" >
           	<ListElemnt v-for="(item, index) in goodsList" :key="index+ 'good'"  :goodsMsg="item" class="clearfix"></ListElemnt>
         </div>
@@ -86,7 +76,67 @@ export default{
 	data(){
 		return{
       activeIndex: '1',
-			listNav: ["延误", "抢单中", "加工中", "代付款收货", "待评价", "取消订单", "已完成", "管理员关闭", "已退货/退款"],
+			listNav: [
+          {
+            type: "所有订单",
+            flag: false
+          },
+          {
+            type:"待发前期资料",
+            flag: false,
+            inner: [
+                    {
+                      type:"待发样衣",
+                      flag: false
+                    },
+                    {
+                      type:"待发面料",
+                      flag: false
+                    },
+                    {
+                      type:"待发辅料",
+                      flag: false
+                    }
+                   ]
+          },
+          
+          {
+            type:"延误",
+            flag: false
+          },
+          {
+            type:"抢单中",
+            flag: false
+          },
+          {
+            type:"加工中",
+            flag: false
+          },
+          {
+            type:"待付款收货",
+            flag: false
+          },
+          {
+            type:"待评价",
+            flag: false
+          },
+          {
+            type:"取消订单",
+            flag: false
+          },
+          {
+            type:"已完成",
+            flag: false
+          },
+          {
+            type:"管理员关闭",
+            flag: false
+          },
+          {
+            type:"已退货/退款",
+            flag: false
+          }
+        ],
 			totalRows: 500,
 			perPage : 10,
      		currentPage: 1,
@@ -131,7 +181,17 @@ export default{
 		getMoreList (curVal,oldVal) {
 			let page = this.currentPage
 			//console.log(page)
-	    }
+	    },
+    fliter(index){
+          let self = this;
+          self.listNav.forEach((item, _index)=>{            
+            self.$set(item,"flag",false)
+            if(index == _index){
+              self.$set(item,"flag",true)
+              self.contentTitle= item.type
+            }
+          });
+        }
 	}
 }
 </script>
@@ -196,6 +256,31 @@ export default{
     background-repeat: no-repeat; 
     background-position:  -75px;
     /*background-size: 100% 100%;*/
+  }
+
+  .nav-h{
+    background: #fff;
+    /*padding-top: 20px;*/
+  }
+  .muneNav{
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    margin: 20px 10px;
+    padding: 0 9px;
+    color: #555;
+    font-size: 15px;
+    cursor: pointer;
+    background: rgb(238,238,238);
+    transition: background 0.5s, color 0.5s;
+  }
+  .muneNav:hover{
+    color: #FFF;
+     background: #C44DDC;
+  }
+  .active{
+    color: #FFF;
+     background: #C44DDC;
   }
   .list{
     background: rgb(248,248,248);

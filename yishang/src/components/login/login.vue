@@ -104,10 +104,12 @@ export default {
         ]),
     },
   mounted(){
+    this.$router.push('/login')
+    console.log("login")
     /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
     if(getCookie("phone")){
         console.log("login")
-        this.$router.push('/')
+        this.$router.push('/login')
     }
   },
   methods:{

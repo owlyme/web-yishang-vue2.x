@@ -12,30 +12,24 @@
   <!-- nav -->
   <div class="bg-white pages-nav">
     <div class="container">
-        <el-row>
+        <el-row >
           <el-col :span="4">
-            <router-link to="/">
-              <!--  <img src="../../assets/logo-mini.png">     -->
+            <router-link to="/" >
+               <img src="../../assets/logo-mini.jpg">    
             </router-link>                  
           </el-col>
           <el-col :span="14">
               <div class="link-nav">
-                <el-menu :default-active="activeIndex"
-                class="el-menu-demo" mode="horizontal" 
-                @select="handleSelect">
-                    <el-menu-item index="1">
-                    <router-link to="/">首页</router-link>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                      <router-link to="/zizhu">自主发单</router-link>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                      <router-link to="/wuyou">无忧发单</router-link>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                      <router-link to="/indent">我的订单</router-link>
-                    </el-menu-item>
-                </el-menu>
+                <div class="nav-h clearfix">                   
+                      <span 
+                      v-for="(item, index) in listNav"
+                      :index="index" 
+                      class="muneNav"
+                      :class="{active : item.flag}" 
+                      @click="fliter(index,item.path)"
+                      >{{item.title}}</span> 
+                    
+              </div>
               </div>
           </el-col>
         </el-row>  
@@ -61,18 +55,18 @@ export default {
   components: { Footerinfo},
   data () {
     return {
-      activeIndex: "1"
+      activeIndex: "1",
+      listNav:[{title:'首页',path:"/",flag:true},
+      {title:'自主发单',path:"/zizhu",flag:false},
+      {title:'无忧发单',path:"/wuyou",flag:false},
+      {title:'我的订单',path:"/indent",flag:false}]
     }
   },
-  created(){
-     this.activeIndex = this.$route.path == '/' ? '1' : 
-                        this.$route.path == '/zizhu' ?  '2' :
-                        this.$route.path == '/wuyou' ?  '3' : '4';
-  },
+
   mounted(){
-    console.log( getCookie('phone') )
-    if( !getCookie('phone')){
-      this.$router.push('/')
+    console.log( 'index')
+    if( getCookie('phone') == ''){
+      this.$router.push("/login")
     }
   },
   computed:{
@@ -122,7 +116,18 @@ export default {
       })
 
       // console.log(key, keyPath);
-    }
+    },
+    fliter(index,path){
+          
+          this.listNav.forEach((item, _index)=>{            
+            this.$set(item,"flag",false)
+            if(index == _index){
+              this.$set(item,"flag",true)
+              this.contentTitle= item.type
+            }
+          });
+          this.$router.push(path)
+        }
   }
 }
 </script>
@@ -159,10 +164,16 @@ export default {
   height: 360px;
 }
 
-.pages-nav{
+.pages-nav .container{
+  height: 80px;
   margin-bottom: 20px;
 }
-
+.pages-nav img{
+  height: 80px;
+}
+.back{
+  line-height: 44px;
+}
 .back:hover{
   cursor: pointer;
 }
@@ -170,6 +181,7 @@ export default {
   display: inline-block;
   height: 32px;
   width: 32px;
+  vertical-align: top;
   background-position: -138px  12px;
   opacity: 0.4;
   transition: opacity 0.3s;
@@ -177,6 +189,32 @@ export default {
 .back:hover .logOut {
   opacity: 0.8;
 }
+
+  .nav-h{
+    background: #fff;
+    height: 80px;
+    line-height: 80px;
+    /*padding-top: 20px;*/
+  }
+    .muneNav{
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    margin: 20px 10px;
+    padding: 0 30px;
+    color: #555;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.5s, color 0.5s;
+    font-size: 16px;
+    color: rgb(0, 0, 0);
+  }
+  .muneNav:hover{
+    color: #C44DDC;
+  }
+  .active{
+    color: #C44DDC;
+  }
 
 
 </style>
