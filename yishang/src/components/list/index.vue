@@ -54,6 +54,8 @@ import Footerinfo from "../footer"
 
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
+
+import { setCookie,getCookie,delCookie } from '../../cookies.js'
 export default {
   name: 'index1',
   components: { Footerinfo},
@@ -66,6 +68,12 @@ export default {
      this.activeIndex = this.$route.path == '/' ? '1' : 
                         this.$route.path == '/zizhu' ?  '2' :
                         this.$route.path == '/wuyou' ?  '3' : '4';
+  },
+  mounted(){
+    console.log( getCookie('phone') )
+    if( !getCookie('phone')){
+      this.$router.push('/')
+    }
   },
   computed:{
       ...mapGetters([
@@ -101,7 +109,7 @@ export default {
     },
     handleSelect(key, keyPath){
       let url= this.getUrl+'/Home/User/logOut'
-      this.$http.post( 'http://101.132.187.244:8082/Home/Index/getBanner').then((res)=>{
+      this.axios.post( 'http://101.132.187.244:8082/Home/Index/getBanner').then((res)=>{
           console.log(res)
           if(res.data.status == 200){ 
              this.clearCustomer()        
