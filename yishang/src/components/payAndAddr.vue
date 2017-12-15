@@ -41,6 +41,16 @@
 	</div>
 </template>
 <script>
+const address={
+	receiver: null,
+	phone: null,
+	province: null,
+	city: null,
+	county: null,
+	street: null,
+	is_default: null
+}
+
 import China from "./address/china.vue"
 	export default{
 		name: "pay",

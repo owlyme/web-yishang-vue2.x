@@ -30,6 +30,48 @@
 </template>
 
 <script>
+//发单前判断是否通过审核 http://101.132.187.244:8082/Home/Receipt/beforeReceipt
+
+//发单编辑页		 http://101.132.187.244:8082/Home/Receipt/index type
+const receiptContent={
+	cate: {// true array[object] 商品类别下拉
+		cate_id:null,// true string
+		cate_name:null// true string
+	},
+	mode:{//true array[object]  加工模式下拉
+		mode_id: null,//true string
+		mode_name:null// true string 
+	},
+	style:{// true array[object]服装类型下拉
+		style_id:null,// true string
+		style_name:null// true string
+	},
+	check:{ //true array[object]查货模式下拉
+		check_id:null,// true string
+		check_name:null// true string
+	},
+	error:{//true array[object]误差标准下拉
+		error_id:null,// true string
+		value:null// true string
+	},
+	component:{//true array[object]面料成分下拉
+		component_id:null,// true string
+		component_name:null,// true string
+	},
+	category:{//true array[object]面料类别下拉
+		category_id:null,// true string
+		category_name:null,// true string
+	},
+	address:{//true array[object]
+		id:null,// true string收货人id
+		receiver:null,// true string收货人
+		phone:null,// true string手机号
+		province:null,// true string省city true string市
+		county:null,// true string区
+		street:null,// true string
+	}	
+}
+
 import Sheet from "../workSheet"
 import ColorAndNumber from "../colorAndNumber"
 import Quality from "../quality"

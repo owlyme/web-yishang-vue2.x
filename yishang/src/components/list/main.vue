@@ -68,6 +68,41 @@
 </div>
 </template>
 <script>
+//http://101.132.187.244:8082/Home/Index/index
+//page true string 1
+//status
+const pageContent={
+  content: null,
+  totalRows : null,
+  pageSize: null,
+  list: null,
+  order_id : null,
+  name : null,
+  front_picture : null,
+  demanding_account: null, 
+  done_account: null,
+  fee : null,
+  expire_time : null,
+  arrival_date : null,
+  delivery_date : null,
+  type : null,
+  cycle : null,
+  mode : null,
+  status: null,// 状态：1000 等待接单； 2000 待选工厂； 3xx0 待发样衣； 3x0x 待发面料； 30xx 待发辅料； 3xx1 待收样衣； 3x1x 待收面料； 31xx 待收辅料； 3xx2 已收样衣； 3x2x 已收面料； 32xx 已收辅料； 3300 待发前期资料； 3400 待收前期资料； 4000 生成加工； 5000 待收货付款； 6000 等待评价； 60x1 发单方评价； 601x 接单房评价； 7000 已评价；9000订单已取消；9100订单已关闭；(x代表该位上能取到的任意值）
+  msg: null, //右侧提示按钮文字显示
+  msg_color: null,// 0-超时 1-正常 -1取消关闭
+  state: null
+}
+
+//http://101.132.187.244:8082/Home/Index/getBanner
+const bannerContent={
+  content: null, //true array[object]
+  id: null, //true string
+  title: null, //true string
+  picture: null, //true string
+  url: null
+}
+
 import Carousel from  "../carousel"
 import ListElemnt from "../listEl"
 export default{
