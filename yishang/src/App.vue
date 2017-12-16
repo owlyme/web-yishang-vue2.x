@@ -242,10 +242,5 @@ border-radius: 50px 0 0 50px;
   font-weight: 700;
 }
 /*banner*/
-.carousel-caption{
-    background: #333;
-    top: 340px;
-    left: 0;
-    width: 100%;
-  }
+
 </style>
