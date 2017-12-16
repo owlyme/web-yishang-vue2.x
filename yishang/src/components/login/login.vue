@@ -212,19 +212,18 @@ export default {
   text-align: center;
 }
 .slogan2 {
+   width: 100%;
   margin-top: 10px;
   text-align: center;
+  background: #111;
+  height: 20px；
 }
 .slogan2  span{  
   width: 100%;
-  padding: 0 102px;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 2px;
-  color: rgb(255, 255, 255);
-  background: #111;
-
- 
+  color: rgb(255, 255, 255); 
 }
 .foot-info{
   text-align: center;

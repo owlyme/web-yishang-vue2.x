@@ -62,12 +62,11 @@ export default {
       {title:'我的订单',path:"/indent",flag:false}]
     }
   },
-
   mounted(){
     console.log( 'index')
     if( getCookie('phone') == ''){
-      this.$router.push("/login")
-    }
+        this.$router.push("/login")  
+      }
   },
   computed:{
       ...mapGetters([
@@ -78,7 +77,7 @@ export default {
     ...mapActions([
       'clearCustomer'
     ]),
-    logOut(){
+  logOut(){
       let url= this.getUrl+'/Home/User/logOut'
       this.axios.get(url)
         .then((res)=>{
@@ -101,24 +100,7 @@ export default {
     getCurrentPages(){
       // console.log(this.currentPage)
     },
-    handleSelect(key, keyPath){
-      let url= this.getUrl+'/Home/User/logOut'
-      this.axios.post( 'http://101.132.187.244:8082/Home/Index/getBanner').then((res)=>{
-          console.log(res)
-          if(res.data.status == 200){ 
-             this.clearCustomer()        
-            this.$router.push("/login")
-          }else{
-
-          }          
-      },(err)=>{
-          //console.log(err)
-      })
-
-      // console.log(key, keyPath);
-    },
     fliter(index,path){
-          
           this.listNav.forEach((item, _index)=>{            
             this.$set(item,"flag",false)
             if(index == _index){

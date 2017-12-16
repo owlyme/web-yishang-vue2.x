@@ -148,25 +148,7 @@ a:hover{
 .goods-details .el-steps--vertical .el-step__description{
   display: inline-block;
 }
-/*.list-nav .el-menu,
-.list-nav .el-menu-item,
-.list-nav .el-submenu,
-.list-nav .el-submenu .el-submenu__title{
-  height: 35px;
-  line-height: 35px;  
-}
-.list-nav .el-menu-item{
-  padding: 0;
-  background: rgb(238,238,238);
-  padding:0 5px;
-  margin:0 15px;
-}
-.list-nav .is-active{
-  background: ;
-}
-.list-nav .el-menu--horizontal .el-submenu>.el-menu{
-  top: 30px;
-} */
+
 /* __web-inspector-hide-shortcut__*/
 .nav-item a{
   color: #555;
@@ -223,6 +205,28 @@ textarea{
   background-image: url(/static/login/icons.png);
   background-repeat: no-repeat;
 }
+
+
+
+.el-input-number .el-input__inner{
+  border-radius: 50px;
+}
+.el-input-number .el-input-number__decrease{
+width: 67px;
+border-radius: 50px 0 0 50px;
+}
+.el-input-number .el-input-number__increase{
+  width: 67px;
+  border-radius: 0 50px 50px 0;
+}
+.el-input__prefix {
+    right: 5px;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+#zizhu .el-button--primary{  
+    outline-style: none;
+}
 /*res*/
 .err{
   color: #ff0;
@@ -233,4 +237,15 @@ textarea{
 .color{
    color: rgb(148, 46, 234);
 }
+.size{
+  font-size: 1.2em;
+  font-weight: 700;
+}
+/*banner*/
+.carousel-caption{
+    background: #333;
+    top: 340px;
+    left: 0;
+    width: 100%;
+  }
 </style>

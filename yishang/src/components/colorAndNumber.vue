@@ -1,10 +1,10 @@
 <template>
-	<div class="color">
+	<div class="">
 		<h5>颜色数量</h5>
 		<div v-for="(item, index) in diffKind" class="border-box" >
 			<el-row :gutter="10"  class="bg">	 
-			  <el-col :span="4" class="text-center"> 款色(颜色): </el-col>	
-			  <el-col :span="16">
+			  <el-col :span="6" class="text-center"> 款色(颜色): </el-col>	
+			  <el-col :span="14">
 			  		<el-input v-model="item.color" placeholder="款色(颜色)"></el-input>
 			  </el-col>
 	 		  <el-col :span="4" class="text-center show-btn" >
@@ -16,13 +16,13 @@
 	 		  </el-col>
 			</el-row>
 			<div v-if="item.flag" >
-				<el-row :gutter="10" v-for="(item1, index1) in item.sizes" class="" :key="'row'+index1">
-					  <el-col :span="4" class="textright">
+				<el-row :gutter="10" v-for="(item1, index1) in item.sizes" class="number" :key="'row'+index1">
+					  <el-col :span="6" class="textright">
 					  	<div class="grid-content bg-purple">
 					  		{{ index1 == 0 ?"尺码:" : ''}}  {{item1.size}}
 						</div>
 					  </el-col>
-					  <el-col :span="16">
+					  <el-col :span="14">
 					  	<div class="grid-content bg-purple">
 						  	<el-input-number v-model="item1.number" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
 						</div>
@@ -34,7 +34,7 @@
 		<div class="middle-line">
 			<el-button type="primary" icon="el-icon-plus" @click="addKind" class="circle-btn"></el-button>
 		</div>
-		<div>总价: 件</div>
+		<div>总价: <span class="color size">{{6666}}</span> 件</div>
 	</div>
 </template>
 
@@ -204,5 +204,8 @@ methods:{
 }
 .el-icon-delete:hover{
 	color: #C44DDC;
+}
+.number{
+	margin: 25px 0;
 }
 </style>

@@ -12,22 +12,13 @@
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd"
     >
-
-      <!-- Text slides with image -->
-      <b-carousel-slide caption=""
-                        text=""
-                        img-src="https://lorempixel.com/1024/480/technics/2/"
+      <b-carousel-slide 
+            v-for="(item, index) in banners"
+            :key="'banners'+ index"
+            :caption="item.title"         
+            :img-src="item.picture"
       ></b-carousel-slide>
-
-      <!-- Slides with custom text -->
-      <b-carousel-slide img-src="https://lorempixel.com/1024/480/technics/4/">
-        <h1>Hello world!</h1>
-      </b-carousel-slide>
-
-      <!-- Slides with image only -->
-      <b-carousel-slide img-src="https://lorempixel.com/1024/480/technics/8/">
-      </b-carousel-slide>
-
+      <!-- Text slides with image -->
       <!-- Slides with img slot -->
       <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
       <!-- Slide with blank fluid image to maintain slide aspect ratio -->
@@ -42,6 +33,7 @@
 
 <script>
 export default {
+  props: ["banners"],
   data () {
     return {
       slide: 0,
@@ -64,4 +56,5 @@ export default {
     height: 400px;
     overflow: hidden;
   }
+
 </style>

@@ -106,7 +106,7 @@
 	
 </template>
 <script>
-//http://101.132.187.244:8082/Home/ReceiptOrder/schedule
+//http://101.132.187.244:8082/Home/ReceiptOrder/schedule  order_id
 const indentContent={
 	details: {
 			order_id: null,
@@ -135,6 +135,8 @@ const indentContent={
 		create_time: null
 	}
 };
+
+//http://101.132.187.244:8082/Home/ReceiptOrder/details  order_id
 const detailsContent={
 	details:{
 		order_id:null,
@@ -205,65 +207,33 @@ const detailsContent={
 		total_demanding_account:null,
 		total_done_account: null
 	},
-
-
+	quality:{
+		quality_id:null,
+		check :null,
+		error:null,
+		supplement:null,
+		requirement:null,
+		picture:null,
+	},
+	supplement:{
+		supplement_id:null,
+		requirement:null,
+		picture:null,
+	},
+	address:{
+		address_id:null,
+		receiver:null,
+		phone:null,
+		province :null,
+		city :null,
+		county :null,
+		street:null,
+	} 
 }
 
 
 
 
-
-quality:{
-	quality_id
-	check 
-	error
-	requirement
-	picture
-},
-supplement:{
-	supplement_id
-	requirement
-	picture
-},
-	
-
-版型图片
-supplement
- true string
-其他要求
-supplement_id
- true string
-要求id
-requirement
- true string
-要求信息
-picture
- true string
-图片
-address
- true array[object]
-收货地址
-address_id
- true string
-地址id
-receiver
- true string
-收货人
-phone
- true string
-手机号
-province
- true string
-省
-city
- true string
-市
-county
- true string
-区
-street
- true string
-}
 
 import IndentList from "../indentlistEl"
 	export default{

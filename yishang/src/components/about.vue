@@ -3,10 +3,10 @@
 		<h5>其他要求</h5>
 		<div v-for="(item,index) in aboutList" class="padding-right add-row">
 		<el-row :gutter="10"  class="space padding-bottom" >		 
-		  <el-col :span="4"  class="text-right text-style-sm">
+		  <el-col :span="6"  class="text-right text-style-sm">
 		  	上传说明图片:
 		  </el-col>	
-		  <el-col :span="16">
+		  <el-col :span="14">
 			<el-upload
 			  action="https://jsonplaceholder.typicode.com/posts/"
 			  list-type="picture-card"

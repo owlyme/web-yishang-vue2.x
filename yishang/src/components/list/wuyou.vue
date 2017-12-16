@@ -2,7 +2,7 @@
 	<div id="zizhu" >
 		<!-- 加工单编辑 -->
 		<h3 class="text-center padding-top-bottom">加工单编辑</h3>
-		<el-form ref="form" label-width="16.667%" >
+		<el-form ref="form" label-width="25%" >
 	
 			<Sheet v-on:setWorkSheet="getWorkSheet"></Sheet>
 			<!-- 颜色数量 -->		
@@ -18,7 +18,9 @@
 			<!-- 其他要求1 -->
 			<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
 			<!-- 收货人信息 -->
-			<Pay class="padding-left-right border-top padding-top-bottom" v-on:setNewAddr="getNewAddr"></Pay>
+			<Pay class="padding-left-right border-top padding-top-bottom" v-on
+			
+			:setNewAddr="getNewAddr"></Pay>
 			<!-- 提交订单 -->
 			<div class="padding-left-right border-top padding-top-bottom text-center">
 				<el-button type="primary" @click="onSubmit">自主发单</el-button>
@@ -82,6 +84,7 @@ import Fabric from "../fabric"
 import About from "../about"
 
 import { mapGetters } from 'vuex'
+import {setCookie,getCookie} from '../../cookies.js'
 
 export default {
 name: "zizhu",

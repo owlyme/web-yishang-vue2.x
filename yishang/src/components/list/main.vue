@@ -2,7 +2,7 @@
 <div class="main">
    <div class="zIndexe" v-if=" activeIndex == '1' "></div>
    <div class="zIndexf" > 
-      <div class="carousel-box"><Carousel /></div>
+      <div class="carousel-box" ><Carousel :banners="banner" /></div>
       <div class="switch-ziqu-wuyou">
         <el-row  >
           <el-col :span="12">
@@ -35,11 +35,14 @@
       <div class="list-nav">
         <ul class="nav-h clearfix">
               <li  v-for="(item, index) in listNav"
-                :index="index" 
-                class="muneNav"
+                :index="index " 
+                class="muneNav clearfix"
                 :class="{active : item.flag}"
                 @click="fliter(index)">
-                {{item.type}} <span v-if="(item.num-0)">( {{item.num}} )</span>
+                <div  class="txt">{{item.type}} </div>
+                <ul v-if="item.inner" class="inner-ul">
+                  <li v-for="(item1, index) in item.inner" class="inner-li">{{item1.type}}</li>
+                </ul>
               </li>
         </ul>
         <div class="list" >
@@ -105,6 +108,9 @@ const bannerContent={
 
 import Carousel from  "../carousel"
 import ListElemnt from "../listEl"
+
+import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 export default{
 	name: 'main',
 	components: {Carousel,ListElemnt },
@@ -174,41 +180,57 @@ export default{
         ],
 			totalRows: 500,
 			perPage : 10,
-     		currentPage: 1,
-     		goodsList:[
-     			{
-     				model: "shirt",
-     				status: "doing",
+   		currentPage: 1,
+   		goodsList:[
+   			{
+   				model: "shirt",
+   				status: "doing",
 					done: 30,
 					total:200,
 					price: 66,
 					date: "2017-10-12"
      			},
-     			{
-     				model: "shirt",
-     				status: "doing",
+   			{
+   				model: "shirt",
+   				status: "doing",
+					done: 30,
+					total:200,
+					price: 66,
+		      date: "2017-10-12"
+   			},
+   			{
+   				model: "shirt",
+   				status: "doing",
 					done: 30,
 					total:200,
 					price: 66,
 					date: "2017-10-12"
-     			},
-     			{
-     				model: "shirt",
-     				status: "doing",
-					done: 30,
-					total:200,
-					price: 66,
-					date: "2017-10-12"
-     			},
-     		]
+   			},
+   		],
+      banner: null
 		}
 	},
-  // created(){
-  //   console.log(this.$route.path)
-  // },
 	watch:{
 		currentPage: "getMoreList"
 	},
+  computed:{
+      ...mapGetters([
+         'getUrl'
+      ]),
+  },
+  mounted(){
+    console.log( 'main')    
+    let url= this.getUrl+'/Home/Index/getBanner'
+    this.axios.post(url).then((res)=>{
+        console.log(res)
+        if(res.data.status == 200){
+            this.banner = res.data.content
+            console.log(this.banner)
+        }else{
+
+        }          
+    })  
+  },
 	methods:{
     handleSelect(key, keyPath) {
         //console.log(key, keyPath);
@@ -302,16 +324,20 @@ export default{
     height: 36px;
     line-height: 36px;
     margin: 20px 10px;
-    padding: 0 9px;
+   
     color: #555;
     font-size: 15px;
     cursor: pointer;
     background: rgb(238,238,238);
     transition: background 0.5s, color 0.5s;
+    box-sizing: border-box;
+  }
+  .muneNav .txt{
+     padding: 0 9px;
   }
   .muneNav:hover{
     color: #FFF;
-     background: #C44DDC;
+    background: #C44DDC;
   }
   .active{
     color: #FFF;
@@ -320,6 +346,27 @@ export default{
   .list{
     background: rgb(248,248,248);
   }
+  .inner-ul{
+    display: none;
+    width: 100%;
+    opacity: 0;
+    transition: background 0.5s, color 0.5s,opacity 0.3s;
+  }
+  .muneNav:hover .inner-ul{
+    position: relative;
+     display: block;
+     opacity: 1;
+     color: #555;
+     background: rgb(238,238,238);
+     z-index: 5;
+     text-align: center;
+  }
+  .muneNav:hover .inner-ul .inner-li:hover{
+    color: #FFF;
+    background: #C44DDC;
+  }
+ 
+
 
   .pagination{
     height: 70px;

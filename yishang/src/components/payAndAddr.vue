@@ -1,10 +1,15 @@
 <template>
-	<div class="pay">
+	<div class="pay" >
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%" class="demo-ruleForm">
-		<el-form-item label="是否支付定金:">
+		<el-form-item label="是否支付定金:" v-if='zizhu'>
 		    <el-radio-group v-model="ruleForm.cash" style="padding-top:8px">
 		      <el-radio  :label="1">是</el-radio>
 		      <el-radio  :label="0">否</el-radio>
+		    </el-radio-group>
+		</el-form-item>
+		<el-form-item label="支付服务费用(订单的金额的10%):" v-else>
+		    <el-radio-group v-model="ruleForm.per" style="padding-top:8px">
+		      	<span class="color">{{3000}}</span> 元
 		    </el-radio-group>
 		</el-form-item>
 		<el-form-item label="确认收货地址:" >
@@ -55,6 +60,7 @@ import China from "./address/china.vue"
 	export default{
 		name: "pay",
 		components:{ China},
+		props:['zizhu'],
 		data(){
 			return{				
 				ruleForm: {
@@ -83,6 +89,7 @@ import China from "./address/china.vue"
 			}
 		},
 		mounted(){
+			console.log(this.zizhu)
 			let self = this;
 			let receiver = { pay : 1, address: self.addressList[0]}
 			this.$emit('setNewAddr', receiver)

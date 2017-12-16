@@ -2,10 +2,10 @@
 	<div class="uploadimg">
 			<h5>样衣照片</h5>
 			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="4" class="text-right text-style-sm">
+			  <el-col :span="6" class="text-right text-style-sm">
 			  	正面全览照
 			  </el-col>	
-			  <el-col :span="16">
+			  <el-col :span="14">
 			  		<el-upload
 						class="avatar-uploader"
 						action="https://jsonplaceholder.typicode.com/posts/"
@@ -18,10 +18,10 @@
 			  </el-col>	    			  
 			</el-row>
 			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="4" class="text-right text-style-sm">
+			  <el-col :span="6" class="text-right text-style-sm">
 			  	背面全览照
 			  </el-col>	
-			  <el-col :span="16">
+			  <el-col :span="14">
 			  		<el-upload
 						class="avatar-uploader"
 						action="https://jsonplaceholder.typicode.com/posts/"
@@ -34,10 +34,10 @@
 			  </el-col>	    			  
 			</el-row>
 			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="4" class="text-right text-style-sm">
+			  <el-col :span="6" class="text-right text-style-sm">
 			  	左侧面全览照
 			  </el-col>	
-			  <el-col :span="16">
+			  <el-col :span="14">
 			  		<el-upload
 						class="avatar-uploader"
 						action="https://jsonplaceholder.typicode.com/posts/"
@@ -50,10 +50,10 @@
 			  </el-col>	    			  
 			</el-row>
 			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="4" class="text-right text-style-sm">
+			  <el-col :span="6" class="text-right text-style-sm">
 			  	右侧面全览照
 			  </el-col>	
-			  <el-col :span="16">
+			  <el-col :span="14">
 			  		<el-upload
 						class="avatar-uploader"
 						action="https://jsonplaceholder.typicode.com/posts/"
@@ -66,10 +66,10 @@
 			  </el-col>	    			  
 			</el-row>
 			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="4" class="text-right text-style-sm">
+			  <el-col :span="6" class="text-right text-style-sm">
 			  	局部细节图
 			  </el-col>	
-			  <el-col :span="16">
+			  <el-col :span="14">
 				<el-upload
 				  action="https://jsonplaceholder.typicode.com/posts/"
 				  list-type="picture-card"

@@ -2,17 +2,17 @@
 <div class="fabric">
   <h5>面料信息</h5>
 
-<el-form label-width="16.67%">
+<el-form label-width="25%">
   <div v-for="(item, index) in fabricList">
     <el-form-item :label="item.label" class="bg">
       <el-input v-model="item.name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
       <i  v-if="index > 1" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
     </el-form-item>
     <el-row :gutter="10"  class="space padding-bottom" >    
-        <el-col :span="4" class="text-right text-style-sm">
+        <el-col :span="6" class="text-right text-style-sm">
           面料图片:
         </el-col> 
-        <el-col :span="16">
+        <el-col :span="14">
         <el-upload
           action="https://jsonplaceholder.typicode.com/posts/"
           list-type="picture-card"

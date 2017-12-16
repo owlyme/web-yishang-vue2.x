@@ -71,4 +71,7 @@
 	background: #fff;
 	margin-bottom: 12px;
 }
+.status{
+	/*background-image: url(../../static/login/)*/
+}
 </style>
