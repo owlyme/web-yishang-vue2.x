@@ -10,7 +10,7 @@
     </el-form-item>
     <el-row :gutter="10"  class="space padding-bottom" >    
         <el-col :span="6" class="text-right text-style-sm">
-          面料图片:
+          面料图片: 
         </el-col> 
         <el-col :span="14">
         <el-upload
@@ -25,20 +25,22 @@
         </el-dialog>
         </el-col>
     </el-row>
-      <el-form-item label="面料成分:" class="padding-right">
+      <el-form-item label="面料成分: " class="padding-right">
           <el-select v-model="item.component" placeholder="请输入您的面料成分" style="width:100%">
-            <el-option label="针织" value="zhengzhi"></el-option>
-            <el-option label="梭织" value="suozhi"></el-option>
-            <el-option label="毛衫" value="maoshan"></el-option>
-            <el-option label="牛仔" value="liuzai"></el-option>
+             <el-option 
+                  v-for="(item, index) in category"
+                :key="'category'+index"
+                :label="item.category_name" :value="item.category_id">                  
+                </el-option>
           </el-select>
       </el-form-item>
       <el-form-item label="面料类型:" class="padding-right">
           <el-select v-model="item.type" placeholder="请输入您的面料类型" style="width:100%">
-            <el-option label="针织" value="zhengzhi"></el-option>
-            <el-option label="梭织" value="suozhi"></el-option>
-            <el-option label="毛衫" value="maoshan"></el-option>
-            <el-option label="牛仔" value="liuzai"></el-option>
+             <el-option 
+                  v-for="(item, index) in component"
+                :key="'category'+index"
+                :label="item.component_name" :value="item.component_id">
+                </el-option>
           </el-select>
       </el-form-item>
       <el-form-item label="面料克重:" class="padding-right">
@@ -55,6 +57,7 @@
 
 <script>
 export default {
+  props:['component','category'],
     data() {
       return {
         dialogVisible: false,

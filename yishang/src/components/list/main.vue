@@ -229,7 +229,8 @@ export default{
         }else{
 
         }          
-    })  
+    }) 
+    
   },
 	methods:{
     handleSelect(key, keyPath) {

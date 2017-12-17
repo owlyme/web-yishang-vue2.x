@@ -11,13 +11,17 @@
                 v-model="slide"
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd"
+               
     >
       <b-carousel-slide 
             v-for="(item, index) in banners"
-            :key="'banners'+ index"
-            :caption="item.title"         
+            :key="'banners'+ index"                 
             :img-src="item.picture"
-      ></b-carousel-slide>
+      >      
+        <a :href="item.url" class="bannerLink"></a>
+        
+      </b-carousel-slide>
+      <!-- :caption="item.title"     -->
       <!-- Text slides with image -->
       <!-- Slides with img slot -->
       <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
@@ -55,6 +59,11 @@ export default {
   #carousel1{
     height: 400px;
     overflow: hidden;
+  }
+  .bannerLink{
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
 </style>

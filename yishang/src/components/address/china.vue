@@ -1,7 +1,7 @@
 <template>
  <div id="xy">
    <city-select v-model="cityInfo"></city-select>
-   <!-- <h6>v-model的值是 <code>{{ cityInfo }}</code></h6> -->
+    <!-- <h6>v-model的值是 <code>{{ cityInfo }}</code></h6> --> 
    <!-- <h6>从v-model得知,你选择了 <i>{{ cityName }}</i></h6> -->
  </div>
 </template>
@@ -18,11 +18,11 @@
      CitySelect
    },
    watch:{
-      ruleForm:{
+      cityInfo:{
         handler(curVal,oldVal){
-          console.log(curVal)
-          colorNumber = curVal
-          this.$emit("setNewAddr",curVal)
+           // console.log("china")
+          // console.log( JSON.stringify(curVal) )
+           this.$emit('setCity', curVal)
     　　},
     　　deep:true
       }

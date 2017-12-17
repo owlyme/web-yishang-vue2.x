@@ -188,9 +188,7 @@ a:hover{
   color: #5a5e66;
 }
 /**/
-textarea{
-  height: 80px;
-}
+
 .el-textarea__inner{
   height: 66px;
 }
@@ -198,8 +196,10 @@ textarea{
 .carousel-indicators .active {
     background-color: #e75deb;
 }
-
-
+/*date*/
+.el-input__prefix {
+    opacity: 0;
+}
 /* background*/
 .bg-icon{
   background-image: url(/static/login/icons.png);
@@ -219,11 +219,7 @@ border-radius: 50px 0 0 50px;
   width: 67px;
   border-radius: 0 50px 50px 0;
 }
-.el-input__prefix {
-    right: 5px;
-    -webkit-transition: all .3s;
-    transition: all .3s;
-}
+
 #zizhu .el-button--primary{  
     outline-style: none;
 }
@@ -241,6 +237,18 @@ border-radius: 50px 0 0 50px;
   font-size: 1.2em;
   font-weight: 700;
 }
+.box-center{
+  width: 75%;
+  margin: 0 auto;
+}
 /*banner*/
+.carousel-caption{
+  height: 100%;
+}
 
+/*imgupload */
+.avatar-uploader .el-upload img{
+     width: 100%;
+    height: 100%;
+}
 </style>

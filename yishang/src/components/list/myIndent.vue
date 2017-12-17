@@ -1,7 +1,8 @@
 <template>
 	<div>
+		<router-view></router-view>
 		<!-- 我的订单信息 -->
-		<el-row :gutter="10" v-if="getIndentBlock">
+		<el-row :gutter="10" v-if="displayIndent">
 		  <el-col :span="5">
 		  	<div class="myIndent">我的订单</div>
 			    <ul class="nav-vertal">
@@ -29,7 +30,7 @@
 			  <el-menu-item index="2">订单详情</el-menu-item>
 			</el-menu>
 
-			<div class="container-detail" v-if="activeIndex == '1'">
+			<div class="container-detail">
 				<b-container class="bv-example-row  border-top padding-around">
      			 <b-row cols="4" align-v="center" >
      			 	<b-col cols="3" ><img src="" alt="订单图片"></b-col>
@@ -101,71 +102,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="container-detail1" v-else>
-				<div class="jiben border-top detail-inner">
-					<h6>基本信息</h6>
-					<ul>
-						<li></li>
-					</ul>
-				</div>
-				<div class="mianliao border-top detail-inner">
-					<h6>面料信息(主面料1)</h6>
-					<ul>
-						<li></li>
-					</ul>
-					<div class="mianliao-icon border-top">
-						
-					</div>
-				</div>
-				<div class="mianliao border-top detail-inner">
-					<h6>面料信息(辅面料1)</h6>
-					<ul>
-						<li></li>
-					</ul>
-					<div class="mianliao-icon border-top">
-						
-					</div>
-				</div>
-				<div class="yangyi border-top detail-inner">
-					<h6>样衣图片</h6>
-					<div class="mianliao-icon">
-						
-					</div>
-				</div>
-				<div class="yanseshuliang border-top detail-inner">
-					<h6>颜色数量</h6>
-					<div>
-						
-					</div>
-				</div>
-				<div class="pinzhi border-top detail-inner">
-					<h6>品质要求</h6>
-					<div class="chahuo">
-						
-					</div>
-					<div class="buwei border-top">
-						
-					</div>
-				</div>
-				<div class="banxing border-top detail-inner">
-					<h6>版型图</h6>
-					<div class="mianliao-icon border-top">
-						
-					</div>					
-				</div>
-				<div class="qita border-top detail-inner">
-					<h6>其他</h6>
-					<div class="chahuo">
-						
-					</div>
-					<div class="buwei border-top">
-						
-					</div>				
-				</div>
-				<div class="address border-top detail-inner">
-					<h6>收货地址</h6>
-					<div></div>									
-				</div>
+			<div class="container-detail">
+				
 			</div>
 		</div>
 	</div>
@@ -300,10 +238,6 @@ const detailsContent={
 
 import IndentList from "../indentlistEl"
 
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
-import { mapMutations } from 'vuex'
-
 
 	export default{
 		name: 'indet',
@@ -407,23 +341,12 @@ import { mapMutations } from 'vuex'
 	     		]
 			}
 		},
-		mounted(){
-			console.log(this.getIndentBlock)
-			
-		},
-		computed:{
-			...mapGetters([
-		      'getIndentBlock'
-		    ]),
+		created(){
+			this.displayIndent =true
 		},
 		methods:{
-			...mapMutations([
-		      'setIndentBlock'
-		    ]),
 			handleSelect(key, keyPath) {
 		        console.log(key, keyPath);
-
-		        this.activeIndex = key
 		    },
 		    fliter(index){
 		    	let self = this;
@@ -436,9 +359,9 @@ import { mapMutations } from 'vuex'
 		    	});
 		    },
 		    switchBlock(){
-		    	console.log(123123)		
-		    	this.setIndentBlock(false)
-		    	console.log(this.indentBlock)
+		    	console.log(123123)
+		    	this.displayIndent = !this.displayIndent
+		    	console.log(this.displayIndent)
 		    }
 		}
 	}
@@ -530,10 +453,6 @@ import { mapMutations } from 'vuex'
 		border-color: #C44DDC;
 		background:  rgba(196,77,220,0.07);
 	}
-
-	/*detail*/
-	.detail-inner{
-		padding: 30px;
-	}
+	
 	
 </style>

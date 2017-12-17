@@ -1,7 +1,8 @@
 <template>
 	<div>
+		<router-view></router-view>
 		<!-- 我的订单信息 -->
-		<el-row :gutter="10" v-if="getIndentBlock">
+		<el-row :gutter="10" v-if="displayIndent">
 		  <el-col :span="5">
 		  	<div class="myIndent">我的订单</div>
 			    <ul class="nav-vertal">
@@ -21,153 +22,6 @@
 		  		</div>
 		  </el-col>
 		</el-row>
-
-		<!-- 进度图标 -->
-		<div v-else>
-			<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-			  <el-menu-item index="1">订单进度</el-menu-item>
-			  <el-menu-item index="2">订单详情</el-menu-item>
-			</el-menu>
-
-			<div class="container-detail" v-if="activeIndex == '1'">
-				<b-container class="bv-example-row  border-top padding-around">
-     			 <b-row cols="4" align-v="center" >
-     			 	<b-col cols="3" ><img src="" alt="订单图片"></b-col>
-     			 	<b-col cols="9">
-     			 		<!-- <h4>当前进度: <span> {{}}</span></h4> -->
-     			 		<h5>当前进度: <span style="color: #C44DDC"> 待发前期资料</span></h5>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 	</b-col>
-     			 </b-row>
-     			</b-container>
-				<div class="goods-details  border-top padding-around">					
-					<h5>进度详情</h5>
-					<div class="graph">
-						<div class="graph-bg">
-							<div class="rect"></div>
-							<div class="rectp-round"></div>
-						</div>
-					<el-steps :active="6" align-center class="graph1">
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step title="待发样衣" description=""></el-step>
-					  <el-step title="待收样衣" description=""></el-step>
-					  <el-step title="已收样衣" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					</el-steps>
-					<el-steps :active="6" align-center class="graph2">
-					  <el-step title="等待接单" description=""></el-step>	
-					  <el-step title="待选工厂" description=""></el-step>
-
-					  <el-step title="待发面料" description=""></el-step>
-					  <el-step title="待收面料" description=""></el-step>
-					  <el-step title="已收面料" description=""></el-step>
-
-					  <el-step title="生产加工" description=""></el-step>
-					  <el-step title="待收货付款" description=""></el-step>
-					  <el-step title="等待评价" description=""></el-step>
-					  <el-step title="已评价" description=""></el-step>
-					</el-steps >
-					<el-steps :active="4" align-center class="graph3">
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step title="待发辅料" description=""></el-step>
-					  <el-step title="待收辅料" description=""></el-step>
-					  <el-step title="已收辅料" description=""></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					</el-steps>
-					</div>
-				</div>
-				<div class="goods-details  border-top padding-around" >
-					<h5>订单动态</h5>
-					<div class="padding-top">
-					  <el-steps direction="vertical" :active="3">
-					    <el-step title="步骤 1" description="这是一段很长很长"></el-step>
-					    <el-step title="步骤 2" description="这是一段很长很长"></el-step>
-					    <el-step title="步骤 3" description="这是一段很长很长"></el-step>
-					  </el-steps>
-					</div>
-				</div>
-			</div>
-			<div class="container-detail1" v-else>
-				<div class="jiben border-top detail-inner">
-					<h6>基本信息</h6>
-					<ul>
-						<li></li>
-					</ul>
-				</div>
-				<div class="mianliao border-top detail-inner">
-					<h6>面料信息(主面料1)</h6>
-					<ul>
-						<li></li>
-					</ul>
-					<div class="mianliao-icon border-top">
-						
-					</div>
-				</div>
-				<div class="mianliao border-top detail-inner">
-					<h6>面料信息(辅面料1)</h6>
-					<ul>
-						<li></li>
-					</ul>
-					<div class="mianliao-icon border-top">
-						
-					</div>
-				</div>
-				<div class="yangyi border-top detail-inner">
-					<h6>样衣图片</h6>
-					<div class="mianliao-icon">
-						
-					</div>
-				</div>
-				<div class="yanseshuliang border-top detail-inner">
-					<h6>颜色数量</h6>
-					<div>
-						
-					</div>
-				</div>
-				<div class="pinzhi border-top detail-inner">
-					<h6>品质要求</h6>
-					<div class="chahuo">
-						
-					</div>
-					<div class="buwei border-top">
-						
-					</div>
-				</div>
-				<div class="banxing border-top detail-inner">
-					<h6>版型图</h6>
-					<div class="mianliao-icon border-top">
-						
-					</div>					
-				</div>
-				<div class="qita border-top detail-inner">
-					<h6>其他</h6>
-					<div class="chahuo">
-						
-					</div>
-					<div class="buwei border-top">
-						
-					</div>				
-				</div>
-				<div class="address border-top detail-inner">
-					<h6>收货地址</h6>
-					<div></div>									
-				</div>
-			</div>
-		</div>
 	</div>
 	
 </template>
@@ -300,10 +154,6 @@ const detailsContent={
 
 import IndentList from "../indentlistEl"
 
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
-import { mapMutations } from 'vuex'
-
 
 	export default{
 		name: 'indet',
@@ -407,23 +257,12 @@ import { mapMutations } from 'vuex'
 	     		]
 			}
 		},
-		mounted(){
-			console.log(this.getIndentBlock)
-			
-		},
-		computed:{
-			...mapGetters([
-		      'getIndentBlock'
-		    ]),
+		created(){
+			this.displayIndent =true
 		},
 		methods:{
-			...mapMutations([
-		      'setIndentBlock'
-		    ]),
 			handleSelect(key, keyPath) {
 		        console.log(key, keyPath);
-
-		        this.activeIndex = key
 		    },
 		    fliter(index){
 		    	let self = this;
@@ -436,9 +275,9 @@ import { mapMutations } from 'vuex'
 		    	});
 		    },
 		    switchBlock(){
-		    	console.log(123123)		
-		    	this.setIndentBlock(false)
-		    	console.log(this.indentBlock)
+		    	console.log(123123)
+		    	this.displayIndent = !this.displayIndent
+		    	console.log(this.displayIndent)
 		    }
 		}
 	}
@@ -530,10 +369,6 @@ import { mapMutations } from 'vuex'
 		border-color: #C44DDC;
 		background:  rgba(196,77,220,0.07);
 	}
-
-	/*detail*/
-	.detail-inner{
-		padding: 30px;
-	}
+	
 	
 </style>

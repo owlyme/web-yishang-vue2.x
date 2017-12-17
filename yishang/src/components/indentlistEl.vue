@@ -32,7 +32,7 @@
 <script>
 	export default{
 		name: "",
-		props: ["goodsMsg"],
+		props: ["goodsMsg","change"],
 		data(){
 			return{
 				// goodsMsg: goodsMsg
@@ -40,7 +40,8 @@
 		},
 		methods:{
 			view(){
-				console.log('view')
+				console.log('indent list')
+				this.$emit('change')
 			}
 		}
 

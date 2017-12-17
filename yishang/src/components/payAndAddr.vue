@@ -15,7 +15,7 @@
 		<el-form-item label="确认收货地址:" >
 		    <el-radio-group v-model="ruleForm.address" >
 		    	<div v-for="(item, index) in addressList">
-		    		<el-radio :label="item" :key="'address'+ index"></el-radio>
+		    		<el-radio :label="item" :key="'address'+ index" ></el-radio>
 		    	</div>		     
 		    </el-radio-group>
 		</el-form-item>
@@ -27,7 +27,7 @@
 			  <el-form-item label="手机:" prop="mobile">
 			    <el-input v-model="ruleForm.mobile"></el-input>
 			  </el-form-item>
-			  <el-form-item label="所在地区:" prop="desc">
+			  <el-form-item label="所在地区:" prop="region">
 			  	<!-- cheng shi di dian  -->
 			  <China v-on:setCity="getCity"></China>
 
@@ -57,10 +57,14 @@ const address={
 }
 
 import China from "./address/china.vue"
+import qs from 'qs';
+
+import { mapGetters } from 'vuex'
+
 	export default{
 		name: "pay",
 		components:{ China},
-		props:['zizhu'],
+		props:['zizhu','addressList'],
 		data(){
 			return{				
 				ruleForm: {
@@ -72,11 +76,20 @@ import China from "./address/china.vue"
 		          delivery: false,
 		          desc: ''
 		        },
-		        addressList:["rwerwerwer","qwerqwrwqerwqe"],
+		        newAddress:{
+		        	receiver: null,
+					phone: null,
+					province: null,
+					city: null,
+					county: null,
+					street: null,
+					is_default: null
+		        },
+		       	// addressList:["rwerwerwer","qwerqwrwqerwqe"],
 		        rules: {
 		          name: [
 		            { required: true, message: '请输入收货人姓名', trigger: 'blur' },
-		            { min: 3, max: 6, message: '长度在 2 到 5 个字符', trigger: 'blur' }
+		            { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
 		          ],
 		          mobile: [
 		            { required: true, message: '请输入手机号码', trigger: 'blur' },
@@ -89,11 +102,11 @@ import China from "./address/china.vue"
 			}
 		},
 		mounted(){
-			console.log(this.zizhu)
+			// console.log(this.zizhu)
 			let self = this;
-			let receiver = { pay : 1, address: self.addressList[0]}
-			this.$emit('setNewAddr', receiver)
-		},
+			//Slet receiver = { pay : 1, address: self.addressList}
+			//this.$emit('setNewAddr', receiver)
+		},		
 		watch:{
 			ruleForm:{
 				handler(curVal,oldVal){
@@ -105,29 +118,63 @@ import China from "./address/china.vue"
 		　　　　deep:true
 			}
 		},
+		computed:{
+		      ...mapGetters([
+		         'getUrl'
+		      ]),
+		  },
 		methods:{
-			submitForm(formName) {
+			submitForm(formName) {				
 		        this.$refs[formName].validate((valid) => {
 		          if (valid) {
 		            let address = this.ruleForm.city+this.ruleForm.desc+' ('+this.ruleForm.name+') '+this.ruleForm.mobile;
-		            	this.addressList.push(address)
-		            	this.ruleForm.desc="";
-		            	this.ruleForm.name=""
-		            	this.ruleForm.mobile=""
-		            	// console.log(this.ruleForm)
+		            	this.addressList.push(address)		            	    
+		            	this.addAddress()
 		          } else {
-		            console.log('error submit!!');
+		            // console.log('error submit!!');
 		            return false;
 		          }
-		        });
+		        });		           
+		     },
+		     addAddress(){
+		     	this.newAddress.receiver= this.ruleForm.name
+				this.newAddress.phone= this.ruleForm.mobile							
+				this.newAddress.street= this.ruleForm.desc
+
+		     	let url = this.getUrl+ '/Home/Address/addAddress';
+		        let args = this.newAddress
+			    this.axios.post(url, qs.stringify(args)).then((res)=>{
+		        	console.log(res)
+			        if(res.data.status == 200){
+			        	//添加成功
+			        	this.openMessage( res.data.msg )
+			        }else{
+			        	this.openMessage( res.data.msg, true)
+			        }
+			    }) 		      
 		     },
 		    resetForm(formName) {
 		        this.$refs[formName].resetFields();
 		    },
+		    openMessage(str,bool) {
+		    	let html='';
+		    	if( !bool){
+		    		html = '<i style="color: green">'+str+'</i>';
+		    	}else{
+		    		html = '<i style="color: red">'+str+'</i>';
+		    	} 
+		        this.$alert( html, {
+		          dangerouslyUseHTMLString: true,
+		          showClose: false
+		        });
+		    },
 		    getCity(val){
-		    	// console.log(val)
+		    	 // console.log("get addr:"+ val)	
 		    	let self= this;
-		    	self.$set(self.ruleForm,'city', val)
+					self.$set(self.newAddress,'province', val.province.name)
+					self.$set(self.newAddress,'city', val.city.name)
+					self.$set(self.newAddress,'county', val.block.name)
+		    		self.$set(self.ruleForm,'city', val)
 		    },
 
 		}

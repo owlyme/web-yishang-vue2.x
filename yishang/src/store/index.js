@@ -5,10 +5,12 @@ Vue.use(Vuex)
 
 const state={
 	url: "http://101.132.187.244:8082",
+	uploadUrl: "http://101.132.187.244:8083/picture/upload",
 	customer: {
 		avatar: null,
 		id: null
 	},
+	indentBlock: true,
 	
 	zizhuIndent:{
 		workSheet:{},
@@ -56,6 +58,12 @@ title:"Card Title"
 const getters = {
 	getUrl (state){
 		return state.url
+	},
+	getUploadUrl (state){
+		return state.uploadUrl
+	},
+	getIndentBlock(state){
+		return state.indentBlock
 	},
 	getZizhuIndent (state) {
 	 	return state.zizhuIndent
@@ -105,6 +113,10 @@ const actions = {
 
 
 const mutations = {
+ setIndentBlock(state,val){
+
+	state.indentBlock = val ? val : false ;
+ },
  
  addZizhuIndentList(state){
  	state.zizhuIndentList.push(state.zizhuIndent);

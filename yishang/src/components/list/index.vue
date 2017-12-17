@@ -27,8 +27,7 @@
                       class="muneNav"
                       :class="{active : item.flag}" 
                       @click="fliter(index,item.path)"
-                      >{{item.title}}</span> 
-                    
+                      >{{item.title}}</span>        
               </div>
               </div>
           </el-col>
@@ -48,6 +47,7 @@ import Footerinfo from "../footer"
 
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 
 import { setCookie,getCookie,delCookie } from '../../cookies.js'
 export default {
@@ -76,6 +76,9 @@ export default {
   methods:{
     ...mapActions([
       'clearCustomer'
+    ]),
+    ...mapMutations([
+      'setIndentBlock'
     ]),
   logOut(){
       let url= this.getUrl+'/Home/User/logOut'
@@ -108,6 +111,7 @@ export default {
               this.contentTitle= item.type
             }
           });
+          this.setIndentBlock(true)
           this.$router.push(path)
         }
   }

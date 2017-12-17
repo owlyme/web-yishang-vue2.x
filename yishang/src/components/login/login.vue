@@ -100,7 +100,7 @@ export default {
   },  
   computed:{
       ...mapGetters([
-                    'getUrl'
+          'getUrl'
         ]),
     },
   mounted(){
