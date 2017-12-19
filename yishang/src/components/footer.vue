@@ -1,6 +1,6 @@
 <template>
- <div >  
-   <div class="container footer" >
+<div style="padding-top: 40px">
+   <div class=" footer" >
       <div class="foot-info">
         <span v-for="(item, index)  in certificate" :key="index">{{item}}</span>
       </div>
@@ -8,7 +8,7 @@
         <span v-for="(item, index)  in records" :key="index">{{item}}</span>
       </div>
     </div>
- </div>
+</div>
 </template>
 
 <script>
@@ -32,7 +32,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.footer{
+  padding: 30px 0;
 
+  background: #fff;
+}
 .foot-info{
   text-align: center;
   font-size: 12px;

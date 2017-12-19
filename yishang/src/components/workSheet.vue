@@ -15,9 +15,9 @@
 				  <el-form-item label="服装品类类目:" >
 				    <el-select v-model="form.kindType" placeholder="服装品类类目" style="width:75%">
 				    	<el-option 
-				    		v-for="(item, index) in cate"
-				    		:key="'cate'+index"
-				    	:label="item.cate_name" :value="item.cate_id"></el-option>
+				    		v-for="(item, index) in styles"
+				    		:key="'styles'+index"
+				    	:label="item.style_name" :value="item.style_id"></el-option>
 				    </el-select>
 				  </el-form-item>
 				  <el-form-item label="加工模式:">
@@ -40,8 +40,6 @@
 					name: '',
 					fabricType: "",
 					kindType: '',
-					fabricType:'',
-					kindType:'',
 					status:''
 				}
 			}

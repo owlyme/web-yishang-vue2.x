@@ -1,17 +1,111 @@
 import Vue from 'vue'
 import Vuex from  'vuex'
-
+					// {
+					// 	type: "所有订单",
+					// 	num: 12,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"待发前期资料",
+					// 	num: 3,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"待发样衣",
+					// 	num: 0,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"待发面料",
+					// 	num: 3,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"待发辅料",
+					// 	num: 0,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"延误",
+					// 	num: 0,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"抢单中",
+					// 	num: 3,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"加工中",
+					// 	num: 2,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"待付款收货",
+					// 	num: 1,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"待评价",
+					// 	num: 1,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"取消订单",
+					// 	num: 0,
+					// 	flag: false
+					// },
+					// {
+					// 	type:"已完成",
+					// 	num: 1,
+					// 	flag: false
+					// }
 Vue.use(Vuex)
 
 const state={
 	url: "http://101.132.187.244:8082",
-	uploadUrl: "http://101.132.187.244:8083/picture/upload",
+	uploadUrl: "http://101.132.187.244:8083",
 	customer: {
 		avatar: null,
 		id: null
 	},
 	indentBlock: true,
-	
+	submitReceipt:{
+				type: null,
+				cate_name: null,
+				name: null,
+				style_name: null,
+				mode_name: null,
+				size: null,
+				demanding_account: null,
+				fee: null,
+				total_fee: null,
+				expire_time: null,
+				arrival_date: null,
+				delivery_date: null,
+				front_picture: null,
+				back_picture: null,
+				left_picture: null,
+				right_picture: null,
+				part_picture: null,
+				other_picture: null,
+				check: null,
+				error: null,
+				supplement: null,
+				requirement: null,
+				picture: null,
+				fabric: null,
+				supplements: null,
+				is_deposited: null,
+				receiver: null,
+				phone: null,
+				province: null,
+				city: null,
+				county: null,
+				street: null,
+		   	},
+
+
 	zizhuIndent:{
 		workSheet:{},
 		colorNum:[],
@@ -95,9 +189,7 @@ const actions = {
  },
 
   getCustomInfo (context,info) {
-  	console.log(context.customInfo);
    	context.state.customInfo = info;
-   	console.log(context);
   },
   loadGoods ({ state }){
   	Vue.http.get('api/goods').then((response) => {
@@ -114,75 +206,9 @@ const actions = {
 
 const mutations = {
  setIndentBlock(state,val){
-
-	state.indentBlock = val ? val : false ;
- },
- 
- addZizhuIndentList(state){
- 	state.zizhuIndentList.push(state.zizhuIndent);
- 	state.zizhuIndent = {
-		 		workSheet:{},
-				colorNum:[],
-				period:{},
-				clothePic:{},
-				quality:{},
-				fabric:{},
-				about:{},
-				newAddr:{}
-		 	}
- },
- addWuyouIndentList(state){
- 	state.wuyouIndentList.push(state.wuyouIndent);
- 	state.wuyouIndent = {
-		 		workSheet:{},
-				colorNum:[],
-				period:{},
-				clothePic:{},
-				quality:{},
-				fabric:{},
-				about:{},
-				newAddr:{}
-		 	}
- },
-
-
-
-
-
-
-
-
- addGoods(state, good){
- 	state.goods.push(good);
- },
- seleteGoods(state, goodIndex){
- 	let has = false;
-	 	has = state.seletedGoods.every(function(item, index){
-	 		return item == goodIndex ? true : false;
-	 	});
-	 	if(has){
-	 		state.seletedGoods.splice(goodIndex, 1)
-	 	}else{
-	 		state.seletedGoods.push( index)
-	 	} 	
- },
- removeGoods(state, goodIndex){//single good delete
- 	//state.goods.splice(goodIndex, 1)
- 	state.seletedGoods.splice(goodIndex, 1)
- },
- countTotalPrice (state){//goods delete 
- 	let curGoods = [],
- 		totalPrice = 0;
-
- 	state.seletedGoods.forEach(function(item, index){
- 		curGoods.push( state.goods[item] ); 		
- 	});
- 	curGoods.forEach(function(item, index){
- 		totalPrice += item.price * item.num;		
- 	});
-
- 	state.totalPrice = totalPrice;
- } 
+	// state.indentBlock = val ? val : false ;
+	Vue.set(state,'indentBlock',val || false )
+ }
 }
 
 export default new Vuex.Store({

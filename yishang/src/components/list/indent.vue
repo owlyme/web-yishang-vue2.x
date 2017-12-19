@@ -1,175 +1,245 @@
 <template>
-	<div>
-		<!-- 我的订单信息 -->
-		<el-row :gutter="10" v-if="getIndentBlock">
-		  <el-col :span="5">
-		  	<div class="myIndent">我的订单</div>
-			    <ul class="nav-vertal">
-	          	<li  v-for="(item, index) in listNav"
-	          		:index="index" 
-	          		class="muneNav"
-	          		:class="{active : item.flag}"
-	          		@click="fliter(index)">
-	          		{{item.type}} <span v-if="(item.num-0)">( {{item.num}} )</span>
-	          	</li>
-	          </ul>
-		  </el-col>
-		  <el-col :span="19">
-		  		<div class="myIndent">{{contentTitle}}</div>
-		  		<div v-for="(item,index) in myMgoodsList" :index="index+'indent'">
-		  			<IndentList :goodsMsg="item" v-on:change="switchBlock"></IndentList>
-		  		</div>
-		  </el-col>
-		</el-row>
+	<div id="indent">
+		<div class="container">
+			<!-- 我的订单信息 -->
+			<el-row :gutter="10" v-if="getIndentBlock" style="weidth : 100%">
+			  <el-col :span="5">
+			  	<div class="myIndent">我的订单</div>
+				    <ul class="nav-vertal">
+		          	<li  v-for="(item, index) in listNav"
+		          		:index="index" 
+		          		class="muneNav"
+		          		:class="{active : item.flag}"
+		          		@click="fliter(index, item.keyword)" 
+		          		>
+		          		{{item.type}} <span v-if="(item.num-0)">( {{item.num}} )</span>
+		          	</li>
+		          </ul>
+			  </el-col>
+			  <el-col :span="19">
+			  		<div class="myIndent">{{contentTitle}}</div>
+			  		<div v-for="(item,index) in goodsList" :index="index+'indent'">
+			  			<IndentList :goodsMsg="item" v-on:change="switchBlock"></IndentList>
+			  		</div>
+			  </el-col>
+			</el-row>
 
-		<!-- 进度图标 -->
-		<div v-else>
-			<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-			  <el-menu-item index="1">订单进度</el-menu-item>
-			  <el-menu-item index="2">订单详情</el-menu-item>
-			</el-menu>
+			<!-- 进度图标 -->
+			<div v-else>
+			<!-- 	<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+				  <el-menu-item index="1">订单进度</el-menu-item>
+				  <el-menu-item index="2">订单详情</el-menu-item>
+				</el-menu> -->
+				<div class="nav-schedule-details el-menu-demo clearfix">
+					<ul>
+						<li @click="changeActiveIndex">订单进度</li>
+						<li @click="changeActiveIndex">订单详情</li>
+					</ul>
+				</div>
 
-			<div class="container-detail" v-if="activeIndex == '1'">
-				<b-container class="bv-example-row  border-top padding-around">
-     			 <b-row cols="4" align-v="center" >
-     			 	<b-col cols="3" ><img src="" alt="订单图片"></b-col>
-     			 	<b-col cols="9">
-     			 		<!-- <h4>当前进度: <span> {{}}</span></h4> -->
-     			 		<h5>当前进度: <span style="color: #C44DDC"> 待发前期资料</span></h5>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 		<div class="text-style">当前进度:</div>
-     			 	</b-col>
-     			 </b-row>
-     			</b-container>
-				<div class="goods-details  border-top padding-around">					
-					<h5>进度详情</h5>
-					<div class="graph">
-						<div class="graph-bg">
-							<div class="rect"></div>
-							<div class="rectp-round"></div>
+				<div class="container-detail" v-if="activeIndex">
+					<div >
+						<b-container class="bv-example-row  border-top padding-around" >
+		     			 <b-row cols="4"  >
+		     			 	<b-col cols="3" ><img alt="订单图片" :src="getUploadUrl+'/'+selectSchedule.details.front_picture"></b-col>
+		     			 	<b-col cols="9">
+		     			 	
+	     			 		<h5>当前进度: <span class="color"> {{ selectSchedule.details.status_msg }}</span></h5>
+		     			 		<div class="text-style">订单名称: <span> {{selectSchedule.details.name}}</span></div>
+		     			 		<div class="text-style">交货时间: <span> {{selectSchedule.details.delivery_date}}</span></div>
+		     			 		<div class="text-style">生产周期: <span> {{selectSchedule.details.cycle}} 天</span></div>
+		     			 		<div class="text-style">面辅料完备时间: <span> {{selectSchedule.details.arrival_date}}</span></div>
+		     			 		<div class="text-style">接单方:
+		     			 			<span v-for="(item, index) in selectSchedule.details.undertake_company"> 
+		     			 			{{ item.company}} </span></div>
+		     			 		<div class="text-style">完成件数:<span> {{selectSchedule.details.done_account}}/ {{selectSchedule.details.demanding_account}}</span></div>
+		     			 	</b-col>
+		     			 </b-row>
+		     			</b-container>
+						<div class="goods-details  border-top padding-around">
+							<h5>进度详情</h5>
+							<div class="graph">
+								<div class="graph-bg">
+									<div class="rect"></div>
+									<div class="rectp-round"></div>
+								</div>
+							<el-steps :active="graph1Active" align-center class="graph1">
+							  <el-step class="stephidden" title="" description=""></el-step>
+							  <el-step class="stephidden" title="" description=""></el-step>
+							  <el-step title="待发样衣" description=""></el-step>
+							  <el-step title="待收样衣" description=""></el-step>
+							  <el-step title="已收样衣" description=""></el-step>
+							  <el-step class="stephidden" title="" description=""></el-step>
+							  <el-step class="stephidden" title="" description=""></el-step>
+							  <el-step class="stephidden" title="" description=""></el-step>
+							  <el-step class="stephidden" title="" description=""></el-step>
+							</el-steps>
+							<el-steps :active="graph2Active" align-center class="graph2">
+							  <el-step title="等待接单" description=""></el-step>	
+							  <el-step title="待选工厂" description=""></el-step>
+
+							  <el-step title="待发面料" description=""></el-step>
+							  <el-step title="待收面料" description=""></el-step>
+							  <el-step title="已收面料" description=""></el-step>
+
+							  <el-step title="生产加工" description=""></el-step>
+							  <el-step title="待收货付款" description=""></el-step>
+							  <el-step title="等待评价" description=""></el-step>
+							  <el-step title="已评价" description=""></el-step>
+							</el-steps >
+							<el-steps :active="graph3Active" align-center class="graph3">
+							  <el-step class="stephidden" ></el-step>
+							  <el-step class="stephidden" ></el-step>
+							  <el-step title="待发辅料" description=""></el-step>
+							  <el-step title="待收辅料" description=""></el-step>
+							  <el-step title="已收辅料" description=""></el-step>
+							  <el-step class="stephidden" ></el-step>
+							  <el-step class="stephidden" ></el-step>
+							  <el-step class="stephidden" ></el-step>
+							  <el-step class="stephidden" ></el-step>
+							</el-steps>
+							</div>
 						</div>
-					<el-steps :active="6" align-center class="graph1">
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step title="待发样衣" description=""></el-step>
-					  <el-step title="待收样衣" description=""></el-step>
-					  <el-step title="已收样衣" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					  <el-step class="stephidden" title="" description=""></el-step>
-					</el-steps>
-					<el-steps :active="6" align-center class="graph2">
-					  <el-step title="等待接单" description=""></el-step>	
-					  <el-step title="待选工厂" description=""></el-step>
+						<div class="goods-details  border-top padding-around">
+							<h5>订单动态</h5>
+							<div class="padding-top">
+							  <el-steps direction="vertical" :active="3">
+							  	<el-step title="步骤 1" 
+							  		v-for="(item, index) in selectSchedule.history"
+							  		:key="'history'+ index"
+							  	  :description="item"></el-step>
+							  </el-steps>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-detail1" v-else>
+					<div class="jiben border-top detail-inner">
+						<h6>基本信息</h6>
+						<ul class="clearfix">
+							<li>订单名称: <span>{{selectDetails.details.name}}</span></li>
+							<li>加工总价: <span>{{selectDetails.details.total_fee}}</span></li>
+							<li>接单方: <span
+								v-for="(item, index) in selectDetails.details.undertake_company" :key='index'
+								>{{item}}</span></li>
 
-					  <el-step title="待发面料" description=""></el-step>
-					  <el-step title="待收面料" description=""></el-step>
-					  <el-step title="已收面料" description=""></el-step>
+							<li>商品类别: <span>{{selectDetails.details.style}}</span></li>
+							<li>交货时间: <span>{{selectDetails.details.delivery_date}}</span></li>
+							<li>发单方: <span>{{selectDetails.details.publish_company.company}}</span></li>
 
-					  <el-step title="生产加工" description=""></el-step>
-					  <el-step title="待收货付款" description=""></el-step>
-					  <el-step title="等待评价" description=""></el-step>
-					  <el-step title="已评价" description=""></el-step>
-					</el-steps >
-					<el-steps :active="4" align-center class="graph3">
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step title="待发辅料" description=""></el-step>
-					  <el-step title="待收辅料" description=""></el-step>
-					  <el-step title="已收辅料" description=""></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					  <el-step class="stephidden" ></el-step>
-					</el-steps>
+							<li>商品颜色: <span>{{selectDetails.details.color}}</span></li>
+							<li>生产周期: <span>{{selectDetails.details.cycle}}</span></li>
+							<li>加工模式: <span>{{selectDetails.details.mode}}</span></li>
+
+							<li>商品属性: <span>{{selectDetails.details.x}}</span></li>
+							<li>面料完备日期: <span>{{selectDetails.details.arrival_date}}</span></li>
+							<li>是否支付定金: <span>{{selectDetails.details.is_deposited}}</span></li>
+
+							<li>单价价格: <span>{{selectDetails.details.fee}}</span></li>
+							<li>订单号: <span>{{selectDetails.details.code}}</span></li>
+							<li>完成件数: <span>{{selectDetails.details.done_account}}</span></li>
+						</ul>
 					</div>
-				</div>
-				<div class="goods-details  border-top padding-around" >
-					<h5>订单动态</h5>
-					<div class="padding-top">
-					  <el-steps direction="vertical" :active="3">
-					    <el-step title="步骤 1" description="这是一段很长很长"></el-step>
-					    <el-step title="步骤 2" description="这是一段很长很长"></el-step>
-					    <el-step title="步骤 3" description="这是一段很长很长"></el-step>
-					  </el-steps>
+					<div class="mianliao border-top detail-inner">
+						<h6>面料信息(主面料1)</h6>
+						<ul>
+							<li>面料名称： <span>{{selectDetails.main.name}}</span></li>
+							<li>面料成分： <span>{{selectDetails.main.component}}</span></li>
+							<li>面料类型： <span>{{selectDetails.main.category}}</span></li>
+							<li>面料克重： <span>{{selectDetails.main.weight}}</span>克/平方米</li>
+						</ul>
+						<div class="mianliao-icon border-top">
+							<div v-for="item in selectDetails.main.picture">
+								<img :src="getUploadUrl+'/'+ item" />
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="container-detail1" v-else>
-				<div class="jiben border-top detail-inner">
-					<h6>基本信息</h6>
-					<ul>
-						<li></li>
-					</ul>
-				</div>
-				<div class="mianliao border-top detail-inner">
-					<h6>面料信息(主面料1)</h6>
-					<ul>
-						<li></li>
-					</ul>
-					<div class="mianliao-icon border-top">
+					<div class="mianliao border-top detail-inner">
+						<div v-for="item in selectDetails.main.auxiliary">
+							<h6>面料信息(辅面料1)</h6>
+							<ul class="clearfix">
+								<li>面料名称： <span>{{item.name}}</span></li>
+								<li>面料成分： <span>{{item.component}}</span></li>
+								<li>面料类型： <span>{{item.category}}</span></li>
+								<li>面料克重： <span>{{item.weight}}</span>克/平方米</li>
+							</ul>
+							<div class="mianliao-icon border-top">
+								<div v-for="item in item.picture">
+									<img :src="getUploadUrl+'/'+ item" />
+								</div>
+							</div>
+						</div>
 						
 					</div>
-				</div>
-				<div class="mianliao border-top detail-inner">
-					<h6>面料信息(辅面料1)</h6>
-					<ul>
-						<li></li>
-					</ul>
-					<div class="mianliao-icon border-top">
-						
+					<div class="yangyi border-top detail-inner">
+						<h6>样衣图片</h6>
+						<div class="mianliao-icon">
+							<ul v-for="item in selectDetails.otherPic">
+								<li v-for="item1 in item.picture">
+									<img :src="getUploadUrl+'/'+ item1" />
+								</li>
+								<li>{{ item.title }}</li>
+							</ul>
+						</div>
 					</div>
-				</div>
-				<div class="yangyi border-top detail-inner">
-					<h6>样衣图片</h6>
-					<div class="mianliao-icon">
-						
+					<div class="yanseshuliang border-top detail-inner">
+						<h6>颜色数量</h6>
+						<div>
+							
+
+						</div>
 					</div>
-				</div>
-				<div class="yanseshuliang border-top detail-inner">
-					<h6>颜色数量</h6>
-					<div>
-						
+					<div class="pinzhi border-top detail-inner">
+						<h6>品质要求</h6>
+						<div class="chahuo">
+							<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
+							<p>整体允许误差范围： <span>{{selectDetails.quality.error}}</span></p>
+						</div>
+						<div class="buwei border-top">
+							<ul class="thead">
+								<li>部位</li>
+								<li>误差标准范围</li>
+							</ul>
+							<ul class="tbody" v-for="(item, index) in selectDetails.quality.supplement" :key="'supplement1'+index">
+								<li>{{item.name}}</li>
+								<li>{{item.err}}</li>
+							</ul>
+						</div>
 					</div>
-				</div>
-				<div class="pinzhi border-top detail-inner">
-					<h6>品质要求</h6>
-					<div class="chahuo">
-						
+					<div class="banxing border-top detail-inner">
+						<h6>版型图</h6>
+						<div class="mianliao-icon border-top">
+							<div v-for="item in selectDetails.quality.picture">
+								<img :src="getUploadUrl+'/'+ item" />
+							</div>
+						</div>					
 					</div>
-					<div class="buwei border-top">
-						
+					<div class="qita border-top detail-inner"  v-for="(item, index) in selectDetails.supplement" :key="'supplement'+index">
+						<h6>其他<span>({{index+1}})</span> </h6>
+						<div class="chahuo">
+							面料名称: {{item.requirement}}
+						</div>
+						<div class="buwei border-top">
+							<div v-for="item1 in item.picture">
+								<img :src="getUploadUrl+'/'+ item1" />
+							</div>
+						</div>				
 					</div>
-				</div>
-				<div class="banxing border-top detail-inner">
-					<h6>版型图</h6>
-					<div class="mianliao-icon border-top">
-						
-					</div>					
-				</div>
-				<div class="qita border-top detail-inner">
-					<h6>其他</h6>
-					<div class="chahuo">
-						
+					<div class="address border-top detail-inner">
+						<h6>收货地址</h6>
+						<div> 
+							{{selectDetails.address.province}}
+							{{selectDetails.address.city}}
+							{{selectDetails.address.county}}
+							{{selectDetails.address.street}}
+							({{selectDetails.address.receiver}} 收)
+							{{selectDetails.address.phone}}
+						</div>									
 					</div>
-					<div class="buwei border-top">
-						
-					</div>				
-				</div>
-				<div class="address border-top detail-inner">
-					<h6>收货地址</h6>
-					<div></div>									
 				</div>
 			</div>
 		</div>
 	</div>
-	
 </template>
 <script>
 //http://101.132.187.244:8082/Home/ReceiptOrder/schedule  order_id
@@ -300,132 +370,168 @@ const detailsContent={
 
 import IndentList from "../indentlistEl"
 
+import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
-
-
 	export default{
 		name: 'indet',
 		components:{ IndentList},
 		data(){
 			return{
+				graph1Active: 0,
+				graph2Active: 0,
+				graph3Active: 0,
 				displayIndent:true,
 				isActive: false,
-				activeIndex: '1',
+				activeIndex: true,
 				listNav: [
-					{
-						type: "所有订单",
-						num: 12,
-						flag: false
-					},
-					{
-						type:"待发前期资料",
-						num: 3,
-						flag: false
-					},
-					{
-						type:"待发样衣",
-						num: 0,
-						flag: false
-					},
-					{
-						type:"待发面料",
-						num: 3,
-						flag: false
-					},
-					{
-						type:"待发辅料",
-						num: 0,
-						flag: false
-					},
-					{
-						type:"延误",
-						num: 0,
-						flag: false
-					},
-					{
-						type:"抢单中",
-						num: 3,
-						flag: false
-					},
-					{
-						type:"加工中",
-						num: 2,
-						flag: false
-					},
-					{
-						type:"待付款收货",
-						num: 1,
-						flag: false
-					},
-					{
-						type:"待评价",
-						num: 1,
-						flag: false
-					},
-					{
-						type:"取消订单",
-						num: 0,
-						flag: false
-					},
-					{
-						type:"已完成",
-						num: 1,
-						flag: false
-					}
-				],
+					  {
+			            type: "所有订单",
+			            keyword: 'x',
+			            flag: false
+			          },
+			          {
+			            type:"待接单",
+			            keyword: '1000',
+			            flag: false
+			          },
+			          {
+			            type:"待发资料",
+			            keyword: '3000',
+			            flag: false,
+		          	  }, 
+		          	  {
+		                  type:"待发样衣",
+		                  keyword: '3xx0',
+		                  flag: false
+		                },
+		                {
+		                  type:"待发面料",
+		                  keyword: '3x0x',
+		                  flag: false
+		                },
+		                {
+		                  type:"待发辅料",
+		                  keyword: '30xx',
+		                  flag: false
+		                },
+			          {
+			            type:"加工中",
+			            keyword: '4000',
+			            flag: false
+			          },
+			          {
+			            type:"待收货",
+			            keyword: '5000',
+			            flag: false
+			          },
+			          {
+			            type:"待评价",
+			            keyword: '6000',
+			            flag: false
+			          },			     
+			          {
+			            type:"已完成",
+			            keyword: '7000',
+			            flag: false
+			          }],
+				size : ["XXS","XS","S","M","L","XL","XXL","3XL","4XL","5XL"], 
 				contentTitle:"所有订单",
-				myMgoodsList:[
-	     			{
-	     				model: "2017款女装连衣裙夏季款时尚修身起码齐全",
-	     				status: "待发样衣、待发辅料、待发面料",
-						done: 30,
-						total:200,
-						price: 66,
-						date: "2017-10-12",
-						plan: "离资料完备12天14小时"
-	     			},
-	     			{
-	     				model: "shirt",
-	     				status: "doing",
-						done: 30,
-						total:200,
-						price: 66,
-						date: "2017-10-12",
-						plan: "离资料完备12天14小时"
-	     			},
-	     			{
-	     				model: "shirt",
-	     				status: "doing",
-						done: 30,
-						total:200,
-						price: 66,
-						date: "2017-10-12",
-						plan: "离资料完备12天14小时"
-	     			},
-	     		]
+				goodsList:[],
+				savedList:[],
+				selectSchedule:{},
+				selectDetails: {}
 			}
 		},
 		mounted(){
-			console.log(this.getIndentBlock)
-			
+			// console.log(this.getIndentBlock)
+			this.getMainlist({page: 1})
 		},
 		computed:{
 			...mapGetters([
-		      'getIndentBlock'
+		      'getIndentBlock',
+		      'getUploadUrl',
+		      'getUrl'
 		    ]),
+		    curSchedule(){
+		    	return this.selectSchedule
+		    },
+		    curDetails(){
+		    	return this.selectDetails
+		    }
+		},
+		watch: {
+			// selectSchedule:{
+			// 	handler(curVal,oldVal){
+
+			//   　　　  },
+			//  　　　		deep:true
+			// },
+			// selectDetails: {
+			// 	handler(curVal,oldVal){
+
+			//    　　},
+			//  　　　		deep:true
+			// }
 		},
 		methods:{
 			...mapMutations([
 		      'setIndentBlock'
 		    ]),
-			handleSelect(key, keyPath) {
-		        console.log(key, keyPath);
-
-		        this.activeIndex = key
+		    getMainlist(args){
+		      let url= this.getUrl+'/Home/Index/index'
+		      this.axios.post(url, qs.stringify(args)).then((res)=>{
+		          // console.log(res)
+		          if(res.data.status == 200){
+		            this.perPage =  res.data.content.pageSize;
+		            this.totalRows = res.data.content.totalRows-0;
+		          //  this.goodsList = res.data.content.list;
+		            this.savedList =  res.data.content.list;
+		            this.goodsList = this.savedList.slice(0, this.savedList.length)
+		            console.log(this.goodsList)
+		          }else{
+		          }          
+		      })  
 		    },
-		    fliter(index){
+		    getSchedule(id){
+		    	let url= this.getUrl+'/Home/ReceiptOrder/schedule'
+		      	this.axios.post(url, qs.stringify({order_id: id }))
+		      	.then((res)=>{
+		          if(res.data.status == 200){
+		          	this.$set(this.selectSchedule,'details',res.data.content.details)
+		          	this.$set(this.selectSchedule,'history',res.data.content.history)			
+		            // this.selectSchedule = res.data.content		         
+		          	// console.log( this.selectSchedule)
+		          }else{
+		          }          
+		      	})  
+		    },
+		    getDetails(id){
+		    	let url= this.getUrl+'/Home/ReceiptOrder/details'
+			      this.axios.post(url, qs.stringify({order_id: id }))
+			      .then((res)=>{
+		           console.log(res)
+		          if(res.data.status == 200){
+		          		console.log( res.data.content)
+		          		this.$set(this,'selectDetails',res.data.content)		          		
+		          		console.log( this.selectDetails)		          	
+		          }else{
+		          }          
+		      })  
+		    },
+		    switchBlock(uid){
+		    	//console.log(uid)
+		    	this.setIndentBlock(false)
+		    	this.getSchedule(uid)
+		    	this.getDetails(uid)
+
+		    	console.log(this.selectSchedule)
+		    },
+		    changeActiveIndex(){
+		    	this.activeIndex = !this.activeIndex
+		    },
+		    fliter(index, keyword){
 		    	let self = this;
 		    	self.listNav.forEach((item, _index)=>{		    		
 		    		self.$set(item,"flag",false)
@@ -434,11 +540,22 @@ import { mapMutations } from 'vuex'
 		    			self.contentTitle= item.type
 		    		}
 		    	});
+		    	this.displayOrNot(keyword)
+		    },		    
+		    displayOrNot(keyword){
+		      let self = this;
+		      self.goodsList= [];
+		      self.savedList.forEach((item, _index)=>{ 
+		         if(item.status == keyword ){
+		            self.goodsList.push(self.savedList[_index])
+		         }
+		      });
 		    },
-		    switchBlock(){
-		    	console.log(123123)		
-		    	this.setIndentBlock(false)
-		    	console.log(this.indentBlock)
+		    showSchedule(){
+
+		    },
+		    showDetails(){
+
 		    }
 		}
 	}
@@ -446,6 +563,9 @@ import { mapMutations } from 'vuex'
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+	#indent{
+		background: rgb(248,248,248);
+	}
 	li{
 		list-style: none;
 	}
@@ -457,6 +577,9 @@ import { mapMutations } from 'vuex'
 		background: rgb(238,238,238);
 		font-size: 0.8em;
 		text-indent: 20px;
+	}
+	.nav-vertal{
+		background: #fff;
 	}
 	.muneNav{
 		color: #555;
@@ -476,13 +599,18 @@ import { mapMutations } from 'vuex'
 		color: #C44DDC;
 		border-left-color: #C44DDC;
 	}
+	.col-3 img{
+		width: 100%;
+
+	}
 	.goods-details{
 
 	}
 
 	.text-style{
-		text-indent: 1.5em
-	}
+		text-indent: 1.5em;
+		height: 30px;
+	}	
 	.container-detail-list{
 		height: 345px;		
 	}
@@ -535,5 +663,24 @@ import { mapMutations } from 'vuex'
 	.detail-inner{
 		padding: 30px;
 	}
-	
+	.nav-schedule-details li{
+		float: left;
+		width: 25%;
+		height: 55px;
+		line-height: 55px;
+		text-align: center;
+		border-bottom: 2px solid rgba(255,255,255,0);
+	}
+	.nav-schedule-details li:hover{
+		cursor: pointer;
+		color: #C44DDC;
+		border-bottom: 2px solid #C44DDC;
+	}
+	.jiben ul li {
+		float: left;
+		width: 33.33%;
+		height: 35px;
+		line-height: 35px;
+		font-size: 14px;
+	}
 </style>

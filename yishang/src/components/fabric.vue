@@ -14,10 +14,10 @@
         </el-col> 
         <el-col :span="14">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="actionUrl"
           list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove">
+          :on-success=" (response, file, fileList) =>{ return  uploadImgeSuccess(fileList, index)}"
+          :on-remove="()=>{  return  handleRemove(fileList, index) }">
           <span class="remind">点击上传</span>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible" size="tiny">
@@ -25,21 +25,25 @@
         </el-dialog>
         </el-col>
     </el-row>
+      <el-form-item label="要求信息:" v-if=" !item.is_main" style="width:96%">
+          <el-input type="textarea" v-model="item.requirement"></el-input>
+      </el-form-item>
       <el-form-item label="面料成分: " class="padding-right">
           <el-select v-model="item.component" placeholder="请输入您的面料成分" style="width:100%">
-             <el-option 
-                  v-for="(item, index) in category"
-                :key="'category'+index"
-                :label="item.category_name" :value="item.category_id">                  
+               <el-option 
+                  v-for="(item, index) in component"
+                :key="'component'+index"
+                :label="item.component_name" :value="item.component_id">
                 </el-option>
+            
           </el-select>
       </el-form-item>
       <el-form-item label="面料类型:" class="padding-right">
-          <el-select v-model="item.type" placeholder="请输入您的面料类型" style="width:100%">
+          <el-select v-model="item.category" placeholder="请输入您的面料类型" style="width:100%">
              <el-option 
-                  v-for="(item, index) in component"
+                v-for="(item, index) in category"
                 :key="'category'+index"
-                :label="item.component_name" :value="item.component_id">
+                :label="item.category_name" :value="item.category_id">
                 </el-option>
           </el-select>
       </el-form-item>
@@ -56,6 +60,8 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex'
 export default {
   props:['component','category'],
     data() {
@@ -72,24 +78,36 @@ export default {
         },
         fabricList:[
           {
+            is_main: 1,
             label:'主面料1名称:',
             name: '',
+            requirement:'',
             component: '',
-            delivery: false,
-            imgUrl:'',
+            category:'',
+            picture:[],
             weight:''
           },
           {
+            is_main: 0,
             label:'辅面料1名称:',
             name: '',
+            requirement:"",
             component: '',
-            delivery: false,
-            imgUrl:'',
+            category:'',
+            picture:[],
             weight:''
           }
-        ]
+        ],
       }
     },
+    computed:{
+        ...mapGetters([
+            'getUploadUrl'
+          ]),
+        actionUrl(){
+          return this.getUploadUrl +'/picture/upload'
+        }
+      },
     watch:{
       fabricList:{
         handler(curVal,oldVal){
@@ -98,28 +116,39 @@ export default {
     　　　deep:true
       }
     },
-    methods: {
-      handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePictureCardPreview(file) {
-          this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
-        addFabric(){
+    methods: {      
+     handleRemove(fileList, index) {
+          let imgs = [];
+          fileList.forEach((item ,index) =>{
+            imgs.push(item.response.content.url)
+          })
+          this.fabricList[index].picture = imgs.slice(0, imgs.length)
+      },
+      uploadImgeSuccess(fileList , index){
+        let imgs = [];
+        fileList.forEach((item ,index) =>{
+          imgs.push(item.response.content.url)
+        })
+        this.fabricList[index].picture = imgs.slice(0, imgs.length)
+        //console.log(this.fabricList)
+      },     
+      addFabric(){
           let fabric = {
                 label:'',
                 name: '',
+                requirement:"",
                 component: '',
+                category:'',
                 delivery: false,
-                imgUrl:'',
+                picture:[],
                 weight:''
               }
               fabric.label= "辅面料" + (this.index++) + "名称:";
-              console.log(fabric)
+             // console.log(fabric)
           this.fabricList.push(fabric)
         },
         deleteFabric(index){
+          this.index--
           this.fabricList.splice(index,1)
         }
     }

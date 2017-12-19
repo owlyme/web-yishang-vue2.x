@@ -1,17 +1,17 @@
 <template>
 	<div class="about border-top">
-		<h5>其他要求</h5>
-		<div v-for="(item,index) in aboutList" class="padding-right add-row">
+		<div v-for="(item, index) in aboutList" class="padding-right add-row" :key=" 'about'+ index" >
+		<h5>其他要求{{index +1}}</h5>
 		<el-row :gutter="10"  class="space padding-bottom" >		 
 		  <el-col :span="6"  class="text-right text-style-sm">
 		  	上传说明图片:
 		  </el-col>	
 		  <el-col :span="14">
 			<el-upload
-			  action="https://jsonplaceholder.typicode.com/posts/"
+			  :action="actionUrl"
 			  list-type="picture-card"
-			  :on-preview="handlePictureCardPreview"
-			  :on-remove="handleRemove">
+			  :on-success=" (response, file, fileList) =>{ return  uploadImgeSuccess(fileList, index)}"
+          	  :on-remove="()=>{  return  handleRemove(fileList, index) }">
 			  <span class="remind">点击上传</span>
 			</el-upload>
 			<el-dialog :visible.sync="item.dialogVisible" size="tiny">
@@ -19,8 +19,8 @@
 			</el-dialog>
 		  </el-col>	    			  
 		</el-row>		
-			<el-form-item label="信息要求:" >
-			    <el-input type="textarea" v-model="item.desc" placeholder="请填写要求信息"></el-input>
+			<el-form-item label="要求信息:" >
+			    <el-input type="textarea" v-model="item.requirement" placeholder="请填写要求信息"></el-input>
 			</el-form-item>
 			<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</div>
@@ -32,18 +32,16 @@
 	</div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 	export default{
 		name: "quality",
 		data(){
 			return{
-				picId : 0,
 				aboutList:[
 					{
 					id: 0,
-					imgSrc : "",
-					info: "",
-
-					desc:"",
+					imgUrls:[],
+					requirement:"",
 					dialogVisible: false,
 					dialogImageUrl: false
 					}
@@ -54,33 +52,63 @@
 		watch:{
 			aboutList:{
 				handler(curVal,oldVal){
-					// console.log(curVal)
-					this.$emit("setAbout",curVal)
+					let value = [];
+					curVal.forEach((item, index) =>{
+						value[index] = {
+							requirement : item.requirement,
+							picture: item.imgUrls
+						}
+					})
+					this.$emit("setAbout",value)
 		　　　　　　},
 		　　　　deep:true
 			},
 		},
+		computed:{
+	        ...mapGetters([
+	            'getUploadUrl'
+	          ]),
+	        actionUrl(){
+	          return this.getUploadUrl +'/picture/upload'
+	        }
+	     },
 		methods:{
-			handleRemove(file, fileList,index) {
-		        console.log(file, fileList);
-		    },
-		    handlePictureCardPreview(file,index) {
-		    	this.dialogImageUrl = file.url;
-		        this.dialogVisible = true;
-		    },
-		    addAbout(){
+			handleRemove(fileList, index) {
+		          let imgs = [];
+		          fileList.forEach((item ,index) =>{
+		            imgs.push(item.response.content.url)
+		          })
+		        
+		          this.aboutList[index].imgUrls = imgs.slice(0, imgs.length)
+		      },
+		      uploadImgeSuccess(fileList , index){
+		        let imgs = [];
+		        fileList.forEach((item ,index) =>{
+		          imgs.push(item.response.content.url)
+		        })
+		        
+		        this.aboutList[index].imgUrls = imgs.slice(0, imgs.length)
+		        		//console.log(this.aboutList)
+		      }, 
+				addAbout(){
 		    	let about = {
-		    		id: this.picId++,
-					imgSrc : "",
-					info: "",
-					desc:"",
+		    		id: '',
+					imgUrls:[],
+					requirement:"",
 					dialogVisible: false,
 					dialogImageUrl: false
 				}				
 		    	this.aboutList.push(about)
+		    	this.aboutList.forEach((item ,index) =>{
+		          this.aboutList[index].id = index
+		        })
 		    },
 		    clickDelete(index){
+		    	this.picId--
 		      	this.aboutList.splice(index,1)
+		      	this.aboutList.forEach((item ,index) =>{
+		          this.aboutList[index].id = index
+		        })
 		    },
 
 		}

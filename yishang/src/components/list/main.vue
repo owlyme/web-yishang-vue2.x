@@ -1,7 +1,7 @@
 <template>
-<div class="main">
+<div class="main clearfix">
    <div class="zIndexe" v-if=" activeIndex == '1' "></div>
-   <div class="zIndexf" > 
+   <div class="zIndexf container " > 
       <div class="carousel-box" ><Carousel :banners="banner" /></div>
       <div class="switch-ziqu-wuyou">
         <el-row  >
@@ -32,21 +32,26 @@
       </div>
 	
         <!-- 过滤订单 -->
-      <div class="list-nav">
+      <div class="list-nav ">
         <ul class="nav-h clearfix">
               <li  v-for="(item, index) in listNav"
                 :index="index " 
-                class="muneNav clearfix"
-                :class="{active : item.flag}"
-                @click="fliter(index)">
-                <div  class="txt">{{item.type}} </div>
+                class="muneNav clearfix "          
+                @click="fliter(index)"  
+                >
+                <div  class="txt" :class="{'txt-active' : item.flag }"   @click='displayOrNot(item.keyword)'>{{item.type}} </div>
                 <ul v-if="item.inner" class="inner-ul">
-                  <li v-for="(item1, index) in item.inner" class="inner-li">{{item1.type}}</li>
+                  <li v-for="(item1, index) in item.inner" class="inner-li"  @click='displayOrNot(item1.keyword)'>{{item1.type}}</li>
                 </ul>
               </li>
         </ul>
+
         <div class="list" >
-          	<ListElemnt v-for="(item, index) in goodsList" :key="index+ 'good'"  :goodsMsg="item" class="clearfix"></ListElemnt>
+          	<ListElemnt v-for="(item, index) in goodsList" 
+                      :key="index+ 'good'"  
+                      :goodsMsg="item" 
+                      class="clearfix"
+                      v-if="" ></ListElemnt>
         </div>
       </div>   
       <!-- pagination -->
@@ -62,7 +67,7 @@
               last-text="末页"
               :per-page="perPage" >
               </b-pagination>
-              <span class="total-pages">共{{totalRows / perPage}}页</span>
+              <span class="total-pages">共{{ Math.round( totalRows / perPage) }}页</span>
             </b-col>
          </b-row>  
   	   </div>
@@ -109,6 +114,7 @@ const bannerContent={
 import Carousel from  "../carousel"
 import ListElemnt from "../listEl"
 
+import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 export default{
@@ -117,96 +123,91 @@ export default{
 	data(){
 		return{
       activeIndex: '1',
+      mainList:[],
 			listNav: [
           {
             type: "所有订单",
+            keyword: 'x',
             flag: false
           },
           {
-            type:"待发前期资料",
+            type:"待接单",
+            keyword: '1000',
+            flag: false
+          },
+          {
+            type:"待发资料",
+            keyword: '3000',
             flag: false,
             inner: [
                     {
                       type:"待发样衣",
+                      keyword: '3xx0',
                       flag: false
                     },
                     {
                       type:"待发面料",
+                      keyword: '3x0x',
                       flag: false
                     },
                     {
                       type:"待发辅料",
+                      keyword: '30xx',
                       flag: false
                     }
                    ]
-          },
-          
-          {
-            type:"延误",
-            flag: false
-          },
-          {
-            type:"抢单中",
-            flag: false
-          },
+          },          
+          // {
+          //   type:"延误",
+          //   keyword: 'x',
+          //   flag: false
+          // },
+          // {
+          //   type:"抢单中",
+          //   keyword: '1000',
+          //   flag: false
+          // },
           {
             type:"加工中",
+            keyword: '4000',
             flag: false
           },
           {
-            type:"待付款收货",
+            type:"待收货",
+            keyword: '5000',
             flag: false
           },
           {
             type:"待评价",
+            keyword: '6000',
             flag: false
           },
-          {
-            type:"取消订单",
-            flag: false
-          },
+          // {
+          //   type:"取消订单",
+          //   keyword: '9000',
+          //   flag: false
+          // },
           {
             type:"已完成",
+            keyword: '7000',
             flag: false
           },
-          {
-            type:"管理员关闭",
-            flag: false
-          },
-          {
-            type:"已退货/退款",
-            flag: false
-          }
+          // {
+          //   type:"管理员关闭",
+          //   keyword: '9100',
+          //   flag: false
+          // },
+          // {
+          //   type:"已退货/退款",
+          //   keyword: 'x',
+          //   flag: false
+          // }
         ],
-			totalRows: 500,
-			perPage : 10,
+			totalRows: 1,
+			perPage : 1,
    		currentPage: 1,
-   		goodsList:[
-   			{
-   				model: "shirt",
-   				status: "doing",
-					done: 30,
-					total:200,
-					price: 66,
-					date: "2017-10-12"
-     			},
-   			{
-   				model: "shirt",
-   				status: "doing",
-					done: 30,
-					total:200,
-					price: 66,
-		      date: "2017-10-12"
-   			},
-   			{
-   				model: "shirt",
-   				status: "doing",
-					done: 30,
-					total:200,
-					price: 66,
-					date: "2017-10-12"
-   			},
-   		],
+   		goodsList:[],
+      savedList:[],
       banner: null
 		}
 	},
@@ -220,53 +221,93 @@ export default{
   },
   mounted(){
     console.log( 'main')    
-    let url= this.getUrl+'/Home/Index/getBanner'
-    this.axios.post(url).then((res)=>{
-        console.log(res)
-        if(res.data.status == 200){
-            this.banner = res.data.content
-            console.log(this.banner)
-        }else{
-
-        }          
-    }) 
-    
+    this.getBanner()
+    this.getMainlist({page: this.currentPage})
   },
+  watch:{
+      currentPage:{
+        handler(curVal,oldVal){
+          this.getMainlist({page: curVal})
+    　　　　　　},
+    　　　deep:true
+      }
+
+    },
 	methods:{
+    getBanner(){
+      let url= this.getUrl+'/Home/Index/getBanner'
+      this.axios.post(url).then((res)=>{
+          // console.log(res)
+          if(res.data.status == 200){
+              this.banner = res.data.content
+              // console.log(this.banner)
+          }else{
+
+          }          
+      }) 
+    },
+    getMainlist(args){
+      let url= this.getUrl+'/Home/Index/index'
+      this.axios.post(url, qs.stringify(args)).then((res)=>{
+          // console.log(res)
+          if(res.data.status == 200){
+            this.perPage =  res.data.content.pageSize;
+            this.totalRows = res.data.content.totalRows-0;
+          //  this.goodsList = res.data.content.list;
+            this.savedList =  res.data.content.list;
+            this.goodsList = this.savedList.slice(0, this.savedList.length)
+            console.log(this.goodsList)
+          }else{
+
+          }          
+      })  
+    },
     handleSelect(key, keyPath) {
         //console.log(key, keyPath);
       },
-		getMoreList (curVal,oldVal) {
+		getMoreList (curVal) {
 			let page = this.currentPage
 			//console.log(page)
 	    },
-    fliter(index){
-          let self = this;
-          self.listNav.forEach((item, _index)=>{            
-            self.$set(item,"flag",false)
-            if(index == _index){
-              self.$set(item,"flag",true)
-              self.contentTitle= item.type
-            }
-          });
+    fliter(index, keyword){
+      let self = this;
+      self.listNav.forEach((item, _index)=>{            
+        self.$set(item,"flag",false)
+        if(index == _index){
+          self.$set(item,"flag",true)
+          self.contentTitle= item.type
         }
+      });
+    
+    },
+    displayOrNot(keyword){
+      let self = this;
+      self.goodsList= [];
+      self.savedList.forEach((item, _index)=>{ 
+         if(item.status == keyword ){
+            self.goodsList.push(self.savedList[_index])
+         }
+      });
+    }
 	}
 }
 </script>
 <style scoped>
   .main{
+    width: 100%;
     position: relative;
+    background: rgb(248,248,248);
   }
   .zIndexe{
     position: absolute;
     z-index: 1;
-    left: -999px;
-    
+    width: 100%;    
     height: 495px;
-    background: rgb(248,248,248);
+    background: rgb(240,239,237);
+
   }
   .zIndexf{
-    position: absolute;
+    position: relative;
     z-index: 2;  
   }
 
@@ -279,6 +320,7 @@ export default{
   }
   .switch-ziqu-wuyou{
     margin-bottom: 30px;
+    box-shadow: 0 3px 26px rgba(130, 130, 157, 0.5);
   }
   .grid-content{
     height: 350px;
@@ -324,26 +366,34 @@ export default{
     float: left;
     height: 36px;
     line-height: 36px;
-    margin: 20px 10px;
-   
+    /*margin: 20px 10px;*/
+    padding: 0 10px;
+    width: 14.28%;
     color: #555;
+    text-align: center;
     font-size: 15px;
     cursor: pointer;
-    background: rgb(238,238,238);
+    
     transition: background 0.5s, color 0.5s;
     box-sizing: border-box;
   }
   .muneNav .txt{
+    background: rgb(238,238,238);
      padding: 0 9px;
   }
-  .muneNav:hover{
+  .muneNav   .txt-active{
+    color: #FFF;
+    background: #C44DDC;
+  }
+  .muneNav:hover .txt{
     color: #FFF;
     background: #C44DDC;
   }
   .active{
     color: #FFF;
-     background: #C44DDC;
+    background: #C44DDC;
   }
+
   .list{
     background: rgb(248,248,248);
   }
@@ -366,11 +416,12 @@ export default{
     color: #FFF;
     background: #C44DDC;
   }
- 
-
 
   .pagination{
+    position: relative;
+    top: 10px;
     height: 70px;
+    width: 100%;
     background: #fff;
   }
   .pagination ul li{
@@ -379,12 +430,13 @@ export default{
   .owl{
     margin: 0 auto;
     margin: 0 auto;
+    
     margin-top: -10px;
   }
   .pagination .total-pages{
     position: absolute;
     right: -50px;
-    top:  26px;
+    top:  32px;
   }
 
 </style>

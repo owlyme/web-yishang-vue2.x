@@ -3,14 +3,14 @@
 		<h5>颜色数量</h5>
 		<div v-for="(item, index) in diffKind" class="border-box" >
 			<el-row :gutter="10"  class="bg">	 
-			  <el-col :span="6" class="text-center"> 款色(颜色): </el-col>	
+			  <el-col :span="6" class="text-center"> 款色(颜色): </el-col>
 			  <el-col :span="14">
 			  		<el-input v-model="item.color" placeholder="款色(颜色)"></el-input>
 			  </el-col>
 	 		  <el-col :span="4" class="text-center show-btn" >
-	 		  	<div class="hovershow" @click="clickDisplay(index)"  >
-	 		  		<span class="clickshow"  v-if="item.flag"> 收起 </span> 
-	 		  		<span class="clickclose"  v-else="item.flag"> 展开</span> 
+	 		  	<div class="hovershow" @click="clickDisplay(index)">
+	 		  		<span class="clickshow"  v-if="item.flag" > 收起 </span> 
+	 		  		<span class="clickclose"  v-else="item.flag" > 展开 </span> 
 	 		  		<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 	 		  	</div>
 	 		  </el-col>
@@ -34,7 +34,7 @@
 		<div class="middle-line">
 			<el-button type="primary" icon="el-icon-plus" @click="addKind" class="circle-btn"></el-button>
 		</div>
-		<div>总价: <span class="color size">{{6666}}</span> 件</div>
+		<div>总价: <span class="color size">{{demanding_account}}</span> 件</div>
 	</div>
 </template>
 
@@ -57,7 +57,6 @@ data () {
         diffKind: [
         	{
 	          color: '',
-	          number: '',
 	          type: '',
 	          sizes : [
 		          {size: "XXS", number: 0},
@@ -77,16 +76,40 @@ data () {
 	}
 },
 computed:{
-	closeStatus(){
-	
+	demanding_account(){
+		let total=0 ;
+		this.diffKind.forEach((item, index)=> {
+			item.sizes.forEach( (_item, _index)=> {
+				total += _item.number
+			})
+		})
+		return total
 	}
 },
 watch:{
 	diffKind:{
-		handler(curVal,oldVal){
-　　　　　　　　//console.log(curVal)
-				// colorNumber = curVal
-				this.$emit("setColor",curVal)
+		handler(curVal, oldVal){
+				//console.log(curVal)
+				//colorNumber = curVal
+				let total = this.demanding_account
+				let value = []
+				curVal.forEach( (item, index)=>{
+					let obj = {};
+					value.push({
+						color:item.color,
+						xxs_demanding_account :item.sizes[0].number ,
+						xs_demanding_account :item.sizes[1].number ,
+						s_demanding_account : item.sizes[2].number,
+						m_demanding_account : item.sizes[3].number,
+						l_demanding_account : item.sizes[4].number,
+						xl_demanding_account : item.sizes[5].number,
+						xxl_demanding_account : item.sizes[6].number,
+						xxxl_demanding_account :item.sizes[7].number,
+						xxxxl_demanding_account : item.sizes[8].number,
+						xxxxxl_demanding_account : item.sizes[9].number
+					})
+				})
+				this.$emit("setColor",value, total)
 　　　　　　},
 　　　　deep:true
 	}

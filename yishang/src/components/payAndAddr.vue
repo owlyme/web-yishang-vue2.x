@@ -1,25 +1,33 @@
 <template>
 	<div class="pay" >
-		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%" class="demo-ruleForm">
-		<el-form-item label="是否支付定金:" v-if='zizhu'>
-		    <el-radio-group v-model="ruleForm.cash" style="padding-top:8px">
-		      <el-radio  :label="1">是</el-radio>
-		      <el-radio  :label="0">否</el-radio>
-		    </el-radio-group>
-		</el-form-item>
-		<el-form-item label="支付服务费用(订单的金额的10%):" v-else>
-		    <el-radio-group v-model="ruleForm.per" style="padding-top:8px">
-		      	<span class="color">{{3000}}</span> 元
-		    </el-radio-group>
-		</el-form-item>
-		<el-form-item label="确认收货地址:" >
-		    <el-radio-group v-model="ruleForm.address" >
-		    	<div v-for="(item, index) in addressList">
-		    		<el-radio :label="item" :key="'address'+ index" ></el-radio>
-		    	</div>		     
-		    </el-radio-group>
-		</el-form-item>
+		<el-form :model="selectAddress"  ref="selectAddress" label-width="16.667%" >
+			<el-form-item label="是否支付定金:" v-if='zizhu'>
+			    <el-radio-group v-model="selectAddress.is_deposited" style="padding-top:8px">
+			      <el-radio  :label="1">是</el-radio>
+			      <el-radio  :label="0">否</el-radio>
+			    </el-radio-group>
+			</el-form-item>
+			<el-form-item label="支付服务费用(订单的金额的10%):" v-else  v-model="selectAddress.per">
+			    <!-- <el-radio-group v-model="selectAddress.per" style="padding-top:8px">
+			      	<span class="color"> {{ serverFee }} </span> 元
+			    </el-radio-group> -->
+			
+			    	 <span class="color size">{{ serverFee }}</span> 元
+		
+			   
+			</el-form-item>
+			<el-form-item label="确认收货地址:" >
+			    <el-radio-group v-model="selectAddress.address" >
+			    	<div v-for="(item, index) in addressList">
+			    		<el-radio :label="item" :key="'address'+ index" > 
+			    			{{item.province + item.city  + item.county
+						          + item.street  +' (' +item.name + ') '	+item.mobile}}</el-radio>
+			    	</div>		     
+			    </el-radio-group>
+			</el-form-item>
+		</el-form>
 		<h6>添加新地址</h6>
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%" class="demo-ruleForm">
 		<div class='newAddr'>
 			<el-form-item label="姓名:" prop="name">
 			    <el-input v-model="ruleForm.name"></el-input>
@@ -32,8 +40,8 @@
 			  <China v-on:setCity="getCity"></China>
 
 			  </el-form-item>
-			  <el-form-item label="详细地址:" prop="desc">
-			    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+			  <el-form-item label="详细地址:" prop="street">
+			    <el-input type="textarea" v-model="ruleForm.street"></el-input>
 			  </el-form-item>
 		</div>
 
@@ -64,28 +72,25 @@ import { mapGetters } from 'vuex'
 	export default{
 		name: "pay",
 		components:{ China},
-		props:['zizhu','addressList'],
+		props:['zizhu','addressList',"serverFee"],
 		data(){
-			return{				
-				ruleForm: {
-				  cash:1,
+			return{
+				selectAddress: {
+					is_deposited:1,
+				  	address: null,
+				  	per: '0'
+				},
+				ruleForm: {					  
 				  address: '',
 		          name: '',
 		          mobile: '',
-		          city: "",
 		          delivery: false,
-		          desc: ''
+		          province: null,
+				  city: null,
+				  county: null,
+				  street: null,
+				  is_default: null
 		        },
-		        newAddress:{
-		        	receiver: null,
-					phone: null,
-					province: null,
-					city: null,
-					county: null,
-					street: null,
-					is_default: null
-		        },
-		       	// addressList:["rwerwerwer","qwerqwrwqerwqe"],
 		        rules: {
 		          name: [
 		            { required: true, message: '请输入收货人姓名', trigger: 'blur' },
@@ -102,18 +107,28 @@ import { mapGetters } from 'vuex'
 			}
 		},
 		mounted(){
-			// console.log(this.zizhu)
 			let self = this;
+			console.log(this.serverFee)
 			//Slet receiver = { pay : 1, address: self.addressList}
 			//this.$emit('setNewAddr', receiver)
-		},		
+		},
 		watch:{
-			ruleForm:{
+			selectAddress:{
 				handler(curVal,oldVal){
-					let self = this;
-					let receiver = { pay : self.ruleForm.cash, address: self.ruleForm.address}
-					this.$emit('setNewAddr', receiver)
-					// console.log(receiver)
+					if( this.addressList ){
+						let receiver = {
+							is_deposited :curVal.is_deposited,
+							per : curVal.per,
+							province: curVal.address.province,
+							city :curVal.address.city,
+							county :curVal.address.county,
+							street: curVal.address.street,
+							name :curVal.address.name,
+							phone :curVal.address.mobile
+						}
+						this.$emit('setNewAddr', receiver)
+					}
+
 		　　　　},
 		　　　　deep:true
 			}
@@ -126,9 +141,14 @@ import { mapGetters } from 'vuex'
 		methods:{
 			submitForm(formName) {				
 		        this.$refs[formName].validate((valid) => {
-		          if (valid) {
-		            let address = this.ruleForm.city+this.ruleForm.desc+' ('+this.ruleForm.name+') '+this.ruleForm.mobile;
-		            	this.addressList.push(address)		            	    
+		          if (valid) {		         
+		          let address = {province: this.ruleForm.province,
+			          			 city :this.ruleForm.city,
+			          			 county :this.ruleForm.county,
+						         street: this.ruleForm.street,
+						         name :this.ruleForm.name ,
+						         mobile :this.ruleForm.mobile}
+						this.addressList.push(address)
 		            	this.addAddress()
 		          } else {
 		            // console.log('error submit!!');
@@ -137,14 +157,18 @@ import { mapGetters } from 'vuex'
 		        });		           
 		     },
 		     addAddress(){
-		     	this.newAddress.receiver= this.ruleForm.name
-				this.newAddress.phone= this.ruleForm.mobile							
-				this.newAddress.street= this.ruleForm.desc
-
 		     	let url = this.getUrl+ '/Home/Address/addAddress';
-		        let args = this.newAddress
+		        let args = {
+		        		receiver: this.ruleForm.name,
+						phone: this.ruleForm.mobile,
+						province: this.ruleForm.province,
+						city: this.ruleForm.city,
+						county: this.ruleForm.county,
+						street: this.ruleForm.street,
+						is_default: null	
+			        }
 			    this.axios.post(url, qs.stringify(args)).then((res)=>{
-		        	console.log(res)
+		        	//console.log(res)
 			        if(res.data.status == 200){
 			        	//添加成功
 			        	this.openMessage( res.data.msg )
@@ -169,12 +193,12 @@ import { mapGetters } from 'vuex'
 		        });
 		    },
 		    getCity(val){
-		    	 // console.log("get addr:"+ val)	
+		    	// console.log("get addr:"+ val)	
 		    	let self= this;
-					self.$set(self.newAddress,'province', val.province.name)
-					self.$set(self.newAddress,'city', val.city.name)
-					self.$set(self.newAddress,'county', val.block.name)
-		    		self.$set(self.ruleForm,'city', val)
+					self.$set(self.ruleForm,'province', val.province.name)
+					self.$set(self.ruleForm,'city', val.city.name)
+					self.$set(self.ruleForm,'county', val.block.name)
+
 		    },
 
 		}

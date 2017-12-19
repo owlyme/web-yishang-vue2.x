@@ -8,7 +8,7 @@
 			  </el-col>	
 			  <el-col :span="14">
 			  		<el-upload
-				        :action="getUploadUrl"
+				        :action="actionUrl"
 				        list-type="picture-card"
 				        :on-success="uploadImgeSuccess0"				        
 				        :on-remove="handleRemove0">
@@ -25,7 +25,7 @@
 			  </el-col>	
 			  <el-col :span="14">
 			  		<el-upload
-				        :action="getUploadUrl"
+				        :action="actionUrl"
 				        list-type="picture-card"
 				        :on-success="uploadImgeSuccess1"				        
 				        :on-remove="handleRemove1">
@@ -42,7 +42,7 @@
 			  </el-col>	
 			  <el-col :span="14">
 			  		<el-upload
-				        :action="getUploadUrl"
+				        :action="actionUrl"
 				        list-type="picture-card"
 				        :on-success="uploadImgeSuccess2"				        
 				        :on-remove="handleRemove2">
@@ -59,7 +59,7 @@
 			  </el-col>	
 			  <el-col :span="14">
 			  		<el-upload
-				        :action="getUploadUrl"
+				        :action="actionUrl"
 				        list-type="picture-card"
 				        :on-success="uploadImgeSuccess3"				        
 				        :on-remove="handleRemove3">
@@ -76,7 +76,7 @@
 			  </el-col>	
 			  <el-col :span="14">
 			  		<el-upload
-				        :action="getUploadUrl"
+				        :action="actionUrl"
 				        list-type="picture-card"
 				        :on-success="uploadImgeSuccess4"				        
 				        :on-remove="handleRemove4">
@@ -132,11 +132,21 @@ import { mapGetters } from 'vuex'
 				]
 			}
 		},
+		mounted(){
+			
+		},
 		watch:{
 			uploadImgs:{
 				handler(curVal,oldVal){
 		　　　　　　　　//console.log(curVal)
-						this.$emit("setClothePic",curVal)
+						let picture = {
+							front_picture: this.uploadImgs[0].imgUrls,
+							back_picture: this.uploadImgs[1].imgUrls,
+							left_picture: this.uploadImgs[2].imgUrls,
+							right_picture: this.uploadImgs[3].imgUrls,
+							part_picture: this.uploadImgs[4].imgUrls
+						}
+						this.$emit("setClothePic",picture)
 		　　　　　　},
 			　　　　deep:true
 				}
@@ -145,6 +155,9 @@ import { mapGetters } from 'vuex'
 	      ...mapGetters([
 	          'getUploadUrl'
 	        ]),
+	      actionUrl(){
+	      	return this.getUploadUrl +'/picture/upload'
+	      }
 	    },
 		methods:{			
 			handleRemove0(file, fileListS) {

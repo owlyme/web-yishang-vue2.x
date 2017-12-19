@@ -241,11 +241,40 @@ border-radius: 50px 0 0 50px;
   width: 75%;
   margin: 0 auto;
 }
+.container{
+  width: 1200px; 
+  position: relative;
+}
 /*banner*/
 .carousel-caption{
   height: 100%;
 }
 
+.type-wuyou{
+    position: absolute;
+    top: 24px;
+    left: 26px;
+    width: 108px;
+    height: 108px;
+    text-align: center;    
+    overflow: hidden; 
+}
+.type-wuyou .rotate{
+  position: absolute;
+  left: -38px;
+  top: 4px;
+  width: 108px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 14px;
+  color: #fff;
+  background: rgb(148,46,234);
+  transform:rotate(-42deg);
+  -ms-transform:rotate(-42deg);
+  -moz-transform:rotate(-42deg);  
+  -webkit-transform:rotate(-42deg);
+  -o-transform:rotate(-42deg);
+}
 /*imgupload */
 .avatar-uploader .el-upload img{
      width: 100%;

@@ -2,7 +2,7 @@
 	<div class="quality">
 		<h5 class="padding-bottom">品质要求</h5>
 		<el-form-item label="查货选择:" >
-		    <el-select v-model="form.model" placeholder="请选择你的查货模式" style="width:75%">
+		    <el-select v-model="form.check" placeholder="请选择你的查货模式" style="width:75%">
 		    	<el-option 
 		    				v-for="(item, index) in check"
 				    		:key="'check'+index"
@@ -20,11 +20,11 @@
 		    </el-select>
 		</el-form-item>
 
-		<el-row  v-for="(item, index) in form.details" class='padding-right details-row'  
+		<el-row  v-for="(item, index) in form.supplement" class='padding-right details-row'  
 		:key="item+index">		 
 		  <el-col :span="12">
 		  	<el-form-item :label="'细节部位'+ (index+1)+':'" label-width="50%">
-			    <el-input v-model="item.position" placeholder="请输入细节部位" ></el-input>
+			    <el-input v-model="item.name" placeholder="请输入细节部位" ></el-input>
 			</el-form-item>
 		  </el-col>
 		  <el-col :span="12">
@@ -48,15 +48,15 @@
 		<div class="middle-line">
 			<el-button type="primary" icon="el-icon-plus" @click="addDetail" class="circle-btn"></el-button>
 		</div>
-		<el-form-item label="信息要求:">
-		    <el-input type="textarea" v-model="form.desc"></el-input>
+		<el-form-item label="要求信息:">
+		    <el-input type="textarea" v-model="form.requirement"></el-input>
 		</el-form-item>
 
 		<el-row :gutter="10"  class="space" >
 		  <h6>版型图(若有版型图请上传)</h6>
 	      <el-col :span="14" :offset="6">
 	      <el-upload
-	        :action="getUploadUrl"
+	        :action="actionUrl"
 	        list-type="picture-card"
 	        :on-success="uploadImgeSuccess"
 	        :on-preview="handlePictureCardPreview"
@@ -82,14 +82,14 @@ import { mapGetters } from 'vuex'
 				dialogVisible: false,
 				dialogImageUrl:false,
 				form: {
-		          model: '',
+		          check: '',
 		          error: '',
 		          delivery: false,	          
-		          desc: '',
+		          requirement: '',
 		          imageUrls:"",
-		          details:[
+		          supplement:[
 			          {
-						position : "",
+						name : "",
 						error: "",
 					}]
 		        },
@@ -99,6 +99,9 @@ import { mapGetters } from 'vuex'
 	      ...mapGetters([
 	          'getUploadUrl'
 	        ]),
+	      actionUrl(){
+	      	return this.getUploadUrl +'/picture/upload'
+	      }	
 	    },
 		watch:{
 			form:{
@@ -123,24 +126,24 @@ import { mapGetters } from 'vuex'
 		        this.dialogVisible = true
 		    },
 		    uploadImgeSuccess(response, file, fileList){
-		    	// console.log(response)
+		    	//console.log(response)
 		    	// console.log(file)
 		    	//console.log(fileList)
 		    	let imgs = [];
 		    	fileList.forEach((item ,index) =>{
 		    		imgs.push(item.response.content.url)
 		    	})
-		    	this.form.imageUrsl = imgs.slice(0, imgs.length)
+		    	this.form.imageUrls = imgs.slice(0, imgs.length)
 		    },
 			addDetail(){	
 				let detail = {
 					position : "",
 					error: ""
 				}
-				this.form.details.push(detail)
+				this.form.supplement.push(detail)
 			},
 		    clickDelete(index){
-		      	this.form.details.splice(index,1)
+		      	this.form.supplement.splice(index,1)
 		    },
 		}
 	}

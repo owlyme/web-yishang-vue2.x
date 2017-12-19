@@ -10,7 +10,7 @@
     </div>
   </div>
   <!-- nav -->
-  <div class="bg-white pages-nav">
+  <div class="bg-white pages-nav  clearfix">
     <div class="container">
         <el-row >
           <el-col :span="4">
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-    <div class="container bg-white"> 
+    <div class="bg-white"> 
       <keep-alive> <router-view/> </keep-alive> 
     </div>
   <Footerinfo/>
@@ -126,9 +126,7 @@ export default {
 .bg-white{
   background: #fff;
 }
-.container{
-  width: 1200px;  
-}
+
 .head-height{
   height: 44px;
   font-size: 14px;
