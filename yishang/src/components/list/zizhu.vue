@@ -34,7 +34,7 @@
 				<!-- 其他要求1 -->
 				<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
 				<!-- 收货人信息 -->
-				<Pay class=" border-top padding-top-bottom" 
+				<Pay class="border-top padding-top-bottom" 
 					zizhu='true'
 					:addressList="receiptContent.address"
 					v-on:setNewAddr="getNewAddr"

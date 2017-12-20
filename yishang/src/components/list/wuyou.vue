@@ -35,7 +35,7 @@
 				<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
 				<!-- 收货人信息 -->
 				<Pay class="border-top padding-top-bottom" 
-					:serverFee="receiptContent.sever_fee || 0"
+					:deposit="receiptContent.deposit"
 					:addressList="receiptContent.address"
 					v-on:setNewAddr="getNewAddr"
 				></Pay>

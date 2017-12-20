@@ -37,7 +37,7 @@
 					<div class="isloading border-top" v-if="isLoading">
 						<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
 					</div>
-					<div v-else>
+					<div  v-if="selectSchedule.details">
 						<b-container class="bv-example-row  border-top padding-around" >
 		     			 <b-row cols="4"  >
 		     			 	<b-col cols="3" ><img alt="订单图片" :src="getUploadUrl+'/'+selectSchedule.details.front_picture"></b-col>
@@ -98,7 +98,7 @@
 							</el-steps>
 							</div>
 						</div>
-						<div class="goods-details  border-top padding-around">
+						<div class="goods-details  border-top padding-around" v-if="selectSchedule.history">
 							<h5>订单动态</h5>
 							<div class="padding-top">
 							  <el-steps direction="vertical" :active="3">
@@ -117,7 +117,7 @@
 						<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
 					</div>
 					<div v-else >
-						<div class="jiben border-top detail-inner">
+						<div class="jiben border-top detail-inner" v-if="selectDetails.details">
 							<h6>基本信息</h6>
 							<ul class="clearfix">
 								<li>订单名称: <span>{{selectDetails.details.name}}</span></li>
@@ -146,7 +146,7 @@
 								<li>商品属性: <span>{{selectDetails.details.x}}</span></li> -->
 							</ul>
 						</div>
-						<div class="mianliao border-top detail-inner">
+						<div class="mianliao border-top detail-inner" v-if="selectDetails.main">
 							<h6>面料信息(主面料1)</h6>
 							<ul>
 								<li>面料名称： <span>{{selectDetails.main.name}}</span></li>
@@ -160,7 +160,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mianliao border-top detail-inner">
+						<div class="mianliao border-top detail-inner" v-if="selectDetails.auxiliary">
 							<div v-for="item in selectDetails.auxiliary">
 								<h6>面料信息(辅面料1)</h6>
 								<ul class="clearfix">
@@ -176,7 +176,7 @@
 								</div>
 							</div>						
 						</div>
-						<div class="yangyi border-top detail-inner">
+						<div class="yangyi border-top detail-inner" v-if="selectDetails.otherPic" >
 							<h6>样衣图片</h6>
 							<div class="mianliao-icon clearfix">
 								<ul v-for="item in selectDetails.otherPic" class="inner-icon">
@@ -187,7 +187,7 @@
 								</ul>
 							</div>
 						</div>
-						<div class="yanseshuliang border-top detail-inner">
+						<div class="yanseshuliang border-top detail-inner" v-if="selectDetails.size">
 							<h6>颜色数量</h6>
 							<div class="clearfix">
 								<ul class="thead">
@@ -208,7 +208,7 @@
 								</ul>
 							</div>
 						</div>
-						<div class="pinzhi border-top detail-inner">
+						<div class="pinzhi border-top detail-inner" v-if="selectDetails.quality">
 							<h6>品质要求</h6>
 							<div class="chahuo">
 								<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
@@ -225,7 +225,7 @@
 								</ul>
 							</div>
 						</div>
-						<div class="banxing border-top detail-inner">
+						<div class="banxing border-top detail-inner" v-if="selectDetails.quality">
 							<h6>版型图</h6>
 							<div class="mianliao-icon clearfix ">
 								<div v-for="item in selectDetails.quality.picture" class="inner-icon">
@@ -233,7 +233,10 @@
 								</div>
 							</div>					
 						</div>
-						<div class="qita border-top detail-inner"  v-for="(item, index) in selectDetails.supplement" :key="'supplement'+index">
+						<div class="qita border-top detail-inner" 
+							v-if="selectDetails.supplement"
+						 	v-for="(item, index) in selectDetails.supplement" 
+						 	:key="'supplement'+index">
 							<h6>其他<span>({{index+1}})</span> </h6>
 							<div class="chahuo">
 								面料名称: {{item.requirement}}
@@ -244,9 +247,9 @@
 								</div>
 							</div>				
 						</div>
-						<div class="address border-top detail-inner">
+						<div class="address border-top detail-inner" v-if="selectDetails.address">
 							<h6>收货地址</h6>
-							<div> 
+							<div > 
 								{{selectDetails.address.province}}
 								{{selectDetails.address.city}}
 								{{selectDetails.address.county}}

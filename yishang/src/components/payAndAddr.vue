@@ -8,7 +8,7 @@
 			    </el-radio-group>
 			</el-form-item>
 			<el-form-item label="支付服务费用(订单的金额的10%):" v-else  v-model="selectAddress.per">			
-			    	 <span class="color size">{{ serverFee }}</span> 元			   
+			    	 <span class="color size">{{ deposit }}</span> 元			   
 			</el-form-item>
 			<el-form-item label="确认收货地址:" >
 			    <el-radio-group v-model="selectAddress.address" >
@@ -38,8 +38,6 @@
 			    <el-input type="textarea" v-model="ruleForm.street" placeholder="请填写您的详细地址"></el-input>
 			  </el-form-item>
 		</div>
-
-
 		  <el-form-item class="text-right padding-top">
 		  	<el-button @click="resetForm('ruleForm')">取消</el-button>
 		    <el-button type="primary" @click="submitForm('ruleForm')">确认添加</el-button>
@@ -66,7 +64,7 @@ import { mapGetters } from 'vuex'
 	export default{
 		name: "pay",
 		components:{ China},
-		props:['zizhu','addressList',"serverFee"],
+		props:['zizhu','addressList',"deposit"],
 		data(){
 			return{
 				selectAddress: {
@@ -102,7 +100,7 @@ import { mapGetters } from 'vuex'
 		},
 		mounted(){
 			let self = this;
-			console.log(this.serverFee)
+			console.log(this.deposit)
 			//Slet receiver = { pay : 1, address: self.addressList}
 			//this.$emit('setNewAddr', receiver)
 		},

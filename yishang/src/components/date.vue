@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div >
+		<div>
 			<el-form-item label="加工单价:" class="dates">
 			    <el-input v-model="dateForm.fee" placeholder=""  type="number"></el-input>
 			     <div class="after"> 元/件 </div>
@@ -40,7 +40,7 @@
 		},
 		computed:{
 			total_fee(){
-				// console.log(this.total)
+				console.log(this.total)
 				return this.total * this.dateForm.fee
 			}
 		},
