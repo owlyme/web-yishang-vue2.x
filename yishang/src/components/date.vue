@@ -40,13 +40,8 @@
 		},
 		computed:{
 			total_fee(){
-				console.log(this.total)
 				return this.total * this.dateForm.fee
 			}
-		},
-		mounted(){
-			// console.log('date')
-			// console.log(this.total)
 		},
 		watch:{
 			dateForm:{

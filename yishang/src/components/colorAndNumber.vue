@@ -41,36 +41,36 @@
 export default {
 	name: "color",
 	data () {
-	return {
-	displaySizeList: false,
-	clothes:{},
-	activeNames: [],
-	size : ["XXS","XS","S","M","L","XL","XXL","3XL","4XL","5XL"], 
-	clothes: {
-	color: '',
-	number: '',
-	type: '',
-	size: [],
-	flag: false
-	},
-	diffKind: [
-	{
-	color: '',
-	type: '',
-	sizes : [
-	{size: "XS", number: 0},
-	{size: "S", number: 0},
-	{size: "M", number: 0},
-	{size: "L", number: 0},
-	{size: "XL", number: 0},
-	{size: "XXL", number: 0},
-	{size: "3XL", number: 0},
-	{size: "4XL", number: 0},
-	], 
-	flag: true
-	},
-	],
-	}
+		return {
+			displaySizeList: false,
+			clothes:{},
+			activeNames: [],
+			size : ["XS","S","M","L","XL","XXL","3XL","4XL"], 
+			clothes: {
+				color: '',
+				number: '',
+				type: '',
+				size: [],
+				flag: false
+			},
+			diffKind: [
+				{
+					color: '',
+					type: '',
+					sizes : [
+						{size: "XS", number: 0},
+						{size: "S", number: 0},
+						{size: "M", number: 0},
+						{size: "L", number: 0},
+						{size: "XL", number: 0},
+						{size: "XXL", number: 0},
+						{size: "3XL", number: 0},
+						{size: "4XL", number: 0}
+					], 
+					flag: true
+				},
+			]
+		}
 	},
 	computed:{
 		demanding_account(){
@@ -93,15 +93,24 @@ export default {
 					value.push({
 					color:item.color,
 					// xxs_demanding_account :item.sizes[0].number ,
-					xs_demanding_account :item.sizes[1].number ,
-					s_demanding_account : item.sizes[2].number,
-					m_demanding_account : item.sizes[3].number,
-					l_demanding_account : item.sizes[4].number,
-					xl_demanding_account : item.sizes[5].number,
-					xxl_demanding_account : item.sizes[6].number,
-					xxxl_demanding_account :item.sizes[7].number,
-					xxxxl_demanding_account : item.sizes[8].number,
+					// xs_demanding_account :item.sizes[1].number ,
+					// s_demanding_account : item.sizes[2].number,
+					// m_demanding_account : item.sizes[3].number,
+					// l_demanding_account : item.sizes[4].number,
+					// xl_demanding_account : item.sizes[5].number,
+					// xxl_demanding_account : item.sizes[6].number,
+					// xxxl_demanding_account :item.sizes[7].number,
+					// xxxxl_demanding_account : item.sizes[8].number,
 					// xxxxxl_demanding_account : item.sizes[9].number
+
+					xs_demanding_account    : item.sizes[0].number ,
+					s_demanding_account     : item.sizes[1].number,
+					m_demanding_account     : item.sizes[2].number,
+					l_demanding_account     : item.sizes[3].number,
+					xl_demanding_account    : item.sizes[4].number,
+					xxl_demanding_account   : item.sizes[5].number,
+					xxxl_demanding_account  : item.sizes[6].number,
+					xxxxl_demanding_account : item.sizes[7].number,
 					})
 				})
 				this.$emit("setColor",value, total)

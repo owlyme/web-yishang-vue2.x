@@ -7,8 +7,8 @@
 			      <el-radio  :label="0">否</el-radio>
 			    </el-radio-group>
 			</el-form-item>
-			<el-form-item label="支付服务费用(订单的金额的10%):" v-else  v-model="selectAddress.per">			
-			    	 <span class="color size">{{ deposit }}</span> 元			   
+			<el-form-item :label="percent" v-else  v-model="selectAddress.per">			
+			    	 <span class="color size">{{ depositFee }}</span> 元			   
 			</el-form-item>
 			<el-form-item label="确认收货地址:" >
 			    <el-radio-group v-model="selectAddress.address" >
@@ -64,7 +64,7 @@ import { mapGetters } from 'vuex'
 	export default{
 		name: "pay",
 		components:{ China},
-		props:['zizhu','addressList',"deposit"],
+		props:['zizhu','addressList',"deposit","totalFee"],
 		data(){
 			return{
 				selectAddress: {
@@ -129,6 +129,12 @@ import { mapGetters } from 'vuex'
 		      ...mapGetters([
 		         'getUrl'
 		      ]),
+		      depositFee(){		 
+		      	return (this.deposit -0) * (this.totalFee || 0)
+		      },
+		      percent(){
+		      	return '支付服务费用(订单的金额的'+ ((this.deposit-0) * 100) + '%):'
+		      }
 		  },
 		methods:{
 			submitForm(formName) {				

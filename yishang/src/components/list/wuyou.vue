@@ -15,7 +15,7 @@
 				<!-- 加工详情与信息-->
 				<Date class="padding-left-right border-top padding-top-bottom" 
 					v-on:setPeriod="getPeriod"
-					:total="receiptContent.demanding_account || 0 "
+					:total="receiptContent.demanding_account || 0 "					
 				></Date>
 				<!-- 上传图片 -->
 				<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
@@ -36,6 +36,7 @@
 				<!-- 收货人信息 -->
 				<Pay class="border-top padding-top-bottom" 
 					:deposit="receiptContent.deposit"
+					:totalFee="submitotalFee"
 					:addressList="receiptContent.address"
 					v-on:setNewAddr="getNewAddr"
 				></Pay>
@@ -105,40 +106,7 @@ const receiptContent={
 		street:null,// true string
 	}	
 }	
-const  submitReceipt= {
-		type: null,
-		cate_name: null,
-		name: null,
-		style_name: null,
-		mode_name: null,
-		size: null,
-		demanding_account: null,
-		fee: null,
-		total_fee: null,
-		expire_time: null,
-		arrival_date: null,
-		delivery_date: null,
-		front_picture: null,
-		back_picture: null,
-		left_picture: null,
-		right_picture: null,
-		part_picture: null,
-		other_picture: null,
-		check: null,
-		error: null,
-		supplement: null,
-		requirement: null,
-		picture: null,
-		fabric: null,
-		supplements: null,
-		is_deposited: null,
-		receiver: null,
-		phone: null,
-		province: null,
-		city: null,
-		county: null,
-		street: null,
-}
+
 
 export default {
 	name: "zizhu",
@@ -165,13 +133,51 @@ export default {
 		      ],
 		   	activeNames: ['1'],
 		   	value:null,
-		   	receiptContent:{}
+		   	receiptContent:{},
+		   	submitReceipt: {
+				type: null,
+				cate_name: null,
+				name: null,
+				style_name: null,
+				mode_name: null,
+				size: null,
+				demanding_account: null,
+				fee: null,
+				total_fee: null,
+				expire_time: null,
+				arrival_date: null,
+				delivery_date: null,
+				front_picture: null,
+				back_picture: null,
+				left_picture: null,
+				right_picture: null,
+				part_picture: null,
+				other_picture: null,
+				check: null,
+				error: null,
+				supplement: null,
+				requirement: null,
+				picture: null,
+				fabric: null,
+				supplements: null,
+				is_deposited: null,
+				receiver: null,
+				phone: null,
+				province: null,
+				city: null,
+				county: null,
+				street: null,
+			}
 		}
 	},
   computed:{
       ...mapGetters([
          'getUrl',
       ]),
+      submitotalFee(){
+      	console.log(this.submitReceipt.total_fee)
+      	return this.submitReceipt.total_fee
+      }
   },
   mounted(){
     //console.log( 'zhizhu')
@@ -193,9 +199,8 @@ export default {
 methods:{
     onSubmit(){
     	// console.log(submitReceipt)
-    	this.$set(submitReceipt, 'type', 2)
-    	this.beforeReceipt(submitReceipt);
-    	
+    	this.$set(this.submitReceipt, 'type', 2)
+    	this.beforeReceipt(this.submitReceipt);    	
     },
     getpayfront(){
     	let url = this.getUrl    		
@@ -211,15 +216,15 @@ methods:{
     beforeReceipt(arg){
     	let url = this.getUrl    		
 	    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-	    	console.log(submitReceipt)
+	    	console.log(this.submitReceipt)
 	        if(res.data.status == 200){
-	        	this.submitReceipt(arg)
+	        	this.submitReceiptFn(arg)
 	        }else{
 				
 	        }          
 	    }) 
     },
-    submitReceipt(args){
+    submitReceiptFn(args){
     	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
 	        console.log(res.data.content)
@@ -232,77 +237,75 @@ methods:{
     },
     getWorkSheet(val){
     	let self = this;
-    	self.$set(submitReceipt, 'name', val.name)
-    	self.$set(submitReceipt, 'cate_name', val.fabricType)
-    	self.$set(submitReceipt, 'style_name', val.kindType)
-    	self.$set(submitReceipt, 'mode_name', val.status)
+    	self.$set(self.submitReceipt, 'name', val.name)
+    	self.$set(self.submitReceipt, 'cate_name', val.fabricType)
+    	self.$set(self.submitReceipt, 'style_name', val.kindType)
+    	self.$set(self.submitReceipt, 'mode_name', val.status)
     	// console.log(val)
     },    
     getColornumber(val,total){
     	let self = this;
-    	//self.$set(self.zizhuIndent, 'colorNum', val)    	
+    	//self.$set(self.self.zizhuIndent, 'colorNum', val)    	
     	// console.log(val)
-    	self.$set(submitReceipt, 'size', val)    	
-    	self.$set(submitReceipt, 'demanding_account', total)
-    	self.$set(self.receiptContent, 'demanding_account', total)
-    	
+    	self.$set(self.submitReceipt, 'size', val)    	
+    	self.$set(self.submitReceipt, 'demanding_account', total)
+    	self.$set(self.receiptContent, 'demanding_account', total)    	
     },
     getPeriod(val){
     	let self = this;
-    	// self.$set(self.zizhuIndent, 'period', val)
+    	// self.$set(self.self.zizhuIndent, 'period', val)
     	// console.log(val)
-    	self.$set(submitReceipt, 'fee', val.fee)
-    	self.$set(submitReceipt, 'total_fee', val.total_fee)
-    	self.$set(submitReceipt, 'expire_time', val.expire_time)
-    	self.$set(submitReceipt, 'arrival_date', val.arrival_date)
-    	self.$set(submitReceipt, 'delivery_date', val.delivery_date)
+    	self.$set(self.submitReceipt, 'fee', val.fee)
+    	self.$set(self.submitReceipt, 'total_fee', val.total_fee)
+    	self.$set(self.submitReceipt, 'expire_time', val.expire_time)
+    	self.$set(self.submitReceipt, 'arrival_date', val.arrival_date)
+    	self.$set(self.submitReceipt, 'delivery_date', val.delivery_date)
     },
     getClothePic(val){
     	let self = this;
-    	//self.$set(self.zizhuIndent, 'clothePic', val)
+    	//self.$set(self.self.zizhuIndent, 'clothePic', val)
     	//console.log(val)
-		self.$set(submitReceipt,'front_picture', val.front_picture)
-		self.$set(submitReceipt,'back_picture' , val.back_picture)
-		self.$set(submitReceipt,'left_picture' , val.left_picture)
-		self.$set(submitReceipt,'right_picture', val.right_picture)
-		self.$set(submitReceipt,'part_picture' , val.part_picture)
-		self.$set(submitReceipt,'other_picture', val.other_picture)
+		self.$set(self.submitReceipt,'front_picture', val.front_picture)
+		self.$set(self.submitReceipt,'back_picture' , val.back_picture)
+		self.$set(self.submitReceipt,'left_picture' , val.left_picture)
+		self.$set(self.submitReceipt,'right_picture', val.right_picture)
+		self.$set(self.submitReceipt,'part_picture' , val.part_picture)
+		self.$set(self.submitReceipt,'other_picture', val.other_picture)
     },
     getQuality(val){
     	let self = this;
-    	//self.$set(self.zizhuIndent, 'quality', val)
+    	//self.$set(self.self.zizhuIndent, 'quality', val)
     	//console.log(val)    	
-		self.$set(submitReceipt,'check', val.check)
-		self.$set(submitReceipt,'error' , val.error)
-		self.$set(submitReceipt,'supplement' , val.supplement)
-		self.$set(submitReceipt,'requirement', val.requirement)
-		self.$set(submitReceipt,'picture' , val.imageUrls)
+		self.$set(self.submitReceipt,'check', val.check)
+		self.$set(self.submitReceipt,'error' , val.error)
+		self.$set(self.submitReceipt,'supplement' , val.supplement)
+		self.$set(self.submitReceipt,'requirement', val.requirement)
+		self.$set(self.submitReceipt,'picture' , val.imageUrls)
     },
     getFabric(val){
     	let self = this;
-    	// self.$set(self.zizhuIndent, 'fabric', val)
+    	// self.$set(self.self.zizhuIndent, 'fabric', val)
     	// console.log(val)
-    	self.$set(submitReceipt,'fabric', val)
-
+    	self.$set(self.submitReceipt,'fabric', val)
     },
     getAbout(val){
     	let self = this;
-    	//self.$set(self.zizhuIndent, 'about', val)
+    	//self.$set(self.self.zizhuIndent, 'about', val)
     	//console.log(val)
-    	self.$set(submitReceipt,'supplements', val)
+    	self.$set(self.submitReceipt,'supplements', val)
     },
     getNewAddr(val){
     	let self = this;
-    	//self.$set(self.zizhuIndent, 'newAddr', val)
+    	//self.$set(self.self.zizhuIndent, 'newAddr', val)
     	// console.log(val)
-		self.$set(submitReceipt,'is_deposited', val.is_deposited)
-		self.$set(submitReceipt,'phone', val.phone)
-		self.$set(submitReceipt,'province', val.province)
-		self.$set(submitReceipt,'city', val.city)
-		self.$set(submitReceipt,'county', val.county)
-		self.$set(submitReceipt,'street', val.street)
-		self.$set(submitReceipt,'receiver', val.name)
-		self.$set(submitReceipt,'fee', val.per)
+		self.$set(self.submitReceipt,'is_deposited', val.is_deposited)
+		self.$set(self.submitReceipt,'phone', val.phone)
+		self.$set(self.submitReceipt,'province', val.province)
+		self.$set(self.submitReceipt,'city', val.city)
+		self.$set(self.submitReceipt,'county', val.county)
+		self.$set(self.submitReceipt,'street', val.street)
+		self.$set(self.submitReceipt,'receiver', val.name)
+		self.$set(self.submitReceipt,'fee', val.per)
     }
 }
 

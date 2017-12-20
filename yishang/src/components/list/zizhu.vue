@@ -228,11 +228,10 @@ methods:{
     getColornumber(val,total){
     	let self = this;
     	//self.$set(self.zizhuIndent, 'colorNum', val)    	
-    	// console.log(val)
-    	self.$set(submitReceipt, 'size', val)    	
+    	console.log(val)
+    	self.$set(submitReceipt, 'size', val)
     	self.$set(submitReceipt, 'demanding_account', total)
-    	self.$set(self.receiptContent, 'demanding_account', total)
-    	
+    	self.$set(self.receiptContent, 'demanding_account', total)    	
     },
     getPeriod(val){
     	let self = this;
