@@ -94,7 +94,6 @@ a:hover{
   border-bottom: 0px solid #C44DDC;
   color:  #C44DDC;
 }
-
 .media-body .col{
   font-size: 0.8em;
   border-left: 1px solid #e0e0e0;
@@ -102,23 +101,20 @@ a:hover{
 .media-body .col:first-child{
   border-left: 0px solid #e0e0e0;
 }
-
 .el-button--primary{
-  background: #C44DDC;  
+  background: #C44DDC;
 }
 .el-button--primary:focus, .el-button--primary:hover {
     background: #C44DDC;
     border-color:#C44DDC;
     color: #fff;
 }
-
-
 /*steps*/
 .el-step__line{
   background-color:#C44DDC;
 }
 .el-step__line-inner{
-      border-color: #C44DDC;
+  border-color: #C44DDC;
 }
 .is-finish *{
   color: #C44DDC;
@@ -139,16 +135,14 @@ a:hover{
 .el-step__title.is-finish{
     color: #C44DDC;
 }
-
 .graph1 .el-step__line,
 .graph3 .el-step__line{
     display: none;
-  }
+}
 .goods-details .el-steps--vertical .el-step__title,
 .goods-details .el-steps--vertical .el-step__description{
   display: inline-block;
 }
-
 /* __web-inspector-hide-shortcut__*/
 .nav-item a{
   color: #555;
@@ -165,6 +159,9 @@ a:hover{
 }
 .padding-bottom{
    padding-bottom: 30px;
+}
+.padding-left{
+  padding-left: 30px;
 }
 .padding-right{
   padding-right: 30px;
@@ -187,7 +184,25 @@ a:hover{
   font-size: 14px;
   color: #5a5e66;
 }
-/**/
+/*carousel*/
+.carousel-control-next,
+.carousel-control-prev{
+    background: rgba(57, 37, 37, 0.53);
+    height: 60px;
+    width: 60px;
+    line-height: 30px;
+    border-radius: 30px;
+    top: 50%;
+    margin-top: -30px;
+    right: 30px;
+}
+.carousel-control-next span,
+.carousel-control-prev span{
+
+}
+.carousel-control-prev{
+  left: 30px;
+}
 
 .el-textarea__inner{
   height: 66px;
@@ -205,9 +220,6 @@ a:hover{
   background-image: url(/static/login/icons.png);
   background-repeat: no-repeat;
 }
-
-
-
 .el-input-number .el-input__inner{
   border-radius: 50px;
 }
@@ -219,7 +231,6 @@ border-radius: 50px 0 0 50px;
   width: 67px;
   border-radius: 0 50px 50px 0;
 }
-
 #zizhu .el-button--primary{  
     outline-style: none;
 }
@@ -249,15 +260,14 @@ border-radius: 50px 0 0 50px;
 .carousel-caption{
   height: 100%;
 }
-
 .type-wuyou{
     position: absolute;
-    top: 24px;
-    left: 26px;
+    top: 2px;
+    left: 2px;
     width: 108px;
     height: 108px;
-    text-align: center;    
-    overflow: hidden; 
+    text-align: center;
+    overflow: hidden;
 }
 .type-wuyou .rotate{
   position: absolute;
@@ -277,7 +287,7 @@ border-radius: 50px 0 0 50px;
 }
 /*imgupload */
 .avatar-uploader .el-upload img{
-     width: 100%;
+    width: 100%;
     height: 100%;
 }
 </style>

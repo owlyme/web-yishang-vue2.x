@@ -34,7 +34,7 @@
 				<!-- 其他要求1 -->
 				<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
 				<!-- 收货人信息 -->
-				<Pay class="padding-left-right border-top padding-top-bottom" 
+				<Pay class="border-top padding-top-bottom" 
 					:serverFee="receiptContent.sever_fee || 0"
 					:addressList="receiptContent.address"
 					v-on:setNewAddr="getNewAddr"
@@ -106,39 +106,39 @@ const receiptContent={
 	}	
 }	
 const  submitReceipt= {
-				type: null,
-				cate_name: null,
-				name: null,
-				style_name: null,
-				mode_name: null,
-				size: null,
-				demanding_account: null,
-				fee: null,
-				total_fee: null,
-				expire_time: null,
-				arrival_date: null,
-				delivery_date: null,
-				front_picture: null,
-				back_picture: null,
-				left_picture: null,
-				right_picture: null,
-				part_picture: null,
-				other_picture: null,
-				check: null,
-				error: null,
-				supplement: null,
-				requirement: null,
-				picture: null,
-				fabric: null,
-				supplements: null,
-				is_deposited: null,
-				receiver: null,
-				phone: null,
-				province: null,
-				city: null,
-				county: null,
-				street: null,
-		   	}
+		type: null,
+		cate_name: null,
+		name: null,
+		style_name: null,
+		mode_name: null,
+		size: null,
+		demanding_account: null,
+		fee: null,
+		total_fee: null,
+		expire_time: null,
+		arrival_date: null,
+		delivery_date: null,
+		front_picture: null,
+		back_picture: null,
+		left_picture: null,
+		right_picture: null,
+		part_picture: null,
+		other_picture: null,
+		check: null,
+		error: null,
+		supplement: null,
+		requirement: null,
+		picture: null,
+		fabric: null,
+		supplements: null,
+		is_deposited: null,
+		receiver: null,
+		phone: null,
+		province: null,
+		city: null,
+		county: null,
+		street: null,
+}
 
 export default {
 	name: "zizhu",
@@ -302,6 +302,7 @@ methods:{
 		self.$set(submitReceipt,'county', val.county)
 		self.$set(submitReceipt,'street', val.street)
 		self.$set(submitReceipt,'receiver', val.name)
+		self.$set(submitReceipt,'fee', val.per)
     }
 }
 

@@ -39,7 +39,9 @@
                 class="muneNav clearfix "          
                 @click="fliter(index)"  
                 >
-                <div  class="txt" :class="{'txt-active' : item.flag }"   @click='displayOrNot(item.keyword)'>{{item.type}} </div>
+                <div  class="txt" :class="{'txt-active' : item.flag }" @click='displayOrNot(item.keyword)'>{{item.type}}
+                  <div v-if="item.inner" class="updown">&#60;</div>
+                </div>
                 <ul v-if="item.inner" class="inner-ul">
                   <li v-for="(item1, index) in item.inner" class="inner-li"  @click='displayOrNot(item1.keyword)'>{{item1.type}}</li>
                 </ul>
@@ -51,7 +53,7 @@
                       :key="index+ 'good'"  
                       :goodsMsg="item" 
                       class="clearfix"
-                      v-if="" ></ListElemnt>
+                      ></ListElemnt>
         </div>
       </div>   
       <!-- pagination -->
@@ -128,7 +130,7 @@ export default{
           {
             type: "所有订单",
             keyword: 'x',
-            flag: false
+            flag: true
           },
           {
             type:"待接单",
@@ -157,16 +159,6 @@ export default{
                     }
                    ]
           },          
-          // {
-          //   type:"延误",
-          //   keyword: 'x',
-          //   flag: false
-          // },
-          // {
-          //   type:"抢单中",
-          //   keyword: '1000',
-          //   flag: false
-          // },
           {
             type:"加工中",
             keyword: '4000',
@@ -182,26 +174,11 @@ export default{
             keyword: '6000',
             flag: false
           },
-          // {
-          //   type:"取消订单",
-          //   keyword: '9000',
-          //   flag: false
-          // },
           {
             type:"已完成",
             keyword: '7000',
             flag: false
-          },
-          // {
-          //   type:"管理员关闭",
-          //   keyword: '9100',
-          //   flag: false
-          // },
-          // {
-          //   type:"已退货/退款",
-          //   keyword: 'x',
-          //   flag: false
-          // }
+          }
         ],
 			totalRows: 1,
 			perPage : 1,
@@ -225,13 +202,12 @@ export default{
     this.getMainlist({page: this.currentPage})
   },
   watch:{
-      currentPage:{
-        handler(curVal,oldVal){
-          this.getMainlist({page: curVal})
-    　　　　　　},
-    　　　deep:true
+    currentPage:{
+      handler(curVal,oldVal){
+        this.getMainlist({page: curVal})
+          },
+    　  deep:true
       }
-
     },
 	methods:{
     getBanner(){
@@ -253,7 +229,6 @@ export default{
           if(res.data.status == 200){
             this.perPage =  res.data.content.pageSize;
             this.totalRows = res.data.content.totalRows-0;
-          //  this.goodsList = res.data.content.list;
             this.savedList =  res.data.content.list;
             this.goodsList = this.savedList.slice(0, this.savedList.length)
             console.log(this.goodsList)
@@ -262,9 +237,6 @@ export default{
           }          
       })  
     },
-    handleSelect(key, keyPath) {
-        //console.log(key, keyPath);
-      },
 		getMoreList (curVal) {
 			let page = this.currentPage
 			//console.log(page)
@@ -277,17 +249,26 @@ export default{
           self.$set(item,"flag",true)
           self.contentTitle= item.type
         }
-      });
-    
+      });    
     },
     displayOrNot(keyword){
       let self = this;
       self.goodsList= [];
-      self.savedList.forEach((item, _index)=>{ 
-         if(item.status == keyword ){
-            self.goodsList.push(self.savedList[_index])
+      self.savedList.forEach((item, _index)=>{
+         if(item.status[0] == '3' && item.status.indexOf('000') == -1 ){
+            if(keyword[1] == item.status[1] ){
+               self.goodsList.push(self.savedList[_index])
+            }
+            if(keyword[2] == item.status[2] ){
+               self.goodsList.push(self.savedList[_index])
+            }
+            if(keyword[3] == item.status[3] ){
+               self.goodsList.push(self.savedList[_index])
+            }
+         }else if(item.status == keyword || keyword == 'x') {
+           self.goodsList.push(self.savedList[_index])
          }
-      });
+      })
     }
 	}
 }
@@ -363,6 +344,7 @@ export default{
     /*padding-top: 20px;*/
   }
   .muneNav{
+    position: relative;
     float: left;
     height: 36px;
     line-height: 36px;
@@ -372,8 +354,7 @@ export default{
     color: #555;
     text-align: center;
     font-size: 15px;
-    cursor: pointer;
-    
+    cursor: pointer;    
     transition: background 0.5s, color 0.5s;
     box-sizing: border-box;
   }
@@ -388,6 +369,23 @@ export default{
   .muneNav:hover .txt{
     color: #FFF;
     background: #C44DDC;
+  }
+  .updown {
+    display: block;
+    position: absolute;
+    color: #c6b7b7;
+/*    width: 10px;
+    height: 10px;*/
+    top: 0;right: 30px;
+    transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg);
+    -moz-transform:rotate(-90deg);  
+    -webkit-transform:rotate(-90deg);
+    -o-transform:rotate(-90deg);
+    transition: transform 0.5s;
+  }
+  .muneNav:hover  .updown{
+    transform:rotate(-270deg);
   }
   .active{
     color: #FFF;

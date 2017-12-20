@@ -34,13 +34,13 @@
 				<!-- 其他要求1 -->
 				<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
 				<!-- 收货人信息 -->
-				<Pay class="padding-left-right border-top padding-top-bottom" 
+				<Pay class=" border-top padding-top-bottom" 
 					zizhu='true'
 					:addressList="receiptContent.address"
 					v-on:setNewAddr="getNewAddr"
 				></Pay>
 				<!-- 提交订单 -->
-				<div class="padding-left-right border-top padding-top-bottom text-center">
+				<div class=" border-top padding-top-bottom text-center">
 					<el-button type="primary" @click="onSubmit">自主发单</el-button>
 				    <el-button >保存草稿</el-button>
 				  </el-form-item>

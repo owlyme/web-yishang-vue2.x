@@ -10,18 +10,43 @@ import Indexlist from '@/components/list/index'
     import MyDetail from '@/components/list/myDetail'
 Vue.use(Router)
 
-export default new Router({
+
+
+
+
+// export default new Router({
+//   mode:'history',
+//   routes: [    
+//     {path: '/login',name: 'Login',component: Login    },
+//     {path: '/', name: 'Indexlist',component: Indexlist,
+//           children:[
+//           	{path: "/", name: "Main", component:Main	},
+//           	{path: "/zizhu",name: "Zizhu",component:Zizhu},
+//           	{path: "/wuyou",name: "Wuyou",component:Wuyou},
+//           	{path: "/indent",name: "Indent",component:Indent,
+
+//           	},
+//           ]
+//     },
+//      {
+//       path: '*', 
+//       component: Login
+//     },
+//   ],
+// })
+
+
+
+const router = new Router({
   mode:'history',
   routes: [    
     {path: '/login',name: 'Login',component: Login    },
     {path: '/', name: 'Indexlist',component: Indexlist,
           children:[
-          	{path: "/", name: "Main", component:Main	},
-          	{path: "/zizhu",name: "Zizhu",component:Zizhu},
-          	{path: "/wuyou",name: "Wuyou",component:Wuyou},
-          	{path: "/indent",name: "Indent",component:Indent,
-
-          	},
+            {path: "/", name: "Main", component:Main  },
+            {path: "/zizhu",name: "Zizhu",component:Zizhu},
+            {path: "/wuyou",name: "Wuyou",component:Wuyou},
+            {path: "/indent",name: "Indent",component:Indent,},
           ]
     },
      {
@@ -29,5 +54,18 @@ export default new Router({
       component: Login
     },
   ],
-
 })
+
+router.beforeEach(function (to, from, next) {
+  // console.log(to)
+  // console.log(from)
+  if (to.path === '/forbidden') {
+    next(false)
+  } else {
+    next()
+  }
+})
+
+
+
+ export default router

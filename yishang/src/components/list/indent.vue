@@ -25,25 +25,23 @@
 			</el-row>
 
 			<!-- 进度图标 -->
-			<div v-else>
-			<!-- 	<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-				  <el-menu-item index="1">订单进度</el-menu-item>
-				  <el-menu-item index="2">订单详情</el-menu-item>
-				</el-menu> -->
+			<div class="bg-white" v-else >
 				<div class="nav-schedule-details el-menu-demo clearfix">
 					<ul>
-						<li @click="changeActiveIndex">订单进度</li>
-						<li @click="changeActiveIndex">订单详情</li>
+						<li @click="changeActiveIndex" :class="{active : activeIndex}">订单进度</li>
+						<li @click="changeActiveIndex" :class="{active : !activeIndex}">订单详情</li>
 					</ul>
 				</div>
 
 				<div class="container-detail" v-if="activeIndex">
-					<div >
+					<div class="isloading border-top" v-if="isLoading">
+						<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
+					</div>
+					<div v-else>
 						<b-container class="bv-example-row  border-top padding-around" >
 		     			 <b-row cols="4"  >
 		     			 	<b-col cols="3" ><img alt="订单图片" :src="getUploadUrl+'/'+selectSchedule.details.front_picture"></b-col>
-		     			 	<b-col cols="9">
-		     			 	
+		     			 	<b-col cols="9">		     			 	
 	     			 		<h5>当前进度: <span class="color"> {{ selectSchedule.details.status_msg }}</span></h5>
 		     			 		<div class="text-style">订单名称: <span> {{selectSchedule.details.name}}</span></div>
 		     			 		<div class="text-style">交货时间: <span> {{selectSchedule.details.delivery_date}}</span></div>
@@ -63,7 +61,7 @@
 									<div class="rect"></div>
 									<div class="rectp-round"></div>
 								</div>
-							<el-steps :active="graph1Active" align-center class="graph1">
+							<el-steps :active="graph3Active" align-center class="graph3">
 							  <el-step class="stephidden" title="" description=""></el-step>
 							  <el-step class="stephidden" title="" description=""></el-step>
 							  <el-step title="待发样衣" description=""></el-step>
@@ -87,7 +85,7 @@
 							  <el-step title="等待评价" description=""></el-step>
 							  <el-step title="已评价" description=""></el-step>
 							</el-steps >
-							<el-steps :active="graph3Active" align-center class="graph3">
+							<el-steps :active="graph1Active" align-center class="graph1">
 							  <el-step class="stephidden" ></el-step>
 							  <el-step class="stephidden" ></el-step>
 							  <el-step title="待发辅料" description=""></el-step>
@@ -113,128 +111,150 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="container-detail1" v-else>
-					<div class="jiben border-top detail-inner">
-						<h6>基本信息</h6>
-						<ul class="clearfix">
-							<li>订单名称: <span>{{selectDetails.details.name}}</span></li>
-							<li>加工总价: <span>{{selectDetails.details.total_fee}}</span></li>
-							<li>接单方: <span
-								v-for="(item, index) in selectDetails.details.undertake_company" :key='index'
-								>{{item}}</span></li>
-
-							<li>商品类别: <span>{{selectDetails.details.style}}</span></li>
-							<li>交货时间: <span>{{selectDetails.details.delivery_date}}</span></li>
-							<li>发单方: <span>{{selectDetails.details.publish_company.company}}</span></li>
-
-							<li>商品颜色: <span>{{selectDetails.details.color}}</span></li>
-							<li>生产周期: <span>{{selectDetails.details.cycle}}</span></li>
-							<li>加工模式: <span>{{selectDetails.details.mode}}</span></li>
-
-							<li>商品属性: <span>{{selectDetails.details.x}}</span></li>
-							<li>面料完备日期: <span>{{selectDetails.details.arrival_date}}</span></li>
-							<li>是否支付定金: <span>{{selectDetails.details.is_deposited}}</span></li>
-
-							<li>单价价格: <span>{{selectDetails.details.fee}}</span></li>
-							<li>订单号: <span>{{selectDetails.details.code}}</span></li>
-							<li>完成件数: <span>{{selectDetails.details.done_account}}</span></li>
-						</ul>
+					<div class="isloading border-top" v-if="isLoading">
+						<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
 					</div>
-					<div class="mianliao border-top detail-inner">
-						<h6>面料信息(主面料1)</h6>
-						<ul>
-							<li>面料名称： <span>{{selectDetails.main.name}}</span></li>
-							<li>面料成分： <span>{{selectDetails.main.component}}</span></li>
-							<li>面料类型： <span>{{selectDetails.main.category}}</span></li>
-							<li>面料克重： <span>{{selectDetails.main.weight}}</span>克/平方米</li>
-						</ul>
-						<div class="mianliao-icon border-top">
-							<div v-for="item in selectDetails.main.picture">
-								<img :src="getUploadUrl+'/'+ item" />
-							</div>
-						</div>
-					</div>
-					<div class="mianliao border-top detail-inner">
-						<div v-for="item in selectDetails.main.auxiliary">
-							<h6>面料信息(辅面料1)</h6>
+					<div v-else >
+						<div class="jiben border-top detail-inner">
+							<h6>基本信息</h6>
 							<ul class="clearfix">
-								<li>面料名称： <span>{{item.name}}</span></li>
-								<li>面料成分： <span>{{item.component}}</span></li>
-								<li>面料类型： <span>{{item.category}}</span></li>
-								<li>面料克重： <span>{{item.weight}}</span>克/平方米</li>
+								<li>订单名称: <span>{{selectDetails.details.name}}</span></li>
+								<li>订单号: <span>{{selectDetails.details.code}}</span></li>
+								<li>接单方: <span
+									v-for="(item, index) in selectDetails.details.undertake_company" :key='index'
+									>{{item}}</span></li>
+
+								<li>商品类别: <span>{{selectDetails.details.style}}</span></li>
+								<li>生产周期: <span>{{selectDetails.details.cycle}}</span></li>
+								<li>加工模式: <span>{{selectDetails.details.mode}}</span></li>
+
+								<li>单价价格: <span>{{selectDetails.details.fee}}</span></li>
+								<li>加工总价: <span>{{selectDetails.details.total_fee}}</span></li>
+								<li>是否支付定金: 
+									<span v-if="selectDetails.details.is_deposited">是</span>
+									<span v-else>否</span>
+								</li>
+								
+								<li>完成件数: <span>{{selectDetails.details.done_account}} / {{selectDetails.details.demanding_account}}</span></li>
+								<li>面料完备日期: <span>{{selectDetails.details.arrival_date}}</span></li>
+								<li>交货时间: <span>{{selectDetails.details.delivery_date}}</span></li>
+								
+								<!-- <li>发单方: <span>{{selectDetails.details.publish_company.company}}</span></li>
+								<li>商品颜色: <span>{{selectDetails.details.color}}</span></li>	
+								<li>商品属性: <span>{{selectDetails.details.x}}</span></li> -->
 							</ul>
-							<div class="mianliao-icon border-top">
-								<div v-for="item in item.picture">
+						</div>
+						<div class="mianliao border-top detail-inner">
+							<h6>面料信息(主面料1)</h6>
+							<ul>
+								<li>面料名称： <span>{{selectDetails.main.name}}</span></li>
+								<li>面料成分： <span>{{selectDetails.main.component}}</span></li>
+								<li>面料类型： <span>{{selectDetails.main.category}}</span></li>
+								<li>面料克重： <span>{{selectDetails.main.weight}}</span>克/平方米</li>
+							</ul>
+							<div class="mianliao-icon border-top clearfix ">
+								<div v-for="item in selectDetails.main.picture" class="inner-icon">
 									<img :src="getUploadUrl+'/'+ item" />
 								</div>
 							</div>
 						</div>
-						
-					</div>
-					<div class="yangyi border-top detail-inner">
-						<h6>样衣图片</h6>
-						<div class="mianliao-icon">
-							<ul v-for="item in selectDetails.otherPic">
-								<li v-for="item1 in item.picture">
+						<div class="mianliao border-top detail-inner">
+							<div v-for="item in selectDetails.auxiliary">
+								<h6>面料信息(辅面料1)</h6>
+								<ul class="clearfix">
+									<li>面料名称： <span>{{item.name}}</span></li>
+									<li>面料成分： <span>{{item.component}}</span></li>
+									<li>面料类型： <span>{{item.category}}</span></li>
+									<li>面料克重： <span>{{item.weight}}</span>克/平方米</li>
+								</ul>
+								<div class="mianliao-icon border-top clearfix ">
+									<div v-for="item in item.picture" class="inner-icon">
+										<img :src="getUploadUrl+'/'+ item" />
+									</div>
+								</div>
+							</div>						
+						</div>
+						<div class="yangyi border-top detail-inner">
+							<h6>样衣图片</h6>
+							<div class="mianliao-icon clearfix">
+								<ul v-for="item in selectDetails.otherPic" class="inner-icon">
+									<li v-for="item1 in item.picture">
+										<img :src="getUploadUrl+'/'+ item1" />
+									</li>
+									<li>{{ item.title }}</li>
+								</ul>
+							</div>
+						</div>
+						<div class="yanseshuliang border-top detail-inner">
+							<h6>颜色数量</h6>
+							<div class="clearfix">
+								<ul class="thead">
+									<li v-for="(item,index) in size" :key="'size1'+index">
+										{{ item }}
+									</li>
+								</ul>
+								<ul class="tbody" v-for="(item,index) in selectDetails.size" :key="'size2'+index">								
+									<li>{{ item.color }}</li>
+									<li>{{ item.xs_demanding_account }}</li>
+									<li>{{ item.s_demanding_account }}</li>
+									<li>{{ item.m_demanding_account }}</li>
+									<li>{{ item.l_demanding_account }}</li>
+									<li>{{ item.xl_demanding_account }}</li>
+									<li>{{ item.xxl_demanding_account }}</li>
+									<li>{{ item.xxxl_demanding_account }}</li>
+									<li>{{ item.xxxxl_demanding_account }}</li>
+								</ul>
+							</div>
+						</div>
+						<div class="pinzhi border-top detail-inner">
+							<h6>品质要求</h6>
+							<div class="chahuo">
+								<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
+								<p>整体允许误差范围： <span>{{selectDetails.quality.error}}</span></p>
+							</div>
+							<div class="buwei border-top clearfix">
+								<ul class="thead">
+									<li>部位</li>
+									<li>误差标准范围</li>
+								</ul>
+								<ul class="tbody" v-for="(item, index) in selectDetails.quality.supplement" :key="'supplement1'+index">
+									<li>{{item.name}}</li>
+									<li>{{item.err}}</li>
+								</ul>
+							</div>
+						</div>
+						<div class="banxing border-top detail-inner">
+							<h6>版型图</h6>
+							<div class="mianliao-icon clearfix ">
+								<div v-for="item in selectDetails.quality.picture" class="inner-icon">
+									<img :src="getUploadUrl+'/'+ item" />
+								</div>
+							</div>					
+						</div>
+						<div class="qita border-top detail-inner"  v-for="(item, index) in selectDetails.supplement" :key="'supplement'+index">
+							<h6>其他<span>({{index+1}})</span> </h6>
+							<div class="chahuo">
+								面料名称: {{item.requirement}}
+							</div>
+							<div class="buwei border-top clearfix ">
+								<div v-for="item1 in item.picture" class="inner-icon">
 									<img :src="getUploadUrl+'/'+ item1" />
-								</li>
-								<li>{{ item.title }}</li>
-							</ul>
+								</div>
+							</div>				
 						</div>
-					</div>
-					<div class="yanseshuliang border-top detail-inner">
-						<h6>颜色数量</h6>
-						<div>
-							
-
+						<div class="address border-top detail-inner">
+							<h6>收货地址</h6>
+							<div> 
+								{{selectDetails.address.province}}
+								{{selectDetails.address.city}}
+								{{selectDetails.address.county}}
+								{{selectDetails.address.street}}
+								({{selectDetails.address.receiver}} 收)
+								{{selectDetails.address.phone}}
+							</div>									
 						</div>
-					</div>
-					<div class="pinzhi border-top detail-inner">
-						<h6>品质要求</h6>
-						<div class="chahuo">
-							<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
-							<p>整体允许误差范围： <span>{{selectDetails.quality.error}}</span></p>
-						</div>
-						<div class="buwei border-top">
-							<ul class="thead">
-								<li>部位</li>
-								<li>误差标准范围</li>
-							</ul>
-							<ul class="tbody" v-for="(item, index) in selectDetails.quality.supplement" :key="'supplement1'+index">
-								<li>{{item.name}}</li>
-								<li>{{item.err}}</li>
-							</ul>
-						</div>
-					</div>
-					<div class="banxing border-top detail-inner">
-						<h6>版型图</h6>
-						<div class="mianliao-icon border-top">
-							<div v-for="item in selectDetails.quality.picture">
-								<img :src="getUploadUrl+'/'+ item" />
-							</div>
-						</div>					
-					</div>
-					<div class="qita border-top detail-inner"  v-for="(item, index) in selectDetails.supplement" :key="'supplement'+index">
-						<h6>其他<span>({{index+1}})</span> </h6>
-						<div class="chahuo">
-							面料名称: {{item.requirement}}
-						</div>
-						<div class="buwei border-top">
-							<div v-for="item1 in item.picture">
-								<img :src="getUploadUrl+'/'+ item1" />
-							</div>
-						</div>				
-					</div>
-					<div class="address border-top detail-inner">
-						<h6>收货地址</h6>
-						<div> 
-							{{selectDetails.address.province}}
-							{{selectDetails.address.city}}
-							{{selectDetails.address.county}}
-							{{selectDetails.address.street}}
-							({{selectDetails.address.receiver}} 收)
-							{{selectDetails.address.phone}}
-						</div>									
 					</div>
 				</div>
 			</div>
@@ -242,146 +262,20 @@
 	</div>
 </template>
 <script>
-//http://101.132.187.244:8082/Home/ReceiptOrder/schedule  order_id
-const indentContent={
-	details: {
-			order_id: null,
-			front_picture: null, 
-			name: null,
-			fee : null,
-			total_fee: null, 
-			delivery_date: null, 
-			cycle : null,
-			arrival_date: null, 
-			code : null,
-			mode: null,
-			done_account : null,
-			demanding_account : null,
-			is_deposited: null,
-			status: null,
-			style: null, 
-			status_msg: null, 
-			remander: null,
-			publish_company: {company:null},//发单公司
-			undertake_company:{company:null}
-		},
-	history:{
-		log_id : null,
-		operation : null,
-		create_time: null
-	}
-};
-
-//http://101.132.187.244:8082/Home/ReceiptOrder/details  order_id
-const detailsContent={
-	details:{
-		order_id:null,
-		front_picture :null,
-		name :null,
-		fee:null,
-		total_fee:null,
-		expire_time :null,
-		delivery_date :null,
-		arrival_date:null,
-		cycle :null,
-		code :null,
-		mode :null,
-		done_account :null,
-		demanding_account :null,
-		is_deposited :null,
-		status:null,//1000 等待接单； 2000 待选工厂； 3xx0 待发样衣； 3x0x 待发面料； 30xx 待发辅料； 3xx1 待收样衣； 3x1x 待收面料； 31xx 待收辅料； 3xx2 已收样衣； 3x2x 已收面料； 32xx 已收辅料； 3300 待发前期资料； 3400 待收前期资料； 4000 生成加工； 5000 待收货付款； 6000 等待评价； 60x1 发单方评价； 601x 接单房评价； 7000 已评价；9000订单已取消；9100订单已关闭；(x代表该位上能取到的任意值）
-		style :null,
-		back_picture:null,
-		left_picture :null,
-		right_picture :null,
-		part_picture:null, 
-		type:null,//单子类型：1普通发单，2无忧发
-		undertake_company:{
-			company: null
-		}
-	},
-	main:{//主面料
-		fabric_id:null,
-		name:null,
-		component:null,
-		category:null,
-		weight:null,
-		picture:null,
-	},
-	auxiliary:{//辅面料
-		fabric_id:null,
-		name:null,
-		component:null,
-		category:null,
-		weight:null,
-		picture:null,
-	},
-	otherPic:{//其他图片
-		part_id: null,  
-		title: null, 
-		picture: null, 
-	},
-	size:{
-		size_id:null,
-		color:null,
-		xs_demanding_account :null,
-		xs_done_account :null,
-		s_demanding_account:null,
-		s_done_account :null,
-		m_demanding_account:null, 
-		m_done_account :null,
-		l_demanding_account:null,
-		l_done_account :null,
-		xl_demanding_account:null,
-		xl_done_account :null,
-		xxl_demanding_account :null,
-		xxl_done_account :null,
-		xxxl_demanding_account:null,
-		xxxl_done_acount:null,
-		xxxxl_demanding_account :null,
-		xxxxl_done_acount:null,
-		total_demanding_account:null,
-		total_done_account: null
-	},
-	quality:{
-		quality_id:null,
-		check :null,
-		error:null,
-		supplement:null,
-		requirement:null,
-		picture:null,
-	},
-	supplement:{
-		supplement_id:null,
-		requirement:null,
-		picture:null,
-	},
-	address:{
-		address_id:null,
-		receiver:null,
-		phone:null,
-		province :null,
-		city :null,
-		county :null,
-		street:null,
-	} 
-}
-
-
-import IndentList from "../indentlistEl"
-
-import qs from 'qs';
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
-import { mapMutations } from 'vuex'
+	import IndentList from "../indentlistEl"
+	import qs from 'qs';
+	import { mapGetters } from 'vuex'
+	import { mapActions } from 'vuex'
+	import { mapMutations } from 'vuex'
 	export default{
-		name: 'indet',
+		name: 'indent',
 		components:{ IndentList},
 		data(){
 			return{
 				graph1Active: 0,
 				graph2Active: 0,
 				graph3Active: 0,
+				isLoading: 1,
 				displayIndent:true,
 				isActive: false,
 				activeIndex: true,
@@ -389,7 +283,7 @@ import { mapMutations } from 'vuex'
 					  {
 			            type: "所有订单",
 			            keyword: 'x',
-			            flag: false
+			            flag: true
 			          },
 			          {
 			            type:"待接单",
@@ -436,7 +330,7 @@ import { mapMutations } from 'vuex'
 			            keyword: '7000',
 			            flag: false
 			          }],
-				size : ["XXS","XS","S","M","L","XL","XXL","3XL","4XL","5XL"], 
+				size : ["颜色(数量)","尺码 XS","S","M","L","XL","XXL","3XL","4XL"], 
 				contentTitle:"所有订单",
 				goodsList:[],
 				savedList:[],
@@ -445,7 +339,6 @@ import { mapMutations } from 'vuex'
 			}
 		},
 		mounted(){
-			// console.log(this.getIndentBlock)
 			this.getMainlist({page: 1})
 		},
 		computed:{
@@ -461,20 +354,6 @@ import { mapMutations } from 'vuex'
 		    	return this.selectDetails
 		    }
 		},
-		watch: {
-			// selectSchedule:{
-			// 	handler(curVal,oldVal){
-
-			//   　　　  },
-			//  　　　		deep:true
-			// },
-			// selectDetails: {
-			// 	handler(curVal,oldVal){
-
-			//    　　},
-			//  　　　		deep:true
-			// }
-		},
 		methods:{
 			...mapMutations([
 		      'setIndentBlock'
@@ -482,14 +361,12 @@ import { mapMutations } from 'vuex'
 		    getMainlist(args){
 		      let url= this.getUrl+'/Home/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
-		          // console.log(res)
+		          console.log(res)
 		          if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;
-		          //  this.goodsList = res.data.content.list;
 		            this.savedList =  res.data.content.list;
 		            this.goodsList = this.savedList.slice(0, this.savedList.length)
-		            console.log(this.goodsList)
 		          }else{
 		          }          
 		      })  
@@ -500,9 +377,9 @@ import { mapMutations } from 'vuex'
 		      	.then((res)=>{
 		          if(res.data.status == 200){
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
-		          	this.$set(this.selectSchedule,'history',res.data.content.history)			
-		            // this.selectSchedule = res.data.content		         
-		          	// console.log( this.selectSchedule)
+		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
+		          	this.setGraph(this.selectSchedule.details.status)
+		          	this.isLoading = 0;  	          	
 		          }else{
 		          }          
 		      	})  
@@ -511,24 +388,21 @@ import { mapMutations } from 'vuex'
 		    	let url= this.getUrl+'/Home/ReceiptOrder/details'
 			      this.axios.post(url, qs.stringify({order_id: id }))
 			      .then((res)=>{
-		           console.log(res)
-		          if(res.data.status == 200){
-		          		console.log( res.data.content)
-		          		this.$set(this,'selectDetails',res.data.content)		          		
-		          		console.log( this.selectDetails)		          	
-		          }else{
-		          }          
+		           // console.log(res)
+			          if(res.data.status == 200){
+			          		console.log( res.data.content)
+			          		this.$set(this,'selectDetails',res.data.content)
+			          		this.isLoading = 0;         	
+			          }else{
+			          }          
 		      })  
 		    },
 		    switchBlock(uid){
-		    	//console.log(uid)
 		    	this.setIndentBlock(false)
 		    	this.getSchedule(uid)
 		    	this.getDetails(uid)
-
-		    	console.log(this.selectSchedule)
 		    },
-		    changeActiveIndex(){
+		    changeActiveIndex(index){
 		    	this.activeIndex = !this.activeIndex
 		    },
 		    fliter(index, keyword){
@@ -545,11 +419,37 @@ import { mapMutations } from 'vuex'
 		    displayOrNot(keyword){
 		      let self = this;
 		      self.goodsList= [];
-		      self.savedList.forEach((item, _index)=>{ 
-		         if(item.status == keyword ){
-		            self.goodsList.push(self.savedList[_index])
+		      self.savedList.forEach((item, _index)=>{
+		         if(item.status[0] == '3' && item.status.indexOf('000') == -1 ){
+		            if(keyword[1] == item.status[1] ){
+		               self.goodsList.push(self.savedList[_index])
+		            }
+		            if(keyword[2] == item.status[2] ){
+		               self.goodsList.push(self.savedList[_index])
+		            }
+		            if(keyword[3] == item.status[3] ){
+		               self.goodsList.push(self.savedList[_index])
+		            }
+		         }else if(item.status == keyword || keyword == 'x') {
+		           self.goodsList.push(self.savedList[_index])
 		         }
-		      });
+		      })
+		    },
+		    setGraph(status){
+		    	let step = 3;
+		    	if( status[0] < 3 ){
+		    		this.graph1Active=0
+		    		this.graph2Active= status[0]
+		    		this.graph3Active=0
+		    	}else if(status[0] == '3'){
+		    		this.graph1Active=parseInt(status[1])+step
+		    		this.graph2Active=parseInt(status[2])+step
+		    		this.graph3Active=parseInt(status[3])+step
+		    	}else if( status[0] > '3'){
+		    		this.graph1Active=5
+		    		this.graph2Active=parseInt(status[0])+step -1
+		    		this.graph3Active=5
+		    	}
 		    },
 		    showSchedule(){
 
@@ -560,7 +460,6 @@ import { mapMutations } from 'vuex'
 		}
 	}
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	#indent{
@@ -601,12 +500,11 @@ import { mapMutations } from 'vuex'
 	}
 	.col-3 img{
 		width: 100%;
-
 	}
-	.goods-details{
-
+	.isloading{
+		position: relative;
+    	height: 200px;
 	}
-
 	.text-style{
 		text-indent: 1.5em;
 		height: 30px;
@@ -630,8 +528,7 @@ import { mapMutations } from 'vuex'
 		height: 100px;
 		width: 100%;
 		z-index:4;
-	}
-	
+	}	
 	.graph-bg{
 		position: absolute;
 		width: 100%;
@@ -658,7 +555,6 @@ import { mapMutations } from 'vuex'
 		border-color: #C44DDC;
 		background:  rgba(196,77,220,0.07);
 	}
-
 	/*detail*/
 	.detail-inner{
 		padding: 30px;
@@ -682,5 +578,37 @@ import { mapMutations } from 'vuex'
 		height: 35px;
 		line-height: 35px;
 		font-size: 14px;
+	}
+	.buwei ul,
+	.yanseshuliang ul{		
+		float: left;
+		margin-right: 20px;
+	}
+	.yanseshuliang .thead li{
+		text-align: right;
+	}
+
+	.thead li,.tbody li{
+		font-size: 14px;
+		color: rgb(102, 102, 102);
+		margin-bottom: 20px;
+	}
+	.tbody li{
+		text-align: center;
+		color: rgb(6, 6, 6);
+	}
+	.inner-icon{
+		float: left;
+		margin: 30px 30px 0 0;
+		padding:1px;
+		text-align: center;
+		border: 1px solid #e0e0e0;
+	}
+	.inner-icon img{
+		width: 140px;
+		height: 140px;
+	}
+	.banxing .inner-icon img{
+		width: 200px;
 	}
 </style>

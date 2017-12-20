@@ -1,20 +1,14 @@
 <template>
 	<div class="pay" >
-		<el-form :model="selectAddress"  ref="selectAddress" label-width="16.667%" >
+		<el-form :model="selectAddress"  ref="selectAddress" label-width="30%" >
 			<el-form-item label="是否支付定金:" v-if='zizhu'>
 			    <el-radio-group v-model="selectAddress.is_deposited" style="padding-top:8px">
 			      <el-radio  :label="1">是</el-radio>
 			      <el-radio  :label="0">否</el-radio>
 			    </el-radio-group>
 			</el-form-item>
-			<el-form-item label="支付服务费用(订单的金额的10%):" v-else  v-model="selectAddress.per">
-			    <!-- <el-radio-group v-model="selectAddress.per" style="padding-top:8px">
-			      	<span class="color"> {{ serverFee }} </span> 元
-			    </el-radio-group> -->
-			
-			    	 <span class="color size">{{ serverFee }}</span> 元
-		
-			   
+			<el-form-item label="支付服务费用(订单的金额的10%):" v-else  v-model="selectAddress.per">			
+			    	 <span class="color size">{{ serverFee }}</span> 元			   
 			</el-form-item>
 			<el-form-item label="确认收货地址:" >
 			    <el-radio-group v-model="selectAddress.address" >
@@ -26,14 +20,14 @@
 			    </el-radio-group>
 			</el-form-item>
 		</el-form>
-		<h6>添加新地址</h6>
-		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%" class="demo-ruleForm">
+		<h6 class="padding-left-right">添加新地址</h6>
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="16.667%"  class="padding-left-right">
 		<div class='newAddr'>
 			<el-form-item label="姓名:" prop="name">
-			    <el-input v-model="ruleForm.name"></el-input>
+			    <el-input v-model="ruleForm.name" placeholder="请输入您的名字"></el-input>
 			  </el-form-item>
 			  <el-form-item label="手机:" prop="mobile">
-			    <el-input v-model="ruleForm.mobile"></el-input>
+			    <el-input v-model="ruleForm.mobile" placeholder="请输入您的手机号"></el-input>
 			  </el-form-item>
 			  <el-form-item label="所在地区:" prop="region">
 			  	<!-- cheng shi di dian  -->
@@ -41,7 +35,7 @@
 
 			  </el-form-item>
 			  <el-form-item label="详细地址:" prop="street">
-			    <el-input type="textarea" v-model="ruleForm.street"></el-input>
+			    <el-input type="textarea" v-model="ruleForm.street" placeholder="请填写您的详细地址"></el-input>
 			  </el-form-item>
 		</div>
 

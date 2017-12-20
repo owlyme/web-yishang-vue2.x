@@ -27,7 +27,7 @@
                       class="muneNav"
                       :class="{active : item.flag}" 
                       @click="fliter(index,item.path)"
-                      >{{item.title}}</span>        
+                      >{{item.title}}</span>
               </div>
               </div>
           </el-col>
@@ -35,20 +35,18 @@
     </div>
   </div>
 
-    <div class="bg-white"> 
-      <keep-alive> <router-view/> </keep-alive> 
-    </div>
+  <div class="bg-white"> 
+    <keep-alive> <router-view/> </keep-alive> 
+  </div>
   <Footerinfo/>
  </div>
 </template>
 
 <script>
 import Footerinfo from "../footer"
-
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
-
 import { setCookie,getCookie,delCookie } from '../../cookies.js'
 export default {
   name: 'index1',
@@ -63,7 +61,7 @@ export default {
     }
   },
   mounted(){
-    console.log( 'index')
+    // console.log( 'index')
     if( getCookie('phone') == ''){
         this.$router.push("/login")  
       }
@@ -84,10 +82,10 @@ export default {
       let url= this.getUrl+'/Home/User/logOut'
       this.axios.get(url)
         .then((res)=>{
-            // console.log(res)
             if(res.data.status == 200){ 
               this.clearCustomer()        
               this.$router.push("/login")
+              delCookie('phone')
             }else{
 
             }          
@@ -113,55 +111,53 @@ export default {
           });
           this.setIndentBlock(true)
           this.$router.push(path)
-        }
+    }
   }
 }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.bg{  
+  .bg{  
   background: rgb(248,248,248);
-}
-.bg-white{
+  }
+  .bg-white{
   background: #fff;
-}
+  }
 
-.head-height{
+  .head-height{
   height: 44px;
   font-size: 14px;
   line-height: 1.2;
   color: rgb(102, 102, 102)
-}
-.fl{
+  }
+  .fl{
   float: left;
-}
-.fr{
+  }
+  .fr{
   float: right;
-}
-.login-sucess{
+  }
+  .login-sucess{
   height: 44px;
   line-height: 44px;
   font-size: 15px;
-}
-.banner{
+  }
+  .banner{
   height: 360px;
-}
-
-.pages-nav .container{
+  }
+  .pages-nav .container{
   height: 80px;
   margin-bottom: 20px;
-}
-.pages-nav img{
+  }
+  .pages-nav img{
   height: 80px;
-}
-.back{
+  }
+  .back{
   line-height: 44px;
-}
-.back:hover{
+  }
+  .back:hover{
   cursor: pointer;
-}
-.logOut{
+  }
+  .logOut{
   display: inline-block;
   height: 32px;
   width: 32px;
@@ -169,36 +165,33 @@ export default {
   background-position: -138px  12px;
   opacity: 0.4;
   transition: opacity 0.3s;
-}
-.back:hover .logOut {
-  opacity: 0.8;
-}
-
-  .nav-h{
-    background: #fff;
-    height: 80px;
-    line-height: 80px;
-    /*padding-top: 20px;*/
   }
-    .muneNav{
-    float: left;
-    height: 36px;
-    line-height: 36px;
-    margin: 20px 10px;
-    padding: 0 30px;
-    color: #555;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background 0.5s, color 0.5s;
-    font-size: 16px;
-    color: rgb(0, 0, 0);
+  .back:hover .logOut {
+  opacity: 0.8;
+  }
+  .nav-h{
+  background: #fff;
+  height: 80px;
+  line-height: 80px;
+  /*padding-top: 20px;*/
+  }
+  .muneNav{
+  float: left;
+  height: 36px;
+  line-height: 36px;
+  margin: 20px 10px;
+  padding: 0 30px;
+  color: #555;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.5s, color 0.5s;
+  font-size: 16px;
+  color: rgb(0, 0, 0);
   }
   .muneNav:hover{
-    color: #C44DDC;
+  color: #C44DDC;
   }
   .active{
-    color: #C44DDC;
+  color: #C44DDC;
   }
-
-
 </style>

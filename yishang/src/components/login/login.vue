@@ -120,21 +120,23 @@ export default {
       this.message = val
       this.resFalse = false
     },
-     login(){
-      let url= this.getUrl+'/Home/User/loginCheck'
+    login(){
+      let url= this.getUrl+'/Home/User/loginCheck'   
+      // let args = this.account
       let args = {
                     phone: 18271632203,
                     password: 123456
                   }
       this.axios.post(url, qs.stringify(args))
       .then((res)=>{
-            console.log(res)
+            // console.log(res)
             if(res.data.status == 200){
               this.account= { name: '', save : false}
               this.getCustomerInfo({
                 avatar: res.data.content.avatar,
                 id: res.data.content.id
               });
+              // setCookie('phone','18271632203',10000*60)
               setCookie('phone','18271632203',10000*60)
               this.$router.push("/")
             }else{
@@ -159,205 +161,212 @@ export default {
 </script>
 
 <style scoped>
-.header{
-  padding: 30px;
-  height: 110px;
-}
-.logo {
-  text-align: right;
-  color: rgb(148, 46, 234);
-  padding-right: 34px;
-  border-right: 1px solid #e0e0e0;
-}
-.login{
-  font-size: 18px;
-  padding-left: 34px;
-  font-family: "Microsoft YaHei";
-  color: rgb(148, 46, 234);
-}
-.bgimg{
-  padding:  60px 0;
-  background-image: url(/static/login/main-bg.jpg);
-  background-repeat: no-repeat;  
-  background-size: 100% 100%;
-}
+  .header{
+    padding: 30px;
+    height: 110px;
+  }
+  .logo {
+    text-align: right;
+    color: rgb(148, 46, 234);
+    padding-right: 34px;
+    border-right: 1px solid #e0e0e0;
+  }
+  .login{
+    font-size: 18px;
+    padding-left: 34px;
+    font-family: "Microsoft YaHei";
+    color: rgb(148, 46, 234);
+  }
+  .bgimg{
+    padding:  60px 0;
+    background-image: url(/static/login/main-bg.jpg);
+    background-repeat: no-repeat;  
+    background-size: 100% 100%;
+  }
 
-.body-block { 
-  padding: 0 60px;  
-  background-color: rgb(255, 123, 123);
-  width: 100%;
-}
+  .body-block { 
+    padding: 0 60px;  
+    background-color: rgb(255, 123, 123);
+    width: 100%;
+  }
 
-.clothespic{
-  padding: 0 60px;  
-  width: 100%;
-}
-.clothespic img{
-  position: relative;
-  display: inline-block;
-  right: -90px;
-}
+  .clothespic{
+    padding: 0 60px;  
+    width: 100%;
+  }
+  .clothespic img{
+    position: relative;
+    display: inline-block;
+    right: -90px;
+  }
 
-.tianmao{
-  color: #ff0036;
-}
-.yishang{
-  color: rgb(148, 46, 234);
-}
+  .tianmao{
+    color: #ff0036;
+  }
+  .yishang{
+    color: rgb(148, 46, 234);
+  }
 
-.slogan {
-  font-size: 50px;
-  color: rgb(51, 51, 51);
-  line-height: 1.2;
-  text-align: center;
-}
-.slogan2 {
-   width: 100%;
-  margin-top: 10px;
-  text-align: center;
-  background: #111;
-  height: 20px；
-}
-.slogan2  span{  
-  width: 100%;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  color: rgb(255, 255, 255); 
-}
-.foot-info{
-  text-align: center;
-  font-size: 12px;
-  font-family: "Microsoft YaHei";
-  color: rgba(135, 132, 132, 0.77);
-}
-.foot-info span{
-  display: inline-block;
-  height: 1.2em;
-  margin: 10px;
-  font-weight: 700;
-}
+  .slogan {
+    font-size: 50px;
+    color: rgb(51, 51, 51);
+    line-height: 1.2;
+    text-align: center;
+  }
+  .slogan2 {
+     width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    background: #111;
+    height: 20px；
+  }
+  .slogan2  span{  
+    width: 100%;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgb(255, 255, 255); 
+  }
+  .foot-info{
+    text-align: center;
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+    color: rgba(135, 132, 132, 0.77);
+  }
+  .foot-info span{
+    display: inline-block;
+    height: 1.2em;
+    margin: 10px;
+    font-weight: 700;
+  }
 
-.qr-code, .pc{
-  padding-top: 40px;
-  position: relative;
-  width: 352px;
-  height: 392px;
-  background-image: url(/static/login/pc-qr.jpg);  
-  background-repeat: no-repeat;   
-  background-position: 0 0;
-}
-.pc{
-  padding: 40px;
-  text-align: left;
-  background-position: -352px 0;
-}
-.switch-btn{
-  position: absolute;
-  right: 0px;
-  bottom: 0;
-  height: 60px;
-  width: 60px;
-  cursor: pointer;
-}
-#qr-code .qr-code-img{
-  padding: 20px;
-  width: 180px;
-  height: 180px;
-  border: 1px solid rgba(244,244,244,1);  
-} 
-.refresh{
-  width: 180px;
-  height: 36px;
-  margin: 10px;
-  border-color: rgb(148, 46, 234);
-  background: rgb(148, 46, 234);
-}
-.remind {
-  font-size: 12px;
-  color: rgb(51, 51, 51);  
-}
-.remind-scan{
-  position: absolute;
-  width: 185px;
-  height: 95px;
-  right: -171px;
-  bottom: 41px;
-  background-image: url(/static/login/remind-scan.png);
-  background-repeat: no-repeat; 
-  background-size: 100% 100%;
-}
-.scan{
-  display: inline-block;
-  vertical-align: middle;
-  width: 29px;
-  height: 29px;
-  background-image: url(/static/login/scan.jpg);
-  background-repeat: no-repeat;  
-  background-position:0px -4px;
-}
+  .qr-code, .pc{
+    padding-top: 40px;
+    position: relative;
+    width: 352px;
+    height: 392px;
+    background-image: url(/static/login/pc-qr.jpg);  
+    background-repeat: no-repeat;   
+    background-position: 0 0;
+  }
+  .pc{
+    padding: 40px;
+    text-align: left;
+    background-position: -352px 0;
+  }
+  .switch-btn{
+    position: absolute;
+    right: 0px;
+    bottom: 0;
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+  }
+  #qr-code .qr-code-img{
+    padding: 20px;
+    width: 180px;
+    height: 180px;
+    border: 1px solid rgba(244,244,244,1);  
+  } 
+  .refresh{
+    width: 180px;
+    height: 36px;
+    margin: 10px;
+    border-color: rgb(148, 46, 234);
+    background: rgb(148, 46, 234);
+  }
+  .remind {
+    font-size: 12px;
+    color: rgb(51, 51, 51);  
+  }
+  .remind-scan{
+    position: absolute;
+    display: none;
+    width: 185px;
+    height: 95px;
+    right: -171px;
+    bottom: 41px;
+    background-image: url(/static/login/remind-scan.png);
+    background-repeat: no-repeat; 
+    background-size: 100% 100%;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .pc:hover .remind-scan{
+    display: block;
+    opacity: 1;
+  }
+  .scan{
+    display: inline-block;
+    vertical-align: middle;
+    width: 29px;
+    height: 29px;
+    background-image: url(/static/login/scan.jpg);
+    background-repeat: no-repeat;  
+    background-position:0px -4px;
+  }
 
-.form-control{
-  font-size: 0.6rem;
-}
-.form-control:focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #942eea;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(148, 46, 234, 0.15);
-}
-.input-group{
-  margin-bottom: 10px;  
-}
-.input-group h4{
-  font-size: 20px;
-}
-.input-group span{
-  color: #942eea;
-}
-.input-group input[type="checkbox"]{
-    margin-right: 5px;
-    height: 1.7rem;
-}
-.login-btn{
-  width: 100%;
-  margin: 0px; 
-  cursor: pointer;
-}
-.input-account{
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 32px;
-  width: 32px;
-  background-position: -90px 6px;
-  z-index: 3;
-  opacity: 0.5;
-  transition: opacity 0.3s;
-}
-.input-secret{
-  position: absolute;
-  height: 32px;
-  width: 32px;
-  background-position: -48px 3px;
-  z-index: 3;
-  opacity: 0.4;
-   transition: opacity 0.3s;
-}
-.input-group:hover .input-account,
-.input-group:hover .input-secret{
-  opacity: 0.8;
-}
-.input-text-indent{
-    text-indent: 24px;
-}
-span.err{
-  text-indent: 1em;
-  color: #e60a45;
-  font-style:italic;
-}
-span.err:before{
-  content: '*';
-}
+  .form-control{
+    font-size: 0.6rem;
+  }
+  .form-control:focus {
+      color: #495057;
+      background-color: #fff;
+      border-color: #942eea;
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(148, 46, 234, 0.15);
+  }
+  .input-group{
+    margin-bottom: 10px;  
+  }
+  .input-group h4{
+    font-size: 20px;
+  }
+  .input-group span{
+    color: #942eea;
+  }
+  .input-group input[type="checkbox"]{
+      margin-right: 5px;
+      height: 1.7rem;
+  }
+  .login-btn{
+    width: 100%;
+    margin: 0px; 
+    cursor: pointer;
+  }
+  .input-account{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 32px;
+    width: 32px;
+    background-position: -90px 6px;
+    z-index: 3;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+  .input-secret{
+    position: absolute;
+    height: 32px;
+    width: 32px;
+    background-position: -48px 3px;
+    z-index: 3;
+    opacity: 0.4;
+     transition: opacity 0.3s;
+  }
+  .input-group:hover .input-account,
+  .input-group:hover .input-secret{
+    opacity: 0.8;
+  }
+  .input-text-indent{
+      text-indent: 24px;
+  }
+  span.err{
+    text-indent: 1em;
+    color: #e60a45;
+    font-style:italic;
+  }
+  span.err:before{
+    content: '*';
+  }
 </style>

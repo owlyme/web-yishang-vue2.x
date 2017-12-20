@@ -24,8 +24,9 @@
 				    <el-radio-group v-model="form.status" style="padding-top:8px">
 				    <el-radio 
 				    	v-for="(item, index) in mode"
-				    	:index="'mode'+ index"
-						    :label="item.mode_name" :value="item.mode_id"></el-radio>
+				    	:key="'mode'+ index"
+						:label="item.mode_name" 
+						:value="item.mode_id"></el-radio>
 					</el-radio-group>
 		 		</el-form-item>
 			</div>

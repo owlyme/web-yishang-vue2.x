@@ -7,35 +7,36 @@
 			<span class="model">{{ goodsMsg.name }}</span> 
 			<span class="status">{{ goodsMsg.state }}</span>
 			</h5>
-		<b-container class="bv-example-row">
-			<b-row align-v="center" no-gutter="true">
-				<b-col>完成件数：{{ goodsMsg.done_account }}/{{ goodsMsg.demanding_account }} </b-col>
-				<b-col>单间价格：{{ goodsMsg.fee}}元 </b-col>
-				<b-col>交货时间：{{  goodsMsg.delivery_date }} </b-col>
+		<b-container class="bv-example-row" >
+			<b-row align-v="center"  class="xy-row">
+				<b-col >完成件数：{{ goodsMsg.done_account }}/{{ goodsMsg.demanding_account }} </b-col>
+				<b-col >单间价格：{{ goodsMsg.fee}}元 </b-col>
+				<b-col >交货时间：{{  goodsMsg.delivery_date }} </b-col>
 				<b-col>
-					<b-row align-v="center">
-						<b-col >
-							<!-- {{ goodsMsg.msg}} 			 -->				
+					<b-row align-v="center" class="inner">
+						<b-col cols="5">
+							{{ goodsMsg.msg}} 			
 						</b-col>
-						<b-col>
+						<b-col cols="5">
 							<el-button type="primary" @click="view(goodsMsg.uid)">查看</el-button>
 						</b-col>
 					</b-row>
 				</b-col>
+				
 			</b-row>
-    	</b-container>		
+    	</b-container>
+    	<div class="type-wuyou" v-if="goodsMsg.type == 2"><div class="rotate">无忧</div></div>	
 	</b-media>
-	<div class="type-wuyou" v-if="goodsMsg.type == 2"><div class="rotate">无忧</div></div>
+	
 </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+	import { mapGetters } from 'vuex'
 	export default{
 		name: "",
 		props: ["goodsMsg","change"],
 		data(){
 			return{
-				// goodsMsg: goodsMsg
 			}
 		},
 		computed:{
@@ -47,23 +48,17 @@ import { mapGetters } from 'vuex'
 	      	return this.getUploadUrl+ "/"+this.goodsMsg.front_picture
 	      }
 	    },
-	    mounted(){
-
-	    },
 		methods:{
 			view(uid){
 				console.log('indent list')
 				this.$emit('change', uid)
 			}
 		}
-
 	}
 </script>
 <style scoped>
+.container,
 .list-element{
-	width: 100%;
-}
-.container{
 	width: 100%;
 }
 .list-element{
@@ -72,9 +67,9 @@ import { mapGetters } from 'vuex'
 	padding: 25px;
 }
 .list-element:hover{
+	padding: 24px;
 	box-shadow: 0 0px 15px rgba(130, 130, 157, 0.5);
 }
-.list-element,
 .goods{
 	width: 100%;
 	position: relative;
@@ -84,15 +79,6 @@ import { mapGetters } from 'vuex'
 	height: 50px;
 	line-height: 50px;
 	border-bottom: 2px dashed #eeeeee;
-}
-.bv-example-row{
-	height: 80%;
-	height: 50px;
-	line-height: 50px;
-	
-}
-.bv-example-row .col{ 
-	font-size: 14px;
 }
 .goods li{
 	list-style: none;
@@ -124,9 +110,6 @@ import { mapGetters } from 'vuex'
 .plan.danger{
 	background: rgb(255,25,27);
 }
-.plan-danger{
-
-}
 .list-element{
 	background: #fff;
 	margin-bottom: 12px;
@@ -142,6 +125,17 @@ import { mapGetters } from 'vuex'
 }
 .cancel{
 	background: #eeeeee;
+}
+.bv-example-row{
+	padding:0;
+	/*height: 80%;*/
+	padding-top:10px;
+	height: 30px;
+	line-height: 30px
+}
+.inner{
+	line-height: 1.2em;
+	text-align: center;	
 }
 
 </style>

@@ -20,9 +20,9 @@
 		<div class="plan " 
 		:class="{ danger: goodsMsg.msg_color == 0, cancel :  goodsMsg.msg_color == -1 }"
 		 v-html="goodsMsg.msg"> {{goodsMsg.msg}}</div>
-		
+		<div class="type-wuyou" v-if="goodsMsg.type == 2"><div class="rotate">无忧</div></div>
 	</b-media>
-	<div class="type-wuyou" v-if="goodsMsg.type == 2"><div class="rotate">无忧</div></div>
+	
 </div>
 </template>
 <script>
@@ -52,6 +52,7 @@ import { mapGetters } from 'vuex'
 	padding: 25px;
 }
 .list-element:hover{
+	padding: 24px;
 	box-shadow: 0 0px 15px rgba(130, 130, 157, 0.5);
 }
 .list-element,
@@ -68,8 +69,7 @@ import { mapGetters } from 'vuex'
 .bv-example-row{
 	height: 80%;
 	height: 50px;
-	line-height: 50px;
-	
+	line-height: 50px;	
 }
 .bv-example-row .col{ 
 	font-size: 14px;
