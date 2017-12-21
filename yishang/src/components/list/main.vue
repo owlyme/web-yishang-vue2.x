@@ -7,7 +7,10 @@
         <el-row  >
           <el-col :span="12">
             <div class="grid-content bg-purple">
-              <div class="zizhu-bg"></div>
+              <router-link to="/zizhu">
+                <div class="zizhu-bg"></div>
+              </router-link>
+              
               <h4>自主发单</h4>
               <p>
                 自主发单需自主填写发单信息<br>
@@ -18,7 +21,9 @@
           </el-col>
           <el-col :span="12">
             <div class="grid-content bg-purple-light ">
-              <div class="wuyou-bg"><span></span></div>
+              <router-link to="/wuyou">
+                 <div class="wuyou-bg"></div>
+              </router-link>             
               <h4>无忧发单</h4>
               <p>
                 无忧发单需自主填单信息<br>
@@ -78,9 +83,7 @@
 </div>
 </template>
 <script>
-//http://101.132.187.244:8082/Home/Index/index
-//page true string 1
-//status
+
 const pageContent={
   content: null,
   totalRows : null,
@@ -249,7 +252,7 @@ export default{
           self.$set(item,"flag",true)
           self.contentTitle= item.type
         }
-      });    
+      });
     },
     displayOrNot(keyword){
       let self = this;
@@ -307,7 +310,6 @@ export default{
     height: 350px;
     padding-top: 60px;
     text-align: center;
-    cursor: pointer;
   }
   .grid-content h4{
     padding:20px 0;
@@ -341,7 +343,8 @@ export default{
 
   .nav-h{
     background: #fff;
-    /*padding-top: 20px;*/
+    height: 80px;
+    padding-top: 20px;
   }
   .muneNav{
     position: relative;

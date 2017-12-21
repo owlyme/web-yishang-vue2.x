@@ -50,7 +50,6 @@
 	    },
 		methods:{
 			view(uid){
-				console.log('indent list')
 				this.$emit('change', uid)
 			}
 		}

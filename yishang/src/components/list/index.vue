@@ -21,13 +21,19 @@
           <el-col :span="14">
               <div class="link-nav">
                 <div class="nav-h clearfix">                   
-                      <span 
+                     <!--  <span 
                       v-for="(item, index) in listNav"
                       :index="index" 
                       class="muneNav"
                       :class="{active : item.flag}" 
                       @click="fliter(index,item.path)"
-                      >{{item.title}}</span>
+                      >{{item.title}}</span> -->
+
+                      <router-link 
+                      class="muneNav"
+                      v-for="(item, index) in listNav"                      
+                      :to='item.path'
+                      ><div @click="fliter">{{item.title}}</div></router-link>
               </div>
               </div>
           </el-col>
@@ -54,10 +60,10 @@ export default {
   data () {
     return {
       activeIndex: "1",
-      listNav:[{title:'首页',path:"/",flag:true},
-      {title:'自主发单',path:"/zizhu",flag:false},
-      {title:'无忧发单',path:"/wuyou",flag:false},
-      {title:'我的订单',path:"/indent",flag:false}]
+      listNav:[{title:'首页',path:"/"},
+      {title:'自主发单',path:"/zizhu"},
+      {title:'无忧发单',path:"/wuyou"},
+      {title:'我的订单',path:"/indent"}]
     }
   },
   mounted(){
@@ -101,16 +107,8 @@ export default {
     getCurrentPages(){
       // console.log(this.currentPage)
     },
-    fliter(index,path){
-          this.listNav.forEach((item, _index)=>{            
-            this.$set(item,"flag",false)
-            if(index == _index){
-              this.$set(item,"flag",true)
-              this.contentTitle= item.type
-            }
-          });
-          this.setIndentBlock(true)
-          this.$router.push(path)
+    fliter(){
+      this.setIndentBlock(true)
     }
   }
 }
@@ -191,7 +189,7 @@ export default {
   .muneNav:hover{
   color: #C44DDC;
   }
-  .active{
+  .router-link-exact-active{
   color: #C44DDC;
   }
 </style>

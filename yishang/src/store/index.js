@@ -1,65 +1,6 @@
 import Vue from 'vue'
 import Vuex from  'vuex'
-					// {
-					// 	type: "所有订单",
-					// 	num: 12,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"待发前期资料",
-					// 	num: 3,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"待发样衣",
-					// 	num: 0,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"待发面料",
-					// 	num: 3,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"待发辅料",
-					// 	num: 0,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"延误",
-					// 	num: 0,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"抢单中",
-					// 	num: 3,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"加工中",
-					// 	num: 2,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"待付款收货",
-					// 	num: 1,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"待评价",
-					// 	num: 1,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"取消订单",
-					// 	num: 0,
-					// 	flag: false
-					// },
-					// {
-					// 	type:"已完成",
-					// 	num: 1,
-					// 	flag: false
-					// }
+					
 Vue.use(Vuex)
 
 const state={
@@ -185,7 +126,6 @@ const actions = {
 								avatar: null,
 								id: null
 							});
- 	console.log(state)
  },
 
   getCustomInfo (context,info) {

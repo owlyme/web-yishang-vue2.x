@@ -270,7 +270,7 @@ methods:{
 		self.$set(self.submitReceipt,'left_picture' , val.left_picture)
 		self.$set(self.submitReceipt,'right_picture', val.right_picture)
 		self.$set(self.submitReceipt,'part_picture' , val.part_picture)
-		self.$set(self.submitReceipt,'other_picture', val.other_picture)
+		
     },
     getQuality(val){
     	let self = this;
@@ -293,6 +293,7 @@ methods:{
     	//self.$set(self.self.zizhuIndent, 'about', val)
     	//console.log(val)
     	self.$set(self.submitReceipt,'supplements', val)
+    	self.$set(self.submitReceipt,'other_picture', val.other_picture)
     },
     getNewAddr(val){
     	let self = this;

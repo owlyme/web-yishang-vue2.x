@@ -1,22 +1,104 @@
 <template>
+	<el-upload
+	  class="avatar-uploader"
+	  action="https://jsonplaceholder.typicode.com/posts/"
+	  :show-file-list="false"
+	  :on-success="handleAvatarSuccess"
+
+	  :before-upload="beforeAvatarUpload">
+	  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+	  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+	</el-upload>
+
+</template>
+
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
+
+<script>
+  export default {
+    data() {
+      return {
+        imageUrl: ''
+      };
+    },
+    methods: {
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        this.imageUrl = URL.createObjectURL(file.raw);
+        return isJPG && isLt2M;
+      }
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+<!-- <template>
 	<div class="uploadimg">
 		<div >
 			<h5>样衣照片</h5>
+			<div id="single">
 			<el-row :gutter="10"  class="space" >		 
 			  <el-col :span="6" class="text-right text-style-sm">
 			  	{{ uploadImgs[0].name }}
 			  </el-col>	
 			  <el-col :span="14">
-			  		<el-upload
+			  		<el-upload			  			
+			  			ref="upload"
 				        :action="actionUrl"
+				        :auto-upload="false"
 				        list-type="picture-card"
 				        :on-success="uploadImgeSuccess0"				        
-				        :on-remove="handleRemove0">
-				        <span class="remind">点击上传</span>
+				        :on-remove="handleRemove0"
+				        :on-change="fileChange">
+						
+				        <span  slot="trigger" class="remind" 
+			  				 v-if="!uploadImgs[0].dialogVisible">点击上传</span>
+
+				        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
 				      </el-upload>
-				      <el-dialog :visible.sync="uploadImgs[0].dialogVisible" size="tiny">
-				        <img width="100%" :src="uploadImgs[0].dialogImageUrl" alt="">
-				      </el-dialog>
 			  </el-col>	    			  
 			</el-row>
 			<el-row :gutter="10"  class="space" >		 
@@ -70,6 +152,8 @@
 				      </el-dialog>
 			  </el-col>	    			  
 			</el-row>
+			</div>
+
 			<el-row :gutter="10"  class="space" >		 
 			  <el-col :span="6" class="text-right text-style-sm">
 			  	{{ uploadImgs[4].name }}
@@ -98,11 +182,13 @@ import { mapGetters } from 'vuex'
 		name: 'imageuplaod',
 		data(){
 			return{
+				imageUrl: '',
 				uploadImgs:[
 					{
 						name:'正面全览照',
 						dialogVisible: false,
 						dialogImageUrl: false,
+						imgUrl: '',
 						imgUrls:[],
 					},
 					{
@@ -129,7 +215,8 @@ import { mapGetters } from 'vuex'
 						dialogImageUrl: false,
 						imgUrls:[],
 					},
-				]
+				],
+				imageUrl: ''
 			}
 		},
 		mounted(){
@@ -196,7 +283,7 @@ import { mapGetters } from 'vuex'
 		    	this.uploadImgs[4].imgUrls = imgs.slice(0, imgs.length)
 		    },
 		    uploadImgeSuccess0(response, file, fileList){
-		    	// console.log(response)
+		    	console.log(response)
 		    	// console.log(file)
 		    	// console.log( fileList)
 		    	//this.form.imageUrl = response.content.url
@@ -234,6 +321,32 @@ import { mapGetters } from 'vuex'
 		    	})
 		    	this.uploadImgs[4].imgUrls = imgs.slice(0, imgs.length)
 		    },
+
+		    handleAvatarSuccess(res, file) {
+		    	console.log(file)
+		        this.imageUrl = URL.createObjectURL(file.raw);
+		      },
+		      beforeAvatarUpload(file) {
+		        const isJPG = file.type === 'image/jpeg';
+		        const isLt2M = file.size / 1024 / 1024 < 2;
+
+		        if (!isJPG) {
+		          this.$message.error('上传头像图片只能是 JPG 格式!');
+		        }
+		        if (!isLt2M) {
+		          this.$message.error('上传头像图片大小不能超过 2MB!');
+		        }
+		        return isJPG && isLt2M;
+		      },
+		       submitUpload() {
+		        this.$refs.upload.submit();
+		      },
+
+		      fileChange(file, fileList){
+		      	console.log('changed')
+		      	//document.getElementsByClassName('el-upload--picture-card')
+		      	console.log(document.getElementsByClassName('el-upload--picture-card'))
+		      }
 
 		}
 	}
@@ -273,4 +386,8 @@ import { mapGetters } from 'vuex'
   .space{
   	margin-bottom:15px;
   }
-</style>
+
+
+
+  
+</style> -->

@@ -393,7 +393,7 @@
 			      .then((res)=>{
 		           // console.log(res)
 			          if(res.data.status == 200){
-			          		console.log( res.data.content)
+			          		// console.log( res.data.content)
 			          		this.$set(this,'selectDetails',res.data.content)
 			          		this.isLoading = 0;         	
 			          }else{
@@ -442,7 +442,7 @@
 		    	let step = 3;
 		    	if( status[0] < 3 ){
 		    		this.graph1Active=0
-		    		this.graph2Active= status[0]
+		    		this.graph2Active= parseInt(status[0])
 		    		this.graph3Active=0
 		    	}else if(status[0] == '3'){
 		    		this.graph1Active=parseInt(status[1])+step
@@ -453,13 +453,7 @@
 		    		this.graph2Active=parseInt(status[0])+step -1
 		    		this.graph3Active=5
 		    	}
-		    },
-		    showSchedule(){
-
-		    },
-		    showDetails(){
-
-		    }
+		    }		 
 		}
 	}
 </script>
