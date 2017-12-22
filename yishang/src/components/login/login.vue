@@ -78,6 +78,7 @@ import Footerinfo from "../footer"
 import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 import {setCookie,getCookie} from '../../cookies.js'
 
 export default {
@@ -114,22 +115,31 @@ export default {
     ...mapActions([
       'getCustomerInfo',
     ]),
+    ...mapMutations([
+      'setSavePassword',
+    ]),
     focused (val){
       this.message = val
       this.resFalse = false
     },
     login(){
       let url= this.getUrl+'/Home/User/loginCheck'   
-      let args = this.account
+      let args = {
+        phone : this.account.name,
+        password: this.account.password
+      }
       this.axios.post(url, qs.stringify(args))
       .then((res)=>{
             if(res.data.status == 200){
-              this.account= { name: '', save : false}
               this.getCustomerInfo({
                 avatar: res.data.content.avatar,
                 id: res.data.content.id
               });
-              setCookie('phone',this.account.name,10000*60)
+              if(this.account.save){
+                this.setSavePassword(true)
+              }
+              setCookie('phone',this.account.name,10000*60)              
+              this.account= { name: '',password:'', save : false}
               this.$router.push("/")
             }else{
               this.message= res.data.msg

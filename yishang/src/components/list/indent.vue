@@ -364,7 +364,6 @@
 		    getMainlist(args){
 		      let url= this.getUrl+'/Home/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
-		          console.log(res)
 		          if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;

@@ -10,6 +10,7 @@ const state={
 		avatar: null,
 		id: null
 	},
+	savePassword: false,
 	indentBlock: true,
 	submitReceipt:{
 				type: null,
@@ -56,6 +57,9 @@ const getters = {
 	},
 	getIndentBlock(state){
 		return state.indentBlock
+	},
+	getSavePassword(state){
+		return state.savePassword
 	}
 }
 
@@ -63,7 +67,6 @@ const actions = {
  getCustomerInfo( context, info ){
  	  let state = context.state;
  	  Vue.set(state,'customer',info);
- 	 
  },
  clearCustomer(context, ){
  	let state = context.state;
@@ -82,7 +85,11 @@ const actions = {
 const mutations = {
  setIndentBlock(state,val){
 	Vue.set(state,'indentBlock',val || false )
+ },
+ setSavePassword(state,val){
+ 	Vue.set(state,'savePassword',val) 	
  }
+
 }
 
 export default new Vuex.Store({

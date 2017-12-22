@@ -62,7 +62,7 @@
 }
 .list-element{
 	position: relative;
-	height: 150px;
+	min-height: 150px;
 	padding: 25px;
 }
 .list-element:hover{

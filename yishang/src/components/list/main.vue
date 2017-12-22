@@ -166,8 +166,7 @@ export default{
          'getUrl'
       ]),
   },
-  mounted(){
-    console.log( 'main')    
+  mounted(){  
     this.getBanner()
     this.getMainlist({page: this.currentPage})
   },
@@ -183,7 +182,6 @@ export default{
     getBanner(){
       let url= this.getUrl+'/Home/Index/getBanner'
       this.axios.post(url).then((res)=>{
-          console.log(res)
           if(res.data.status == 200){
               this.banner = res.data.content
           }else{
@@ -199,7 +197,6 @@ export default{
             this.totalRows = res.data.content.totalRows-0;
             this.savedList =  res.data.content.list;
             this.goodsList = this.savedList.slice(0, this.savedList.length)
-            console.log(this.goodsList)
           }else{
 
           }          

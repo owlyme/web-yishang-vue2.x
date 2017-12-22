@@ -69,20 +69,21 @@ export default {
   mounted(){
     // console.log( 'index')
     if( getCookie('phone') == ''){
-        this.$router.push("/login")  
+        this.$router.push("/login")
       }
   },
   computed:{
       ...mapGetters([
-         'getUrl'
+         'getUrl',
+         'getSavePassword'
       ]),
   },
   methods:{
     ...mapActions([
-      'clearCustomer'
+      'clearCustomer',
     ]),
     ...mapMutations([
-      'setIndentBlock'
+      'setIndentBlock',
     ]),
   logOut(){
       let url= this.getUrl+'/Home/User/logOut'
@@ -91,7 +92,9 @@ export default {
             if(res.data.status == 200){ 
               this.clearCustomer()        
               this.$router.push("/login")
-              delCookie('phone')
+              if(!this.getSavePassword){
+                delCookie('phone')
+              }
             }else{
 
             }          
