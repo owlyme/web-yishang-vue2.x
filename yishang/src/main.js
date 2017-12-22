@@ -13,6 +13,21 @@ Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(ElementUI) 
 
+Vue.prototype.openMessage = (arg) =>{
+		    	let html='';
+		    	if( !arg.bool){
+		    		html = '<span style="color: #C44DDC">'+arg.str+'</span>';
+		    	}else{
+		    		html = '<i style="color: red">'+arg.str+'</i>';
+		    	} 
+		        arg.ele.$alert( html, {
+		          dangerouslyUseHTMLString: true,
+		          showClose: false
+		        });
+		    }
+
+
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'element-ui/lib/theme-chalk/index.css'

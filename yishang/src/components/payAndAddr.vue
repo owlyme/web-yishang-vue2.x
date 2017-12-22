@@ -15,7 +15,7 @@
 			    	<div v-for="(item, index) in addressList">
 			    		<el-radio :label="item" :key="'address'+ index" > 
 			    			{{item.province + item.city  + item.county
-						          + item.street  +' (' +item.name + ') '	+item.mobile}}</el-radio>
+						          + item.street  +' (' +item.receiver + ') '	+item.phone}}</el-radio>
 			    	</div>		     
 			    </el-radio-group>
 			</el-form-item>
@@ -46,21 +46,9 @@
 	</div>
 </template>
 <script>
-const address={
-	receiver: null,
-	phone: null,
-	province: null,
-	city: null,
-	county: null,
-	street: null,
-	is_default: null
-}
-
 import China from "./address/china.vue"
 import qs from 'qs';
-
 import { mapGetters } from 'vuex'
-
 	export default{
 		name: "pay",
 		components:{ China},
@@ -100,27 +88,23 @@ import { mapGetters } from 'vuex'
 		},
 		mounted(){
 			let self = this;
-			console.log(this.deposit)
-			//Slet receiver = { pay : 1, address: self.addressList}
-			//this.$emit('setNewAddr', receiver)
 		},
 		watch:{
 			selectAddress:{
 				handler(curVal,oldVal){
 					if( this.addressList ){
 						let receiver = {
-							is_deposited :curVal.is_deposited,
-							per : curVal.per,
-							province: curVal.address.province,
-							city :curVal.address.city,
-							county :curVal.address.county,
-							street: curVal.address.street,
-							name :curVal.address.name,
-							phone :curVal.address.mobile
+							is_deposited : curVal.is_deposited,
+							per :         curVal.per,
+							province:  curVal.address.province,
+							city :     curVal.address.city,
+							county :   curVal.address.county,
+							street:    curVal.address.street,
+							name :     curVal.address.receiver,
+							phone :    curVal.address.phone
 						}
 						this.$emit('setNewAddr', receiver)
 					}
-
 		　　　　},
 		　　　　deep:true
 			}
@@ -139,15 +123,8 @@ import { mapGetters } from 'vuex'
 		methods:{
 			submitForm(formName) {				
 		        this.$refs[formName].validate((valid) => {
-		          if (valid) {		         
-		          let address = {province: this.ruleForm.province,
-			          			 city :this.ruleForm.city,
-			          			 county :this.ruleForm.county,
-						         street: this.ruleForm.street,
-						         name :this.ruleForm.name ,
-						         mobile :this.ruleForm.mobile}
-						this.addressList.push(address)
-		            	this.addAddress()
+		          if (valid) {		
+		            this.addAddress()
 		          } else {
 		            // console.log('error submit!!');
 		            return false;
@@ -163,12 +140,14 @@ import { mapGetters } from 'vuex'
 						city: this.ruleForm.city,
 						county: this.ruleForm.county,
 						street: this.ruleForm.street,
-						is_default: null	
+						is_default: 1
 			        }
 			    this.axios.post(url, qs.stringify(args)).then((res)=>{
-		        	//console.log(res)
+			    	console.log(res)
 			        if(res.data.status == 200){
 			        	//添加成功
+			        	console.log(args)
+			        	this.addressList.push(args)
 			        	this.openMessage( res.data.msg )
 			        }else{
 			        	this.openMessage( res.data.msg, true)
@@ -180,11 +159,11 @@ import { mapGetters } from 'vuex'
 		    },
 		    openMessage(str,bool) {
 		    	let html='';
-		    	if( !bool){
+		    	if( !bool ){
 		    		html = '<i style="color: green">'+str+'</i>';
 		    	}else{
 		    		html = '<i style="color: red">'+str+'</i>';
-		    	} 
+		    	}
 		        this.$alert( html, {
 		          dangerouslyUseHTMLString: true,
 		          showClose: false
@@ -196,9 +175,7 @@ import { mapGetters } from 'vuex'
 					self.$set(self.ruleForm,'province', val.province.name)
 					self.$set(self.ruleForm,'city', val.city.name)
 					self.$set(self.ruleForm,'county', val.block.name)
-
 		    },
-
 		}
 	}
 </script>

@@ -44,51 +44,8 @@ const state={
 				city: null,
 				county: null,
 				street: null,
-		   	},
-
-
-	zizhuIndent:{
-		workSheet:{},
-		colorNum:[],
-		period:{},
-		clothePic:{},
-		quality:{},
-		fabric:{},
-		about:{},
-		newAddr:{}
 	},
-	zizhuIndentList:[],
-
-	wuyouIndent:{
-		workSheet:{},
-		colorNum:{},
-		period:{},
-		clothePic:{},
-		quality:{},
-		fabric:{},
-		about:{},
-		newAddr:{}
-	},
-	wuyouIndentList: []
 }
-
-
-// const state={
-// 	totalPrice: 0,
-// 	goods: [],
-// 	loadedGoods: [],
-// 	seletedGoods: [],
-// 	customInfo: {}
-// }
-/*
-{
-content:"Some quick example.",
-href:"#",
-imgSrc:"https://lorempixel.com/600/300/food/5/",
-price:50,
-title:"Card Title"
-}
-*/
 
 const getters = {
 	getUrl (state){
@@ -99,18 +56,6 @@ const getters = {
 	},
 	getIndentBlock(state){
 		return state.indentBlock
-	},
-	getZizhuIndent (state) {
-	 	return state.zizhuIndent
-	 },
-	getZizhuIndentList(state){
-		return state.zizhuIndentList
-	},
-	getWuyouIndent (state) {
-	 	return state.wuyouIndent
-	},
-	getWuyouIndentList(state){
-		return state.wuyouIndentList
 	}
 }
 
@@ -118,7 +63,7 @@ const actions = {
  getCustomerInfo( context, info ){
  	  let state = context.state;
  	  Vue.set(state,'customer',info);
- 	  console.log(state)
+ 	 
  },
  clearCustomer(context, ){
  	let state = context.state;
@@ -131,22 +76,11 @@ const actions = {
   getCustomInfo (context,info) {
    	context.state.customInfo = info;
   },
-  loadGoods ({ state }){
-  	Vue.http.get('api/goods').then((response) => {
-	  console.log(response.data)
-	   state.loadedGoods = response.data
-	   console.log( state.loadedGoods)
-	}) 
-	Vue.http.get('api/profile').then((response) => {
-	  console.log(response.data)
-	}) 
-  }
-}
 
+}
 
 const mutations = {
  setIndentBlock(state,val){
-	// state.indentBlock = val ? val : false ;
 	Vue.set(state,'indentBlock',val || false )
  }
 }

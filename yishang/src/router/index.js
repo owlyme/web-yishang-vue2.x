@@ -6,14 +6,9 @@ import Indexlist from '@/components/list/index'
 	import Zizhu from '@/components/list/zizhu'
 	import Wuyou from '@/components/list/wuyou'
 	import Indent from '@/components/list/indent'
-    import MyIndent from '@/components/list/myIndent'
-    import MyDetail from '@/components/list/myDetail'
 Vue.use(Router)
 const router = new Router({
-
   mode:'history',
-
-
   routes: [    
     {path: '/login',name: 'Login',component: Login    },
     {path: '/', name: 'Indexlist',component: Indexlist,
@@ -32,7 +27,7 @@ const router = new Router({
 })
 
 router.beforeEach(function (to, from, next) {
-  console.log(to)
+  // console.log(to)
   if (to.path === '/indent') {
     next()
   } else {

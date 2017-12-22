@@ -8,21 +8,25 @@
       <el-input v-model="item.name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
       <i  v-if="index > 1" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
     </el-form-item>
-    <el-row :gutter="10"  class="space padding-bottom" >    
+    <el-row :gutter="10"  class="space padding-bottom  uploadimg" >    
         <el-col :span="6" class="text-right text-style-sm">
           面料图片: 
         </el-col> 
         <el-col :span="14">
-        <el-upload
-          :action="actionUrl"
-          list-type="picture-card"
-          :on-success=" (response, file, fileList) =>{ return  uploadImgeSuccess(fileList, index)}"
-          :on-remove="()=>{  return  handleRemove(fileList, index) }">
-          <span class="remind">点击上传</span>
-        </el-upload>
-        <el-dialog :visible.sync="dialogVisible" size="tiny">
-          <img width="100%" :src="dialogImageUrl" alt="">
-        </el-dialog>
+        <el-upload              
+              ref="fabric"
+                :action="actionUrl"
+                :auto-upload="false"
+                list-type="picture-card"
+                :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
+                :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"            
+                :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}"> 
+                <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
+                <el-button class="click-submit"  @click="submitImg(index)">点击上传</el-button>
+          </el-upload>
+          <el-dialog :visible.sync="item.dialogVisible" size="tiny">
+              <img width="100%" :src="item.dialogImageUrl" alt="">
+          </el-dialog>
         </el-col>
     </el-row>
       <el-form-item label="要求信息:" v-if=" !item.is_main" style="width:96%">
@@ -84,7 +88,7 @@ export default {
             requirement:'',
             component: '',
             category:'',
-            picture:[],
+            picture:'',
             weight:''
           },
           {
@@ -94,7 +98,7 @@ export default {
             requirement:"",
             component: '',
             category:'',
-            picture:[],
+            picture:'',
             weight:''
           }
         ],
@@ -117,21 +121,23 @@ export default {
       }
     },
     methods: {      
-     handleRemove(fileList, index) {
-          let imgs = [];
-          fileList.forEach((item ,index) =>{
-            imgs.push(item.response.content.url)
-          })
-          this.fabricList[index].picture = imgs.slice(0, imgs.length)
-      },
-      uploadImgeSuccess(fileList , index){
-        let imgs = [];
-        fileList.forEach((item ,index) =>{
-          imgs.push(item.response.content.url)
-        })
-        this.fabricList[index].picture = imgs.slice(0, imgs.length)
-        //console.log(this.fabricList)
-      },     
+     handleRemoveSingle(file,index) {
+          this.fabricList[index].picture = ''
+        },          
+        uploadImgeSuccessSingle(response, index){
+            if (response.status == 200 ) {
+               this.fabricList[index].picture = response.content.url
+              }else{
+                //response.msg
+              }
+        },
+        handlePictureCardPreviewSingle(file,index) {
+            this.fabricList[index].dialogImageUrl = file.url;
+            this.fabricList[index].dialogVisible = true;
+        },
+          submitImg(index) {
+            this.$refs.fabric[index].submit();
+        },    
       addFabric(){
           let fabric = {
                 label:'',
@@ -140,7 +146,7 @@ export default {
                 component: '',
                 category:'',
                 delivery: false,
-                picture:[],
+                picture:'',
                 weight:''
               }
               fabric.label= "辅面料" + (this.index++) + "名称:";

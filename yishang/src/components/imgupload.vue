@@ -1,178 +1,58 @@
 <template>
-	<el-upload
-	  class="avatar-uploader"
-	  action="https://jsonplaceholder.typicode.com/posts/"
-	  :show-file-list="false"
-	  :on-success="handleAvatarSuccess"
-
-	  :before-upload="beforeAvatarUpload">
-	  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-	  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-	</el-upload>
-
-</template>
-
-
-<style>
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-</style>
-
-<script>
-  export default {
-    data() {
-      return {
-        imageUrl: ''
-      };
-    },
-    methods: {
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        this.imageUrl = URL.createObjectURL(file.raw);
-        return isJPG && isLt2M;
-      }
-    }
-  }
-</script>
-
-
-
-
-
-
-
-
-
-<!-- <template>
-	<div class="uploadimg">
-		<div >
-			<h5>样衣照片</h5>
-			<div id="single">
-			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="6" class="text-right text-style-sm">
-			  	{{ uploadImgs[0].name }}
-			  </el-col>	
-			  <el-col :span="14">
+	<div >
+		<h5>样衣照片</h5>
+		<div class="uploadimg ">
+			<el-row :gutter="10"  class="space" 
+				v-for="(item, index) in uploadSingleImg" :key="'uploadSingleImg'+ index"	>		 
+			  <el-col :span="6" class="text-right text-style-sm"> 	{{ item.name }}	  </el-col>	
+			  <el-col :span="14" >
 			  		<el-upload			  			
-			  			ref="upload"
+			  			ref="imgSingle"
 				        :action="actionUrl"
 				        :auto-upload="false"
 				        list-type="picture-card"
-				        :on-success="uploadImgeSuccess0"				        
-				        :on-remove="handleRemove0"
-				        :on-change="fileChange">
-						
-				        <span  slot="trigger" class="remind" 
-			  				 v-if="!uploadImgs[0].dialogVisible">点击上传</span>
+				        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
+				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"		        
+				        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}">	
+				        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
+				        <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button>
+				      </el-upload>
+				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
+				        <img width="100%" :src="item.dialogImageUrl" alt="">
+				      </el-dialog>
+			  </el-col>	    			  
+			</el-row>			
+		</div>
 
-				        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-				      </el-upload>
-			  </el-col>	    			  
-			</el-row>
-			<el-row :gutter="10"  class="space" >		 
+		<div class="uploadimgs">
+			<el-row :gutter="10"  class="space" v-for="(item, index) in uploadImgArr" :key="'uploadImgArr'+ index">		 
 			  <el-col :span="6" class="text-right text-style-sm">
-			  	{{ uploadImgs[1].name }}
+			  	{{ item.name }}
 			  </el-col>	
 			  <el-col :span="14">
 			  		<el-upload
+			  			ref="imgArr"
 				        :action="actionUrl"
+				        :auto-upload="false"
 				        list-type="picture-card"
-				        :on-success="uploadImgeSuccess1"				        
-				        :on-remove="handleRemove1">
-				        <span class="remind">点击上传</span>
-				      </el-upload>
-				      <el-dialog :visible.sync="uploadImgs[1].dialogVisible" size="tiny">
-				        <img width="100%" :src="uploadImgs[1].dialogImageUrl" alt="">
-				      </el-dialog>
-			  </el-col>	    			  
-			</el-row>
-			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="6" class="text-right text-style-sm">
-			  	{{ uploadImgs[2].name }}
-			  </el-col>	
-			  <el-col :span="14">
-			  		<el-upload
-				        :action="actionUrl"
-				        list-type="picture-card"
-				        :on-success="uploadImgeSuccess2"				        
-				        :on-remove="handleRemove2">
-				        <span class="remind">点击上传</span>
-				      </el-upload>
-				      <el-dialog :visible.sync="uploadImgs[2].dialogVisible" size="tiny">
-				        <img width="100%" :src="uploadImgs[2].dialogImageUrl" alt="">
-				      </el-dialog>
-			  </el-col>	    			  
-			</el-row>
-			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="6" class="text-right text-style-sm">
-			  	{{ uploadImgs[3].name }}
-			  </el-col>	
-			  <el-col :span="14">
-			  		<el-upload
-				        :action="actionUrl"
-				        list-type="picture-card"
-				        :on-success="uploadImgeSuccess3"				        
-				        :on-remove="handleRemove3">
-				        <span class="remind">点击上传</span>
-				      </el-upload>
-				      <el-dialog :visible.sync="uploadImgs[3].dialogVisible" size="tiny">
-				        <img width="100%" :src="uploadImgs[3].dialogImageUrl" alt="">
-				      </el-dialog>
-			  </el-col>	    			  
-			</el-row>
-			</div>
+				        :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
+				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"		        
+				        :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">
 
-			<el-row :gutter="10"  class="space" >		 
-			  <el-col :span="6" class="text-right text-style-sm">
-			  	{{ uploadImgs[4].name }}
-			  </el-col>	
-			  <el-col :span="14">
-			  		<el-upload
-				        :action="actionUrl"
-				        list-type="picture-card"
-				        :on-success="uploadImgeSuccess4"				        
-				        :on-remove="handleRemove4">
-				        <span class="remind">点击上传</span>
+				        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
+				        <el-button class="click-submit"	 @click="submitImgArr(index)">点击上传</el-button>
 				      </el-upload>
-				      <el-dialog :visible.sync="uploadImgs[4].dialogVisible" size="tiny">
-				        <img width="100%" :src="uploadImgs[4].dialogImageUrl" alt="">
+				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
+				        <img width="100%" :src="item.dialogImageUrl" alt="">
 				      </el-dialog>
 			  </el-col>	    			  
 			</el-row>
 		</div>
+		<div class="middle-line">
+			<el-button type="primary" icon="el-icon-plus" @click="addImgArr" class="circle-btn"></el-button>
+		</div>
 	</div>
+
 </template>
 <script>
 
@@ -182,33 +62,35 @@ import { mapGetters } from 'vuex'
 		name: 'imageuplaod',
 		data(){
 			return{
+				ref: 'upload',
 				imageUrl: '',
-				uploadImgs:[
+				uploadSingleImg:[
 					{
 						name:'正面全览照',
 						dialogVisible: false,
 						dialogImageUrl: false,
-						imgUrl: '',
-						imgUrls:[],
+						imgUrl: ''						
 					},
 					{
 						name:'背面全览照',
 						dialogVisible: false,
 						dialogImageUrl: false,
-						imgUrls:[],
+						imgUrl: ''
 					},
 					{
 						name:'左侧面全览照',
 						dialogVisible: false,
 						dialogImageUrl: false,
-						imgUrls:[],
+						imgUrl: ''
 					},
 					{
 						name:'右侧面全览照',
 						dialogVisible: false,
 						dialogImageUrl: false,
-						imgUrls:[],
-					},
+						imgUrl: ''
+					}		
+				],
+				uploadImgArr:[
 					{
 						name:'局部细节图',
 						dialogVisible: false,
@@ -216,27 +98,45 @@ import { mapGetters } from 'vuex'
 						imgUrls:[],
 					},
 				],
-				imageUrl: ''
+				pictures:{
+					front_picture: '',
+					back_picture:'',
+					left_picture:'',
+					right_picture:'', 
+					part_picture:[],
+					other_picture:[]
+				}
 			}
 		},
-		mounted(){
-			
-		},
 		watch:{
-			uploadImgs:{
+			uploadSingleImg:{
+				handler(curVal,oldVal){									
+					this.pictures.front_picture = curVal[0].imgUrl
+					this.pictures.back_picture =  curVal[1].imgUrl
+					this.pictures.left_picture =  curVal[2].imgUrl
+					this.pictures.right_picture = curVal[3].imgUrl
+				},
+				deep:true
+			},
+			uploadImgArr:{
 				handler(curVal,oldVal){
-		　　　　　　　　//console.log(curVal)
-						let picture = {
-							front_picture: this.uploadImgs[0].imgUrls,
-							back_picture: this.uploadImgs[1].imgUrls,
-							left_picture: this.uploadImgs[2].imgUrls,
-							right_picture: this.uploadImgs[3].imgUrls,
-							part_picture: this.uploadImgs[4].imgUrls
+					this.pictures.part_picture = curVal[0].imgUrls
+					let otherImgs = []
+					curVal.forEach((item, index)=>{						
+						if (index >0 ) {
+							otherImgs[index -1] = {title: item.title, sub_picture: item.imgUrls }
 						}
-						this.$emit("setClothePic",picture)
-		　　　　　　},
-			　　　　deep:true
-				}
+					})
+					this.pictures.other_picture = otherImgs
+				},
+				deep:true
+			},			
+			pictures:{
+				handler(curVal,oldVal){
+					this.$emit("setClothePic",curVal)
+				},
+				deep:true
+			}
 		},
 		computed:{
 	      ...mapGetters([
@@ -246,107 +146,58 @@ import { mapGetters } from 'vuex'
 	      	return this.getUploadUrl +'/picture/upload'
 	      }
 	    },
-		methods:{			
-			handleRemove0(file, fileListS) {
+		methods:{
+			handleRemoveSingle(file,index) {
+		    	this.uploadSingleImg[index].imgUrl = ''
+		    },		      
+		    uploadImgeSuccessSingle(response, index){
+		        if (response.status == 200 ) {
+		        	 this.uploadSingleImg[index].imgUrl = response.content.url
+		        	}else{
+		        		//response.msg
+		        	}
+		    },
+		    handlePictureCardPreviewSingle(file,index) {
+		        this.uploadSingleImg[index].dialogImageUrl = file.url;
+		        this.uploadSingleImg[index].dialogVisible = true;
+		    },
+	        submitImg(index) {
+	       	 	this.$refs.imgSingle[index].submit();
+	     	},
+		    handleRemove(fileList,index) {
+		    	if(!this.uploadImgArr[index].imgUrls.length) return;
 		        let imgs = [];
 		    	fileList.forEach((item ,index) =>{
 		    		imgs.push(item.response.content.url)
 		    	})
-		    	this.uploadImgs[0].imgUrls = imgs.slice(0, imgs.length)
+		    	this.uploadImgArr[index].imgUrls = imgs.slice(0, imgs.length)
 		    },
-		    handleRemove1(file, fileListS) {
-		        let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[1].imgUrls = imgs.slice(0, imgs.length)
+		    uploadImgeSuccess(response,index){
+		        if (response.status == 200 ) {
+		        	 this.uploadImgArr[index].imgUrls.push(response.content.url)
+		        	}else{
+		        		//response.msg
+		        	}
 		    },
-		    handleRemove2(file, fileListS) {
-		        let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[2].imgUrls = imgs.slice(0, imgs.length)
-		    },
-		    handleRemove3(file, fileListS) {
-		        let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[3].imgUrls = imgs.slice(0, imgs.length)
-		    },
-		    handleRemove4(file, fileListS) {
-		        let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[4].imgUrls = imgs.slice(0, imgs.length)
-		    },
-		    uploadImgeSuccess0(response, file, fileList){
-		    	console.log(response)
-		    	// console.log(file)
-		    	// console.log( fileList)
-		    	//this.form.imageUrl = response.content.url
-		    	let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[0].imgUrls = imgs.slice(0, imgs.length)
-		    },
-		    uploadImgeSuccess1(response, file, fileList){
-		    	let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[1].imgUrls = imgs.slice(0, imgs.length)
-		    },
-		    uploadImgeSuccess2(response, file, fileList){
-		    	let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[2].imgUrls = imgs.slice(0, imgs.length)
-		    },
-		    uploadImgeSuccess3(response, file, fileList){
-		    	let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[3].imgUrls = imgs.slice(0, imgs.length)
-		    },
-		    uploadImgeSuccess4(response, file, fileList){
-		    	let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.uploadImgs[4].imgUrls = imgs.slice(0, imgs.length)
-		    },
-
-		    handleAvatarSuccess(res, file) {
-		    	console.log(file)
-		        this.imageUrl = URL.createObjectURL(file.raw);
-		      },
-		      beforeAvatarUpload(file) {
-		        const isJPG = file.type === 'image/jpeg';
-		        const isLt2M = file.size / 1024 / 1024 < 2;
-
-		        if (!isJPG) {
-		          this.$message.error('上传头像图片只能是 JPG 格式!');
-		        }
-		        if (!isLt2M) {
-		          this.$message.error('上传头像图片大小不能超过 2MB!');
-		        }
-		        return isJPG && isLt2M;
-		      },
-		       submitUpload() {
-		        this.$refs.upload.submit();
-		      },
-
-		      fileChange(file, fileList){
-		      	console.log('changed')
-		      	//document.getElementsByClassName('el-upload--picture-card')
-		      	console.log(document.getElementsByClassName('el-upload--picture-card'))
-		      }
+		    handlePictureCardPreview(file,index) {
+		        this.uploadImgArr[index].dialogImageUrl = file.url;
+		        this.uploadImgArr[index].dialogVisible = true;
+		    },	    
+	     	submitImgArr(index) {
+	       	 	this.$refs.imgArr[index].submit();
+	     	},
+	     	addImgArr(){
+	     		let len = this.uploadImgArr.length
+				let otherPics = {
+						name:'其他细节图',
+						title:'细节图'+len,
+						dialogVisible: false,
+						dialogImageUrl: false,
+						imgUrls:[],
+						
+					}
+				this.uploadImgArr.push(otherPics)
+	     	}
 
 		}
 	}
@@ -355,13 +206,13 @@ import { mapGetters } from 'vuex'
 .uploadimg{
 
 }
-	.avatar-uploader .el-upload {
+.avatar-uploader .el-upload {
 	border: 1px solid #e0e0e0;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-  }
+}
   .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
@@ -386,8 +237,5 @@ import { mapGetters } from 'vuex'
   .space{
   	margin-bottom:15px;
   }
-
-
-
   
-</style> -->
+</style>

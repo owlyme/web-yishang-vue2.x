@@ -3,8 +3,7 @@
 		<div class="container bg-white" >
 			<!-- 加工单编辑 -->
 			<h3 class="text-center padding-top-bottom">加工单编辑</h3>
-			<el-form ref="form" label-width="25%"  >
-		
+			<el-form ref="form" label-width="25%"  >		
 				<Sheet v-on:setWorkSheet="getWorkSheet" 
 					:category = "receiptContent.category" 
 					:styles="receiptContent.style"
@@ -65,47 +64,16 @@ import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 import {setCookie,getCookie} from '../../cookies.js'
 
-
-
-const receiptContent={
-	cate: {// true array[object] 商品类别下拉
-		cate_id:null,// true string
-		cate_name:null// true string
-	},
-	mode:{//true array[object]  加工模式下拉
-		mode_id: null,//true string
-		mode_name:null// true string 
-	},
-	style:{// true array[object]服装类型下拉
-		style_id:null,// true string
-		style_name:null// true string
-	},
-	check:{ //true array[object]查货模式下拉
-		check_id:null,// true string
-		check_name:null// true string
-	},
-	error:{//true array[object]误差标准下拉
-		error_id:null,// true string
-		value:null// true string
-	},
-	component:{//true array[object]面料成分下拉
-		component_id:null,// true string
-		component_name:null,// true string
-	},
-	category:{//true array[object]面料类别下拉
-		category_id:null,// true string
-		category_name:null,// true string
-	},
-	address:{//true array[object]
-		id:null,// true string收货人id
-		receiver:null,// true string收货人
-		phone:null,// true string手机号
-		province:null,// true string省city true string市
-		county:null,// true string区
-		street:null,// true string
-	}	
-}	
-const  submitReceipt= {
+export default {
+	name: "zizhu",
+	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
+	data () {
+		return {
+	        imageUrl: null,
+		   	activeNames: ['1'],
+		   	value:null,
+		   	receiptContent:{},
+		   	submitReceipt: {
 				type: null,
 				cate_name: null,
 				name: null,
@@ -139,33 +107,6 @@ const  submitReceipt= {
 				county: null,
 				street: null,
 		   	}
-
-export default {
-	name: "zizhu",
-	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
-	data () {
-		return {
-			zizhuIndent: {
-	         	workSheet:{},
-				colorNum:{},
-				period:{},
-				clothePic:{},
-				quality:{},
-				fabric:{},
-				about:{},
-				newAddr:{}
-	        },
-	        formInline: {
-	          user: '',
-	          region: ''
-	        },
-	        imageUrl: null,
-			types: [
-		        'text', 'password', 'email', 'number', 'url','tel', 'date', `time`, 'range', 'color'
-		      ],
-		   	activeNames: ['1'],
-		   	value:null,
-		   	receiptContent:{}
 		}
 	},
   computed:{
@@ -174,13 +115,11 @@ export default {
       ]),
   },
   mounted(){
-    //console.log( 'zhizhu')
     if( getCookie('phone') == ''){
       this.$router.push("/login")
     }    
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=1').then((res)=>{
-        // console.log(res.data.content)
         if(res.data.status == 200){
         	this.receiptContent = res.data.content
         }else{
@@ -188,111 +127,90 @@ export default {
         }          
     })
   },
-methods:{
-    onSubmit(){
-    	console.log(submitReceipt)
-    	this.$set(submitReceipt, 'type', 1)
-    	this.beforeReceipt(submitReceipt);
-    },
-    beforeReceipt(arg){
-    	let url = this.getUrl    		
-	    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-	    	console.log(submitReceipt)
-	        console.log(res.data.content)
-	        if(res.data.status == 200){
-	        	this.submitReceipt(arg)
-	        }else{
-				
-	        }          
-	    }) 
-    },
-    submitReceipt(args){
-    	let url = this.getUrl
-	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
-	        console.log(res.data.content)
-	        if(res.data.status == 200){
-	        	
-	        }else{
-				
-	        }          
-	    }) 
-    },
-    getWorkSheet(val){
-    	let self = this;
-    	self.$set(submitReceipt, 'name', val.name)
-    	self.$set(submitReceipt, 'cate_name', val.fabricType)
-    	self.$set(submitReceipt, 'style_name', val.kindType)
-    	self.$set(submitReceipt, 'mode_name', val.status)
-    	// console.log(val)
-    },    
-    getColornumber(val,total){
-    	let self = this;
-    	//self.$set(self.zizhuIndent, 'colorNum', val)    	
-    	console.log(val)
-    	self.$set(submitReceipt, 'size', val)
-    	self.$set(submitReceipt, 'demanding_account', total)
-    	self.$set(self.receiptContent, 'demanding_account', total)    	
-    },
-    getPeriod(val){
-    	let self = this;
-    	// self.$set(self.zizhuIndent, 'period', val)
-    	// console.log(val)
-    	self.$set(submitReceipt, 'fee', val.fee)
-    	self.$set(submitReceipt, 'total_fee', val.total_fee)
-    	self.$set(submitReceipt, 'expire_time', val.expire_time)
-    	self.$set(submitReceipt, 'arrival_date', val.arrival_date)
-    	self.$set(submitReceipt, 'delivery_date', val.delivery_date)
-    },
-    getClothePic(val){
-    	let self = this;
-    	//self.$set(self.zizhuIndent, 'clothePic', val)
-    	//console.log(val)
-		self.$set(submitReceipt,'front_picture', val.front_picture)
-		self.$set(submitReceipt,'back_picture' , val.back_picture)
-		self.$set(submitReceipt,'left_picture' , val.left_picture)
-		self.$set(submitReceipt,'right_picture', val.right_picture)
-		self.$set(submitReceipt,'part_picture' , val.part_picture)
-		self.$set(submitReceipt,'other_picture', val.other_picture)
-    },
-    getQuality(val){
-    	let self = this;
-    	//self.$set(self.zizhuIndent, 'quality', val)
-    	//console.log(val)    	
-		self.$set(submitReceipt,'check', val.check)
-		self.$set(submitReceipt,'error' , val.error)
-		self.$set(submitReceipt,'supplement' , val.supplement)
-		self.$set(submitReceipt,'requirement', val.requirement)
-		self.$set(submitReceipt,'picture' , val.imageUrls)
-    },
-    getFabric(val){
-    	let self = this;
-    	// self.$set(self.zizhuIndent, 'fabric', val)
-    	// console.log(val)
-    	self.$set(submitReceipt,'fabric', val)
-
-    },
-    getAbout(val){
-    	let self = this;
-    	//self.$set(self.zizhuIndent, 'about', val)
-    	//console.log(val)
-    	self.$set(submitReceipt,'supplements', val)
-    },
-    getNewAddr(val){
-    	let self = this;
-    	//self.$set(self.zizhuIndent, 'newAddr', val)
-    	// console.log(val)
-		self.$set(submitReceipt,'is_deposited', val.is_deposited)
-		self.$set(submitReceipt,'phone', val.phone)
-		self.$set(submitReceipt,'province', val.province)
-		self.$set(submitReceipt,'city', val.city)
-		self.$set(submitReceipt,'county', val.county)
-		self.$set(submitReceipt,'street', val.street)
-		self.$set(submitReceipt,'receiver', val.name)
-    }
+	methods:{
+	    onSubmit(){
+	    	this.openMessage({ele: this, str: 4444});
+	    	this.$set(this.submitReceipt, 'type', 1)
+	    	this.beforeReceipt(submitReceipt);
+	    },
+	    beforeReceipt(arg){
+	    	let url = this.getUrl
+		    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
+		        if(res.data.status == 200){
+		        	this.submitReceiptFn(arg)
+		        }else{
+					
+		        }          
+		    }) 
+	    },
+	    submitReceiptFn(args){
+	    	let url = this.getUrl
+		    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
+		        if(res.data.status == 200){
+		        	
+		        }else{
+					
+		        }          
+		    }) 
+	    },
+	    getWorkSheet(val){
+	    	let self = this;
+	    	self.$set(this.submitReceipt, 'name', val.name)
+	    	self.$set(this.submitReceipt, 'cate_name', val.fabricType)
+	    	self.$set(this.submitReceipt, 'style_name', val.kindType)
+	    	self.$set(this.submitReceipt, 'mode_name', val.status)
+	    },    
+	    getColornumber(val,total){
+	    	let self = this; 
+	    	self.$set(this.submitReceipt, 'size', val)
+	    	self.$set(this.submitReceipt, 'demanding_account', total)
+	    	self.$set(self.receiptContent, 'demanding_account', total)    	
+	    },
+	    getPeriod(val){
+	    	let self = this;
+	    	self.$set(this.submitReceipt, 'fee', val.fee)
+	    	self.$set(this.submitReceipt, 'total_fee', val.total_fee)
+	    	self.$set(this.submitReceipt, 'expire_time', val.expire_time)
+	    	self.$set(this.submitReceipt, 'arrival_date', val.arrival_date)
+	    	self.$set(this.submitReceipt, 'delivery_date', val.delivery_date)
+	    },
+	    getClothePic(val){
+	    	let self = this;
+			self.$set(this.submitReceipt,'front_picture', val.front_picture)
+			self.$set(this.submitReceipt,'back_picture' , val.back_picture)
+			self.$set(this.submitReceipt,'left_picture' , val.left_picture)
+			self.$set(this.submitReceipt,'right_picture', val.right_picture)
+			self.$set(this.submitReceipt,'part_picture' , val.part_picture)
+			self.$set(this.submitReceipt,'other_picture', val.other_picture)
+	    },
+	    getQuality(val){
+	    	let self = this;
+			self.$set(this.submitReceipt,'check', val.check)
+			self.$set(this.submitReceipt,'error' , val.error)
+			self.$set(this.submitReceipt,'supplement' , val.supplement)
+			self.$set(this.submitReceipt,'requirement', val.requirement)
+			self.$set(this.submitReceipt,'picture' , val.imageUrls)
+	    },
+	    getFabric(val){
+	    	let self = this;
+	    	self.$set(this.submitReceipt,'fabric', val)
+	    },
+	    getAbout(val){
+	    	let self = this;
+	    	self.$set(this.submitReceipt,'supplements', val)
+	    },
+	    getNewAddr(val){
+	    	let self = this;
+			self.$set(this.submitReceipt,'is_deposited', val.is_deposited)
+			self.$set(this.submitReceipt,'phone', val.phone)
+			self.$set(this.submitReceipt,'province', val.province)
+			self.$set(this.submitReceipt,'city', val.city)
+			self.$set(this.submitReceipt,'county', val.county)
+			self.$set(this.submitReceipt,'street', val.street)
+			self.$set(this.submitReceipt,'receiver', val.name)
+	    }
+	}
 }
-
-}
-
 </script>
 <style scoped>
 	#zizhu{

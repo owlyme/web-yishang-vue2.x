@@ -1,25 +1,29 @@
 <template>
 	<div class="about border-top">
-		<div v-for="(item, index) in aboutList" class="padding-right add-row" :key=" 'about'+ index" >
+		<div v-for="(item, index) in aboutList" class="padding-right add-row uploadimg" :key=" 'about'+ index" >
 		<h5>其他要求{{index +1}}</h5>
 		<el-row :gutter="10"  class="space padding-bottom" >		 
 		  <el-col :span="6"  class="text-right text-style-sm">
 		  	上传说明图片:
 		  </el-col>	
 		  <el-col :span="14">
-			<el-upload
-			  :action="actionUrl"
-			  list-type="picture-card"
-			  :on-success=" (response, file, fileList) =>{ return  uploadImgeSuccess(fileList, index)}"
-          	  :on-remove="()=>{  return  handleRemove(fileList, index) }">
-			  <span class="remind">点击上传</span>
-			</el-upload>
-			<el-dialog :visible.sync="item.dialogVisible" size="tiny">
-			  <img width="100%" :src="item.dialogImageUrl" alt="">
-			</el-dialog>
+			<el-upload			  			
+	  			ref="supplements"
+		        :action="actionUrl"
+		        :auto-upload="false"
+		        list-type="picture-card"
+		        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
+		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"		        
+		        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}">	
+		        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
+		        <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button>
+		      </el-upload>
+		      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
+		        <img width="100%" :src="item.dialogImageUrl" alt="">
+		      </el-dialog>
 		  </el-col>	    			  
 		</el-row>		
-			<el-form-item label="要求信息:" >
+			<el-form-item label="要求信息:" class="padding-top">
 			    <el-input type="textarea" v-model="item.requirement" placeholder="请填写要求信息"></el-input>
 			</el-form-item>
 			<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
@@ -40,13 +44,12 @@ import { mapGetters } from 'vuex'
 				aboutList:[
 					{
 					id: 0,
-					imgUrls:[],
-					requirement:"",
+					imgUrl:'',
+					requirement:"0",
 					dialogVisible: false,
 					dialogImageUrl: false
 					}
-				],
-				
+				],				
 			}
 		},
 		watch:{
@@ -56,7 +59,7 @@ import { mapGetters } from 'vuex'
 					curVal.forEach((item, index) =>{
 						value[index] = {
 							requirement : item.requirement,
-							picture: item.imgUrls
+							picture: item.imgUrl
 						}
 					})
 					this.$emit("setAbout",value)
@@ -73,27 +76,27 @@ import { mapGetters } from 'vuex'
 	        }
 	     },
 		methods:{
-			handleRemove(fileList, index) {
-		          let imgs = [];
-		          fileList.forEach((item ,index) =>{
-		            imgs.push(item.response.content.url)
-		          })
-		        
-		          this.aboutList[index].imgUrls = imgs.slice(0, imgs.length)
-		      },
-		      uploadImgeSuccess(fileList , index){
-		        let imgs = [];
-		        fileList.forEach((item ,index) =>{
-		          imgs.push(item.response.content.url)
-		        })
-		        
-		        this.aboutList[index].imgUrls = imgs.slice(0, imgs.length)
-		        		//console.log(this.aboutList)
-		      }, 
-				addAbout(){
+			handleRemoveSingle(file,index) {
+		    	this.aboutList[index].imgUrl = ''
+		    },		      
+		    uploadImgeSuccessSingle(response, index){
+		        if (response.status == 200 ) {
+		        	 this.aboutList[index].imgUrl = response.content.url
+		        	}else{
+		        		//response.msg
+		        	}
+		    },
+		    handlePictureCardPreviewSingle(file,index) {
+		        this.aboutList[index].dialogImageUrl = file.url;
+		        this.aboutList[index].dialogVisible = true;
+		    },
+	        submitImg(index) {
+	       	 	this.$refs.supplements[index].submit();
+	     	}, 
+			addAbout(){
 		    	let about = {
 		    		id: '',
-					imgUrls:[],
+					imgUrl:'',
 					requirement:"",
 					dialogVisible: false,
 					dialogImageUrl: false

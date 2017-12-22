@@ -76,7 +76,6 @@
 <script>
 import Footerinfo from "../footer"
 import qs from 'qs';
-
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import {setCookie,getCookie} from '../../cookies.js'
@@ -108,7 +107,6 @@ export default {
     console.log("login")
     /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
     if(getCookie("phone")){
-        console.log("login")
         this.$router.push('/login')
     }
   },
@@ -122,22 +120,16 @@ export default {
     },
     login(){
       let url= this.getUrl+'/Home/User/loginCheck'   
-      // let args = this.account
-      let args = {
-                    phone: 18271632203,
-                    password: 123456
-                  }
+      let args = this.account
       this.axios.post(url, qs.stringify(args))
       .then((res)=>{
-            // console.log(res)
             if(res.data.status == 200){
               this.account= { name: '', save : false}
               this.getCustomerInfo({
                 avatar: res.data.content.avatar,
                 id: res.data.content.id
               });
-              // setCookie('phone','18271632203',10000*60)
-              setCookie('phone','18271632203',10000*60)
+              setCookie('phone',this.account.name,10000*60)
               this.$router.push("/")
             }else{
               this.message= res.data.msg

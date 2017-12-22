@@ -3,8 +3,7 @@
 		<div class="container bg-white">
 			<!-- 加工单编辑 -->
 			<h3 class="text-center padding-top-bottom">加工单编辑</h3>
-			<el-form ref="form" label-width="25%"  >
-		
+			<el-form ref="form" label-width="25%"  >		
 				<Sheet v-on:setWorkSheet="getWorkSheet" 
 					:category = "receiptContent.category" 
 					:styles="receiptContent.style"
@@ -175,37 +174,31 @@ export default {
          'getUrl',
       ]),
       submitotalFee(){
-      	console.log(this.submitReceipt.total_fee)
       	return this.submitReceipt.total_fee
       }
   },
   mounted(){
-    //console.log( 'zhizhu')
     if( getCookie('phone') == ''){
       this.$router.push("/login")
     }    
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=2').then((res)=>{
-        // console.log(res.data.content)
         if(res.data.status == 200){
         	this.receiptContent = res.data.content
         }else{
-
+        	
         }          
     })
-
     this.getpayfront();
   },
 methods:{
     onSubmit(){
-    	// console.log(submitReceipt)
     	this.$set(this.submitReceipt, 'type', 2)
-    	this.beforeReceipt(this.submitReceipt);    	
+    	this.beforeReceipt(this.submitReceipt);
     },
     getpayfront(){
     	let url = this.getUrl    		
 	    this.axios.post(url+'/Home/Receipt/payfront?money').then((res)=>{
-	        // console.log(res.data.content)
 	        if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
 	        }else{
@@ -241,20 +234,15 @@ methods:{
     	self.$set(self.submitReceipt, 'cate_name', val.fabricType)
     	self.$set(self.submitReceipt, 'style_name', val.kindType)
     	self.$set(self.submitReceipt, 'mode_name', val.status)
-    	// console.log(val)
     },    
     getColornumber(val,total){
     	let self = this;
-    	//self.$set(self.self.zizhuIndent, 'colorNum', val)    	
-    	// console.log(val)
     	self.$set(self.submitReceipt, 'size', val)    	
     	self.$set(self.submitReceipt, 'demanding_account', total)
     	self.$set(self.receiptContent, 'demanding_account', total)    	
     },
     getPeriod(val){
     	let self = this;
-    	// self.$set(self.self.zizhuIndent, 'period', val)
-    	// console.log(val)
     	self.$set(self.submitReceipt, 'fee', val.fee)
     	self.$set(self.submitReceipt, 'total_fee', val.total_fee)
     	self.$set(self.submitReceipt, 'expire_time', val.expire_time)
@@ -263,19 +251,15 @@ methods:{
     },
     getClothePic(val){
     	let self = this;
-    	//self.$set(self.self.zizhuIndent, 'clothePic', val)
-    	//console.log(val)
 		self.$set(self.submitReceipt,'front_picture', val.front_picture)
 		self.$set(self.submitReceipt,'back_picture' , val.back_picture)
 		self.$set(self.submitReceipt,'left_picture' , val.left_picture)
 		self.$set(self.submitReceipt,'right_picture', val.right_picture)
 		self.$set(self.submitReceipt,'part_picture' , val.part_picture)
-		
+    	self.$set(self.submitReceipt,'other_picture', val.other_picture)
     },
     getQuality(val){
-    	let self = this;
-    	//self.$set(self.self.zizhuIndent, 'quality', val)
-    	//console.log(val)    	
+    	let self = this;    	
 		self.$set(self.submitReceipt,'check', val.check)
 		self.$set(self.submitReceipt,'error' , val.error)
 		self.$set(self.submitReceipt,'supplement' , val.supplement)
@@ -284,21 +268,14 @@ methods:{
     },
     getFabric(val){
     	let self = this;
-    	// self.$set(self.self.zizhuIndent, 'fabric', val)
-    	// console.log(val)
     	self.$set(self.submitReceipt,'fabric', val)
     },
     getAbout(val){
     	let self = this;
-    	//self.$set(self.self.zizhuIndent, 'about', val)
-    	//console.log(val)
     	self.$set(self.submitReceipt,'supplements', val)
-    	self.$set(self.submitReceipt,'other_picture', val.other_picture)
     },
     getNewAddr(val){
     	let self = this;
-    	//self.$set(self.self.zizhuIndent, 'newAddr', val)
-    	// console.log(val)
 		self.$set(self.submitReceipt,'is_deposited', val.is_deposited)
 		self.$set(self.submitReceipt,'phone', val.phone)
 		self.$set(self.submitReceipt,'province', val.province)

@@ -52,20 +52,23 @@
 		    <el-input type="textarea" v-model="form.requirement"></el-input>
 		</el-form-item>
 
-		<el-row :gutter="10"  class="space" >
+		<el-row :gutter="10"  class="space uploadimg" >
 		  <h6>版型图(若有版型图请上传)</h6>
 	      <el-col :span="14" :offset="6">
-	      <el-upload
-	        :action="actionUrl"
-	        list-type="picture-card"
-	        :on-success="uploadImgeSuccess"
-	        :on-preview="handlePictureCardPreview"
-	        :on-remove="handleRemove">
-	        <span class="remind">点击上传</span>
-	      </el-upload>
-	      <el-dialog :visible.sync="dialogVisible" size="tiny">
-	        <img width="100%" :src="dialogImageUrl" alt="">
-	      </el-dialog>
+	      <el-upload			  			
+	  			ref="banxing"
+		        :action="actionUrl"
+		        :auto-upload="false"
+		        list-type="picture-card"
+		        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file)}"
+		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response)}"		        
+		        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file)}">	
+		        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
+		        <el-button class="click-submit"	 @click="submitImg">点击上传</el-button>
+		      </el-upload>
+		      <el-dialog :visible.sync="dialogVisible" size="tiny">
+		        <img width="100%" :src="dialogImageUrl" alt="">
+		      </el-dialog>
 	      </el-col>             
 	    </el-row>
 	</div>
@@ -106,35 +109,29 @@ import { mapGetters } from 'vuex'
 		watch:{
 			form:{
 				handler(curVal,oldVal){
-					// console.log(curVal)
 					this.$emit("setQuality",curVal)
 		　　　　},
 		　　　　deep:true
 			}
 		},
 		methods:{
-			handleRemove(file, fileList) {
-		        //console.log(file, fileList);
-		        let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.form.imageUrls = imgs.slice(0, imgs.length)
+			handleRemoveSingle(file) {
+		    	this.form.imageUrls = ''
+		    },		      
+		    uploadImgeSuccessSingle(response){
+		        if (response.status == 200 ) {
+		        	 this.form.imageUrls = response.content.url
+		        	}else{
+		        		//response.msg
+		        	}
 		    },
-		    handlePictureCardPreview(file) {
-		    	this.dialogImageUrl = file.url;
-		        this.dialogVisible = true
+		    handlePictureCardPreviewSingle(file) {
+		        this.dialogImageUrl = file.url;
+		        this.dialogVisible = true;
 		    },
-		    uploadImgeSuccess(response, file, fileList){
-		    	//console.log(response)
-		    	// console.log(file)
-		    	//console.log(fileList)
-		    	let imgs = [];
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.form.imageUrls = imgs.slice(0, imgs.length)
-		    },
+	        submitImg(index) {
+	       	 	this.$refs.banxing.submit();
+	     	}, 
 			addDetail(){	
 				let detail = {
 					position : "",
