@@ -339,6 +339,8 @@ export default {
   }
   .input-secret{
     position: absolute;
+    top: 0;
+    left: 0;
     height: 32px;
     width: 32px;
     background-position: -48px 3px;
@@ -351,7 +353,7 @@ export default {
     opacity: 0.8;
   }
   .input-text-indent{
-      text-indent: 24px;
+    text-indent: 24px;
   }
   span.err{
     text-indent: 1em;
