@@ -3,8 +3,7 @@
   <!-- header -->
   <div class="container head-height">
      <div class="login-sucess clearfix">
-      <div class="fl">
-        <img class="avatarImg" :src="avatarSrc"  />
+      <div class="fl">        
         <span>欢迎登陆亿尚智能平台！</span></div>
       <div class="fr back" @click="logOut">
         <span class="logOut bg-icon"></span>退出登录
@@ -17,7 +16,7 @@
         <el-row >
           <el-col :span="4">
             <router-link to="/" >
-               <img src="../../assets/logo-mini.jpg">    
+              <img class="avatarImg" :src="avatarSrc" />
             </router-link>                  
           </el-col>
           <el-col :span="14">
@@ -51,8 +50,8 @@ export default {
   name: 'index1',
   components: { Footerinfo},
   data () {
-    return {      
-      activeIndex: "1",
+    return {
+      loginSucess: false,
       listNav:[{title:'首页',path:"/"},
       {title:'自主发单',path:"/zizhu"},
       {title:'无忧发单',path:"/wuyou"},

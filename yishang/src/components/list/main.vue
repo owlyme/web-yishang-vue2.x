@@ -152,6 +152,7 @@ export default{
 			totalRows: 1,
 			perPage : 1,
    		currentPage: 1,
+      currentStatus: 'x',
    		goodsList:[],
       savedList:[],
       banner: null
@@ -167,16 +168,16 @@ export default{
   },
   mounted(){  
     this.getBanner()
-    this.getMainlist({page: this.currentPage})
+    this.getMainlist({page: this.currentPage,status: 'x'})
   },
   watch:{
     currentPage:{
       handler(curVal,oldVal){
-        this.getMainlist({page: curVal})
-          },
-    　  deep:true
-      }
-    },
+        this.getMainlist({page: curVal,status: this.currentStatus})
+      },
+      deep:true
+    }
+  },
 	methods:{
     getBanner(){
       let url= this.getUrl+'/Home/Index/getBanner'
@@ -188,7 +189,7 @@ export default{
           }          
       }) 
     },
-    getMainlist(args){
+    getMainlist(args){  
       let url= this.getUrl+'/Home/Index/index'
       this.axios.post(url, qs.stringify(args)).then((res)=>{
           if(res.data.status == 200){
@@ -212,26 +213,11 @@ export default{
           self.$set(item,"flag",true)
           self.contentTitle= item.type
         }
-      });
+      });      
     },
     displayOrNot(keyword){
-      let self = this;
-      self.goodsList= [];
-      self.savedList.forEach((item, _index)=>{
-         if(item.status[0] == '3' && item.status.indexOf('000') == -1 ){
-            if(keyword[1] == item.status[1] ){
-               self.goodsList.push(self.savedList[_index])
-            }
-            if(keyword[2] == item.status[2] ){
-               self.goodsList.push(self.savedList[_index])
-            }
-            if(keyword[3] == item.status[3] ){
-               self.goodsList.push(self.savedList[_index])
-            }
-         }else if(item.status == keyword || keyword == 'x') {
-           self.goodsList.push(self.savedList[_index])
-         }
-      })
+      this.currentStatus = keyword
+      this.getMainlist({status: keyword})
     }
 	}
 }

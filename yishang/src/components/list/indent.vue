@@ -335,6 +335,7 @@
 			          }],
 				size : ["颜色(数量)","尺码 XS","S","M","L","XL","XXL","3XL","4XL"], 
 				contentTitle:"所有订单",
+				currentStatus: 'x',
 				goodsList:[],
 				savedList:[],
 				selectSchedule:{},
@@ -342,7 +343,7 @@
 			}
 		},
 		mounted(){
-			this.getMainlist({page: 1})
+			this.getMainlist({status: 'x'})
 		},
 		computed:{
 			...mapGetters([
@@ -419,6 +420,8 @@
 		    	this.displayOrNot(keyword)
 		    },		    
 		    displayOrNot(keyword){
+		      this.getMainlist({status: keyword})
+		      return 
 		      let self = this;
 		      self.goodsList= [];
 		      self.savedList.forEach((item, _index)=>{

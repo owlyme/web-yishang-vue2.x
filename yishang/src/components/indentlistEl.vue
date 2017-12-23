@@ -14,7 +14,7 @@
 				<b-col >交货时间：{{  goodsMsg.delivery_date }} </b-col>
 				<b-col>
 					<b-row align-v="center" class="inner">
-						<b-col cols="5">
+						<b-col cols="5" v-html="goodsMsg.msg">
 							{{ goodsMsg.msg}} 			
 						</b-col>
 						<b-col cols="5">

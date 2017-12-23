@@ -28,19 +28,21 @@
 			</el-form-item>
 		  </el-col>
 		  <el-col :span="12">
-		  	<!-- <el-form-item :label="'误差标准范围'+ (index+1)+':'" >
-				<el-select v-model="item.error" placeholder="请选择你的误差标准" >
-			      <el-option 
-			    				v-for="(item, index) in error"
-					    		:key="'error'+index"
-					    		:label="item.error_value" :value="item.error_id">
+		  	   <!--  <el-form-item :label="'误差标准范围'+ (index+1)+':'" >
+			    <el-input v-model="item.error" placeholder="请输入误差标准"></el-input>
+			  </el-form-item>	 -->
+
+			  <el-form-item :label="'误差标准范围'+ (index+1)+':'" label-width="30%" >
+			    <el-select v-model="item.error" placeholder="请选择你的误差标准"  style="width:55%"	>
+			      <el-option
+	    				v-for="(item, index) in error"
+			    		:key="'error'+index"
+			    		:label="item.error_value" :value="item.error_id" >
 					</el-option>
 			    </el-select>
-			</el-form-item>     -->
+			</el-form-item>
 
-		  	    <el-form-item :label="'误差标准范围'+ (index+1)+':'" label-width="30%">
-			    <el-input v-model="item.error" placeholder="请输入误差标准" style="width:55%"></el-input>
-			  </el-form-item>	
+
 		  </el-col>
 		  <i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</el-row>
@@ -52,22 +54,22 @@
 		    <el-input type="textarea" v-model="form.requirement"></el-input>
 		</el-form-item>
 
-		<el-row :gutter="10"  class="space uploadimg" >
+		<el-row :gutter="10"  class="space " >
 		  <h6>版型图(若有版型图请上传)</h6>
 	      <el-col :span="14" :offset="6">
 	      	<div  class="floatleft">
 			  	<img :src="showSrc" class="show-demo2">
 			</div>	
 			 <!-- :auto-upload="false" -->
-	      <el-upload		
+	      <el-upload
 	     		class="floatleft"	  			
 	  			ref="banxing"
 		        :action="actionUrl"
 		       
 		        list-type="picture-card"
-		        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file)}"
-		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response)}"		        
-		        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file)}">	
+		        :on-preview="(file) =>{ return  handlePictureCardPreview(file)}"
+		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response)}"		        
+		        :on-remove="(file, fileList) =>{ return  handleRemove(file)}">	
 		        <span  slot="trigger" class="remind" >点击上传</span>
 		       <!--  <el-button class="click-submit"	 @click="submitImg">点击上传</el-button> -->
 		      </el-upload>
@@ -95,7 +97,7 @@ import { mapGetters } from 'vuex'
 		          error: '',
 		          delivery: false,	          
 		          requirement: '',
-		          imageUrls:"",
+		          imageUrls:[],
 		          supplement:[
 			          {
 						name : "",
@@ -121,23 +123,30 @@ import { mapGetters } from 'vuex'
 			}
 		},
 		methods:{
-			handleRemoveSingle(file) {
-		    	this.form.imageUrls = ''
-		    },		      
-		    uploadImgeSuccessSingle(response){
+			handleRemove(fileList) {
+		    	if(!this.uploadImgArr[index].imgUrls.length) return;
+		        let imgs = [];
+		    	fileList.forEach((item ,index) =>{
+		    		imgs.push(item.response.content.url)
+		    	})
+		    	this.form.imageUrls = imgs.slice(0, imgs.length)
+		    },
+		    uploadImgeSuccess(response){
 		        if (response.status == 200 ) {
-		        	 this.form.imageUrls = response.content.url
+		        	 this.form.imageUrls.push(response.content.url)
 		        	}else{
 		        		//response.msg
 		        	}
 		    },
-		    handlePictureCardPreviewSingle(file) {
+		    handlePictureCardPreview(file) {
 		        this.dialogImageUrl = file.url;
 		        this.dialogVisible = true;
-		    },
-	        submitImg(index) {
+		    },	    
+	     	submitImgArr() {
 	       	 	this.$refs.banxing.submit();
-	     	}, 
+	     	},
+				      
+		
 			addDetail(){	
 				let detail = {
 					position : "",

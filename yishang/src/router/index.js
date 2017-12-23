@@ -8,7 +8,8 @@ import Indexlist from '@/components/list/index'
 	import Indent from '@/components/list/indent'
 Vue.use(Router)
 const router = new Router({
-  mode:'hash',
+  // mode:'hash',
+  mode: 'history',
   routes: [    
     {path: '/login',name: 'Login',component: Login    },
     {path: '/', name: 'Indexlist',component: Indexlist,

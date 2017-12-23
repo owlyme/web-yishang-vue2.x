@@ -129,7 +129,6 @@ export default {
   },
 	methods:{
 	    onSubmit(){
-	    	this.openMessage({ele: this, str: 4444});
 	    	this.$set(this.submitReceipt, 'type', 1)
 	    	this.beforeReceipt(submitReceipt);
 	    },
