@@ -362,7 +362,7 @@
 		      'setIndentBlock'
 		    ]),
 		    getMainlist(args){
-		      let url= this.getUrl+'/Home/Index/index'
+		      let url= this.getUrl+'Home/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
 		          if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
@@ -374,7 +374,7 @@
 		      })  
 		    },
 		    getSchedule(id){
-		    	let url= this.getUrl+'/Home/ReceiptOrder/schedule'
+		    	let url= this.getUrl+'Home/ReceiptOrder/schedule'
 		      	this.axios.post(url, qs.stringify({order_id: id }))
 		      	.then((res)=>{
 		          if(res.data.status == 200){
@@ -387,7 +387,7 @@
 		      	})  
 		    },
 		    getDetails(id){
-		    	let url= this.getUrl+'/Home/ReceiptOrder/details'
+		    	let url= this.getUrl+'Home/ReceiptOrder/details'
 			      this.axios.post(url, qs.stringify({order_id: id }))
 			      .then((res)=>{
 		           // console.log(res)
@@ -459,6 +459,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	#indent{
+		margin-top: 20px;
 		background: rgb(248,248,248);
 	}
 	li{

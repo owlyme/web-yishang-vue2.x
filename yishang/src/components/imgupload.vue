@@ -1,21 +1,27 @@
 <template>
-	<div >
+	<div>
 		<h5>样衣照片</h5>
 		<div class="uploadimg ">
-			<el-row :gutter="10"  class="space" 
+			<el-row :gutter="10"  class="space " 
 				v-for="(item, index) in uploadSingleImg" :key="'uploadSingleImg'+ index"	>		 
 			  <el-col :span="6" class="text-right text-style-sm"> 	{{ item.name }}	  </el-col>	
 			  <el-col :span="14" >
-			  		<el-upload			  			
+			  		<div  class="floatleft">
+			  			<img :src="item.showSrc" class="show-demo1">
+			  		</div>			  		
+			  		<el-upload	
+			  			class="floatleft"
+			  					  			
 			  			ref="imgSingle"
 				        :action="actionUrl"
-				        :auto-upload="false"
+				        
 				        list-type="picture-card"
 				        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
-				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"		        
-				        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}">	
-				        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
-				        <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button>
+				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"    
+				        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}">
+
+				        <span  slot="trigger" class="remind" >点击上传</span>
+				       <!--  <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
 				      </el-upload>
 				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
 				        <img width="100%" :src="item.dialogImageUrl" alt="">
@@ -30,17 +36,20 @@
 			  	{{ item.name }}
 			  </el-col>	
 			  <el-col :span="14">
+			  		<div  class="floatleft" v-if="item.showSrc1">
+			  			<img :src="item.showSrc1" class="show-demo1">
+			  			<img :src="item.showSrc2" class="show-demo1">
+			  		</div>	
 			  		<el-upload
 			  			ref="imgArr"
 				        :action="actionUrl"
-				        :auto-upload="false"
 				        list-type="picture-card"
 				        :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
 				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"		        
 				        :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">
 
-				        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
-				        <el-button class="click-submit"	 @click="submitImgArr(index)">点击上传</el-button>
+				        <span  slot="trigger" class="remind" >点击上传</span>
+				        <!-- <el-button class="click-submit"	 @click="submitImgArr(index)">点击上传</el-button> -->
 				      </el-upload>
 				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
 				        <img width="100%" :src="item.dialogImageUrl" alt="">
@@ -67,24 +76,28 @@ import { mapGetters } from 'vuex'
 				uploadSingleImg:[
 					{
 						name:'正面全览照',
+						showSrc: require('../assets/front-pic.jpg'),
 						dialogVisible: false,
 						dialogImageUrl: false,
 						imgUrl: ''						
 					},
 					{
 						name:'背面全览照',
+						showSrc: require('../assets/back-pic.jpg'),
 						dialogVisible: false,
 						dialogImageUrl: false,
 						imgUrl: ''
 					},
 					{
 						name:'左侧面全览照',
+						showSrc: require('../assets/left-pic.jpg'),
 						dialogVisible: false,
 						dialogImageUrl: false,
 						imgUrl: ''
 					},
 					{
 						name:'右侧面全览照',
+						showSrc: require('../assets/right-pic.jpg'),
 						dialogVisible: false,
 						dialogImageUrl: false,
 						imgUrl: ''
@@ -93,6 +106,8 @@ import { mapGetters } from 'vuex'
 				uploadImgArr:[
 					{
 						name:'局部细节图',
+						showSrc1: require('../assets/part1-pic.jpg'),
+						showSrc2: require('../assets/part2-pic.jpg'),
 						dialogVisible: false,
 						dialogImageUrl: false,
 						imgUrls:[],
@@ -197,8 +212,7 @@ import { mapGetters } from 'vuex'
 						
 					}
 				this.uploadImgArr.push(otherPics)
-	     	}
-
+	     	},
 		}
 	}
 </script>
@@ -237,5 +251,13 @@ import { mapGetters } from 'vuex'
   .space{
   	margin-bottom:15px;
   }
-  
+  .show-demo1{
+  	border:1px solid #e0e0e0;
+  	height: 145px;
+  	width: 145px;
+  }
+  .floatleft{
+  	float: left;
+  	margin-right: 10px;
+  }
 </style>

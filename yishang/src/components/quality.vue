@@ -55,16 +55,21 @@
 		<el-row :gutter="10"  class="space uploadimg" >
 		  <h6>版型图(若有版型图请上传)</h6>
 	      <el-col :span="14" :offset="6">
-	      <el-upload			  			
+	      	<div  class="floatleft">
+			  	<img :src="showSrc" class="show-demo2">
+			</div>	
+			 <!-- :auto-upload="false" -->
+	      <el-upload		
+	     		class="floatleft"	  			
 	  			ref="banxing"
 		        :action="actionUrl"
-		        :auto-upload="false"
+		       
 		        list-type="picture-card"
 		        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file)}"
 		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response)}"		        
 		        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file)}">	
-		        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
-		        <el-button class="click-submit"	 @click="submitImg">点击上传</el-button>
+		        <span  slot="trigger" class="remind" >点击上传</span>
+		       <!--  <el-button class="click-submit"	 @click="submitImg">点击上传</el-button> -->
 		      </el-upload>
 		      <el-dialog :visible.sync="dialogVisible" size="tiny">
 		        <img width="100%" :src="dialogImageUrl" alt="">
@@ -82,6 +87,7 @@ import { mapGetters } from 'vuex'
 		props: ['check', "error"],
 		data(){
 			return{
+				showSrc: require('../assets/mode-pic.jpg'),
 				dialogVisible: false,
 				dialogImageUrl:false,
 				form: {
@@ -166,4 +172,13 @@ import { mapGetters } from 'vuex'
 	right: 15%;	
 	top: 10px;
 }
+  .show-demo2{
+  	border:1px solid #e0e0e0;
+  	height: 145px;
+  	width: 200px;
+  }
+  .floatleft{
+  	float: left;
+  	margin-right: 10px;
+  }
 </style>

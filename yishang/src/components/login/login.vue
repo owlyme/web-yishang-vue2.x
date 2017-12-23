@@ -2,7 +2,7 @@
  <div >
   <div class="container header" >
      <b-row align-h="center" align-v="center" >
-        <b-col cols="3" class="logo"><img src="../../assets/logo.png"></b-col>
+        <b-col cols="4" class="logo"><img src="/static/login/logo.png"></b-col>
         <b-col cols="8" class="login">欢迎登录</b-col>
     </b-row>   
   </div>
@@ -16,15 +16,15 @@
         <b-col>
           <h2 class="slogan center"><img src="/static/login/app.png" /></h2>
           <h2 class="slogan center">买商品上<span class="tianmao">天猫</span></h2>
-          <h2 class="slogan center">买服务上<span class="yishang">亿尚</span></h2>
-          <h6 class="slogan2 center"><span>亿尚APP，接单发单就是那么简单</span></h6>
+          <h2 class="slogan center">买服务上<span class="yishang">衣依</span></h2>
+          <h6 class="slogan2 center"><span>衣依APP，接单发单就是那么简单</span></h6>
         </b-col>
         <!-- 登录 -->
         <b-col class="login-form center" >
           <keep-alive>
             <!-- 二维码 -->
             <div class="qr-code" v-if="switchToPC">
-              <h4>使用亿尚APP 扫码安全登录</h4>
+              <h4>使用衣依APP 扫码安全登录</h4>
               <div id="qr-code">
                 <img :src="qrCodeUrl" alt="二维码" class="qr-code-img" />
               </div>
@@ -104,8 +104,6 @@ export default {
         ]),
     },
   mounted(){
-    this.$router.push('/login')
-    console.log("login")
     /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
     if(getCookie("phone")){
         this.$router.push('/login')
@@ -117,6 +115,7 @@ export default {
     ]),
     ...mapMutations([
       'setSavePassword',
+      'setCustomerInfo'
     ]),
     focused (val){
       this.message = val
@@ -131,14 +130,15 @@ export default {
       this.axios.post(url, qs.stringify(args))
       .then((res)=>{
             if(res.data.status == 200){
-              this.getCustomerInfo({
+              this.setCustomerInfo({
                 avatar: res.data.content.avatar,
                 id: res.data.content.id
               });
               if(this.account.save){
                 this.setSavePassword(true)
               }
-              setCookie('phone',this.account.name,10000*60)              
+              setCookie('yiyiavatar',res.data.content.avatar,10000*60)
+              setCookie('phone',this.account.name,10000*60)
               this.account= { name: '',password:'', save : false}
               this.$router.push("/")
             }else{

@@ -195,6 +195,7 @@ methods:{
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
     	this.beforeReceipt(this.submitReceipt);
+
     },
     getpayfront(){
     	let url = this.getUrl    		
@@ -291,7 +292,8 @@ methods:{
 
 </script>
 <style scoped>
-	#wuyou{
+	#wuyou{		
+		margin-top: 20px;
 		background: rgb(248,248,248);
 	}
 	.submit button{

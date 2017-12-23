@@ -9,9 +9,8 @@
             <div class="grid-content bg-purple">
               <router-link to="/zizhu">
                 <div class="zizhu-bg"></div>
-              </router-link>
-              
-              <h4>自主发单</h4>
+                <h4>自主发单</h4>
+              </router-link>   
               <p>
                 自主发单需自主填写发单信息<br>
                 确定发单以后会将订单直接发送至工厂抢单界面<br>
@@ -23,8 +22,8 @@
             <div class="grid-content bg-purple-light ">
               <router-link to="/wuyou">
                  <div class="wuyou-bg"></div>
-              </router-link>             
-              <h4>无忧发单</h4>
+                 <h4>无忧发单</h4>
+              </router-link> 
               <p>
                 无忧发单需自主填单信息<br>
                 系统会匹配符合订单信息的专业"M"人员与您对接<br>
@@ -282,9 +281,15 @@ export default{
     color: #fff;
     background: #C44DDC;
   }
+  .bg-purple h4{
+    color: #fff;
+  }
   .bg-purple-light{
     background: #fff;
   } 
+  .bg-purple-light h4{
+    color: #666;
+  }
   .zizhu-bg,
   .wuyou-bg{
     height: 102px;

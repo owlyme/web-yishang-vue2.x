@@ -40,7 +40,7 @@ import { mapGetters } from 'vuex'
 	          'getUploadUrl'
 	        ]),
 	      imgsrc(){
-	      	return this.getUploadUrl+ "/"+this.goodsMsg.front_picture
+	      	return this.getUploadUrl+this.goodsMsg.front_picture
 	      }
 	    },
 	}

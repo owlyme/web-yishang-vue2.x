@@ -45,7 +45,7 @@
 	          'getUrl'
 	        ]),
 	      imgsrc(){
-	      	return this.getUploadUrl+ "/"+this.goodsMsg.front_picture
+	      	return this.getUploadUrl+this.goodsMsg.front_picture
 	      }
 	    },
 		methods:{

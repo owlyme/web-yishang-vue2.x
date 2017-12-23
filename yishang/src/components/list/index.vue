@@ -3,7 +3,9 @@
   <!-- header -->
   <div class="container head-height">
      <div class="login-sucess clearfix">
-      <div class="fl">欢迎登陆亿尚智能平台！</div>
+      <div class="fl">
+        <img class="avatarImg" :src="avatarSrc"  />
+        <span>欢迎登陆亿尚智能平台！</span></div>
       <div class="fr back" @click="logOut">
         <span class="logOut bg-icon"></span>退出登录
       </div>
@@ -20,15 +22,7 @@
           </el-col>
           <el-col :span="14">
               <div class="link-nav">
-                <div class="nav-h clearfix">                   
-                     <!--  <span 
-                      v-for="(item, index) in listNav"
-                      :index="index" 
-                      class="muneNav"
-                      :class="{active : item.flag}" 
-                      @click="fliter(index,item.path)"
-                      >{{item.title}}</span> -->
-
+                <div class="nav-h clearfix">
                       <router-link 
                       class="muneNav"
                       v-for="(item, index) in listNav"                      
@@ -40,7 +34,6 @@
         </el-row>  
     </div>
   </div>
-
   <div class="bg-white"> 
     <keep-alive> <router-view/> </keep-alive> 
   </div>
@@ -58,7 +51,7 @@ export default {
   name: 'index1',
   components: { Footerinfo},
   data () {
-    return {
+    return {      
       activeIndex: "1",
       listNav:[{title:'首页',path:"/"},
       {title:'自主发单',path:"/zizhu"},
@@ -67,7 +60,6 @@ export default {
     }
   },
   mounted(){
-    // console.log( 'index')
     if( getCookie('phone') == ''){
         this.$router.push("/login")
       }
@@ -75,8 +67,14 @@ export default {
   computed:{
       ...mapGetters([
          'getUrl',
-         'getSavePassword'
+         'getSavePassword',
+         'getCustomer',
+         'getUploadUrl'
       ]),
+      avatarSrc(){
+        if( getCookie('yiyiavatar') ) return this.getUploadUrl+ getCookie('yiyiavatar') 
+        return this.getUploadUrl +this.getCustomer.avatar
+      }
   },
   methods:{
     ...mapActions([
@@ -94,6 +92,7 @@ export default {
               this.$router.push("/login")
               if(!this.getSavePassword){
                 delCookie('phone')
+                delCookie('yiyiavatar')
               }
             }else{
 
@@ -131,23 +130,30 @@ export default {
   line-height: 1.2;
   color: rgb(102, 102, 102)
   }
-  .fl{
-  float: left;
-  }
-  .fr{
-  float: right;
-  }
   .login-sucess{
   height: 44px;
   line-height: 44px;
   font-size: 15px;
+  }
+  .fl{
+    height: 100%;
+  float: left;
+  }
+  .fr{
+    height: 100%;
+  float: right;
+  }
+
+  
+  .avatarImg{
+    height: 100%;
   }
   .banner{
   height: 360px;
   }
   .pages-nav .container{
   height: 80px;
-  margin-bottom: 20px;
+
   }
   .pages-nav img{
   height: 80px;
@@ -163,7 +169,7 @@ export default {
   height: 32px;
   width: 32px;
   vertical-align: top;
-  background-position: -138px  12px;
+  background-position: -138px  10px;
   opacity: 0.4;
   transition: opacity 0.3s;
   }

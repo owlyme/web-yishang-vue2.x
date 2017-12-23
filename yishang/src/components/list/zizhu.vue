@@ -214,6 +214,7 @@ export default {
 </script>
 <style scoped>
 	#zizhu{
+		margin-top: 20px;
 		background: rgb(248,248,248);
 	}
 	.submit button{

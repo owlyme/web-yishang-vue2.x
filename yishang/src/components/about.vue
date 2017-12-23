@@ -7,16 +7,19 @@
 		  	上传说明图片:
 		  </el-col>	
 		  <el-col :span="14">
-			<el-upload			  			
+		  	<div  class="floatleft" v-if="item.showSrc">
+			  			<img :src="item.showSrc" class="show-demo1">
+			  </div>	
+			<el-upload
+				class="floatleft"			  			
 	  			ref="supplements"
 		        :action="actionUrl"
-		        :auto-upload="false"
 		        list-type="picture-card"
 		        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
 		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"		        
 		        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}">	
-		        <span  slot="trigger" class="remind" ><i class="el-icon-plus"></i></span>
-		        <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button>
+		        <span  slot="trigger" class="remind" >点击上传</span>
+		        <!-- <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
 		      </el-upload>
 		      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
 		        <img width="100%" :src="item.dialogImageUrl" alt="">
@@ -45,7 +48,8 @@ import { mapGetters } from 'vuex'
 					{
 					id: 0,
 					imgUrl:'',
-					requirement:"0",
+					showSrc: require('../assets/back-pic.jpg'),
+					requirement:"",
 					dialogVisible: false,
 					dialogImageUrl: false
 					}
@@ -138,4 +142,13 @@ import { mapGetters } from 'vuex'
 	right: 0px;
 	top: 10px;
 }
+  .show-demo1{
+  	border:1px solid #e0e0e0;
+  	height: 145px;
+  	width: 145px;
+  }
+  .floatleft{
+  	float: left;
+  	margin-right: 10px;
+  }
 </style>
