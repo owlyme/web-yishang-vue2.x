@@ -19,7 +19,7 @@
 			  <el-col :span="19">
 			  		<div class="myIndent">{{contentTitle}}</div>
 			  		<div v-for="(item,index) in goodsList" :index="index+'indent'">
-			  			<IndentList :goodsMsg="item" v-on:change="switchBlock(item.order_id)"></IndentList>
+			  			<IndentList :goodsMsg="item" v-on:change="switchBlock"></IndentList>
 			  		</div>
 			  </el-col>
 			</el-row>

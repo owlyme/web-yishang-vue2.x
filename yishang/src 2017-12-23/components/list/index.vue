@@ -4,7 +4,7 @@
   <div class="container head-height">
      <div class="login-sucess clearfix">
       <div class="fl">        
-        <span>欢迎登陆衣依供应链平台！</span></div>
+        <span>欢迎登陆亿尚智能平台！</span></div>
       <div class="fr back" @click="logOut">
         <span class="logOut bg-icon"></span>退出登录
       </div>
@@ -45,6 +45,7 @@ import Footerinfo from "../footer"
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
+import { setCookie,getCookie,delCookie } from '../../cookies.js'
 export default {
   name: 'index1',
   components: { Footerinfo},
@@ -58,7 +59,9 @@ export default {
     }
   },
   mounted(){
- 
+    if( getCookie('phone') == ''){
+        this.$router.push("/login")
+      }
   },
   computed:{
       ...mapGetters([
@@ -68,7 +71,8 @@ export default {
          'getUploadUrl'
       ]),
       avatarSrc(){
-        if( this.$cookies.get('yiyiavatar') ) return this.getUploadUrl+ this.$cookies.get('yiyiavatar')
+        if( getCookie('yiyiavatar') ) return this.getUploadUrl+ getCookie('yiyiavatar') 
+        return this.getUploadUrl +this.getCustomer.avatar
       }
   },
   methods:{
@@ -86,8 +90,8 @@ export default {
               this.clearCustomer()        
               this.$router.push("/login")
               if(!this.getSavePassword){
-                this.$cookies.remove('yiyiphone');
-                this.$cookies.remove('yiyiavatar');
+                delCookie('phone')
+                delCookie('yiyiavatar')
               }
             }else{
 

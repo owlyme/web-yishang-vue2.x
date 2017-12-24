@@ -62,6 +62,7 @@ import About from "../about"
 import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
+import {setCookie,getCookie} from '../../cookies.js'
 
 export default {
 	name: "zizhu",
@@ -114,6 +115,9 @@ export default {
       ]),
   },
   mounted(){
+    if( getCookie('phone') == ''){
+      this.$router.push("/login")
+    }    
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=1').then((res)=>{
         if(res.data.status == 200){

@@ -79,6 +79,7 @@ import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
+import {setCookie,getCookie} from '../../cookies.js'
 
 export default {
   name: 'login',
@@ -103,7 +104,8 @@ export default {
         ]),
     },
   mounted(){
-    if(this.$cookies.get("yiyiphone")){
+    /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
+    if(getCookie("phone")){
         this.$router.push('/login')
     }
   },
@@ -120,7 +122,7 @@ export default {
       this.resFalse = false
     },
     login(){
-      let url= this.getUrl+'Home/User/loginCheck'   
+      let url= this.getUrl+'/Home/User/loginCheck'   
       let args = {
         phone : this.account.name,
         password: this.account.password
@@ -135,8 +137,8 @@ export default {
               if(this.account.save){
                 this.setSavePassword(true)
               }
-              this.$cookies.set('yiyiavatar', res.data.content.avatar, 10000*60);
-              this.$cookies.set('yiyiphone', this.account.name, 10000*60);
+              setCookie('yiyiavatar',res.data.content.avatar,10000*60)
+              setCookie('phone',this.account.name,10000*60)
               this.account= { name: '',password:'', save : false}
               this.$router.push("/")
             }else{
@@ -146,7 +148,7 @@ export default {
       })
     },
     refreshQr(){
-      let url= this.getUrl+'Home/User/qrcode'
+      let url= this.getUrl+'/Home/User/qrcode'
       this.axios.post(url).then((res)=>{
           if(res.status == 200){
             this.qrCodeUrl =res.data

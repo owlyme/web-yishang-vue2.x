@@ -52,6 +52,8 @@ const mutations = {
  },
  setCustomerInfo( state, info ){
   Vue.set(state,'customer',info);
+  console.log(info)
+  console.log(state.customer)
  },
 
 }

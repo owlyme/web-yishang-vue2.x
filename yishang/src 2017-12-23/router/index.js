@@ -8,8 +8,8 @@ import Indexlist from '@/components/list/index'
 	import Indent from '@/components/list/indent'
 Vue.use(Router)
 const router = new Router({
-  mode:'hash',
-  // mode: 'history',
+  // mode:'hash',
+  mode: 'history',
   routes: [    
     {path: '/login',name: 'Login',component: Login    },
     {path: '/', name: 'Indexlist',component: Indexlist,
@@ -27,14 +27,10 @@ const router = new Router({
   ],
 })
 
-
-// import VueCookies from 'vue-cookies'
-// Vue.use(VueCookies)
-
 router.beforeEach(function (to, from, next) {
-  console.log(Vue.cookies.get("yiyiphone"))
-  if( to.path != '/login' && !Vue.cookies.get('yiyiphone')){
-      next({path: "/login"})   
+  // console.log(to)
+  if (to.path === '/indent') {
+    next()
   } else {
     next()
   }
