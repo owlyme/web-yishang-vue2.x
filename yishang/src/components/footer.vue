@@ -18,7 +18,7 @@ export default {
     return {
       certificate: [
       "浙 ICP 备 17056291 号",
-      "Ccpyright©2017",
+      "Copyright©2017",
       "杭州亿尚智能科技有限公司"],
       records:[],
       }

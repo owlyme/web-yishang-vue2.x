@@ -59,7 +59,7 @@
 
               <div class="switch-btn" @click.enter="swicthFn"></div>
               <!-- 提示 -->
-              <div class='remind-scan'></div>
+              <div class='remind-scan' ></div>
             </div>
           </keep-alive>
         </b-col>
@@ -136,25 +136,66 @@ export default {
                 this.setSavePassword(true)
               }
               this.$cookies.set('yiyiavatar', res.data.content.avatar, 10000*60);
-              this.$cookies.set('yiyiphone', this.account.name, 10000*60);
+              this.$cookies.set('yiyiphone', res.data.content.phone, 10000*60);
               this.account= { name: '',password:'', save : false}
               this.$router.push("/")
             }else{
               this.message= res.data.msg
               this.resFalse = true
-            }          
+            }
       })
     },
     refreshQr(){
+      console.log('click')
       let url= this.getUrl+'Home/User/qrcode'
       this.axios.post(url).then((res)=>{
           if(res.status == 200){
             this.qrCodeUrl =res.data
+            
           }         
-      })
+      });
+    },
+    loopQr(){
+      let url= this.getUrl+'/Home/User/qrcodeLoop'
+      let args = {code: true}
+      let timer = setInterval(()=>{
+          if( !this.switchToPC ){
+             clearInterval(timer)
+          }
+          this.axios.post(url,qs.stringify(args)).then((res)=>{ 
+                if(res.data){
+                 this.qrcodeLogin()
+                 clearInterval(timer)
+                }      
+            });
+      },3000)
+    },
+    qrcodeLogin(){
+      let url= this.getUrl+'/Home/User/qrcodeLogin'
+      let args = {code: true}
+      this.axios.post(url,qs.stringify(args)).then((res)=>{
+          if(res.status == 200){
+            if(res.data.status == 200){
+              this.setCustomerInfo({
+                avatar: res.data.content.avatar,
+                id: res.data.content.id
+              });
+              if(this.account.save){
+                this.setSavePassword(true)
+              }
+              this.$cookies.set('yiyiavatar', res.data.content.avatar, 10000*60);
+              this.$cookies.set('yiyiphone', res.data.content.phone, 10000*60);
+              this.$router.push("/")
+            }else{
+            }       
+          }         
+      });
     },
     swicthFn(){
       this.switchToPC = !this.switchToPC
+      if(this.switchToPC){
+        this.loopQr()
+      }
     }
   }
 }

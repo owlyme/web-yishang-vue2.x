@@ -29,17 +29,19 @@
 			  </el-col>	    			  
 			</el-row>			
 		</div>
-
 		<div class="uploadimgs">
 			<el-row :gutter="10"  class="space" v-for="(item, index) in uploadImgArr" :key="'uploadImgArr'+ index">		 
-			  <el-col :span="6" class="text-right text-style-sm">
-			  	{{ item.name }}
+			  <el-col :span="6" class="text-right text-style-sm">			   
+			  	<input v-model="item.name" type="text" name="" class="input-name" placeholder="请输入标题"
+			  	:class="{'el-input__inner': !item.name}" 
+			  	v-focus
+			  	>
 			  </el-col>	
 			  <el-col :span="14">
 			  		<div  class="floatleft" v-if="item.showSrc1">
 			  			<img :src="item.showSrc1" class="show-demo1">
 			  			<img :src="item.showSrc2" class="show-demo1">
-			  		</div>	
+			  		</div>
 			  		<el-upload
 			  			ref="imgArr"
 				        :action="actionUrl"
@@ -54,7 +56,8 @@
 				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
 				        <img width="100%" :src="item.dialogImageUrl" alt="">
 				      </el-dialog>
-			  </el-col>	    			  
+			  </el-col>
+			  <i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>			  
 			</el-row>
 		</div>
 		<div class="middle-line">
@@ -202,17 +205,44 @@ import { mapGetters } from 'vuex'
 	       	 	this.$refs.imgArr[index].submit();
 	     	},
 	     	addImgArr(){
+
 	     		let len = this.uploadImgArr.length
 				let otherPics = {
-						name:'其他细节图',
+						name:'',
 						title:'细节图'+len,
 						dialogVisible: false,
 						dialogImageUrl: false,
-						imgUrls:[],
-						
+						imgUrls:[],						
 					}
 				this.uploadImgArr.push(otherPics)
+					
+
 	     	},
+	     	clickDelete(index){
+		      	this.uploadImgArr.splice(index,1)
+		    },
+			open3() {
+				this.$prompt('请输入其他细节名称', '衣依供应链平台提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',					
+					})
+					.then(({ value }) => {
+						let len = this.uploadImgArr.length
+						let otherPics = {
+								name:value,
+								title:value,
+								dialogVisible: false,
+								dialogImageUrl: false,
+								imgUrls:[],						
+							}
+						this.uploadImgArr.push(otherPics)
+					}).catch(() => {
+			          this.$message({
+			            type: 'info',
+			            message: '取消输入'
+			          });
+			        });
+			}
 		}
 	}
 </script>
@@ -260,4 +290,28 @@ import { mapGetters } from 'vuex'
   	float: left;
   	margin-right: 10px;
   }
+ .el-icon-delete:hover{
+	color: #C44DDC;
+}
+.space .el-icon-delete{
+	position: absolute;
+	display: none;
+	right: 0px;
+	top: 10px;
+	cursor: pointer;
+}
+.space:hover .el-icon-delete {
+	position: absolute;
+	display: block;
+	right: 15%;	
+	top: 10px;
+}
+.input-name{	
+    outline: none;
+    border: none;
+    text-align: right;
+    color: #5a5e66;
+}
+
+
 </style>

@@ -19,7 +19,7 @@
 				</el-option>
 		    </el-select>
 		</el-form-item>
-
+		<el-form label-width="30%"  >
 		<el-row  v-for="(item, index) in form.supplement" class='padding-right details-row'  
 		:key="item+index">		 
 		  <el-col :span="12">
@@ -28,25 +28,24 @@
 			</el-form-item>
 		  </el-col>
 		  <el-col :span="12">
-		  	   <!--  <el-form-item :label="'误差标准范围'+ (index+1)+':'" >
-			    <el-input v-model="item.error" placeholder="请输入误差标准"></el-input>
-			  </el-form-item>	 -->
-
-			  <el-form-item :label="'误差标准范围'+ (index+1)+':'" label-width="30%" >
+		  	    <el-form-item :label="'误差标准范围'+ (index+1)+':'"  style="width:100%" >
+			    <el-input v-model="item.error" placeholder="请输入误差标准" style="width:60%"	></el-input>
+			  </el-form-item>	
+			  <!-- <el-form-item :label="'误差标准范围'+ (index+1)+':'" label-width="30%" >
 			    <el-select v-model="item.error" placeholder="请选择你的误差标准"  style="width:55%"	>
 			      <el-option
 	    				v-for="(item, index) in error"
 			    		:key="'error'+index"
 			    		:label="item.error_value" :value="item.error_id" >
 					</el-option>
-			    </el-select>
+			    </el-select> -->
 			</el-form-item>
 
 
 		  </el-col>
 		  <i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</el-row>
-
+		</el-form>
 		<div class="middle-line">
 			<el-button type="primary" icon="el-icon-plus" @click="addDetail" class="circle-btn"></el-button>
 		</div>

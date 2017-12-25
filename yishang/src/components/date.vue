@@ -2,14 +2,23 @@
 	<div>
 		<div>
 			<el-form-item label="加工单价:" class="dates">
-			    <el-input v-model="dateForm.fee" placeholder=""  type="number"></el-input>
+			   <!--  <el-input v-model="dateForm.fee" placeholder=""  type="number" min='1' 
+			     ></el-input> -->
+
+			     <div class="el-input">
+			     	<input autocomplete="off" v-model="dateForm.fee"  placeholder=""  rows="2" min="1" validateevent="true" class="el-input__inner"
+			     	:keyup="onlyNumber()">
+			     </div>
+
 			     <div class="after"> 元/件 </div>
 			 </el-form-item>
 			 <el-form-item label="加工总价:">
 			     <span class="color size">{{ total_fee }}</span> 元
 			 </el-form-item>
 			 <el-form-item label="抢单截止时间:" class="dates">
-			    <el-date-picker	 v-model="dateForm.expire_time"   type="date" style="width:100%" disabledDate="true" align='center' placeholder="选择时间">  </el-date-picker>
+			    <el-date-picker	 
+			    v-model="dateForm.expire_time"   
+			    type="datetime" style="width:100%" disabledDate="true" align='center' placeholder="选择时间">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 			 <el-form-item label="面辅料完备到场日期:" class="dates">
@@ -30,7 +39,7 @@
 		data(){
 			return{
 				dateForm: {
-		          fee: 0,
+		          fee: '',
 		          total_fee:'',
 				  expire_time: '',
 				  arrival_date:'',
@@ -55,7 +64,14 @@
 		},
 		methods:{
 			cantPiker(){
-				// console.log(12313)
+			},
+			onlyNumber(){
+				if(this.dateForm.fee){
+					let str = this.dateForm.fee
+					str = str.toString().replace(/[^0-9]\D*$/,"")
+					this.$set(this.dateForm, 'fee', str)
+				}
+				
 			}
 		}
 	}

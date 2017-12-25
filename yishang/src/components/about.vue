@@ -117,6 +117,30 @@ import { mapGetters } from 'vuex'
 		          this.aboutList[index].id = index
 		        })
 		    },
+	    	open3() {
+			this.$prompt('请输入其他细节名称', '衣依供应链平台提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',					
+				})
+				.then(({ value }) => {
+					let about = {
+		    		id: '',
+					imgUrl:'',
+					requirement:"",
+					dialogVisible: false,
+					dialogImageUrl: false
+					}				
+			    	this.aboutList.push(about)
+			    	this.aboutList.forEach((item ,index) =>{
+			          this.aboutList[index].id = index
+			        })
+				}).catch(() => {
+		          this.$message({
+		            type: 'info',
+		            message: '取消输入'
+		          });
+		        });
+			}
 
 		}
 	}

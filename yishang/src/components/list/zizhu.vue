@@ -1,51 +1,56 @@
 <template>
-	<div id="zizhu" >	
-		<div class="container bg-white" >
-			<!-- 加工单编辑 -->
-			<h3 class="text-center padding-top-bottom">加工单编辑</h3>
-			<el-form ref="form" label-width="25%"  >		
-				<Sheet v-on:setWorkSheet="getWorkSheet" 
-					:category = "receiptContent.category" 
-					:styles="receiptContent.style"
-					:mode="receiptContent.mode"	
-					></Sheet>
-				<!-- 颜色数量 -->		
-				<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
-				<!-- 加工详情与信息-->
-				<Date class="padding-left-right border-top padding-top-bottom" 
-					v-on:setPeriod="getPeriod"
-					:total="receiptContent.demanding_account || 0 "
-				></Date>
-				<!-- 上传图片 -->
-				<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
-				<!-- 品质要求 quality -->
-				<Quality class="padding-left-right border-top padding-top-bottom" 
-					v-on:setQuality="getQuality"
-					:check="receiptContent.check" 
-					:error="receiptContent.error"
-				></Quality>	
-				<!-- 面料 -->
-				<Fabric class="padding-left-right border-top padding-top-bottom" 
-					v-on:setFabric="getFabric"
-					:component = "receiptContent.component"
-					:category = "receiptContent.category"
-				></Fabric>
-				<!-- 其他要求1 -->
-				<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
-				<!-- 收货人信息 -->
-				<Pay class="border-top padding-top-bottom" 
-					zizhu='true'
-					:addressList="receiptContent.address"
-					v-on:setNewAddr="getNewAddr"
-				></Pay>
-				<!-- 提交订单 -->
-				<div class=" border-top padding-top-bottom text-center">
-					<el-button type="primary" @click="onSubmit">自主发单</el-button>
-				    <el-button >保存草稿</el-button>
-				  </el-form-item>
-				</div>			   
-			</el-form>			
-		</div>
+	<div >
+		<div v-if="!true" class="text-center padding-top-bottom color">			
+				{{ msg }}			
+		</div>		
+		<div id="zizhu" v-else >	
+			<div class="container bg-white" >
+				<!-- 加工单编辑 -->
+				<h3 class="text-center padding-top-bottom">加工单编辑</h3>
+				<el-form ref="form" label-width="25%"  >		
+					<Sheet v-on:setWorkSheet="getWorkSheet" 
+						:category = "receiptContent.category" 
+						:styles="receiptContent.style"
+						:mode="receiptContent.mode"	
+						></Sheet>
+					<!-- 颜色数量 -->		
+					<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
+					<!-- 加工详情与信息-->
+					<Date class="padding-left-right border-top padding-top-bottom" 
+						v-on:setPeriod="getPeriod"
+						:total="receiptContent.demanding_account || 0 "
+					></Date>
+					<!-- 上传图片 -->
+					<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
+					<!-- 品质要求 quality -->
+					<Quality class="padding-left-right border-top padding-top-bottom" 
+						v-on:setQuality="getQuality"
+						:check="receiptContent.check" 
+						:error="receiptContent.error"
+					></Quality>	
+					<!-- 面料 -->
+					<Fabric class="padding-left-right border-top padding-top-bottom" 
+						v-on:setFabric="getFabric"
+						:component = "receiptContent.component"
+						:category = "receiptContent.category"
+					></Fabric>
+					<!-- 其他要求1 -->
+					<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
+					<!-- 收货人信息 -->
+					<Pay class="border-top padding-top-bottom" 
+						zizhu='true'
+						:addressList="receiptContent.address"
+						v-on:setNewAddr="getNewAddr"
+					></Pay>
+					<!-- 提交订单 -->
+					<div class=" border-top padding-top-bottom text-center">
+						<el-button type="primary" @click="onSubmit">自主发单</el-button>
+					    <el-button >保存草稿</el-button>
+					  </el-form-item>
+					</div>			   
+				</el-form>			
+			</div>
+		</div>		
 	</div>
 </template>
 
@@ -68,9 +73,7 @@ export default {
 	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
 	data () {
 		return {
-	        imageUrl: null,
-		   	activeNames: ['1'],
-		   	value:null,
+			msg: '',
 		   	receiptContent:{},
 		   	submitReceipt: {
 				type: null,
@@ -112,6 +115,12 @@ export default {
       ...mapGetters([
          'getUrl',
       ]),
+      passBefore(){
+      	return this.beforeReceipt()
+      }
+  },
+  created(){
+  	this.beforeReceipt();
   },
   mounted(){
     let url = this.getUrl
@@ -126,16 +135,19 @@ export default {
 	methods:{
 	    onSubmit(){
 	    	this.$set(this.submitReceipt, 'type', 1)
-	    	this.beforeReceipt(submitReceipt);
+	    	this.submitReceiptFn(this.submitReceipt);
 	    },
-	    beforeReceipt(arg){
+	    beforeReceipt(){
 	    	let url = this.getUrl
 		    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-		        if(res.data.status == 200){
-		        	this.submitReceiptFn(arg)
+		    	console.log(res)
+		         if(res.data.status == 400){
+		         	this.msg = res.data.msg
+		         	// this.openMessage({str:res.data.msg, ele: this})
+		        	// this.$router.push('/')
 		        }else{
 					
-		        }          
+		        }         
 		    }) 
 	    },
 	    submitReceiptFn(args){

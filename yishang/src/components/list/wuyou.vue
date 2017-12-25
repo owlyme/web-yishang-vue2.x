@@ -1,53 +1,61 @@
 <template>
-	<div id="wuyou" >
-		<div class="container bg-white">
-			<!-- 加工单编辑 -->
-			<h3 class="text-center padding-top-bottom">加工单编辑</h3>
-			<el-form ref="form" label-width="25%"  >		
-				<Sheet v-on:setWorkSheet="getWorkSheet" 
-					:category = "receiptContent.category" 
-					:styles="receiptContent.style"
-					:mode="receiptContent.mode"	
-					></Sheet>
-				<!-- 颜色数量 -->		
-				<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
-				<!-- 加工详情与信息-->
-				<Date class="padding-left-right border-top padding-top-bottom" 
-					v-on:setPeriod="getPeriod"
-					:total="receiptContent.demanding_account || 0 "					
-				></Date>
-				<!-- 上传图片 -->
-				<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
-				<!-- 品质要求 quality -->
-				<Quality class="padding-left-right border-top padding-top-bottom" 
-					v-on:setQuality="getQuality"
-					:check="receiptContent.check" 
-					:error="receiptContent.error"
-				></Quality>	
-				<!-- 面料 -->
-				<Fabric class="padding-left-right border-top padding-top-bottom" 
-					v-on:setFabric="getFabric"
-					:component = "receiptContent.component"
-					:category = "receiptContent.category"
-				></Fabric>
-				<!-- 其他要求1 -->
-				<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
-				<!-- 收货人信息 -->
-				<Pay class="border-top padding-top-bottom" 
-					:deposit="receiptContent.deposit"
-					:totalFee="submitotalFee"
-					:addressList="receiptContent.address"
-					v-on:setNewAddr="getNewAddr"
-				></Pay>
-				<!-- 提交订单 -->
-				<div class="padding-left-right border-top padding-top-bottom text-center">
-					<el-button type="primary" @click="onSubmit">自主发单</el-button>
-				    <el-button >保存草稿</el-button>
-				  </el-form-item>
-				</div>			   
-			</el-form>			
+	<div >
+		<div v-if="!passBefore" class="text-center padding-top-bottom color">			
+				{{ msg }}			
 		</div>
-	</div>	
+		<div v-else>
+			<div  id="wuyou">
+				<div class="container bg-white">
+					<!-- 加工单编辑 -->
+					<h3 class="text-center padding-top-bottom">加工单编辑</h3>
+					<el-form ref="form" label-width="25%"  >		
+						<Sheet v-on:setWorkSheet="getWorkSheet" 
+							:category = "receiptContent.category" 
+							:styles="receiptContent.style"
+							:mode="receiptContent.mode"	
+							></Sheet>
+						<!-- 颜色数量 -->		
+						<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
+						<!-- 加工详情与信息-->
+						<Date class="padding-left-right border-top padding-top-bottom" 
+							v-on:setPeriod="getPeriod"
+							:total="receiptContent.demanding_account || 0 "					
+						></Date>
+						<!-- 上传图片 -->
+						<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
+						<!-- 品质要求 quality -->
+						<Quality class="padding-left-right border-top padding-top-bottom" 
+							v-on:setQuality="getQuality"
+							:check="receiptContent.check" 
+							:error="receiptContent.error"
+						></Quality>	
+						<!-- 面料 -->
+						<Fabric class="padding-left-right border-top padding-top-bottom" 
+							v-on:setFabric="getFabric"
+							:component = "receiptContent.component"
+							:category = "receiptContent.category"
+						></Fabric>
+						<!-- 其他要求1 -->
+						<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
+						<!-- 收货人信息 -->
+						<Pay class="border-top padding-top-bottom" 
+							:deposit="receiptContent.deposit"
+							:totalFee="submitotalFee"
+							:addressList="receiptContent.address"
+							v-on:setNewAddr="getNewAddr"
+						></Pay>
+						<!-- 提交订单 -->
+						<div class="padding-left-right border-top padding-top-bottom text-center">
+							<el-button type="primary" @click="onSubmit">自主发单</el-button>
+						    <el-button >保存草稿</el-button>
+						  </el-form-item>
+						</div>			   
+					</el-form>			
+				</div>
+			</div>				
+		</div>
+	</div>
+	
 </template>
 
 <script>
@@ -65,72 +73,12 @@ import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 
 
-
-const receiptContent={
-	cate: {// true array[object] 商品类别下拉
-		cate_id:null,// true string
-		cate_name:null// true string
-	},
-	mode:{//true array[object]  加工模式下拉
-		mode_id: null,//true string
-		mode_name:null// true string 
-	},
-	style:{// true array[object]服装类型下拉
-		style_id:null,// true string
-		style_name:null// true string
-	},
-	check:{ //true array[object]查货模式下拉
-		check_id:null,// true string
-		check_name:null// true string
-	},
-	error:{//true array[object]误差标准下拉
-		error_id:null,// true string
-		value:null// true string
-	},
-	component:{//true array[object]面料成分下拉
-		component_id:null,// true string
-		component_name:null,// true string
-	},
-	category:{//true array[object]面料类别下拉
-		category_id:null,// true string
-		category_name:null,// true string
-	},
-	address:{//true array[object]
-		id:null,// true string收货人id
-		receiver:null,// true string收货人
-		phone:null,// true string手机号
-		province:null,// true string省city true string市
-		county:null,// true string区
-		street:null,// true string
-	}	
-}	
-
-
 export default {
 	name: "zizhu",
 	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
 	data () {
 		return {
-			zizhuIndent: {
-	         	workSheet:{},
-				colorNum:{},
-				period:{},
-				clothePic:{},
-				quality:{},
-				fabric:{},
-				about:{},
-				newAddr:{}
-	        },
-	        formInline: {
-	          user: '',
-	          region: ''
-	        },
-	        imageUrl: null,
-			types: [
-		        'text', 'password', 'email', 'number', 'url','tel', 'date', `time`, 'range', 'color'
-		      ],
-		   	activeNames: ['1'],
-		   	value:null,
+			msg: '',
 		   	receiptContent:{},
 		   	submitReceipt: {
 				type: null,
@@ -174,44 +122,48 @@ export default {
       ]),
       submitotalFee(){
       	return this.submitReceipt.total_fee
+      },
+      passBefore(){
+      	return this.beforeReceipt()
       }
+  },
+  created(){
+    // this.beforeReceipt()
   },
   mounted(){  
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=2').then((res)=>{
         if(res.data.status == 200){
         	this.receiptContent = res.data.content
-        }else{
-        	
-        }          
+        }         
     })
     this.getpayfront();
   },
 methods:{
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
-    	this.beforeReceipt(this.submitReceipt);
-
+    	this.submitReceiptFn(this.submitReceipt)
     },
     getpayfront(){
     	let url = this.getUrl    		
 	    this.axios.post(url+'/Home/Receipt/payfront?money').then((res)=>{
 	        if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
-	        }else{
-				
-	        }          
+	        }        
 	    }) 
     },
-    beforeReceipt(arg){
+    beforeReceipt(){
     	let url = this.getUrl    		
 	    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-	    	console.log(this.submitReceipt)
-	        if(res.data.status == 200){
-	        	this.submitReceiptFn(arg)
-	        }else{
-				
-	        }          
+	        if(res.data.status ==200){
+	        	return true
+	        }else {
+	        	this.msg = res.data.msg
+	        	//this.openMessage({str:res.data.msg, ele: this})
+
+		        // this.$router.push('/')
+		        return false
+	        }
 	    }) 
     },
     submitReceiptFn(args){

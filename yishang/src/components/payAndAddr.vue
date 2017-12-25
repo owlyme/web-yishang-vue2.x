@@ -8,7 +8,7 @@
 			    </el-radio-group>
 			</el-form-item>
 			<el-form-item :label="percent" v-else  v-model="selectAddress.per">			
-			    	 <span class="color size">{{ depositFee }}</span> 元			   
+			    	 <span class="color size">{{ depositFee.toFixed(2) }}</span> 元			   
 			</el-form-item>
 			<el-form-item label="确认收货地址:" >
 			    <el-radio-group v-model="selectAddress.address" >

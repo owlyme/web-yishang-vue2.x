@@ -8,7 +8,7 @@
       <el-input v-model="item.name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
       <i  v-if="index > 1" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
     </el-form-item>
-    <el-row :gutter="10"  class="space padding-bottom  uploadimg" >    
+    <el-row :gutter="10"  class="space padding-bottom  uploadimgs" >    
         <el-col :span="6" class="text-right text-style-sm">
           面料图片: 
         </el-col> 
@@ -22,9 +22,9 @@
                 :action="actionUrl"
                 
                 list-type="picture-card"
-                :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
-                :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"            
-                :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}"> 
+                :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
+                :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"            
+                :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">
                 <span  slot="trigger" class="remind" >点击上传</span>
                 <!-- <el-button class="click-submit"  @click="submitImg(index)">点击上传</el-button> -->
           </el-upload>
@@ -42,8 +42,7 @@
                   v-for="(item, index) in component"
                 :key="'component'+index"
                 :label="item.component_name" :value="item.component_id">
-                </el-option>
-            
+                </el-option>            
           </el-select>
       </el-form-item>
       <el-form-item label="面料类型:" class="padding-right">
@@ -74,8 +73,6 @@ export default {
   props:['component','category'],
     data() {
       return {
-        dialogVisible: false,
-        dialogImageUrl: false,
         index: 2,
         form: {
           name: '',
@@ -93,8 +90,10 @@ export default {
             requirement:'',
             component: '',
             category:'',
-            picture:'',
-            weight:''
+            picture:[],
+            weight:'',                
+            dialogVisible: false,
+            dialogImageUrl: false,
           },
           {
             is_main: 0,
@@ -104,8 +103,10 @@ export default {
             requirement:"",
             component: '',
             category:'',
-            picture:'',
-            weight:''
+            picture:[],
+            weight:'',
+            dialogVisible: false,
+            dialogImageUrl: false,
           }
         ],
       }
@@ -126,24 +127,44 @@ export default {
     　　　deep:true
       }
     },
-    methods: {      
-     handleRemoveSingle(file,index) {
-          this.fabricList[index].picture = ''
-        },          
-        uploadImgeSuccessSingle(response, index){
+    methods: { 
+    handleRemove(fileList,index) {
+          if(!this.fabricList[index].picture.length) return;
+            let imgs = [];
+          fileList.forEach((item ,index) =>{
+            imgs.push(item.response.content.url)
+          })
+          this.fabricList[index].picture = imgs.slice(0, imgs.length)
+        },
+        uploadImgeSuccess(response,index){
             if (response.status == 200 ) {
-               this.fabricList[index].picture = response.content.url
+               this.fabricList[index].picture.push(response.content.url)
               }else{
                 //response.msg
               }
         },
-        handlePictureCardPreviewSingle(file,index) {
+        handlePictureCardPreview(file,index) {
             this.fabricList[index].dialogImageUrl = file.url;
             this.fabricList[index].dialogVisible = true;
-        },
-          submitImg(index) {
-            this.$refs.fabric[index].submit();
-        },    
+        },      
+            
+     // handleRemoveSingle(file,index) {
+     //      this.fabricList[index].picture = ''
+     //    },          
+     //    uploadImgeSuccessSingle(response, index){
+     //        if (response.status == 200 ) {
+     //           this.fabricList[index].picture = response.content.url
+     //          }else{
+     //            //response.msg
+     //          }
+     //    },
+     //    handlePictureCardPreviewSingle(file,index) {
+     //        this.fabricList[index].dialogImageUrl = file.url;
+     //        this.fabricList[index].dialogVisible = true;
+     //    },
+     //      submitImg(index) {
+     //        this.$refs.fabric[index].submit();
+     //    },    
       addFabric(){
           let fabric = {
                 label:'',
@@ -152,8 +173,10 @@ export default {
                 component: '',
                 category:'',
                 delivery: false,
-                picture:'',
-                weight:''
+                picture:[],
+                weight:'',
+                dialogVisible: false,
+                dialogImageUrl: false,
               }
               fabric.label= "辅面料" + (this.index++) + "名称:";
              // console.log(fabric)
