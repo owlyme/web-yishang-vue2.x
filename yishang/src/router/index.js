@@ -27,10 +27,6 @@ const router = new Router({
   ],
 })
 
-
-// import VueCookies from 'vue-cookies'
-// Vue.use(VueCookies)
-
 router.beforeEach(function (to, from, next) {
   console.log(Vue.cookies.get("yiyiphone"))
   if( to.path != '/login' && !Vue.cookies.get('yiyiphone')){
