@@ -146,7 +146,6 @@ export default {
       })
     },
     refreshQr(){
-      console.log('click')
       let url= this.getUrl+'Home/User/qrcode'
       this.axios.post(url).then((res)=>{
           if(res.status == 200){

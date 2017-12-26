@@ -289,4 +289,24 @@ border-radius: 50px 0 0 50px;
     font-size: 1.3em;
     background: #e0e0e0;
 }
-  
+
+.pagination{
+    position: relative;
+    top: 10px;
+    height: 70px;
+    width: 100%;
+    background: #fff;
+  }
+.pagination ul li{
+    padding: 5px;
+  }
+ .pagination .total-pages{
+    position: absolute;
+    right: -50px;
+    top:  32px;
+  }
+  .owl{
+    margin: 0 auto;
+    margin: 0 auto;    
+    margin-top: -10px;
+  }

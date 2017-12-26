@@ -1,7 +1,7 @@
 <template>
 	<div >
-		<div v-if="!passBefore" class="text-center padding-top-bottom color">			
-				{{ msg }}			
+		<div v-if="!passBefore" class="text-center padding-top-bottom color border-top">			
+				{{ msg }}
 		</div>
 		<div v-else>
 			<div  id="wuyou">
@@ -79,6 +79,7 @@ export default {
 	data () {
 		return {
 			msg: '',
+			passBefore:false,
 		   	receiptContent:{},
 		   	submitReceipt: {
 				type: null,
@@ -122,13 +123,10 @@ export default {
       ]),
       submitotalFee(){
       	return this.submitReceipt.total_fee
-      },
-      passBefore(){
-      	return this.beforeReceipt()
-      }
+      } 
   },
   created(){
-    // this.beforeReceipt()
+  	this.beforeReceipt()
   },
   mounted(){  
     let url = this.getUrl
@@ -137,7 +135,7 @@ export default {
         	this.receiptContent = res.data.content
         }         
     })
-    this.getpayfront();
+    this.getpayfront();    
   },
 methods:{
     onSubmit(){
@@ -153,18 +151,16 @@ methods:{
 	    }) 
     },
     beforeReceipt(){
-    	let url = this.getUrl    		
+    	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-	        if(res.data.status ==200){
-	        	return true
-	        }else {
-	        	this.msg = res.data.msg
-	        	//this.openMessage({str:res.data.msg, ele: this})
-
-		        // this.$router.push('/')
-		        return false
-	        }
-	    }) 
+		        if(res.data.status ==200){
+		        	this.passBefore = true			        	
+		        }else {
+		        	this.msg = res.data.msg
+		        	this.openMessage({str: res.data.msg, ele:this})
+		        	this.$router.push("/")  				        
+		        }
+		})
     },
     submitReceiptFn(args){
     	let url = this.getUrl

@@ -13,6 +13,8 @@ Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(ElementUI) 
 
+
+
 Vue.prototype.openMessage = (arg) =>{
 		    	let html='';
 		    	if( !arg.bool){
@@ -37,7 +39,6 @@ Vue.directive('focus', {
             //el.focus()
         //}
 });
-
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

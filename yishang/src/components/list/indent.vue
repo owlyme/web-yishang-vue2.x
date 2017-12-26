@@ -2,28 +2,46 @@
 	<div id="indent">
 		<div class="container">
 			<!-- 我的订单信息 -->
-			<el-row :gutter="10" v-if="getIndentBlock" style="weidth : 100%">
-			  <el-col :span="5">
-			  	<div class="myIndent">我的订单</div>
-				    <ul class="nav-vertal">
-		          	<li  v-for="(item, index) in listNav"
-		          		:index="index" 
-		          		class="muneNav"
-		          		:class="{active : item.flag}"
-		          		@click="fliter(index, item.keyword)" 
-		          		>
-		          		{{item.type}} <span v-if="(item.num-0)">( {{item.num}} )</span>
-		          	</li>
-		          </ul>
-			  </el-col>
-			  <el-col :span="19">
-			  		<div class="myIndent">{{contentTitle}}</div>
-			  		<div v-for="(item,index) in goodsList" :index="index+'indent'">
-			  			<IndentList :goodsMsg="item" v-on:change="switchBlock(item.order_id)"></IndentList>
-			  		</div>
-			  </el-col>
-			</el-row>
-
+			<div v-if="getIndentBlock">
+				<el-row :gutter="10"  style="weidth : 100%">
+				  <el-col :span="5">
+				  	<div class="myIndent">我的订单</div>
+					    <ul class="nav-vertal">
+			          	<li  v-for="(item, index) in listNav"
+			          		:index="index" 
+			          		class="muneNav"
+			          		:class="{active : item.flag}"
+			          		@click="fliter(index, item.keyword)" 
+			          		>
+			          		{{item.type}} <span v-if="(item.num-0)">( {{item.num}} )</span>
+			          	</li>
+			          </ul>
+				  </el-col>
+				  <el-col :span="19">
+				  		<div class="myIndent">{{contentTitle}}</div>
+				  		<div v-if="goodsList.length" v-for="(item,index) in goodsList" :index="index+'indent'">
+				  			<IndentList :goodsMsg="item" v-on:change="switchBlock(item.order_id)"></IndentList>
+				  		</div>
+				  </el-col>
+				</el-row>
+				<!-- pagination -->
+		        <div class="container pagination " >  	
+		         <b-row  class="owl">
+		            <b-col >
+		              <b-pagination  
+		              :total-rows="30" 
+		              v-model="currentPage" 
+		              first-text="首页"
+		              prev-text="上一页"
+		              next-text="下一页"
+		              last-text="末页"
+		              :per-page="perPage" >
+		              </b-pagination>
+		              <span class="total-pages">共{{ Math.round( totalRows / perPage) }}页</span>
+		            </b-col>
+		         </b-row>  
+		  	   </div>
+			</div>
 			<!-- 进度图标 -->
 			<div class="bg-white" v-else >
 				<div class="nav-schedule-details el-menu-demo clearfix">
@@ -297,22 +315,7 @@
 			            type:"待发资料",
 			            keyword: '3000',
 			            flag: false,
-		          	  }, 
-		          	  {
-		                  type:"待发样衣",
-		                  keyword: '3xx0',
-		                  flag: false
-		                },
-		                {
-		                  type:"待发面料",
-		                  keyword: '3x0x',
-		                  flag: false
-		                },
-		                {
-		                  type:"待发辅料",
-		                  keyword: '30xx',
-		                  flag: false
-		                },
+		          	  },
 			          {
 			            type:"加工中",
 			            keyword: '4000',
@@ -339,12 +342,23 @@
 				goodsList:[],
 				savedList:[],
 				selectSchedule:{},
-				selectDetails: {}
+				selectDetails: {},
+				totalRows: 1,
+				perPage : 1,
+		   		currentPage: 1
 			}
 		},
 		mounted(){
 			this.getMainlist({status: 'x'})
 		},
+		watch:{
+		    currentPage:{
+		      handler(curVal,oldVal){
+		        this.getMainlist({page: curVal,status: this.currentStatus})
+		      },
+		      deep:true
+		    }
+		  },
 		computed:{
 			...mapGetters([
 		      'getIndentBlock',
@@ -365,6 +379,7 @@
 		    getMainlist(args){
 		      let url= this.getUrl+'Home/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
+		      	console.log(res)
 		          if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;
@@ -382,7 +397,7 @@
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
 		          	this.setGraph(this.selectSchedule.details.status)
-		          	this.isLoading = 0;  	          	
+		          	this.isLoading = 0;
 		          }else{
 		          }          
 		      	})  
@@ -393,7 +408,7 @@
 			      .then((res)=>{
 		           // console.log(res)
 			          if(res.data.status == 200){
-			          		// console.log( res.data.content)
+			          		console.log( res.data.content)
 			          		this.$set(this,'selectDetails',res.data.content)
 			          		this.isLoading = 0;         	
 			          }else{

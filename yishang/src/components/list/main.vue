@@ -2,7 +2,11 @@
 <div class="main clearfix">
    <div class="zIndexe" v-if=" activeIndex == '1' "></div>
    <div class="zIndexf container " > 
-      <div class="carousel-box" ><Carousel :banners="banner" /></div>
+      <div class="carousel-box" >
+        <keep-alive>
+          <Carousel :banners="banner" />
+        </keep-alive>
+      </div>
       <div class="switch-ziqu-wuyou">
         <el-row  >
           <el-col :span="12">
@@ -46,9 +50,9 @@
                 <div  class="txt" :class="{'txt-active' : item.flag }" @click='displayOrNot(item.keyword)'>{{item.type}}
                   <div v-if="item.inner" class="updown">&#60;</div>
                 </div>
-                <ul v-if="item.inner" class="inner-ul">
+                <!-- <ul v-if="item.inner" class="inner-ul">
                   <li v-for="(item1, index) in item.inner" class="inner-li"  @click='displayOrNot(item1.keyword)'>{{item1.type}}</li>
-                </ul>
+                </ul> -->
               </li>
         </ul>
 
@@ -110,23 +114,23 @@ export default{
             type:"待发资料",
             keyword: '3000',
             flag: false,
-            inner: [
-                    {
-                      type:"待发样衣",
-                      keyword: '3xx0',
-                      flag: false
-                    },
-                    {
-                      type:"待发面料",
-                      keyword: '3x0x',
-                      flag: false
-                    },
-                    {
-                      type:"待发辅料",
-                      keyword: '30xx',
-                      flag: false
-                    }
-                   ]
+            // inner: [
+            //         {
+            //           type:"待发样衣",
+            //           keyword: '3xx0',
+            //           flag: false
+            //         },
+            //         {
+            //           type:"待发面料",
+            //           keyword: '3x0x',
+            //           flag: false
+            //         },
+            //         {
+            //           type:"待发辅料",
+            //           keyword: '30xx',
+            //           flag: false
+            //         }
+            //        ]
           },          
           {
             type:"加工中",
@@ -204,7 +208,7 @@ export default{
     },
 		getMoreList (curVal) {
 			let page = this.currentPage
-	    },
+	   },
     fliter(index, keyword){
       let self = this;
       self.listNav.forEach((item, _index)=>{            
@@ -369,27 +373,4 @@ export default{
     color: #FFF;
     background: #C44DDC;
   }
-
-  .pagination{
-    position: relative;
-    top: 10px;
-    height: 70px;
-    width: 100%;
-    background: #fff;
-  }
-  .pagination ul li{
-    padding: 5px;
-  }
-  .owl{
-    margin: 0 auto;
-    margin: 0 auto;
-    
-    margin-top: -10px;
-  }
-  .pagination .total-pages{
-    position: absolute;
-    right: -50px;
-    top:  32px;
-  }
-
 </style>

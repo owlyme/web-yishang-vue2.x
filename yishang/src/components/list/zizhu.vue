@@ -1,7 +1,7 @@
 <template>
 	<div >
-		<div v-if="!true" class="text-center padding-top-bottom color">			
-				{{ msg }}			
+		<div v-if="!passBefore" class="text-center padding-top-bottom color border-top">			
+				{{ msg }}
 		</div>		
 		<div id="zizhu" v-else >	
 			<div class="container bg-white" >
@@ -74,6 +74,7 @@ export default {
 	data () {
 		return {
 			msg: '',
+			passBefore: false,
 		   	receiptContent:{},
 		   	submitReceipt: {
 				type: null,
@@ -115,12 +116,9 @@ export default {
       ...mapGetters([
          'getUrl',
       ]),
-      passBefore(){
-      	return this.beforeReceipt()
-      }
   },
   created(){
-  	this.beforeReceipt();
+  	this.beforeReceipt()
   },
   mounted(){
     let url = this.getUrl
@@ -140,15 +138,14 @@ export default {
 	    beforeReceipt(){
 	    	let url = this.getUrl
 		    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-		    	console.log(res)
-		         if(res.data.status == 400){
-		         	this.msg = res.data.msg
-		         	// this.openMessage({str:res.data.msg, ele: this})
-		        	// this.$router.push('/')
-		        }else{
-					
-		        }         
-		    }) 
+			        if(res.data.status ==200){
+			        	this.passBefore= true
+			        }else {
+			        	this.msg = res.data.msg
+			        	this.openMessage({str: res.data.msg, ele:this})
+			        	this.$router.push("/")
+			        }
+			})
 	    },
 	    submitReceiptFn(args){
 	    	let url = this.getUrl

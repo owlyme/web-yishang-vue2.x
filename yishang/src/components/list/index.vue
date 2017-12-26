@@ -34,7 +34,8 @@
     </div>
   </div>
   <div class="bg-white"> 
-    <keep-alive> <router-view/> </keep-alive> 
+    <!-- <keep-alive> <router-view/> </keep-alive>  -->
+    <router-view/>
   </div>
   <Footerinfo/>
  </div>
@@ -68,7 +69,7 @@ export default {
          'getUploadUrl'
       ]),
       avatarSrc(){
-        if( this.$cookies.get('yiyiavatar') ) return this.getUploadUrl+ this.$cookies.get('yiyiavatar')
+        if( this.$cookies.get('yiyiavatar') ) return this.$cookies.get('yiyiavatar')
       }
   },
   methods:{

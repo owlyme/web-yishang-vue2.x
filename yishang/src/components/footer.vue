@@ -4,9 +4,6 @@
       <div class="foot-info">
         <span v-for="(item, index)  in certificate" :key="index">{{item}}</span>
       </div>
-      <div class="foot-info">
-        <span v-for="(item, index)  in records" :key="index">{{item}}</span>
-      </div>
     </div>
 </div>
 </template>
