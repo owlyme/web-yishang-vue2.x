@@ -14,3 +14,5 @@ about.vue 需要get 上传图片的借口
 https://juejin.im/entry/58a673e1128fe1006cb4f367
 
 huo qu di zhi wu lei rong 	?
+
+Vue-cli proxyTable 解决开发环境的跨域问题 https://www.jianshu.com/p/95b2caf7e0da

@@ -91,7 +91,8 @@ export default {
       qrCodeUrl : "",
       saveInfo:false,
       message: '',
-      resFalse: false
+      resFalse: false,
+      customCode: ''
     }
   },
   created(){
@@ -120,6 +121,7 @@ export default {
       this.resFalse = false
     },
     login(){
+      console.log(this.Api)
       let url= this.getUrl+'Home/User/loginCheck'   
       let args = {
         phone : this.account.name,
@@ -147,16 +149,17 @@ export default {
     },
     refreshQr(){
       let url= this.getUrl+'Home/User/qrcode'
-      this.axios.post(url).then((res)=>{
+      this.axios.get(url).then((res)=>{
+        console.log( res)
           if(res.status == 200){
             this.qrCodeUrl =res.data
-            
+            this.customCode = res.headers["custom-code"]
           }         
       });
     },
     loopQr(){
       let url= this.getUrl+'/Home/User/qrcodeLoop'
-      let args = {code: true}
+      let args = {code: this.customCode}
       let timer = setInterval(()=>{
           if( !this.switchToPC ){
              clearInterval(timer)

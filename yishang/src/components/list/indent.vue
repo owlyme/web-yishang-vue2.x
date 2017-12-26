@@ -28,8 +28,8 @@
 		        <div class="container pagination " >  	
 		         <b-row  class="owl">
 		            <b-col >
-		              <b-pagination  
-		              :total-rows="30" 
+		              <b-pagination
+		              :total-rows="totalRows" 
 		              v-model="currentPage" 
 		              first-text="首页"
 		              prev-text="上一页"
@@ -50,7 +50,6 @@
 						<li @click="changeActiveIndex" :class="{active : !activeIndex}">订单详情</li>
 					</ul>
 				</div>
-
 				<div class="container-detail" v-if="activeIndex">
 					<div class="isloading border-top" v-if="isLoading">
 						<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
@@ -120,10 +119,10 @@
 							<h5>订单动态</h5>
 							<div class="padding-top">
 							  <el-steps direction="vertical" :active="3">
-							  	<el-step title="步骤 1" 
+							  	<el-step title="" 
 							  		v-for="(item, index) in selectSchedule.history"
 							  		:key="'history'+ index"
-							  	  :description="item"></el-step>
+							  	  	:description="item.create_time + item.operation"></el-step>
 							  </el-steps>
 							</div>
 						</div>
@@ -379,7 +378,6 @@
 		    getMainlist(args){
 		      let url= this.getUrl+'Home/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
-		      	console.log(res)
 		          if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;
