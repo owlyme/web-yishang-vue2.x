@@ -1,6 +1,7 @@
 <template>
 	<div >
-		<div v-if="!passBefore" class="text-center padding-top-bottom color border-top">			
+		<!-- <div v-if="!passBefore" class="text-center padding-top-bottom color border-top">			 -->
+		<div v-if="false" class="text-center padding-top-bottom color border-top">
 				{{ msg }}
 		</div>		
 		<div id="zizhu" v-else >	
@@ -143,7 +144,7 @@ export default {
 			        }else {
 			        	this.msg = res.data.msg
 			        	this.openMessage({str: res.data.msg, ele:this})
-			        	this.$router.push("/")
+			        	// this.$router.push("/")
 			        }
 			})
 	    },

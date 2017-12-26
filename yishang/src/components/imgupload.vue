@@ -32,8 +32,8 @@
 		<div class="uploadimgs">
 			<el-row :gutter="10"  class="space" v-for="(item, index) in uploadImgArr" :key="'uploadImgArr'+ index">		 
 			  <el-col :span="6" class="text-right text-style-sm">			   
-			  	<input v-model="item.name" type="text" name="" class="input-name" placeholder="请输入标题"
-			  	:class="{'el-input__inner': !item.name}" 
+			  	<input v-model="item.title" type="text" name="" class="input-name" placeholder="请输入标题"
+			  	:class="{'el-input__inner': !item.title}" 
 			  	v-focus
 			  	>
 			  </el-col>	
@@ -151,6 +151,7 @@ import { mapGetters } from 'vuex'
 			},			
 			pictures:{
 				handler(curVal,oldVal){
+					console.log(curVal)
 					this.$emit("setClothePic",curVal)
 				},
 				deep:true
@@ -209,7 +210,7 @@ import { mapGetters } from 'vuex'
 	     		let len = this.uploadImgArr.length
 				let otherPics = {
 						name:'',
-						title:'细节图'+len,
+						title:'',
 						dialogVisible: false,
 						dialogImageUrl: false,
 						imgUrls:[],						

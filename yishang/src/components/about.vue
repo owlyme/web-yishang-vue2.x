@@ -1,6 +1,6 @@
 <template>
 	<div class="about border-top">
-		<div v-for="(item, index) in aboutList" class="padding-right add-row uploadimg" :key=" 'about'+ index" >
+		<div v-for="(item, index) in aboutList" class="padding-right add-row uploadimgs" :key=" 'about'+ index" >
 		<h5>其他要求{{index +1}}</h5>
 		<el-row :gutter="10"  class="space padding-bottom" >		 
 		  <el-col :span="6"  class="text-right text-style-sm">
@@ -15,9 +15,9 @@
 	  			ref="supplements"
 		        :action="actionUrl"
 		        list-type="picture-card"
-		        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
-		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"		        
-		        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}">	
+		        :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
+		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"		        
+		        :on-remove="(file, fileList) =>{ return  handleRemove(file, index)}">	
 		        <span  slot="trigger" class="remind" >点击上传</span>
 		        <!-- <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
 		      </el-upload>
@@ -47,7 +47,7 @@ import { mapGetters } from 'vuex'
 				aboutList:[
 					{
 					id: 0,
-					imgUrl:'',
+					imgUrls:[],
 					showSrc: require('../assets/back-pic.jpg'),
 					requirement:"",
 					dialogVisible: false,
@@ -63,7 +63,7 @@ import { mapGetters } from 'vuex'
 					curVal.forEach((item, index) =>{
 						value[index] = {
 							requirement : item.requirement,
-							picture: item.imgUrl
+							picture: item.imgUrls
 						}
 					})
 					this.$emit("setAbout",value)
@@ -80,27 +80,46 @@ import { mapGetters } from 'vuex'
 	        }
 	     },
 		methods:{
-			handleRemoveSingle(file,index) {
-		    	this.aboutList[index].imgUrl = ''
-		    },		      
-		    uploadImgeSuccessSingle(response, index){
+			 handleRemove(fileList,index) {
+		    	if(!this.aboutList[index].imgUrls.length) return;
+		        let imgs = [];
+		    	fileList.forEach((item ,index) =>{
+		    		imgs.push(item.response.content.url)
+		    	})
+		    	this.aboutList[index].imgUrls = imgs.slice(0, imgs.length)
+		    },
+		    uploadImgeSuccess(response,index){
 		        if (response.status == 200 ) {
-		        	 this.aboutList[index].imgUrl = response.content.url
+		        	 this.aboutList[index].imgUrls.push(response.content.url)
 		        	}else{
 		        		//response.msg
 		        	}
 		    },
-		    handlePictureCardPreviewSingle(file,index) {
+		    handlePictureCardPreview(file,index) {
 		        this.aboutList[index].dialogImageUrl = file.url;
 		        this.aboutList[index].dialogVisible = true;
-		    },
-	        submitImg(index) {
-	       	 	this.$refs.supplements[index].submit();
-	     	}, 
+		    },	
+			// handleRemoveSingle(file,index) {
+		 //    	this.aboutList[index].imgUrl = ''
+		 //    },		      
+		 //    uploadImgeSuccessSingle(response, index){
+		 //        if (response.status == 200 ) {
+		 //        	 this.aboutList[index].imgUrl = response.content.url
+		 //        	}else{
+		 //        		//response.msg
+		 //        	}
+		 //    },
+		 //    handlePictureCardPreviewSingle(file,index) {
+		 //        this.aboutList[index].dialogImageUrl = file.url;
+		 //        this.aboutList[index].dialogVisible = true;
+		 //    },
+	  //       submitImg(index) {
+	  //      	 	this.$refs.supplements[index].submit();
+	  //    	}, 
 			addAbout(){
 		    	let about = {
 		    		id: '',
-					imgUrl:'',
+					imgUrls:[],
 					requirement:"",
 					dialogVisible: false,
 					dialogImageUrl: false
