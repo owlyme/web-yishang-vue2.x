@@ -14,7 +14,7 @@
   <div class="bg-white pages-nav  clearfix">
     <div class="container">
         <el-row >
-          <el-col :span="4">
+          <el-col :span="4" class="center">
             <router-link to="/" >
               <img class="avatarImg" :src="avatarSrc" />
             </router-link>                  
