@@ -191,9 +191,43 @@
 								</div>
 							</div>						
 						</div>
-						<div class="yangyi border-top detail-inner" v-if="selectDetails.otherPic" >
+						<div class="yangyi border-top detail-inner"  >
 							<h6>样衣图片</h6>
 							<div class="mianliao-icon clearfix">
+								<ul class="inner-icon" v-if="selectDetails.details.front_picture">
+									<li >
+										<img :src="getUploadUrl+selectDetails.details.front_picture" />
+									</li>
+									<li>正面全览图</li>
+								</ul>
+								<ul class="inner-icon" v-if="selectDetails.details.back_picture">
+									<li >
+										<img :src="getUploadUrl+selectDetails.details.back_picture" />
+									</li>
+									<li>背面全览图</li>
+								</ul>
+								<ul class="inner-icon" v-if="selectDetails.details.left_picture">
+									<li >
+										<img :src="getUploadUrl+selectDetails.details.left_picture" />
+									</li>
+									<li>左侧全览图</li>
+								</ul>
+								<ul class="inner-icon" v-if="selectDetails.details.right_picture">
+									<li >
+										<img :src="getUploadUrl+selectDetails.details.right_picture" />
+									</li>
+									<li>右侧全览图</li>
+								</ul>
+								<ul class="inner-icon" 
+									v-if="selectDetails.details.part_picture.length"
+									v-for="(item,index) in selectDetails.details.part_picture" 
+									:key="index">
+									<li>
+										<img :src="getUploadUrl+selectDetails.details.part_picture"/>
+									</li>
+									<li>局部细节图</li>
+								</ul>
+
 								<ul v-for="item in selectDetails.otherPic" class="inner-icon">
 									<li v-for="item1 in item.picture">
 										<img :src="getUploadUrl+'/'+ item1" />
@@ -210,7 +244,7 @@
 										{{ item }}
 									</li>
 								</ul>
-								<ul class="tbody" v-for="(item,index) in selectDetails.size" :key="'size2'+index">								
+								<ul class="tbody" v-for="(item,index) in selectDetails.size" :key="'size2'+index">
 									<li>{{ item.color }}</li>
 									<li>{{ item.xs_demanding_account }}</li>
 									<li>{{ item.s_demanding_account }}</li>

@@ -167,10 +167,11 @@ methods:{
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
 	        console.log(res.data.content)
 	        if(res.data.status == 200){
-	        	
-	        }else{
-				
-	        }          
+	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
+	        	this.$router.push("/indent")
+		        }else{
+		        	this.openMessage({str: res.data.msg, ele:this})
+		    }            
 	    }) 
     },
     getWorkSheet(val){
