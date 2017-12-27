@@ -5,6 +5,11 @@ http://101.132.187.244:8082/Home/User/loginCheck?phone=
 &password=
 123546
 
+
+101.132.187.244     yishang    yishang
+/api/Application/Home/View/Index
+http://101.132.187.244:8082/#/login
+
 login get pic
 payAddress 需要请求 addressList 一部加载
 			 需要post addressList submit 函数中
@@ -16,3 +21,7 @@ https://juejin.im/entry/58a673e1128fe1006cb4f367
 huo qu di zhi wu lei rong 	?
 
 Vue-cli proxyTable 解决开发环境的跨域问题 https://www.jianshu.com/p/95b2caf7e0da
+
+Content
+
+function randomSort(array) {array.sort(function () { return 0.5 - Math.random(); })}  

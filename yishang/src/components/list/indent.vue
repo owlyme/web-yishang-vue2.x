@@ -37,7 +37,7 @@
 		              last-text="末页"
 		              :per-page="perPage" >
 		              </b-pagination>
-		              <span class="total-pages">共{{ Math.round( totalRows / perPage) }}页</span>
+		              <span class="total-pages">共{{ Math.ceil( totalRows / perPage) }}页</span>
 		            </b-col>
 		         </b-row>  
 		  	   </div>
@@ -65,8 +65,8 @@
 		     			 		<div class="text-style">生产周期: <span> {{selectSchedule.details.cycle}} 天</span></div>
 		     			 		<div class="text-style">面辅料完备时间: <span> {{selectSchedule.details.arrival_date}}</span></div>
 		     			 		<div class="text-style">接单方:
-		     			 			<span v-for="(item, index) in selectSchedule.details.undertake_company"> 
-		     			 			{{ item.company}} </span></div>
+		     			 			<span > 
+		     			 			{{ selectSchedule.details.undertake_company.company}} </span></div>
 		     			 		<div class="text-style">完成件数:<span> {{selectSchedule.details.done_account}}/ {{selectSchedule.details.demanding_account}}</span></div>
 		     			 	</b-col>
 		     			 </b-row>
@@ -139,9 +139,7 @@
 							<ul class="clearfix">
 								<li>订单名称: <span>{{selectDetails.details.name}}</span></li>
 								<li>订单号: <span>{{selectDetails.details.code}}</span></li>
-								<li>接单方: <span
-									v-for="(item, index) in selectDetails.details.undertake_company" :key='index'
-									>{{item}}</span></li>
+								<li>接单方: <span>{{ selectDetails.details.undertake_company.company }}</span></li>
 
 								<li>商品类别: <span>{{selectDetails.details.style}}</span></li>
 								<li>生产周期: <span>{{selectDetails.details.cycle}}</span></li>
@@ -378,6 +376,8 @@
 		    getMainlist(args){
 		      let url= this.getUrl+'Home/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
+		      	console.log('mainlist')
+		      	console.log(res)
 		          if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;
@@ -391,6 +391,8 @@
 		    	let url= this.getUrl+'Home/ReceiptOrder/schedule'
 		      	this.axios.post(url, qs.stringify({order_id: id }))
 		      	.then((res)=>{
+		      		console.log('getSchedule')
+		      	console.log(res)
 		          if(res.data.status == 200){
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
@@ -404,14 +406,15 @@
 		    	let url= this.getUrl+'Home/ReceiptOrder/details'
 			      this.axios.post(url, qs.stringify({order_id: id }))
 			      .then((res)=>{
-		           // console.log(res)
+		           		console.log('getDetails')
+		      	console.log(res)
 			          if(res.data.status == 200){
 			          		console.log( res.data.content)
 			          		this.$set(this,'selectDetails',res.data.content)
 			          		this.isLoading = 0;         	
 			          }else{
-			          }          
-		      })  
+			        }
+		      })
 		    },
 		    switchBlock(uid){
 		    	this.setIndentBlock(false)

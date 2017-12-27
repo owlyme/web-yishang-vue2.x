@@ -121,7 +121,6 @@ export default {
       this.resFalse = false
     },
     login(){
-      console.log(this.Api)
       let url= this.getUrl+'Home/User/loginCheck'   
       let args = {
         phone : this.account.name,
@@ -150,7 +149,6 @@ export default {
     refreshQr(){
       let url= this.getUrl+'Home/User/qrcode'
       this.axios.get(url).then((res)=>{
-        console.log( res)
           if(res.status == 200){
             this.qrCodeUrl =res.data
             this.customCode = res.headers["custom-code"]
@@ -164,7 +162,8 @@ export default {
           if( !this.switchToPC ){
              clearInterval(timer)
           }
-          this.axios.post(url,qs.stringify(args)).then((res)=>{ 
+          this.axios.post(url,qs.stringify(args)).then((res)=>{
+                console.log(res)
                 if(res.data){
                  this.qrcodeLogin()
                  clearInterval(timer)
@@ -176,6 +175,7 @@ export default {
       let url= this.getUrl+'/Home/User/qrcodeLogin'
       let args = {code: true}
       this.axios.post(url,qs.stringify(args)).then((res)=>{
+          console.log(res)
           if(res.status == 200){
             if(res.data.status == 200){
               this.setCustomerInfo({

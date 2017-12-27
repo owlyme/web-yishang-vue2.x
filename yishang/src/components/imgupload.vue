@@ -109,6 +109,7 @@ import { mapGetters } from 'vuex'
 				uploadImgArr:[
 					{
 						name:'局部细节图',
+						title:'局部细节图',
 						showSrc1: require('../assets/part1-pic.jpg'),
 						showSrc2: require('../assets/part2-pic.jpg'),
 						dialogVisible: false,
