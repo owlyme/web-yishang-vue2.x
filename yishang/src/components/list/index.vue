@@ -24,9 +24,11 @@
                 <div class="nav-h clearfix">
                       <router-link 
                       class="muneNav"
-                      v-for="(item, index) in listNav"                      
+                      v-for="(item, index) in listNav"
+                      :key="'mainnav'+ index"
                       :to='item.path'
-                      ><div @click="fliter">{{item.title}}</div></router-link>
+                      @click.native="fliter(index)"
+                      >{{item.title}}</router-link>
               </div>
               </div>
           </el-col>
@@ -105,9 +107,9 @@ export default {
     getCurrentPages(){
       // console.log(this.currentPage)
     },
-    fliter(){
+    fliter(index){
       this.setIndentBlock(true)
-    }
+    }, 
   }
 }
 </script>

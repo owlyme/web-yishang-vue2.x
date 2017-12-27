@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
 import App from './App'
-import router from './router'
 import store from './store'
+import router from './router'
+import axios from './util/http.js'
+import VueAxios from 'vue-axios'
 
 import BootstrapVue from 'bootstrap-vue'
 import ElementUI from 'element-ui'
-import axios from './util/http.js'
-import VueAxios from 'vue-axios'
 
 Vue.use(VueCookies)
 Vue.use(VueAxios, axios)
