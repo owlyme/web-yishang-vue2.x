@@ -42,8 +42,8 @@
 								</ul>
 								<div class="padding-top"><button class="next btn"> 下一步 </button></div>
 							</div>
-							<div v-if="displayOrNot == 'bank'">
-								
+							<div v-if="displayOrNot == 'bank'">							
+								   <Banks :bankVal.sync="bankval"></Banks>
 							</div>
 						</div>
 					</div>
@@ -114,7 +114,7 @@ import Imgupload from "../imgupload"
 import Pay from "../payAndAddr"
 import Fabric from "../fabric"
 import About from "../about"
-
+import Banks from "../banks"
 import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
@@ -122,10 +122,11 @@ import { mapMutations } from 'vuex'
 
 export default {
 	name: "zizhu",
-	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
+	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About, Banks},
 	data () {
 		return {
 			msg: '',
+			bankval: '',
 			displayOrNot: 'thd',
 			submitSuccess: true,
 		   	receiptContent:{},
@@ -173,6 +174,14 @@ export default {
       	return this.submitReceipt.total_fee
       } 
   },
+  watch:{
+		bankval:{
+			handler(curVal,oldVal){
+				console.log(curVal)
+			},
+			deep:true
+		}
+	},
   mounted(){  
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=2').then((res)=>{
@@ -309,7 +318,7 @@ methods:{
   }
   .bg-jianshe{
 	background-position: 1px 1px;
-  }
+  }	
   .bg-nongye{
 	background-position: 1px 1px;
   }

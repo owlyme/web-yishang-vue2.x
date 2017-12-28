@@ -24,3 +24,5 @@ Content
 
 https://wiki.filezilla-project.org/Using
 function randomSort(array) {array.sort(function () { return 0.5 - Math.random(); })}  
+
+ require('../assets/back-pic.jpg'),
