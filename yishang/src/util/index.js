@@ -1,5 +1,4 @@
 import Api from './api.js'
-import Http from './http.js'
 
 export default{
 	install(Vue, options){

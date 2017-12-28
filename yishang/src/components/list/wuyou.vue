@@ -1,7 +1,54 @@
 <template>
 	<div >
-		<div v-if="!passBefore" class="text-center padding-top-bottom color border-top">			
-				{{ msg }}
+		<div v-if="submitSuccess" class=" padding-top-bottom color border-top">			
+			<div class="container servicefee" >
+			    <b-row  align-v="center" >
+			        <b-col cols="3" >
+						<div>
+							支付费用：
+						</div>
+						<div>
+							￥ 2000.00
+						</div>
+			        </b-col>
+			        <b-col cols="9" class="login">
+						<div>
+							<span>订单名称：3000大棉袄</span>
+							<span>订单编号：3000大棉袄</span>
+						</div>
+						<div>
+							<span>订单状态：3000大棉袄</span>
+							<span>订单金额：3000大棉袄</span>
+						</div>
+			        </b-col>
+			    </b-row>
+			    <b-col >
+					<div>
+						<b-nav tabs>
+						  <b-nav-item :active="(displayOrNot == 'thd')"						  
+						  @click="toPayPage('thd')">第三方支付</b-nav-item>
+						  <b-nav-item :active="displayOrNot == 'bank' " 						  
+						  @click="toPayPage('bank')">银行卡/信用卡支付</b-nav-item>
+						</b-nav>
+						<div class="pay-type">
+							<div v-if="displayOrNot == 'thd'" class="padding-left-right padding-top-bottom">
+								<ul class="padding-top">
+									<li class="inline selected margin-right">
+										<div class="bg-bank size2 bg-weichat "></div>
+									</li>
+									<li class="inline selected margin-right">
+										<div class="bg-bank size2 bg-ali"></div>
+									</li>
+								</ul>
+								<div class="padding-top"><button class="next btn"> 下一步 </button></div>
+							</div>
+							<div v-if="displayOrNot == 'bank'">
+								
+							</div>
+						</div>
+					</div>
+			    </b-col>  
+			</div>
 		</div>
 		<div v-else>
 			<div  id="wuyou">
@@ -79,7 +126,8 @@ export default {
 	data () {
 		return {
 			msg: '',
-			passBefore:false,
+			displayOrNot: 'thd',
+			submitSuccess: true,
 		   	receiptContent:{},
 		   	submitReceipt: {
 				type: null,
@@ -125,9 +173,6 @@ export default {
       	return this.submitReceipt.total_fee
       } 
   },
-  created(){
-  	this.beforeReceipt()
-  },
   mounted(){  
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=2').then((res)=>{
@@ -138,6 +183,9 @@ export default {
     this.getpayfront();    
   },
 methods:{
+	toPayPage(val){
+		this.displayOrNot= val
+	},
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
     	this.submitReceiptFn(this.submitReceipt)
@@ -149,19 +197,7 @@ methods:{
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
 	        }        
 	    }) 
-    },
-    beforeReceipt(){
-    	let url = this.getUrl
-	    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-		        if(res.data.status ==200){
-		        	this.passBefore = true			        	
-		        }else {
-		        	this.msg = res.data.msg
-		        	this.openMessage({str: res.data.msg, ele:this})
-		        	this.$router.push("/")  				        
-		        }
-		})
-    },
+    },    
     submitReceiptFn(args){
     	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
@@ -248,4 +284,123 @@ methods:{
 	.submit button:second-child{
 		background: rgb(204,204,204);
 	}
+	.pay-type{
+		border: 2px solid rgb(148, 46, 234);
+		border-top: none;
+	}
+	.nav-tabs {
+	    border-bottom: 2px solid #942eea;
+	}
+	.nav-tabs .nav-item {
+	    margin-bottom: -3px;
+	}
+	.nav-link.active{
+    color: rgb(148, 46, 234);
+    border-width: 2px;
+    border-color: #942eea #942eea #fff;
+  }
+  .bg-bank{
+  	background-image: url(/static/bank/bank-icons.png);
+  	background-repeat: no-repeat;
+  	cursor: pointer;
+  }
+  .bg-gongshang{
+	background-position: 1px 1px;
+  }
+  .bg-jianshe{
+	background-position: 1px 1px;
+  }
+  .bg-nongye{
+	background-position: 1px 1px;
+  }
+  .bg-zhaoshang{
+	background-position: 1px 1px;
+  }
+  .bg-guangda{
+	background-position: 1px 1px;
+  }
+  .bg-mingsheng{
+	background-position: 1px 1px;
+  }
+  .bg-zhongxin{
+	background-position: 1px 1px;
+  }
+  .bg-xingye{
+	background-position: 1px 1px;
+  }
+  .bg-pudong{
+	background-position: 1px 1px;
+  }
+  .bg-pingan{
+	background-position: 1px 1px;
+  }
+  .bg-huaxia{
+	background-position: 1px 1px;
+  }
+  .bg-ningbo{
+	background-position: 1px 1px;
+  }
+  .bg-beijing{
+	background-position: 1px 1px;
+  }
+  .bg-dongya{
+	background-position: 1px 1px;
+  }
+  .bg-shanghai{
+	background-position: 1px 1px;
+  }
+  .bg-youzheng{
+	background-position: 1px 1px;
+  }
+  .bg-nanjin{
+	background-position: 1px 1px;
+  }
+  .bg-bohai{
+	background-position: 1px 1px;
+  }
+  .bg-shanghainongshang{
+	background-position: 1px 1px;
+  }
+  .bg-weichat{
+	background-position: 0px -280px;
+  }
+  .bg-ali{
+	background-position: -164px -280px;
+  }
+  .selected{
+  	position: relative;
+  	border: 2px solid rgba(211, 201, 218, 0.18);
+  }
+  .selected:hover{
+  	border: 2px solid rgb(148, 46, 234);
+  }
+
+  .size1{
+  	width: 196px;
+  	height: 46px;
+  }
+  .size2{
+  	width: 139px;
+  	height: 48px;
+  }
+  .inline{  	
+  	display: inline-block;  	
+  	padding: 2px;
+  }
+  .is-selected{
+  	position: absolute;
+  	width: 6px;
+  	height:6px;
+  	right: 0;
+  	bottom: 0;
+  }
+
+ .next{
+ 	width: 139px;
+  	height: 36px;
+ 	background: rgb(148, 46, 234);
+ 	color: #fff;
+ 	font-size: 1.1em;
+ 	font-weight: 600px;
+ }
 </style>

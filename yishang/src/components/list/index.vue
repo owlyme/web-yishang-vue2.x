@@ -20,7 +20,7 @@
             </router-link>                  
           </el-col>
           <el-col :span="14">
-              <div class="link-nav">
+             <!--  <div class="link-nav">
                 <div class="nav-h clearfix">
                       <router-link 
                       class="muneNav"
@@ -29,15 +29,25 @@
                       :to='item.path'
                       @click.native="fliter(index)"
                       >{{item.title}}</router-link>
-              </div>
+                </div>
+              </div> -->
+              <div class="link-nav">
+                <div class="nav-h clearfix">
+                      <a 
+                      class="muneNav"                      
+                      v-for="(item, index) in listNav"
+                      :key="'mainnav'+ index"
+                      @click="fliter(index)"
+                      ><span :class="{ isactive: item.flag}">{{item.title}}</span></a>
+                </div>
               </div>
           </el-col>
         </el-row>  
     </div>
   </div>
   <div class="bg-white"> 
-    <!-- <keep-alive> <router-view/> </keep-alive>  -->
-    <router-view/>
+    <keep-alive> <router-view/> </keep-alive> 
+    <!-- <router-view/> -->
   </div>
   <Footerinfo/>
  </div>
@@ -54,14 +64,21 @@ export default {
   data () {
     return {
       loginSucess: false,
-      listNav:[{title:'首页',path:"/"},
-      {title:'自主发单',path:"/zizhu"},
-      {title:'无忧发单',path:"/wuyou"},
-      {title:'我的订单',path:"/indent"}]
+      listNav:[{title:'首页',path:"/", flag: true},
+      {title:'自主发单',path:"/zizhu", flag: false},
+      {title:'无忧发单',path:"/wuyou", flag: false},
+      {title:'我的订单',path:"/indent", flag: false}]
     }
   },
   mounted(){
-
+    let curPath = this.$router.history.current.path
+    this.listNav.forEach((item, _index)=>{        
+        if( curPath == item.path ){
+          this.$set(item, 'flag', true)
+        }else{
+          this.$set(item, 'flag', false)
+        }
+      })
   },
   computed:{
       ...mapGetters([
@@ -107,8 +124,33 @@ export default {
     getCurrentPages(){
       // console.log(this.currentPage)
     },
+    beforeReceipt(index){
+        let url = this.getUrl
+        this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
+            this.$router.push(this.listNav[index].path)
+              if(res.data.status ==200){
+                this.$router.push(this.listNav[index].path)
+              }else {
+                this.msg = res.data.msg
+                this.openMessage({str: res.data.msg, ele:this})
+              }
+      })
+    },
     fliter(index){
+      let listNav = this.listNav
       this.setIndentBlock(true)
+      listNav.forEach((item, _index)=>{
+        if( index == _index){
+          this.$set(item, 'flag', true)
+        }else{
+          this.$set(item, 'flag', false)
+        }
+      })
+      if(index% 3 ){
+        this.beforeReceipt(index)
+      }else{
+        this.$router.push(listNav[index].path)
+      }
     }, 
   }
 }
@@ -140,9 +182,7 @@ export default {
   .fr{
     height: 100%;
   float: right;
-  }
-
-  
+  }  
   .avatarImg{
     height: 100%;
   }
@@ -196,7 +236,8 @@ export default {
   .muneNav:hover{
   color: #C44DDC;
   }
+  .isactive,
   .router-link-exact-active{
-  color: #C44DDC;
+    color: #C44DDC;
   }
 </style>

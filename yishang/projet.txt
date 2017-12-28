@@ -1,9 +1,7 @@
 xiaoyaoji  owlyme@yeah.net 1148452777
 http://www.xiaoyaoji.cn/doc/18podjSMqt
-phone=
-18271632203
-&password=
-123546
+phone=   18271632203
+password=	123546
 
 http://101.132.187.244:8082/#/login
 101.132.187.244     yishang    yishang

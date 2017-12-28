@@ -1,9 +1,7 @@
 <template>
 	<div >
-		<div v-if="!passBefore" class="text-center padding-top-bottom color border-top">
-				{{ msg }}
-		</div>		
-		<div id="zizhu" v-else >	
+			
+			
 			<div class="container bg-white" >
 				<!-- 加工单编辑 -->
 				<h3 class="text-center padding-top-bottom">加工单编辑</h3>
@@ -50,7 +48,7 @@
 					</div>			   
 				</el-form>			
 			</div>
-		</div>		
+			
 	</div>
 </template>
 
@@ -116,10 +114,8 @@ export default {
       ...mapGetters([
          'getUrl',
       ]),
-  },
-  created(){
-  	this.beforeReceipt()
-  },
+      
+  },  
   mounted(){
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=1').then((res)=>{
@@ -135,18 +131,7 @@ export default {
 	    	this.$set(this.submitReceipt, 'type', 1)
 	    	this.submitReceiptFn(this.submitReceipt);
 	    },
-	    beforeReceipt(){
-	    	let url = this.getUrl
-		    this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-			        if(res.data.status ==200){
-			        	this.passBefore= true
-			        }else {
-			        	this.msg = res.data.msg
-			        	this.openMessage({str: res.data.msg, ele:this})
-			        	this.$router.push("/")
-			        }
-			})
-	    },
+	   
 	    submitReceiptFn(args){
 	    	let url = this.getUrl
 		    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
