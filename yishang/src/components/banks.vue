@@ -1,166 +1,197 @@
-<template>
-	<div>
-		<!-- <el-form-item label="是否支付定金:" >
-		    <el-radio-group v-model="bank" style="padding-top:8px">
-		      <el-radio  
-		       v-for="(item, index) in bankList"
-		       :key="'bank'+ index"
-		       :label="item.id">
-		       			{{item.name}}       
-		       		<img :src="item.logo" class="banklogo">		
-		       </el-radio>
-		    </el-radio-group>
-		</el-form-item> -->
+<template>	
+<div>
+	<b-nav tabs>
+	  <b-nav-item :active="(displayOrNot == 'thd')"						  
+	  @click="toPayPage('thd')">第三方支付</b-nav-item>
+	  <b-nav-item :active=" (displayOrNot == 'bank') " 						  
+	  @click="toPayPage('bank')">银行卡/信用卡支付</b-nav-item>
+	</b-nav>
+	<div class="pay-type">
+		<div v-if="displayOrNot == 'thd'" class="padding-left-right padding-top-bottom">
+			<ul class="padding-top">
+				<li class="inline selected margin-right">
+					<img :src="item.logo" />
+				</li>
+				<li class="inline selected margin-right">
+					<img :src="item.logo" />
+				</li>
+			</ul>
+			<div class="padding-top-bottom"><button class="next btn"> 下一步 </button></div>
+		</div>
+		<div v-if="displayOrNot == 'bank'">
 			<div class="bank-box">
 				<label v-for="(item, index) in bankList"
 		      			:key="'bank'+ index"
 		       			:label="item.id" 
 		       			@click="selected(index)"
 		       			:class="{checked: item.check}"
-		       			class="inputLabel">
+		       			class="inputLabel size1">
 					<input type="radio" name="bank" :value="index" v-model="bank">
-					<span class="banklogo">{{item.name}}</span>
+					<span class="banklogo"> <img :src="item.logo" /></span>
 				</label>
-			</div>		
+				<div class="padding-top-bottom"><button class="next btn"> 下一步 </button></div>
+			</div>
+		</div>
 	</div>
+</div>
 </template>
 <script >
 
 export default{
 	data(){
 		return{
+			displayOrNot: 'thd',
 			bank: "",
-			bankList:[
+			thirdParty:[
 				{
-					name:'工商银行',
+					name:,
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/gongshang.jpg')
 				},
 				{
 					name:'建设银行',
 					id:'2',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/jianshe.jpg')
+				}
+			],
+			bankList:[
+				{
+					name:'工商银行',
+					id:'1',
+					check:false,
+					flag: false,
+					logo: require('../assets/bank/gongshang.jpg')
+				},
+				{
+					name:'建设银行',
+					id:'2',
+					check:false,
+					flag: false,
+					logo: require('../assets/bank/jianshe.jpg')
 				},
 				{
 					name:'农业银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/nongye.jpg')
 				},
 				{
 					name:'招商银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/zhaoshang.jpg')
 				},
 				{
 					name:'光大银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/guangda.jpg')
 				},
 				{
 					name:'民生银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/minsheng.jpg')
 				},
 				{
 					name:'中兴银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/zhongxing.jpg')
 				},
 				{
 					name:'兴业银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/xingye.jpg')
 				},
 				{
 					name:'浦东银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/shanghaipudong.jpg')
 				},
 				{
 					name:'平安银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/pingan.jpg')
 				},
 				{
 					name:'华夏银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/huaxia.jpg')
 				},
 				{
 					name:'宁波银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/ningbo.jpg')
 				},
 				{
 					name:'东亚银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/dongya.jpg')
 				},
 				{
 					name:'上海银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/shanghai.jpg')
 				},
 				{
 					name:'邮政银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/youzheng.jpg')
 				},
 				{
 					name:'南京银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/nanjing.jpg')
 				},
 				{
 					name:'渤海银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/bohai.jpg')
 				},
 				{
 					name:'上海农商银行',
 					id:'1',
 					check:false,
 					flag: false,
-					// logo: require('../assets/banks/gongshang.jpg')
+					logo: require('../assets/bank/shanghainongshang.jpg')
 				}
 			]
 		}
 	},
 	methods:{
+		toPayPage(val){
+			this.displayOrNot= val
+		},
 		selected(index){
 			this.bankList.forEach((item, _index)=>{
 				if(index == _index){
@@ -174,8 +205,7 @@ export default{
 	}
 }
 </script>
-<style scpoed>
-
+<style scoped>
 	.bank-box{
 		padding: 30px;
 	}
@@ -183,8 +213,9 @@ export default{
 		position: relative;
 		width: 25%;
 		height: 60px;
+		margin: 20px 0;
 		line-height: 60px;
-		text-indent:  20px;
+		text-indent:  30px;
 	}
 	.inputLabel:before{
 		display: inline-block;
@@ -216,74 +247,19 @@ export default{
 		display: inline-block;
 	}
 	.banklogo{
+		padding: 10px;
+		padding-right: 30px;
 		border: 2px solid rgba(70, 70, 70, 0.2);
+	}
+	.banklogo:hover{
+		padding: 10px;
+		padding-right: 30px;
+		border: 2px solid rgb(148, 46, 234);
 	}
 	.checked .banklogo{
 		border: 2px solid rgb(148, 46, 234);	
 	}
-	.bg-gongshang{
-	background-position: 1px 1px;
-  }
-  .bg-jianshe{
-	background-position: 1px 1px;
-  }
-  .bg-nongye{
-	background-position: 1px 1px;
-  }
-  .bg-zhaoshang{
-	background-position: 1px 1px;
-  }
-  .bg-guangda{
-	background-position: 1px 1px;
-  }
-  .bg-mingsheng{
-	background-position: 1px 1px;
-  }
-  .bg-zhongxin{
-	background-position: 1px 1px;
-  }
-  .bg-xingye{
-	background-position: 1px 1px;
-  }
-  .bg-pudong{
-	background-position: 1px 1px;
-  }
-  .bg-pingan{
-	background-position: 1px 1px;
-  }
-  .bg-huaxia{
-	background-position: 1px 1px;
-  }
-  .bg-ningbo{
-	background-position: 1px 1px;
-  }
-  .bg-beijing{
-	background-position: 1px 1px;
-  }
-  .bg-dongya{
-	background-position: 1px 1px;
-  }
-  .bg-shanghai{
-	background-position: 1px 1px;
-  }
-  .bg-youzheng{
-	background-position: 1px 1px;
-  }
-  .bg-nanjin{
-	background-position: 1px 1px;
-  }
-  .bg-bohai{
-	background-position: 1px 1px;
-  }
-  .bg-shanghainongshang{
-	background-position: 1px 1px;
-  }
-  .bg-weichat{
-	background-position: 0px -280px;
-  }
-  .bg-ali{
-	background-position: -164px -280px;
-  }
+	
   .selected{
   	position: relative;
   	border: 2px solid rgba(211, 151, 218, 0.18);
@@ -293,7 +269,7 @@ export default{
   }
 
   .size1{
-  	width: 196px;
+  
   	height: 46px;
   }
   .size2{
@@ -311,4 +287,71 @@ export default{
   	right: 0;
   	bottom: 0;
   }
+  .next{
+ 	width: 139px;
+  	height: 36px;
+ 	background: rgb(148, 46, 234);
+ 	color: #fff;
+ 	font-size: 1.1em;
+ 	font-weight: 600px;
+ }
+ .pay-type{
+		border: 2px solid rgb(148, 46, 234);
+		border-top: none;
+	}
+	.nav-tabs {
+	    border-bottom: 2px solid #942eea;
+	}
+	.nav-tabs .nav-item {
+	    margin-bottom: -3px;
+	}
+.nav-link.active{
+    color: rgb(148, 46, 234);
+    border-width: 2px;
+    border-color: #942eea #942eea #fff;
+  }
+
+  .bg-bank{
+  	background-image: url(/static/bank/bank-icons.png);
+  	background-repeat: no-repeat;
+  	cursor: pointer;
+  }
+  .bg-weichat{
+	background-position: 0px -280px;
+  }
+  .bg-ali{
+	background-position: -164px -280px;
+  }
+/*.selected{
+  	position: relative;
+  	border: 2px solid rgba(211, 201, 218, 0.18);
+  }
+  .selected:hover{
+  	border: 2px solid rgb(148, 46, 234);
+  }
+
+  .size2{
+  	width: 139px;
+  	height: 48px;
+  }
+  .inline{  	
+  	display: inline-block;  	
+  	padding: 2px;
+  }
+  .is-selected{
+  	position: absolute;
+  	width: 6px;
+  	height:6px;
+  	right: 0;
+  	bottom: 0;
+  }
+
+ .next{
+ 	width: 139px;
+  	height: 36px;
+ 	background: rgb(148, 46, 234);
+ 	color: #fff;
+ 	font-size: 1.1em;
+ 	font-weight: 600px;
+ }*/
 </style>
