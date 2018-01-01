@@ -119,9 +119,6 @@ export default {
 		}
 	},
 	methods:{
-		handleChange(){
-			console.log(this.clothes)
-		},
 		clickDisplay(index){
 			let self = this;
 			self.diffKind.forEach((item, _index)=>{

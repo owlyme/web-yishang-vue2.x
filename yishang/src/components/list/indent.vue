@@ -223,14 +223,14 @@
 									v-for="(item,index) in selectDetails.details.part_picture" 
 									:key="index">
 									<li>
-										<img :src="getUploadUrl+selectDetails.details.part_picture"/>
+										<img :src="getUploadUrl+item"/>
 									</li>
 									<li>局部细节图</li>
 								</ul>
 
 								<ul v-for="item in selectDetails.otherPic" class="inner-icon">
 									<li v-for="item1 in item.picture">
-										<img :src="getUploadUrl+'/'+ item1" />
+										<img :src="getUploadUrl+ item1" />
 									</li>
 									<li>{{ item.title }}</li>
 								</ul>
@@ -410,8 +410,8 @@
 		    getMainlist(args){
 		      let url= this.getUrl+'Home/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
-		      	console.log('mainlist')
-		      	console.log(res)
+		      	// console.log('mainlist')
+		      	// console.log(res)
 		          if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;
@@ -425,8 +425,8 @@
 		    	let url= this.getUrl+'Home/ReceiptOrder/schedule'
 		      	this.axios.post(url, qs.stringify({order_id: id }))
 		      	.then((res)=>{
-		      		console.log('getSchedule')
-		      	console.log(res)
+		      		// console.log('getSchedule')
+		      	// console.log(res)
 		          if(res.data.status == 200){
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
@@ -440,10 +440,10 @@
 		    	let url= this.getUrl+'Home/ReceiptOrder/details'
 			      this.axios.post(url, qs.stringify({order_id: id }))
 			      .then((res)=>{
-		           		console.log('getDetails')
-		      	console.log(res)
+		           		// console.log('getDetails')
+		      	// console.log(res)
 			          if(res.data.status == 200){
-			          		console.log( res.data.content)
+			          		// console.log( res.data.content)
 			          		this.$set(this,'selectDetails',res.data.content)
 			          		this.isLoading = 0;         	
 			          }else{

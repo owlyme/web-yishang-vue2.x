@@ -96,6 +96,7 @@ export default {
     }
   },
   created(){
+    
     this.refreshQr()
   },  
   computed:{
@@ -163,19 +164,19 @@ export default {
              clearInterval(timer)
           }
           this.axios.post(url,qs.stringify(args)).then((res)=>{
-                console.log(res)
+                // console.log(res)
                 if(res.data){
                  this.qrcodeLogin()
                  clearInterval(timer)
                 }      
             });
-      },3000)
+          },3000)
     },
     qrcodeLogin(){
       let url= this.getUrl+'/Home/User/qrcodeLogin'
-      let args = {code: true}
+      let args = {code: this.customCode}
       this.axios.post(url,qs.stringify(args)).then((res)=>{
-          console.log(res)
+          // console.log(res)
           if(res.status == 200){
             if(res.data.status == 200){
               this.setCustomerInfo({

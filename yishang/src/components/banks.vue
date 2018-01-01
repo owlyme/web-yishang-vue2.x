@@ -1,206 +1,283 @@
 <template>	
 <div>
-	<b-nav tabs>
-	  <b-nav-item :active="(displayOrNot == 'thd')"						  
-	  @click="toPayPage('thd')">第三方支付</b-nav-item>
-	  <b-nav-item :active=" (displayOrNot == 'bank') " 						  
-	  @click="toPayPage('bank')">银行卡/信用卡支付</b-nav-item>
-	</b-nav>
-	<div class="pay-type">
-		<div v-if="displayOrNot == 'thd'" class="padding-left-right padding-top-bottom">
-			<ul class="padding-top">
-				<li class="inline selected margin-right">
-					<img :src="item.logo" />
-				</li>
-				<li class="inline selected margin-right">
-					<img :src="item.logo" />
-				</li>
-			</ul>
-			<div class="padding-top-bottom"><button class="next btn"> 下一步 </button></div>
-		</div>
-		<div v-if="displayOrNot == 'bank'">
-			<div class="bank-box">
-				<label v-for="(item, index) in bankList"
-		      			:key="'bank'+ index"
-		       			:label="item.id" 
-		       			@click="selected(index)"
-		       			:class="{checked: item.check}"
-		       			class="inputLabel size1">
-					<input type="radio" name="bank" :value="index" v-model="bank">
-					<span class="banklogo"> <img :src="item.logo" /></span>
-				</label>
-				<div class="padding-top-bottom"><button class="next btn"> 下一步 </button></div>
+	<b-row  align-v="center" >
+        <b-col cols="3" >
+			<div>
+				支付费用：
+			</div>
+			<div>
+				￥ <span class="">{{receiptPayFront.service_fee}}</span>
+			</div>
+        </b-col>
+        <b-col cols="9" class="login">
+			<div>
+				<span>订单名称：{{receiptPayFront.name}}</span>
+				<span>订单编号：{{receiptPayFront.order_id}}</span>
+			</div>
+			<div>
+				<span>订单状态：接单状态</span>
+				<span>订单金额：{{receiptPayFront.total_fee}}</span>
+			</div>
+        </b-col>
+    </b-row>
+    <b-col >
+		<b-nav tabs>
+		  <b-nav-item :active="(displayOrNot == 'thd')"						  
+		  @click="toPayPage('thd')">第三方支付</b-nav-item>
+		  <b-nav-item :active=" (displayOrNot == 'bank') " 						  
+		  @click="toPayPage('bank')">银行卡/信用卡支付</b-nav-item>
+		</b-nav>
+		<div class="pay-type">
+			<div v-if="displayOrNot == 'thd'" class="padding-left-right padding-top-bottom">
+				<ul class="padding-top">
+					<label v-for="(item, index) in thirdParty"
+			      			:key="'bank'+ index"
+			       			:label="item.id" 
+			       			@click="selected(index, thirdParty)"
+			       			:class="{checked: item.check}"
+			       			class="inputLabel size2">
+						<input type="radio" name="bank" :value="payType" v-model="bank">
+						<span class="banklogo"> <img :src="item.logo" /></span>
+					</label>
+				</ul>
+				<div class="padding-top-bottom" @click="nextPay()"><button class="next btn" > 下一步 </button></div>
+			</div>
+			<div v-if="displayOrNot == 'bank'">
+				<div class="bank-box">
+					<label v-for="(item, index) in bankList"
+			      			:key="'bank'+ index"
+			       			:label="item.id" 
+			       			@click="selected(index, bankList)"
+			       			:class="{checked: item.check}"
+			       			class="inputLabel size1">
+						<input type="radio" name="bank" :value="payType" v-model="bank">
+						<span class="banklogo"> <img :src="item.logo" /></span>
+					</label>
+					<div class="padding-top-bottom" @click="nextPay()"><button class="next btn"> 下一步 </button></div>
+				</div>
 			</div>
 		</div>
-	</div>
+    </b-col>  
 </div>
 </template>
 <script >
+import { mapGetters } from 'vuex'
+import qs from 'qs';
 
 export default{
+	props:['submitReceipt','receiptContent'],
 	data(){
 		return{
 			displayOrNot: 'thd',
 			bank: "",
+			payType: "",
 			thirdParty:[
 				{
-					name:,
-					id:'1',
+					name:'微信支付',
+					payType:'weichai',
 					check:false,
 					flag: false,
-					logo: require('../assets/bank/gongshang.jpg')
+					logo: require('../assets/bank/weichat.jpg')
 				},
 				{
-					name:'建设银行',
-					id:'2',
+					name:'淘宝支付',
+					payType:'alipay',
 					check:false,
 					flag: false,
-					logo: require('../assets/bank/jianshe.jpg')
+					logo: require('../assets/bank/ali.jpg')
 				}
 			],
 			bankList:[
 				{
 					name:'工商银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/gongshang.jpg')
 				},
 				{
 					name:'建设银行',
-					id:'2',
+					payType:'2',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/jianshe.jpg')
 				},
 				{
 					name:'农业银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/nongye.jpg')
 				},
 				{
 					name:'招商银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/zhaoshang.jpg')
 				},
 				{
 					name:'光大银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/guangda.jpg')
 				},
 				{
 					name:'民生银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/minsheng.jpg')
 				},
 				{
 					name:'中兴银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/zhongxing.jpg')
 				},
 				{
 					name:'兴业银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/xingye.jpg')
 				},
 				{
 					name:'浦东银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/shanghaipudong.jpg')
 				},
 				{
 					name:'平安银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/pingan.jpg')
 				},
 				{
 					name:'华夏银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/huaxia.jpg')
 				},
 				{
 					name:'宁波银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/ningbo.jpg')
 				},
 				{
 					name:'东亚银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/dongya.jpg')
 				},
 				{
 					name:'上海银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/shanghai.jpg')
 				},
 				{
 					name:'邮政银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/youzheng.jpg')
 				},
 				{
 					name:'南京银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/nanjing.jpg')
 				},
 				{
 					name:'渤海银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/bohai.jpg')
 				},
 				{
 					name:'上海农商银行',
-					id:'1',
+					payType:'1',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/shanghainongshang.jpg')
 				}
-			]
+			],
+			receiptPayFront:{
+
+			}
 		}
+	},
+	computed:{
+		...mapGetters([
+         'getUrl',
+      	]),
+		servantFee(){
+			return submitReceipt.total_fee * receiptContents.deposit
+		}
+	},
+	created(){
+		this.getPayfront()
 	},
 	methods:{
 		toPayPage(val){
 			this.displayOrNot= val
 		},
-		selected(index){
-			this.bankList.forEach((item, _index)=>{
+		selected(index, list){
+			list.forEach((item, _index)=>{
 				if(index == _index){
 					this.$set(item, "check", true)
 					this.$emit('update:bankVal', index)
+					this.payType = item.payType
 				}else{
 					this.$set(item, "check", false)
 				}
 			})
+		},
+		getPayfront(){
+			let url = this.getUrl
+			let args= { order_id: this.receiptContent.order_id}
+			// console.log(this.receiptContent.order_id)
+	        this.axios.post(url+'/Home/Receipt/payfront',qs.stringify(args)).then((res)=>{	  
+	        	console.log(res)
+				if(res.data.status == 200 ){
+					this.receiptPayFront = res.data.content
+				}else {
+					
+				}
+	      })
+		},
+		nextPay(){
+			let url = this.getUrl
+			let args= { order_id: receiptPayFront.order_id,
+						pay_type: this.payType,
+						service_fee: receiptPayFront.service_fee}
+			console.log(args)
+			setTimeout(()=>{
+				this.receiptContent.order_id =  null
+			}, 5000)
+
+	        this.axios.post(url+'/Home/Receipt/payBeforeSubmit', 
+	        	qs.stringify(args)).then((res)=>{	
+	        	console.log(res)
+	              if(res.data.status ==200){
+
+	              }else {
+
+	              }
+	      })
 		}
 	}
 }
@@ -211,7 +288,6 @@ export default{
 	}
 	.inputLabel{
 		position: relative;
-		width: 25%;
 		height: 60px;
 		margin: 20px 0;
 		line-height: 60px;
@@ -259,25 +335,46 @@ export default{
 	.checked .banklogo{
 		border: 2px solid rgb(148, 46, 234);	
 	}
-	
-  .selected{
-  	position: relative;
-  	border: 2px solid rgba(211, 151, 218, 0.18);
-  }
-  .selected:hover{
-  	border: 2px solid rgb(148, 46, 234);
-  }
-
-  .size1{
-  
+  .size1{ 
+  	width: 25%;
   	height: 46px;
   }
   .size2{
-  	width: 139px;
-  	height: 48px;
+  	margin-right: 30px;
   }
-  .inline{  	
-  	display: inline-block;  	
+  .size2.inputLabel{
+  	height: 50px;
+	line-height: 0px;
+  	text-indent: 0;
+  }
+	.size2.inputLabel:before,
+	.size2.inputLabel:after{
+		display: none;
+	}
+	.checked.size2.inputLabel:after{
+		display: block;
+		position: absolute;
+		content: '';
+		left: initial;
+    	top: initial;
+    	right: 0;
+    	bottom: 0;
+		height: 16px;
+	    width: 16px;
+	    border-radius: 0;
+	    background: initial;
+	    border: none;
+	    background-image: url(/static/img/bank-icons.dca610e.png);
+	    background-repeat: no-repeat;
+	    background-position: -122px -375px;
+	}
+ 	.size2 .banklogo{
+ 		display: inline-block;
+ 		padding: 0;
+ 	}
+ 
+  .inline{
+  	display: inline-block;
   	padding: 2px;
   }
   .is-selected{
@@ -310,48 +407,5 @@ export default{
     border-width: 2px;
     border-color: #942eea #942eea #fff;
   }
-
-  .bg-bank{
-  	background-image: url(/static/bank/bank-icons.png);
-  	background-repeat: no-repeat;
-  	cursor: pointer;
-  }
-  .bg-weichat{
-	background-position: 0px -280px;
-  }
-  .bg-ali{
-	background-position: -164px -280px;
-  }
-/*.selected{
-  	position: relative;
-  	border: 2px solid rgba(211, 201, 218, 0.18);
-  }
-  .selected:hover{
-  	border: 2px solid rgb(148, 46, 234);
-  }
-
-  .size2{
-  	width: 139px;
-  	height: 48px;
-  }
-  .inline{  	
-  	display: inline-block;  	
-  	padding: 2px;
-  }
-  .is-selected{
-  	position: absolute;
-  	width: 6px;
-  	height:6px;
-  	right: 0;
-  	bottom: 0;
-  }
-
- .next{
- 	width: 139px;
-  	height: 36px;
- 	background: rgb(148, 46, 234);
- 	color: #fff;
- 	font-size: 1.1em;
- 	font-weight: 600px;
- }*/
+ 
 </style>

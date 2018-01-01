@@ -29,7 +29,6 @@ export default {
 
 .footer{
   padding: 30px 0;
-
   background: #fff;
 }
 .foot-info{

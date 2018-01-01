@@ -1,10 +1,10 @@
 <template>
  <div class="bg">
+  <Popup v-if="popup" :popup.sync="popup"></Popup>
   <!-- header -->
   <div class="container head-height">
      <div class="login-sucess clearfix">
-      <div class="fl">        
-        <span>欢迎登陆衣依供应链平台！</span></div>
+      <div class="fl"><span>欢迎登陆衣依供应链平台！</span></div>
       <div class="fr back" @click="logOut">
         <span class="logOut bg-icon"></span>退出登录
       </div>
@@ -20,17 +20,6 @@
             </router-link>                  
           </el-col>
           <el-col :span="14">
-             <!--  <div class="link-nav">
-                <div class="nav-h clearfix">
-                      <router-link 
-                      class="muneNav"
-                      v-for="(item, index) in listNav"
-                      :key="'mainnav'+ index"
-                      :to='item.path'
-                      @click.native="fliter(index)"
-                      >{{item.title}}</router-link>
-                </div>
-              </div> -->
               <div class="link-nav">
                 <div class="nav-h clearfix">
                       <a 
@@ -55,14 +44,17 @@
 
 <script>
 import Footerinfo from "../footer"
+import Popup from '../pop-up'
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
+
 export default {
   name: 'index1',
-  components: { Footerinfo},
+  components: { Footerinfo, Popup},
   data () {
     return {
+      popup: false,
       loginSucess: false,
       listNav:[{title:'首页',path:"/", flag: true},
       {title:'自主发单',path:"/zizhu", flag: false},
@@ -78,7 +70,7 @@ export default {
         }else{
           this.$set(item, 'flag', false)
         }
-      })
+    })
   },
   computed:{
       ...mapGetters([
@@ -98,43 +90,37 @@ export default {
     ...mapMutations([
       'setIndentBlock',
     ]),
-  logOut(){
+    logOut(){
       let url= this.getUrl+'/Home/User/logOut'
       this.axios.get(url)
         .then((res)=>{
-            if(res.data.status == 200){ 
+          if(res.data.status == 200){ 
               this.clearCustomer()        
               this.$router.push("/login")
               if(!this.getSavePassword){
                 this.$cookies.remove('yiyiphone');
                 this.$cookies.remove('yiyiavatar');
               }
-            }else{
+          }else{
 
-            }          
-        })
-    },
-    focused ( val){
-      this.message = val
+          }          
+     })
     },
     send(){
       this.account.save= this.saveInfo
       this.account= { name: '', password: '', save : false}
     },
-    getCurrentPages(){
-      // console.log(this.currentPage)
-    },
     beforeReceipt(index){
         let url = this.getUrl
         this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
-            this.$router.push(this.listNav[index].path)
+              // this.$router.push(this.listNav[index].path)
               if(res.data.status ==200){
                 this.$router.push(this.listNav[index].path)
               }else {
                 this.msg = res.data.msg
-                this.openMessage({str: res.data.msg, ele:this})
+                this.popup = true
               }
-      })
+        })
     },
     fliter(index){
       let listNav = this.listNav

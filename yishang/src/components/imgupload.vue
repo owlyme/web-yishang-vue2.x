@@ -10,11 +10,9 @@
 			  			<img :src="item.showSrc" class="show-demo1">
 			  		</div>			  		
 			  		<el-upload	
-			  			class="floatleft"
-			  					  			
+			  			class="floatleft"			  					  			
 			  			ref="imgSingle"
-				        :action="actionUrl"
-				        
+				        :action="actionUrl"				        
 				        list-type="picture-card"
 				        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
 				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"    
@@ -33,8 +31,7 @@
 			<el-row :gutter="10"  class="space" v-for="(item, index) in uploadImgArr" :key="'uploadImgArr'+ index">		 
 			  <el-col :span="6" class="text-right text-style-sm">			   
 			  	<input v-model="item.title" type="text" name="" class="input-name" placeholder="请输入标题"
-			  	:class="{'el-input__inner': !item.title}" 
-			  	v-focus
+			  	:class="{'el-input__inner': !item.title}"			
 			  	>
 			  </el-col>	
 			  <el-col :span="14">
@@ -152,7 +149,7 @@ import { mapGetters } from 'vuex'
 			},			
 			pictures:{
 				handler(curVal,oldVal){
-					console.log(curVal)
+					// console.log(curVal)
 					this.$emit("setClothePic",curVal)
 				},
 				deep:true

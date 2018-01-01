@@ -1,5 +1,6 @@
 <template>
 <div class="main clearfix">
+  <Popup v-if="popup" :popup.sync="popup"></Popup>
    <div class="zIndexe" v-if=" activeIndex == '1' "></div>
    <div class="zIndexf container " > 
       <div class="carousel-box" >
@@ -11,10 +12,10 @@
         <el-row  >
           <el-col :span="12">
             <div class="grid-content bg-purple">
-              <router-link to="/zizhu">
+              <a @click="beforeReceipt('/zizhu')">
                 <div class="zizhu-bg"></div>
                 <h4>自主发单</h4>
-              </router-link>   
+              </a>
               <p>
                 自主发单需自主填写发单信息<br>
                 确定发单以后会将订单直接发送至工厂抢单界面<br>
@@ -24,10 +25,10 @@
           </el-col>
           <el-col :span="12">
             <div class="grid-content bg-purple-light ">
-              <router-link to="/wuyou">
+              <a  @click="beforeReceipt('/wuyou')">
                  <div class="wuyou-bg"></div>
                  <h4>无忧发单</h4>
-              </router-link> 
+              </a> 
               <p>
                 无忧发单需自主填单信息<br>
                 系统会匹配符合订单信息的专业"M"人员与您对接<br>
@@ -88,15 +89,16 @@
 <script>
 import Carousel from  "../carousel"
 import ListElemnt from "../listEl"
-
+import Popup from '../pop-up'
 import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 export default{
 	name: 'main',
-	components: {Carousel,ListElemnt },
+	components: {Carousel,ListElemnt,Popup },
 	data(){
 		return{
+      popup: false,
       activeIndex: '1',
       mainList:[],
 			listNav: [
@@ -196,7 +198,7 @@ export default{
     getMainlist(args){  
       let url= this.getUrl+'/Home/Index/index'
       this.axios.post(url, qs.stringify(args)).then((res)=>{
-        console.log(res)
+        // console.log(res)
           if(res.data.status == 200){
             this.perPage =  res.data.content.pageSize;
             this.totalRows = res.data.content.totalRows-0;
@@ -223,6 +225,17 @@ export default{
     displayOrNot(keyword){
       this.currentStatus = keyword
       this.getMainlist({status: keyword})
+    },
+    beforeReceipt(path){
+        let url = this.getUrl
+        this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
+            if(res.data.status ==200){
+              this.$router.push(path)
+            }else {
+              this.msg = res.data.msg
+              this.popup = true
+            }
+        })
     }
 	}
 }

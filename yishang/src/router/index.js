@@ -27,10 +27,12 @@ const router = new Router({
   ],
 })
 
-console.log(Vue.Api)
+
+
+
 router.beforeEach(function (to, from, next) {
-  if( to.path!= '/login' && !Vue.cookies.get('yiyiphone')){
-    next({path: "/login"})
+  if( to.path != '/login' && !Vue.cookies.get('yiyiphone')){
+    next({path: "/login" })
   } else{
     next()
   }

@@ -1,54 +1,49 @@
-<template>
-	<div >
-			
-			
-			<div class="container bg-white" >
-				<!-- 加工单编辑 -->
-				<h3 class="text-center padding-top-bottom">加工单编辑</h3>
-				<el-form ref="form" label-width="25%"  >		
-					<Sheet v-on:setWorkSheet="getWorkSheet" 
-						:category = "receiptContent.category" 
-						:styles="receiptContent.style"
-						:mode="receiptContent.mode"	
-						></Sheet>
-					<!-- 颜色数量 -->		
-					<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
-					<!-- 加工详情与信息-->
-					<Date class="padding-left-right border-top padding-top-bottom" 
-						v-on:setPeriod="getPeriod"
-						:total="receiptContent.demanding_account || 0 "
-					></Date>
-					<!-- 上传图片 -->
-					<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
-					<!-- 品质要求 quality -->
-					<Quality class="padding-left-right border-top padding-top-bottom" 
-						v-on:setQuality="getQuality"
-						:check="receiptContent.check" 
-						:error="receiptContent.error"
-					></Quality>	
-					<!-- 面料 -->
-					<Fabric class="padding-left-right border-top padding-top-bottom" 
-						v-on:setFabric="getFabric"
-						:component = "receiptContent.component"
-						:category = "receiptContent.category"
-					></Fabric>
-					<!-- 其他要求1 -->
-					<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
-					<!-- 收货人信息 -->
-					<Pay class="border-top padding-top-bottom" 
-						zizhu='true'
-						:addressList="receiptContent.address"
-						v-on:setNewAddr="getNewAddr"
-					></Pay>
-					<!-- 提交订单 -->
-					<div class=" border-top padding-top-bottom text-center">
-						<el-button type="primary" @click="onSubmit">自主发单</el-button>
-					    <el-button >保存草稿</el-button>
-					  </el-form-item>
-					</div>			   
-				</el-form>			
-			</div>
-			
+<template>	
+	<div class="container bg-white" >
+		<!-- 加工单编辑 -->
+		<h3 class="text-center padding-top-bottom">加工单编辑</h3>
+		<el-form ref="form" label-width="25%"  >		
+			<Sheet v-on:setWorkSheet="getWorkSheet" 
+				:category = "receiptContent.category" 
+				:styles="receiptContent.style"
+				:mode="receiptContent.mode"	
+				></Sheet>
+			<!-- 颜色数量 -->		
+			<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
+			<!-- 加工详情与信息-->
+			<Date class="padding-left-right border-top padding-top-bottom" 
+				v-on:setPeriod="getPeriod"
+				:total="receiptContent.demanding_account || 0 "
+			></Date>
+			<!-- 上传图片 -->
+			<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
+			<!-- 品质要求 quality -->
+			<Quality class="padding-left-right border-top padding-top-bottom" 
+				v-on:setQuality="getQuality"
+				:check="receiptContent.check" 
+				:error="receiptContent.error"
+			></Quality>	
+			<!-- 面料 -->
+			<Fabric class="padding-left-right border-top padding-top-bottom" 
+				v-on:setFabric="getFabric"
+				:component = "receiptContent.component"
+				:category = "receiptContent.category"
+			></Fabric>
+			<!-- 其他要求1 -->
+			<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
+			<!-- 收货人信息 -->
+			<Pay class="border-top padding-top-bottom" 
+				zizhu='true'
+				:addressList="receiptContent.address"
+				v-on:setNewAddr="getNewAddr"
+			></Pay>
+			<!-- 提交订单 -->
+			<div class=" border-top padding-top-bottom text-center">
+				<el-button type="primary" @click="onSubmit">自主发单</el-button>
+			    <el-button >保存草稿</el-button>
+			  </el-form-item>
+			</div>			   
+		</el-form>			
 	</div>
 </template>
 
@@ -130,8 +125,7 @@ export default {
 	    onSubmit(){
 	    	this.$set(this.submitReceipt, 'type', 1)
 	    	this.submitReceiptFn(this.submitReceipt);
-	    },
-	   
+	    },	   
 	    submitReceiptFn(args){
 	    	let url = this.getUrl
 		    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{

@@ -1,30 +1,11 @@
 <template>
 	<div >
-		<div v-if="submitSuccess" class=" padding-top-bottom color border-top">			
-			<div class="container servicefee" >
-			    <b-row  align-v="center" >
-			        <b-col cols="3" >
-						<div>
-							支付费用：
-						</div>
-						<div>
-							￥ 2000.00
-						</div>
-			        </b-col>
-			        <b-col cols="9" class="login">
-						<div>
-							<span>订单名称：3000大棉袄</span>
-							<span>订单编号：3000大棉袄</span>
-						</div>
-						<div>
-							<span>订单状态：3000大棉袄</span>
-							<span>订单金额：3000大棉袄</span>
-						</div>
-			        </b-col>
-			    </b-row>
-			    <b-col >					
-						<Banks :bankVal.sync="bankval"></Banks>	
-			    </b-col>  
+		<div v-if="receiptContent.order_id" class=" padding-top-bottom color border-top">			
+			<div class="container " >		
+				<!-- <Banks :bankVal.sync="bankval"></Banks> -->
+				<Banks :bankVal.sync="bankval" 
+				:submitReceipt="submitReceipt" 
+				:receiptContent="receiptContent" ></Banks>
 			</div>
 		</div>
 		<div v-else>
@@ -102,11 +83,9 @@ export default {
 	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About, Banks},
 	data () {
 		return {
-			msg: '',
-			bankval: '',
-			
+			msg: '',			
 			submitSuccess: true,
-		   	receiptContent:{},
+		   	receiptContent:{order_id:null},
 		   	submitReceipt: {
 				type: null,
 				cate_name: null,
@@ -154,7 +133,7 @@ export default {
   watch:{
 		bankval:{
 			handler(curVal,oldVal){
-				console.log(curVal)
+				// console.log(curVal)
 			},
 			deep:true
 		}
@@ -168,8 +147,7 @@ export default {
     })
     this.getpayfront();    
   },
-methods:{
-	
+methods:{	
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
     	this.submitReceiptFn(this.submitReceipt)
@@ -185,10 +163,10 @@ methods:{
     submitReceiptFn(args){
     	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
-	        console.log(res.data.content)
+	        // console.log(res.data.content)
 	        if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
-	        	this.$router.push("/indent")
+	        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
 		        }else{
 		        	this.openMessage({str: res.data.msg, ele:this})
 		    }            

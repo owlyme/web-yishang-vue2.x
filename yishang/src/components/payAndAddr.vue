@@ -86,9 +86,6 @@ import { mapGetters } from 'vuex'
 		        },
 			}
 		},
-		mounted(){
-			let self = this;
-		},
 		watch:{
 			selectAddress:{
 				handler(curVal,oldVal){
