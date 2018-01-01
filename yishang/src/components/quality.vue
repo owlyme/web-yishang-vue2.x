@@ -144,11 +144,9 @@ import { mapGetters } from 'vuex'
 	     	submitImgArr() {
 	       	 	this.$refs.banxing.submit();
 	     	},
-				      
-		
 			addDetail(){	
 				let detail = {
-					position : "",
+					name : "",
 					error: ""
 				}
 				this.form.supplement.push(detail)

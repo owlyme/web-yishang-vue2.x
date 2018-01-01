@@ -129,7 +129,7 @@
 	padding:0;
 	/*height: 80%;*/
 	padding-top:10px;
-	height: 30px;
+	min-height: 30px;
 	line-height: 30px
 }
 .inner{

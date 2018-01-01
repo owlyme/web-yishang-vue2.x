@@ -1,18 +1,18 @@
 <template>	
-<div>
-	<b-row  align-v="center" >
+<div class="iiii">
+	<b-row  align-v="center" class="msg">
         <b-col cols="3" >
 			<div>
 				支付费用：
 			</div>
 			<div>
-				￥ <span class="">{{receiptPayFront.service_fee}}</span>
+				￥ <span class="serve-fee">{{receiptPayFront.service_fee}}</span>
 			</div>
         </b-col>
         <b-col cols="9" class="login">
 			<div>
 				<span>订单名称：{{receiptPayFront.name}}</span>
-				<span>订单编号：{{receiptPayFront.order_id}}</span>
+				<span>订单编号：{{receiptPayFront.code}}</span>
 			</div>
 			<div>
 				<span>订单状态：接单状态</span>
@@ -20,44 +20,66 @@
 			</div>
         </b-col>
     </b-row>
-    <b-col >
-		<b-nav tabs>
-		  <b-nav-item :active="(displayOrNot == 'thd')"						  
-		  @click="toPayPage('thd')">第三方支付</b-nav-item>
-		  <b-nav-item :active=" (displayOrNot == 'bank') " 						  
-		  @click="toPayPage('bank')">银行卡/信用卡支付</b-nav-item>
-		</b-nav>
-		<div class="pay-type">
-			<div v-if="displayOrNot == 'thd'" class="padding-left-right padding-top-bottom">
-				<ul class="padding-top">
-					<label v-for="(item, index) in thirdParty"
-			      			:key="'bank'+ index"
-			       			:label="item.id" 
-			       			@click="selected(index, thirdParty)"
-			       			:class="{checked: item.check}"
-			       			class="inputLabel size2">
-						<input type="radio" name="bank" :value="payType" v-model="bank">
-						<span class="banklogo"> <img :src="item.logo" /></span>
-					</label>
-				</ul>
-				<div class="padding-top-bottom" @click="nextPay()"><button class="next btn" > 下一步 </button></div>
-			</div>
-			<div v-if="displayOrNot == 'bank'">
-				<div class="bank-box">
-					<label v-for="(item, index) in bankList"
-			      			:key="'bank'+ index"
-			       			:label="item.id" 
-			       			@click="selected(index, bankList)"
-			       			:class="{checked: item.check}"
-			       			class="inputLabel size1">
-						<input type="radio" name="bank" :value="payType" v-model="bank">
-						<span class="banklogo"> <img :src="item.logo" /></span>
-					</label>
-					<div class="padding-top-bottom" @click="nextPay()"><button class="next btn"> 下一步 </button></div>
+    <div v-if="!showWeiChat">
+	    <b-col >
+			<b-nav tabs>
+			  <b-nav-item :active="(displayOrNot == 'thd')"						  
+			  @click="toPayPage('thd')">第三方支付</b-nav-item>
+			  <b-nav-item 
+			  v-if="false"
+			  :active=" (displayOrNot == 'bank') " 						  
+			  @click="toPayPage('bank')">银行卡/信用卡支付</b-nav-item>
+			</b-nav>
+			<div class="pay-type">
+				<div v-if="displayOrNot == 'thd'" class="padding-left-right padding-top-bottom">
+					<ul class="padding-top">
+						<label v-for="(item, index) in thirdParty"
+				      			:key="'bank'+ index"
+				       			:label="item.id" 
+				       			@click="selected(index, thirdParty)"
+				       			:class="{checked: item.check}"
+				       			class="inputLabel size2">
+							<input type="radio" name="bank" :value="item.payType" v-model="bank">
+							<span class="banklogo"> <img :src="item.logo" /></span>
+						</label>
+					</ul>
+					<div class="padding-top-bottom" @click="nextPay(bank)"><button class="next btn" > 下一步 </button></div>
+				</div>
+				<div v-if="displayOrNot == 'bank'">
+					<div class="bank-box">
+						<label v-for="(item, index) in bankList"
+				      			:key="'bank'+ index"
+				       			:label="item.id" 
+				       			@click="selected(index, bankList)"
+				       			:class="{checked: item.check}"
+				       			class="inputLabel size1">
+							<input type="radio" name="bank" :value="item.payType" v-model="bank">
+							<span class="banklogo"> <img :src="item.logo" /></span>
+						</label>
+						<div class="padding-top-bottom" @click="nextPay()"><button class="next btn"> 下一步 </button></div>
+					</div>
 				</div>
 			</div>
-		</div>
-    </b-col>  
+	    </b-col>
+    </div>
+    <div class="weichatpay" v-else>
+    	<b-row >
+    		<b-col >
+    			<div class="weichatpayqrcode center">
+    				<img src="/static/weichat/weichatpay.jpg">
+    			</div>
+    			<div class="weichatpaybutton center">
+    				<img src="/static/weichat/weichatpaybutton.jpg">
+    			</div>
+    		</b-col>
+    		<b-col>
+    			<div>
+					微信支付金额： <span class="serve-fee">{{receiptPayFront.service_fee}}</span>元
+				</div>
+    		</b-col>
+    	</b-row>   	
+    </div>
+  
 </div>
 </template>
 <script >
@@ -71,10 +93,11 @@ export default{
 			displayOrNot: 'thd',
 			bank: "",
 			payType: "",
+			showWeiChat: false,
 			thirdParty:[
 				{
 					name:'微信支付',
-					payType:'weichai',
+					payType:'weichat',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/weichat.jpg')
@@ -228,9 +251,6 @@ export default{
 			return submitReceipt.total_fee * receiptContents.deposit
 		}
 	},
-	created(){
-		this.getPayfront()
-	},
 	methods:{
 		toPayPage(val){
 			this.displayOrNot= val
@@ -259,25 +279,32 @@ export default{
 				}
 	      })
 		},
-		nextPay(){
-			let url = this.getUrl
-			let args= { order_id: receiptPayFront.order_id,
-						pay_type: this.payType,
-						service_fee: receiptPayFront.service_fee}
-			console.log(args)
-			setTimeout(()=>{
-				this.receiptContent.order_id =  null
-			}, 5000)
+		nextPay(payType){			
+			if(payType == 'weichat'){
+				this.showWeiChat= true;
+			}else if(payType == 'ali'){
+				let url = this.getUrl
+				let args= { order_id: receiptPayFront.order_id,
+							pay_type: this.payType,
+							service_fee: receiptPayFront.service_fee}
+				console.log(args)
+				setTimeout(()=>{
+					this.receiptContent.order_id =  null
+				}, 5000)
 
-	        this.axios.post(url+'/Home/Receipt/payBeforeSubmit', 
-	        	qs.stringify(args)).then((res)=>{	
-	        	console.log(res)
-	              if(res.data.status ==200){
+		        this.axios.post(url+'/Home/Receipt/payBeforeSubmit', 
+		        	qs.stringify(args)).then((res)=>{	
+		        	console.log(res)
+		              if(res.data.status ==200){
 
-	              }else {
+		              }else {
 
-	              }
-	      })
+		              }
+		      	})
+			}			
+		},
+		back(){
+
 		}
 	}
 }
@@ -285,6 +312,17 @@ export default{
 <style scoped>
 	.bank-box{
 		padding: 30px;
+	}
+	.pay-type ,.msg{
+		font-size: 16px;
+		color: rgb(51, 51, 51);
+		line-height: 1.2;
+	}
+	.msg{
+		height: 100px;
+		line-height: 30px;
+		background: rgb(255, 252, 217);
+		margin-bottom: 50px;
 	}
 	.inputLabel{
 		position: relative;
@@ -364,7 +402,7 @@ export default{
 	    border-radius: 0;
 	    background: initial;
 	    border: none;
-	    background-image: url(/static/img/bank-icons.dca610e.png);
+	    background-image: url(/static/bank/bank-icons.png);
 	    background-repeat: no-repeat;
 	    background-position: -122px -375px;
 	}
@@ -407,5 +445,31 @@ export default{
     border-width: 2px;
     border-color: #942eea #942eea #fff;
   }
- 
+ .serve-fee{
+ 	font-size: 30px;
+	color: rgb(255, 102, 0);
+	font-weight: bold;
+	line-height: 1.2;
+ }
+ .weichatpay{
+ 	padding: 60px;
+ 	color: rgb(51, 51, 51);
+ 	border: 2px solid rgb(148, 46, 234);
+ }
+ .weichatpayqrcode img{
+ 	padding: 30px;
+ 	border: 1px solid rgba(104,104, 104,0.5);
+	width: 212px;
+	height: 212px;
+ }
+ .weichatpaybutton{
+ 	margin-top: 60px;
+ 	padding: 3px; 
+ 	height: 82px;	
+ }
+ .weichatpaybutton img{
+	width: 270px;
+	height: 82px;
+ }
+
 </style>

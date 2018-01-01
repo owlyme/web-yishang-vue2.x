@@ -149,7 +149,7 @@ import { mapGetters } from 'vuex'
 			},			
 			pictures:{
 				handler(curVal,oldVal){
-					// console.log(curVal)
+					console.log(curVal)
 					this.$emit("setClothePic",curVal)
 				},
 				deep:true

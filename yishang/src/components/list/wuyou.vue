@@ -1,9 +1,9 @@
 <template>
 	<div >
-		<div v-if="receiptContent.order_id" class=" padding-top-bottom color border-top">			
+		<div v-if="receiptContent.order_id" id="banks" class=" padding-top-bottom color border-top">			
 			<div class="container " >		
 				<!-- <Banks :bankVal.sync="bankval"></Banks> -->
-				<Banks :bankVal.sync="bankval" 
+				<Banks 
 				:submitReceipt="submitReceipt" 
 				:receiptContent="receiptContent" ></Banks>
 			</div>
@@ -51,7 +51,7 @@
 						></Pay>
 						<!-- 提交订单 -->
 						<div class="padding-left-right border-top padding-top-bottom text-center">
-							<el-button type="primary" @click="onSubmit">自主发单</el-button>
+							<el-button type="primary" @click="onSubmit">无忧发单</el-button>
 						    <el-button >保存草稿</el-button>
 						  </el-form-item>
 						</div>			   
@@ -130,14 +130,14 @@ export default {
       	return this.submitReceipt.total_fee
       } 
   },
-  watch:{
-		bankval:{
-			handler(curVal,oldVal){
-				// console.log(curVal)
-			},
-			deep:true
-		}
-	},
+ //  watch:{
+	// 	bankval:{
+	// 		handler(curVal,oldVal){
+	// 			// console.log(curVal)
+	// 		},
+	// 		deep:true
+	// 	}
+	// },
   mounted(){  
     let url = this.getUrl
     this.axios.post(url+'/Home/Receipt/Index?type=2').then((res)=>{
@@ -151,6 +151,7 @@ methods:{
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
     	this.submitReceiptFn(this.submitReceipt)
+    	console.log(this.submitReceipt)
     },
     getpayfront(){
     	let url = this.getUrl    		
@@ -163,14 +164,15 @@ methods:{
     submitReceiptFn(args){
     	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
-	        // console.log(res.data.content)
+			console.log(res.data)
+	        this.$set(this.receiptContent, 'order_id', 44444 )
 	        if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
 	        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
-		        }else{
-		        	this.openMessage({str: res.data.msg, ele:this})
-		    }            
-	    }) 
+		    }else{
+		        this.openMessage({str: res.data.msg, ele:this})
+		    }
+	    })
     },
     getWorkSheet(val){
     	let self = this;

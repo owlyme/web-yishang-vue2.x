@@ -2,9 +2,6 @@
 	<div>
 		<div>
 			<el-form-item label="加工单价:" class="dates">
-			   <!--  <el-input v-model="dateForm.fee" placeholder=""  type="number" min='1' 
-			     ></el-input> -->
-
 			     <div class="el-input">
 			     	<input autocomplete="off" v-model="dateForm.fee"  placeholder=""  rows="2" min="1" validateevent="true" class="el-input__inner"
 			     	:keyup="onlyNumber()">
@@ -17,16 +14,17 @@
 			 </el-form-item>
 			 <el-form-item label="抢单截止时间:" class="dates">
 			    <el-date-picker	 
-			    v-model="dateForm.expire_time"   
+			    v-model="dateForm.expire_time"
+			    value-format="yyyy-MM-dd HH-mm-ss"
 			    type="datetime" style="width:100%" disabledDate="true" align='center' placeholder="选择时间">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 			 <el-form-item label="面辅料完备到场日期:" class="dates">
-			    <el-date-picker 	v-model="dateForm.arrival_date"   type="date"	  style="width:100%"  align='center' placeholder="选择日期">  </el-date-picker>
+			    <el-date-picker 	v-model="dateForm.arrival_date"  value-format="yyyy-MM-dd" type="date"	  style="width:100%"  align='center' placeholder="选择日期">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 			<el-form-item label="交货日期:" class="dates">
-			    <el-date-picker	  v-model="dateForm.delivery_date"   type="date"	style="width:100%" align='center' placeholder="选择日期">  </el-date-picker>
+			    <el-date-picker	  v-model="dateForm.delivery_date"  value-format="yyyy-MM-dd" type="date"	style="width:100%" align='center' placeholder="选择日期">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 		</div>
@@ -55,7 +53,6 @@
 		watch:{
 			dateForm:{
 				handler(curVal,oldVal){
-						//console.log(curVal)
 						curVal.total_fee = this.total_fee
 						this.$emit("setPeriod",curVal)
 		　　　　　　},

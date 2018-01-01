@@ -140,10 +140,10 @@ import { mapGetters } from 'vuex'
 						is_default: 1
 			        }
 			    this.axios.post(url, qs.stringify(args)).then((res)=>{
-			    	console.log(res)
+			    	// console.log(res)
 			        if(res.data.status == 200){
 			        	//添加成功
-			        	console.log(args)
+			        	// console.log(args)
 			        	this.addressList.push(args)
 			        	this.openMessage( res.data.msg )
 			        }else{

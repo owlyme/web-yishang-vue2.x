@@ -19,7 +19,7 @@
 				  </el-col>
 				  <el-col :span="19">
 				  		<div class="myIndent">{{contentTitle}}</div>
-				  		<div v-if="goodsList.length" v-for="(item,index) in goodsList" :index="index+'indent'">
+				  		<div v-if="goodsList.length" v-for="(item,index) in goodsList" :key="index+'indent'">
 				  			<IndentList :goodsMsg="item" v-on:change="switchBlock(item.order_id)"></IndentList>
 				  		</div>
 				  </el-col>
@@ -148,7 +148,7 @@
 								<li>单价价格: <span>{{selectDetails.details.fee}}</span></li>
 								<li>加工总价: <span>{{selectDetails.details.total_fee}}</span></li>
 								<li>是否支付定金: 
-									<span v-if="selectDetails.details.is_deposited">是</span>
+									<span v-if="parseInt(selectDetails.details.is_deposited)">是</span>
 									<span v-else>否</span>
 								</li>
 								
@@ -229,8 +229,8 @@
 								</ul>
 
 								<ul v-for="item in selectDetails.otherPic" class="inner-icon">
-									<li v-for="item1 in item.picture">
-										<img :src="getUploadUrl+ item1" />
+									<li>
+										<img  v-for="item1 in item.picture" :src="getUploadUrl+ item1" />
 									</li>
 									<li>{{ item.title }}</li>
 								</ul>
@@ -270,7 +270,7 @@
 								</ul>
 								<ul class="tbody" v-for="(item, index) in selectDetails.quality.supplement" :key="'supplement1'+index">
 									<li>{{item.name}}</li>
-									<li>{{item.err}}</li>
+									<li>{{item.error}}</li>
 								</ul>
 							</div>
 						</div>
@@ -380,7 +380,7 @@
 			}
 		},
 		mounted(){
-			this.getMainlist({status: 'x'})
+			this.getMainlist({status: 'x'})			
 		},
 		watch:{
 		    currentPage:{
@@ -425,12 +425,12 @@
 		    	let url= this.getUrl+'Home/ReceiptOrder/schedule'
 		      	this.axios.post(url, qs.stringify({order_id: id }))
 		      	.then((res)=>{
-		      		// console.log('getSchedule')
-		      	// console.log(res)
 		          if(res.data.status == 200){
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
 		          	this.setGraph(this.selectSchedule.details.status)
+		          	console.log(this.selectSchedule)
+					
 		          	this.isLoading = 0;
 		          }else{
 		          }          
@@ -440,11 +440,9 @@
 		    	let url= this.getUrl+'Home/ReceiptOrder/details'
 			      this.axios.post(url, qs.stringify({order_id: id }))
 			      .then((res)=>{
-		           		// console.log('getDetails')
-		      	// console.log(res)
 			          if(res.data.status == 200){
-			          		// console.log( res.data.content)
 			          		this.$set(this,'selectDetails',res.data.content)
+			          		console.log(this.selectDetails)
 			          		this.isLoading = 0;         	
 			          }else{
 			        }
@@ -657,6 +655,7 @@
 	.inner-icon img{
 		width: 140px;
 		height: 140px;
+		padding: 5px;
 	}
 	.banxing .inner-icon img{
 		width: 200px;

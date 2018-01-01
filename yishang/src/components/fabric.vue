@@ -87,7 +87,7 @@ export default {
             label:'主面料1名称:',
             showSrc:require('../assets/fabric-pic.jpg'),
             name: '',
-            requirement:'',
+            requirement:'主面料',
             component: '',
             category:'',
             picture:[],

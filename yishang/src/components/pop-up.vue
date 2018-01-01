@@ -22,7 +22,6 @@
 		},
 		mounted(){
 			document.querySelector('body').style.overflow = 'hidden'
-
 		},
 		destroyed(){
 			document.querySelector('body').style.overflow = 'auto'
@@ -85,11 +84,9 @@ html, body{
 		font-weight: 700;
 		font-size: 1.1em;
 	}
-	.pop:hover .close-xy{
-		display: block;
-	}
+	
 	.close-xy{
-		display: none;
+		display: block;
 		position: absolute;
 		top: -10px;
 		right: -10px;
