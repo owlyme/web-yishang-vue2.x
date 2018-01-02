@@ -6,7 +6,6 @@
 			     	<input autocomplete="off" v-model="dateForm.fee"  placeholder=""  rows="2" min="1" validateevent="true" class="el-input__inner"
 			     	:keyup="onlyNumber()">
 			     </div>
-
 			     <div class="after"> 元/件 </div>
 			 </el-form-item>
 			 <el-form-item label="加工总价:">

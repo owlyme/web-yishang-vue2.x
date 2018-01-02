@@ -261,7 +261,7 @@
 							<h6>品质要求</h6>
 							<div class="chahuo">
 								<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
-								<p>整体允许误差范围： <span>{{selectDetails.quality.error}}</span></p>
+								<p>整体允许误差范围： <span>{{selectDetails.quality.err}}</span></p>
 							</div>
 							<div class="buwei border-top clearfix">
 								<ul class="thead">

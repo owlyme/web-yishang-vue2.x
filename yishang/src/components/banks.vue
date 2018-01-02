@@ -1,5 +1,5 @@
 <template>	
-<div class="iiii">
+<div>
 	<b-row  align-v="center" class="msg">
         <b-col cols="3" >
 			<div>
@@ -26,7 +26,9 @@
 			  <b-nav-item :active="(displayOrNot == 'thd')"						  
 			  @click="toPayPage('thd')">第三方支付</b-nav-item>
 			  <b-nav-item 
+
 			  v-if="false"
+
 			  :active=" (displayOrNot == 'bank') " 						  
 			  @click="toPayPage('bank')">银行卡/信用卡支付</b-nav-item>
 			</b-nav>
@@ -251,6 +253,9 @@ export default{
 			return submitReceipt.total_fee * receiptContents.deposit
 		}
 	},
+	created(){
+		this.getPayfront()
+	},
 	methods:{
 		toPayPage(val){
 			this.displayOrNot= val
@@ -282,29 +287,23 @@ export default{
 		nextPay(payType){			
 			if(payType == 'weichat'){
 				this.showWeiChat= true;
-			}else if(payType == 'ali'){
+				this.back()
+			}else if(payType == 'alipay'){
 				let url = this.getUrl
-				let args= { order_id: receiptPayFront.order_id,
-							pay_type: this.payType,
-							service_fee: receiptPayFront.service_fee}
+				let args= { order_id: this.receiptPayFront.order_id,
+							pay_type: payType,
+							service_fee: this.receiptPayFront.service_fee}
 				console.log(args)
-				setTimeout(()=>{
-					this.receiptContent.order_id =  null
-				}, 5000)
-
-		        this.axios.post(url+'/Home/Receipt/payBeforeSubmit', 
-		        	qs.stringify(args)).then((res)=>{	
-		        	console.log(res)
-		              if(res.data.status ==200){
-
-		              }else {
-
-		              }
-		      	})
+		       	window.open(this.getUrl+'Home/Receipt/payBeforeSubmit?order_id='+args.order_id
+		       														+'&pay_type='+args.pay_type
+		       														+'&service_fee='+args.service_fee);
 			}			
 		},
 		back(){
-
+			// setTimeout(()=>{
+			// 		this.receiptContent.order_id =  null
+			// 		this.showWeiChat = false
+			// 	}, 5000)
 		}
 	}
 }
@@ -443,7 +442,7 @@ export default{
 .nav-link.active{
     color: rgb(148, 46, 234);
     border-width: 2px;
-    border-color: #942eea #942eea #fff;
+    border-color: #942eea #942eea #fff !important;
   }
  .serve-fee{
  	font-size: 30px;

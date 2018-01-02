@@ -165,7 +165,7 @@ methods:{
     	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
 			console.log(res.data)
-	        this.$set(this.receiptContent, 'order_id', 44444 )
+	        // this.$set(this.receiptContent, 'order_id', 44444 )
 	        if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
 	        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
@@ -189,6 +189,7 @@ methods:{
     },
     getPeriod(val){
     	let self = this;
+    	console.log(val)
     	self.$set(self.submitReceipt, 'fee', val.fee)
     	self.$set(self.submitReceipt, 'total_fee', val.total_fee)
     	self.$set(self.submitReceipt, 'expire_time', val.expire_time)
@@ -229,7 +230,6 @@ methods:{
 		self.$set(self.submitReceipt,'county', val.county)
 		self.$set(self.submitReceipt,'street', val.street)
 		self.$set(self.submitReceipt,'receiver', val.name)
-		self.$set(self.submitReceipt,'fee', val.per)
     }
 }
 
