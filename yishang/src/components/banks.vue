@@ -1,7 +1,7 @@
 <template>	
 <div>
 	<b-row  align-v="center" class="msg">
-        <b-col cols="3" >
+        <b-col cols="2" class="border-right" >
 			<div>
 				支付费用：
 			</div>
@@ -11,11 +11,11 @@
         </b-col>
         <b-col cols="9" class="login">
 			<div>
-				<span>订单名称：{{receiptPayFront.name}}</span>
+				<span class="padding-right">订单名称：{{receiptPayFront.name}}</span>
 				<span>订单编号：{{receiptPayFront.code}}</span>
 			</div>
 			<div>
-				<span>订单状态：接单状态</span>
+				<span class="padding-right">订单状态：接单状态</span>
 				<span>订单金额：{{receiptPayFront.total_fee}}</span>
 			</div>
         </b-col>
@@ -65,10 +65,11 @@
 	    </b-col>
     </div>
     <div class="weichatpay" v-else>
+
     	<b-row >
     		<b-col >
     			<div class="weichatpayqrcode center">
-    				<img src="/static/weichat/weichatpay.jpg">
+    				<img :src="payQrcode">
     			</div>
     			<div class="weichatpaybutton center">
     				<img src="/static/weichat/weichatpaybutton.jpg">
@@ -78,6 +79,7 @@
     			<div>
 					微信支付金额： <span class="serve-fee">{{receiptPayFront.service_fee}}</span>元
 				</div>
+				<div class="padding-top-bottom"> <el-button type="primary" @click.native="back()">改变支付方式</el-button> </div>
     		</b-col>
     	</b-row>   	
     </div>
@@ -96,10 +98,11 @@ export default{
 			bank: "",
 			payType: "",
 			showWeiChat: false,
+			payQrcode: '',
 			thirdParty:[
 				{
 					name:'微信支付',
-					payType:'weichat',
+					payType:'wxpay',
 					check:false,
 					flag: false,
 					logo: require('../assets/bank/weichat.jpg')
@@ -282,29 +285,54 @@ export default{
 				}else {
 					
 				}
-	      })
-		},
-		nextPay(payType){			
-			if(payType == 'weichat'){
-				this.showWeiChat= true;
-				this.back()
-			}else if(payType == 'alipay'){
-				let url = this.getUrl
-				let args= { order_id: this.receiptPayFront.order_id,
-							pay_type: payType,
-							service_fee: this.receiptPayFront.service_fee}
-				console.log(args)
-		       	window.open(this.getUrl+'Home/Receipt/payBeforeSubmit?order_id='+args.order_id
-		       														+'&pay_type='+args.pay_type
-		       														+'&service_fee='+args.service_fee);
-			}			
+	      	})
 		},
 		back(){
-			// setTimeout(()=>{
-			// 		this.receiptContent.order_id =  null
-			// 		this.showWeiChat = false
-			// 	}, 5000)
-		}
+			this.showWeiChat = false
+			clearInterval(this.timer)
+		},
+		nextPay(payType){
+			let url = this.getUrl
+			let args= { order_id: this.receiptPayFront.order_id,
+						pay_type: payType,
+						service_fee: this.receiptPayFront.service_fee}
+			if( payType == 'wxpay' ){
+				this.showWeiChat= true;
+				this.axios.post(url+'Home/Receipt/payBeforeSubmit',qs.stringify(args))
+		       	.then((res)=>{
+		       		console.log(res)
+					if(res.data.status == 200 ){
+						this.payQrcode =  res.data.content.url
+						this.afterWxpay()
+					}else {
+						
+					}
+		       	})		       	
+			}else if(payType == 'alipay'){
+				window.open(url+'Home/Receipt/payBeforeSubmit?pay_type='+args.pay_type
+					 										 +'&service_fee'+args.service_fee
+															 +'&order_id'+args.order_id)
+			}	       	
+		},
+		afterWxpay(){
+			let self = this
+			let url = self.getUrl
+			let args= { order_id: this.receiptPayFront.order_id}			
+				self.timer = setInterval(()=>{
+					this.axios.post(url+'Home/Receipt/IswxPay',qs.stringify(args))
+			       	.then((res)=>{
+						console.log(res)
+						if(res.data.status == 200 ){
+							this.receiptContent.order_id =  null
+							this.showWeiChat = false
+							clearInterval(self.timer)
+						}else {
+							console.log('Waiting wxpay...')
+						}
+			       	})			   
+			}, 2000)
+		},
+		alipay(){}
 	}
 }
 </script>
@@ -449,6 +477,10 @@ export default{
 	color: rgb(255, 102, 0);
 	font-weight: bold;
 	line-height: 1.2;
+	vertical-align: top;
+ }
+ .weichatpay .serve-fee{
+ 	vertical-align: middle;
  }
  .weichatpay{
  	padding: 60px;
@@ -470,5 +502,7 @@ export default{
 	width: 270px;
 	height: 82px;
  }
-
+.border-right{
+	border-right: 1px solid #d5cfcf;
+}
 </style>

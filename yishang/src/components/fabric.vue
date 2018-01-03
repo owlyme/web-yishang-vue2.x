@@ -6,7 +6,7 @@
   <div v-for="(item, index) in fabricList">
     <el-form-item :label="item.label" class="bg">
       <el-input v-model="item.name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
-      <i  v-if="index > 1" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
+      <i  v-if="index > 0" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
     </el-form-item>
     <el-row :gutter="10"  class="space padding-bottom  uploadimgs" >    
         <el-col :span="6" class="text-right text-style-sm">
@@ -95,19 +95,19 @@ export default {
             dialogVisible: false,
             dialogImageUrl: false,
           },
-          {
-            is_main: 0,
-            label:'辅面料1名称:',
-            name: '',
-            showSrc:require('../assets/fabric-pic.jpg'),  
-            requirement:"",
-            component: '',
-            category:'',
-            picture:[],
-            weight:'',
-            dialogVisible: false,
-            dialogImageUrl: false,
-          }
+          // {
+          //   is_main: 0,
+          //   label:'辅面料1名称:',
+          //   name: '',
+          //   showSrc:require('../assets/fabric-pic.jpg'),  
+          //   requirement:"",
+          //   component: '',
+          //   category:'',
+          //   picture:[],
+          //   weight:'',
+          //   dialogVisible: false,
+          //   dialogImageUrl: false,
+          // }
         ],
       }
     },
@@ -167,18 +167,19 @@ export default {
      //    },    
       addFabric(){
           let fabric = {
-                label:'',
+                is_main: 0,
+                label:"辅面料" + (this.fabricList.length) + "名称:",
                 name: '',
+                showSrc:require('../assets/fabric-pic.jpg'),  
                 requirement:"",
                 component: '',
                 category:'',
-                delivery: false,
                 picture:[],
                 weight:'',
                 dialogVisible: false,
                 dialogImageUrl: false,
               }
-              fabric.label= "辅面料" + (this.index++) + "名称:";
+              // fabric.label= "辅面料" + (this.fabricList.length) + "名称:";
              // console.log(fabric)
           this.fabricList.push(fabric)
         },

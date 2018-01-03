@@ -150,7 +150,7 @@ export default {
 methods:{	
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
-    	this.submitReceiptFn(this.submitReceipt)
+    	this.submitReceiptFn(this.submitReceipt)    	
     	console.log(this.submitReceipt)
     },
     getpayfront(){
@@ -165,7 +165,8 @@ methods:{
     	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
 			console.log(res.data)
-	        // this.$set(this.receiptContent, 'order_id', 44444 )
+			//临时开放————————————————————————————————————————————————————————————————————————————————————————————————————————
+	         this.$set(this.receiptContent, 'order_id', 44444 )
 	        if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
 	        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
