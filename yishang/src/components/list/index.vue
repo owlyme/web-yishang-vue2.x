@@ -114,7 +114,7 @@ export default {
         let url = this.getUrl
         this.axios.post(url+'/Home/Receipt/beforeReceipt').then((res)=>{
               //临时开放————————————————————————————————————————————————————————————————————————————————————————————————————————
-               this.$router.push(this.listNav[index].path)
+               // this.$router.push(this.listNav[index].path)
               if(res.data.status ==200){
                 this.$router.push(this.listNav[index].path)
               }else {

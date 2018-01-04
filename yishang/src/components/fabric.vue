@@ -63,10 +63,10 @@
         <div class="after"> 克/米 </div>
       </el-form-item>
       <el-form-item label="门幅宽度:" class="padding-right">
-        <el-input v-model="item.width" placeholder="请输入克重">  </el-input>
-        <el-radio-group v-model="item.width" style="padding-top:8px">
-            <el-radio  :label="1">厘米</el-radio>
-            <el-radio  :label="0">英寸</el-radio>
+        <el-input v-model="item.width" placeholder="请输入克重"  style="width: 70%;">  </el-input>
+        <el-radio-group v-model="item.units" style="padding-left:18px">
+            <el-radio  label="厘米">厘米</el-radio>
+            <el-radio  label="英寸">英寸</el-radio>
         </el-radio-group>
         <!-- <div class="after"> 厘米/英寸 </div> -->
       </el-form-item>
@@ -105,6 +105,7 @@ export default {
             category:'',
             picture:[],
             weight:'',
+            units: '',
             grammage:'',
             width:'',      
             dialogVisible: false,
@@ -139,7 +140,7 @@ export default {
       },
     watch:{
       fabricList:{
-        handler(curVal,oldVal){
+        handler(curVal,oldVal){console.log(curVal)
             this.$emit("setFabric",curVal)
     　　　},
     　　　deep:true
@@ -196,6 +197,7 @@ export default {
                 weight:'',
                 grammage:'',
                 width:'',  
+                units: '',
                 dialogVisible: false,
                 dialogImageUrl: false,
               }
