@@ -429,7 +429,7 @@
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
 		          	this.setGraph(this.selectSchedule.details.status)
-		          	console.log(this.selectSchedule)
+		          	// console.log(this.selectSchedule)
 					
 		          	this.isLoading = 0;
 		          }else{
@@ -442,7 +442,7 @@
 			      .then((res)=>{
 			          if(res.data.status == 200){
 			          		this.$set(this,'selectDetails',res.data.content)
-			          		console.log(this.selectDetails)
+			          		// console.log(this.selectDetails)
 			          		this.isLoading = 0;         	
 			          }else{
 			        }

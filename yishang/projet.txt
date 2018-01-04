@@ -30,3 +30,9 @@ document.documentElement.scrollTop || document.body.scrollTop
 
  WXlXaUpzbWhOYVduTWcwWm1FeFltRTFaRGMyTUdaaVl6aGlNREk1TVRFd056TXlNelFPME8wTw==
  WnlHaVlzNGhPYUduTWc0Wm1Zd09EYzRZV1ZtTlRSbE5qa3pPR1ZqWXpVM1ltSmxOMlVPME8wTw==
+
+ 　　1. 　npm install babel-polyfill --save
+
+　　2. 　在main.ts中 import "babel-polyfill"
+
+　　3.    如果使用了vuex，则在vuex的index.ts文件中也要  import "babel-polyfill"，最好放在 import Vuex from 'vuex' 的前面

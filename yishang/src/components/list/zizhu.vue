@@ -1,5 +1,5 @@
 <template>	
-	<div class="container bg-white" >
+	<div class="container bg-white" id='zizhu'>
 		<!-- 加工单编辑 -->
 		<h3 class="text-center padding-top-bottom">加工单编辑</h3>
 		<el-form ref="form" label-width="25%"  >		

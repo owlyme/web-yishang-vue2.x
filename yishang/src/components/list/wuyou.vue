@@ -151,7 +151,7 @@ methods:{
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
     	this.submitReceiptFn(this.submitReceipt)    	
-    	console.log(this.submitReceipt)
+    	// console.log(this.submitReceipt)
     },
     getpayfront(){
     	let url = this.getUrl    		
@@ -164,9 +164,9 @@ methods:{
     submitReceiptFn(args){
     	let url = this.getUrl
 	    this.axios.post(url+'/Home/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
-			console.log(res.data)
+			// console.log(res.data)
 			//临时开放————————————————————————————————————————————————————————————————————————————————————————————————————————
-	         this.$set(this.receiptContent, 'order_id', 44444 )
+	         // this.$set(this.receiptContent, 'order_id', 44444 )
 	        if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
 	        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
@@ -190,7 +190,7 @@ methods:{
     },
     getPeriod(val){
     	let self = this;
-    	console.log(val)
+    	// console.log(val)
     	self.$set(self.submitReceipt, 'fee', val.fee)
     	self.$set(self.submitReceipt, 'total_fee', val.total_fee)
     	self.$set(self.submitReceipt, 'expire_time', val.expire_time)

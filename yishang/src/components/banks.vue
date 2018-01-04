@@ -300,7 +300,7 @@ export default{
 				this.showWeiChat= true;
 				this.axios.post(url+'Home/Receipt/payBeforeSubmit',qs.stringify(args))
 		       	.then((res)=>{
-		       		console.log(res)
+		       		// console.log(res)
 					if(res.data.status == 200 ){
 						this.payQrcode =  res.data.content.url
 						this.afterWxpay()
@@ -321,7 +321,7 @@ export default{
 				self.timer = setInterval(()=>{
 					this.axios.post(url+'Home/Receipt/IswxPay',qs.stringify(args))
 			       	.then((res)=>{
-						console.log(res)
+						// console.log(res)
 						if(res.data.status == 200 ){
 							this.receiptContent.order_id =  null
 							this.showWeiChat = false

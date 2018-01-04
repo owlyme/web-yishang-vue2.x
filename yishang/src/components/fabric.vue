@@ -58,6 +58,18 @@
         <el-input v-model="item.weight" placeholder="请输入克重">  </el-input>
         <div class="after"> 克/平方米 </div>
       </el-form-item>
+      <el-form-item label="面料米重:" class="padding-right">
+        <el-input v-model="item.grammage" placeholder="请输入克重">  </el-input>
+        <div class="after"> 克/米 </div>
+      </el-form-item>
+      <el-form-item label="门幅宽度:" class="padding-right">
+        <el-input v-model="item.width" placeholder="请输入克重">  </el-input>
+        <el-radio-group v-model="item.width" style="padding-top:8px">
+            <el-radio  :label="1">厘米</el-radio>
+            <el-radio  :label="0">英寸</el-radio>
+        </el-radio-group>
+        <!-- <div class="after"> 厘米/英寸 </div> -->
+      </el-form-item>
     </div>
 </el-form>
   <div class="middle-line">
@@ -74,6 +86,7 @@ export default {
     data() {
       return {
         index: 2,
+        startCode: 65,
         form: {
           name: '',
           component: '',
@@ -84,14 +97,16 @@ export default {
         fabricList:[
           {
             is_main: 1,
-            label:'主面料1名称:',
+            label:'面料A:',
             showSrc:require('../assets/fabric-pic.jpg'),
             name: '',
             requirement:'主面料',
             component: '',
             category:'',
             picture:[],
-            weight:'',                
+            weight:'',
+            grammage:'',
+            width:'',      
             dialogVisible: false,
             dialogImageUrl: false,
           },
@@ -117,7 +132,10 @@ export default {
           ]),
         actionUrl(){
           return this.getUploadUrl +'/picture/upload'
-        }
+        },
+        fabricListLen(){
+           return this.fabricList.length
+         }
       },
     watch:{
       fabricList:{
@@ -168,7 +186,7 @@ export default {
       addFabric(){
           let fabric = {
                 is_main: 0,
-                label:"辅面料" + (this.fabricList.length) + "名称:",
+                label:"面料" + String.fromCharCode(this.fabricListLen+this.startCode) + "名称:",
                 name: '',
                 showSrc:require('../assets/fabric-pic.jpg'),  
                 requirement:"",
@@ -176,6 +194,8 @@ export default {
                 category:'',
                 picture:[],
                 weight:'',
+                grammage:'',
+                width:'',  
                 dialogVisible: false,
                 dialogImageUrl: false,
               }
