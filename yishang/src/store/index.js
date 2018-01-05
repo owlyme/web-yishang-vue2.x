@@ -5,10 +5,10 @@ import Vuex from  'vuex'
 Vue.use(Vuex)
 
 const state={
-	url: "http://101.132.187.244:8082/",
-	uploadUrl: "http://101.132.187.244:8083/",
-	// url: "http://ii.ysintelligent.com/",
-	// uploadUrl: "http://iiadmin.ysintelligent.com/",	
+	// url: "http://101.132.187.244:8082",
+	// uploadUrl: "http://101.132.187.244:8083/",
+	url: "http://ii.ysintelligent.com",
+	uploadUrl: "http://iiadmin.ysintelligent.com/",	
 	customer: {
 		avatar: null,
 		id: null
