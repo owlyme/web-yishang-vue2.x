@@ -155,10 +155,6 @@
 								<li>完成件数: <span>{{selectDetails.details.done_account}} / {{selectDetails.details.demanding_account}}</span></li>
 								<li>面料完备日期: <span>{{selectDetails.details.arrival_date}}</span></li>
 								<li>交货时间: <span>{{selectDetails.details.delivery_date}}</span></li>
-								
-								<!-- <li>发单方: <span>{{selectDetails.details.publish_company.company}}</span></li>
-								<li>商品颜色: <span>{{selectDetails.details.color}}</span></li>	
-								<li>商品属性: <span>{{selectDetails.details.x}}</span></li> -->
 							</ul>
 						</div>
 						<div class="mianliao border-top detail-inner" v-if="selectDetails.main">
@@ -166,8 +162,10 @@
 							<ul>
 								<li>面料名称： <span>{{selectDetails.main.name}}</span></li>
 								<li>面料成分： <span>{{selectDetails.main.component}}</span></li>
-								<li>面料类型： <span>{{selectDetails.main.category}}</span></li>
 								<li>面料克重： <span>{{selectDetails.main.weight}}</span>克/平方米</li>
+								<li>面料米重： <span>{{selectDetails.main.grammage}}</span>克/平方米</li>
+								<li>门幅宽度： <span>{{selectDetails.main.width}}/
+													{{selectDetails.main.units}}</span></li>
 							</ul>
 							<div class="mianliao-icon border-top clearfix ">
 								<div v-for="item in selectDetails.main.picture" class="inner-icon">
@@ -181,8 +179,9 @@
 								<ul class="clearfix">
 									<li>面料名称： <span>{{item.name}}</span></li>
 									<li>面料成分： <span>{{item.component}}</span></li>
-									<li>面料类型： <span>{{item.category}}</span></li>
 									<li>面料克重： <span>{{item.weight}}</span>克/平方米</li>
+									<li>面料米重： <span>{{item.grammage}}</span>克/平方米</li>
+									<li>门幅宽度： <span>{{item.width}}{{item.units}}</span></li>
 								</ul>
 								<div class="mianliao-icon border-top clearfix ">
 									<div v-for="item in item.picture" class="inner-icon">
@@ -261,7 +260,7 @@
 							<h6>品质要求</h6>
 							<div class="chahuo">
 								<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
-								<p>整体允许误差范围： <span>{{selectDetails.quality.err}}</span></p>
+								<p>整体允许误差范围： <span>{{selectDetails.quality.error}}</span></p>
 							</div>
 							<div class="buwei border-top clearfix">
 								<ul class="thead">
@@ -270,7 +269,7 @@
 								</ul>
 								<ul class="tbody" v-for="(item, index) in selectDetails.quality.supplement" :key="'supplement1'+index">
 									<li>{{item.name}}</li>
-									<li>{{item.error}}</li>
+									<li>{{item.err}}</li>
 								</ul>
 							</div>
 						</div>
@@ -410,9 +409,7 @@
 		    getMainlist(args){
 		      let url= this.getUrl+'/Index/index'
 		      this.axios.post(url, qs.stringify(args)).then((res)=>{
-		      	// console.log('mainlist')
-		      	// console.log(res)
-		          if(res.data.status == 200){
+		      	if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;
 		            this.savedList =  res.data.content.list;
@@ -429,8 +426,6 @@
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
 		          	this.setGraph(this.selectSchedule.details.status)
-		          	// console.log(this.selectSchedule)
-					
 		          	this.isLoading = 0;
 		          }else{
 		          }          
@@ -442,7 +437,6 @@
 			      .then((res)=>{
 			          if(res.data.status == 200){
 			          		this.$set(this,'selectDetails',res.data.content)
-			          		// console.log(this.selectDetails)
 			          		this.isLoading = 0;         	
 			          }else{
 			        }

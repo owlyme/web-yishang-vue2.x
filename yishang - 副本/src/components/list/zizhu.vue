@@ -3,20 +3,24 @@
 		<!-- 加工单编辑 -->
 		<h3 class="text-center padding-top-bottom">加工单编辑</h3>
 		<el-form ref="form" label-width="25%"  >		
-			<Sheet v-on:setWorkSheet="getWorkSheet" 
-				:category = "receiptContent.category" 
-				:styles="receiptContent.style"
-				:mode="receiptContent.mode"	
+			<Sheet 
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"
 				></Sheet>
 			<!-- 颜色数量 -->		
-			<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
+			<ColorAndNumber class="padding-left-right border-top padding-top-bottom" 
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"></ColorAndNumber>
 			<!-- 加工详情与信息-->
 			<Date class="padding-left-right border-top padding-top-bottom" 
-				v-on:setPeriod="getPeriod"
-				:total="receiptContent.demanding_account || 0 "
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"
 			></Date>
 			<!-- 上传图片 -->
-			<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
+			<Imgupload class="padding-left-right border-top padding-top-bottom" 
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"
+			></Imgupload>		
 			<!-- 品质要求 quality -->
 			<Quality class="padding-left-right border-top padding-top-bottom" 
 				v-on:setQuality="getQuality"
@@ -30,7 +34,9 @@
 				:category = "receiptContent.category"
 			></Fabric>
 			<!-- 其他要求1 -->
-			<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
+			<About class="padding-left-right border-top padding-top-bottom" 
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"></About>
 			<!-- 收货人信息 -->
 			<Pay class="border-top padding-top-bottom" 
 				zizhu='true'
@@ -40,7 +46,7 @@
 			<!-- 提交订单 -->
 			<div class=" border-top padding-top-bottom text-center">
 				<el-button type="primary" @click="onSubmit">自主发单</el-button>
-			    <el-button >保存草稿</el-button>
+			    <el-button @click="saveDraft">保存草稿</el-button>
 			  </el-form-item>
 			</div>			   
 		</el-form>			
@@ -75,7 +81,17 @@ export default {
 				name: null,
 				style_name: null,
 				mode_name: null,
-				size: null,
+				size: [{
+					color:null,
+					xs_demanding_account    : 0,
+					s_demanding_account     : 0,
+					m_demanding_account     : 0,
+					l_demanding_account     : 0,
+					xl_demanding_account    : 0,
+					xxl_demanding_account   : 0,
+					xxxl_demanding_account  : 0,
+					xxxxl_demanding_account : 0
+					}],
 				demanding_account: null,
 				fee: null,
 				total_fee: null,
@@ -94,7 +110,13 @@ export default {
 				requirement: null,
 				picture: null,
 				fabric: null,
-				supplements: null,
+				supplements: [
+					{
+						requirement : 111,
+						picture: null
+					},
+					
+				],
 				is_deposited: null,
 				receiver: null,
 				phone: null,
@@ -120,7 +142,23 @@ export default {
 
         }          
     })
+
+	    setTimeout(()=>{ 
+	    	this.submitReceipt.supplements.push({
+						requirement : 222,
+						picture: ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515349016291&di=4f11364a34d8686a87291e8d5f93efcd&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515349016291&di=4f11364a34d8686a87291e8d5f93efcd&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg']
+					})
+
+	    },3000)
   },
+  watch:{
+		submitReceipt:{
+			handler(curVal, oldVal){					
+				console.log(curVal)
+	　　　　},
+			deep: true
+		}
+	},
 	methods:{
 	    onSubmit(){
 	    	this.$set(this.submitReceipt, 'type', 1)
@@ -136,6 +174,17 @@ export default {
 		        	this.openMessage({str: res.data.msg, ele:this})
 		        }         
 		    }) 
+	    },
+	    saveDraft(){
+	    	let url = this.getUrl
+	    	let args = this.submitReceipt
+		    this.axios.post(url+'Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+				if(res.data.status == 200){
+		        	this.openMessage({str: res.data.msg, ele:this})	        	
+			    }else{
+			        this.openMessage({str: res.data.msg, ele:this})
+			    }
+		    })
 	    },
 	    getWorkSheet(val){
 	    	let self = this;
@@ -171,9 +220,16 @@ export default {
 	    	let self = this;
 			self.$set(this.submitReceipt,'check', val.check)
 			self.$set(this.submitReceipt,'error' , val.error)
-			self.$set(this.submitReceipt,'supplement' , val.supplement)
+			// self.$set(this.submitReceipt,'supplement' , val.supplement)
 			self.$set(this.submitReceipt,'requirement', val.requirement)
 			self.$set(this.submitReceipt,'picture' , val.imageUrls)
+			let _supplement = []
+			val.supplement.forEach((item, index)=> {
+				if( item.name || item.err){	
+					_supplement.push(item)
+				}
+			})
+			self.$set(self.submitReceipt,'supplement' , _supplement)
 	    },
 	    getFabric(val){
 	    	let self = this;

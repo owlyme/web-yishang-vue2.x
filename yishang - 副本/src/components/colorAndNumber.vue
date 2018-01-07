@@ -1,7 +1,7 @@
 <template>
 	<div class="">
 		<h5>颜色数量</h5>
-		<div v-for="(item, index) in diffKind" class="border-box" >
+		<div v-for="(item, index) in submitReceipt.size" class="border-box" >
 			<el-row :gutter="10"  class="bg">	 
 			  <el-col :span="6" class="text-center"> 款色(颜色): </el-col>
 			  <el-col :span="14">
@@ -9,22 +9,106 @@
 			  </el-col>
 	 		  <el-col :span="4" class="text-center show-btn" >
 	 		  	<div class="hovershow" @click="clickDisplay(index)">
-	 		  		<span class="clickshow"  v-if="item.flag" > 收起 </span> 
-	 		  		<span class="clickclose"  v-else="item.flag" > 展开 </span> 
+	 		  		<span class="clickshow"  v-if="flags[index].flag" > 收起 </span> 
+	 		  		<span class="clickclose"  v-else="flags[index].flag" > 展开 </span> 
 	 		  		<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 	 		  	</div>
 	 		  </el-col>
 			</el-row>
-			<div v-if="item.flag" >
-				<el-row :gutter="10" v-for="(item1, index1) in item.sizes" class="number" :key="'row'+index1">
+			<div v-if="flags[index].flag" >
+				<el-row :gutter="10"  class="number" >
 					  <el-col :span="6" class="textright">
 					  	<div class="grid-content bg-purple">
-					  		{{ index1 == 0 ?"尺码:" : ''}}  {{item1.size}}
+					  		尺码: XS
 						</div>
 					  </el-col>
 					  <el-col :span="14">
 					  	<div class="grid-content bg-purple">
-						  	<el-input-number v-model="item1.number" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						  	<el-input-number v-model="item.xs_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						</div>
+					  </el-col>
+				</el-row>
+				<el-row :gutter="10"  class="number" >
+					  <el-col :span="6" class="textright">
+					  	<div class="grid-content bg-purple">
+					  		S
+						</div>
+					  </el-col>
+					  <el-col :span="14">
+					  	<div class="grid-content bg-purple">
+						  	<el-input-number v-model="item.s_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						</div>
+					  </el-col>	
+				</el-row>
+				<el-row :gutter="10"  class="number" >
+					  <el-col :span="6" class="textright">
+					  	<div class="grid-content bg-purple">
+					  		M
+						</div>
+					  </el-col>
+					  <el-col :span="14">
+					  	<div class="grid-content bg-purple">
+						  	<el-input-number v-model="item.m_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						</div>
+					  </el-col>	
+				</el-row>
+				<el-row :gutter="10"  class="number" >
+					  <el-col :span="6" class="textright">
+					  	<div class="grid-content bg-purple">
+					  		L
+						</div>
+					  </el-col>
+					  <el-col :span="14">
+					  	<div class="grid-content bg-purple">
+						  	<el-input-number v-model="item.l_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						</div>
+					  </el-col>	
+				</el-row>
+				<el-row :gutter="10"  class="number" >
+					  <el-col :span="6" class="textright">
+					  	<div class="grid-content bg-purple">
+					  		XL
+						</div>
+					  </el-col>
+					  <el-col :span="14">
+					  	<div class="grid-content bg-purple">
+						  	<el-input-number v-model="item.xl_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						</div>
+					  </el-col>	
+				</el-row>
+				<el-row :gutter="10"  class="number" >
+					  <el-col :span="6" class="textright">
+					  	<div class="grid-content bg-purple">
+					  		XXL
+						</div>
+					  </el-col>
+					  <el-col :span="14">
+					  	<div class="grid-content bg-purple">
+						  	<el-input-number v-model="item.xxl_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						</div>
+					  </el-col>	
+				</el-row>
+				<el-row :gutter="10"  class="number" >
+					  <el-col :span="6" class="textright">
+					  	<div class="grid-content bg-purple">
+					  		3XL
+						</div>
+					  </el-col>
+					  <el-col :span="14">
+					  	<div class="grid-content bg-purple">
+						  	<el-input-number v-model="item.xxxl_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
+						</div>
+					  </el-col>		
+				</el-row>
+				<el-row :gutter="10"  class="number" >
+					  <el-col :span="6" class="textright">
+					  	<div class="grid-content bg-purple">
+					  		4XL
+						</div>
+					  </el-col>
+					  <el-col :span="14">
+					  	<div class="grid-content bg-purple">
+						  	<el-input-number v-model="item.xxxxl_demanding_account" :min="0"  label="描述文字" class="fulid-width" ></el-input-number>
 						</div>
 					  </el-col>				  
 				</el-row>
@@ -40,116 +124,57 @@
 <script>
 export default {
 	name: "color",
+	props:['receiptContent','submitReceipt'],
 	data () {
 		return {
 			displaySizeList: false,
-			clothes:{},
-			activeNames: [],
-			size : ["XS","S","M","L","XL","XXL","3XL","4XL"], 
-			clothes: {
-				color: '',
-				number: '',
-				type: '',
-				size: [],
-				flag: false
-			},
-			diffKind: [
-				{
-					color: '',
-					type: '',
-					sizes : [
-						{size: "XS", number: 0},
-						{size: "S", number: 0},
-						{size: "M", number: 0},
-						{size: "L", number: 0},
-						{size: "XL", number: 0},
-						{size: "XXL", number: 0},
-						{size: "3XL", number: 0},
-						{size: "4XL", number: 0}
-					], 
-					flag: true
-				},
-			]
+			flags: [{flag: true}]
 		}
 	},
 	computed:{
 		demanding_account(){
 			let total=0 ;
-			this.diffKind.forEach((item, index)=> {
-				item.sizes.forEach( (_item, _index)=> {
-					total += _item.number
+			this.submitReceipt.size.forEach((item, index)=> {
+					total = item.xs_demanding_account  
+							+ item.s_demanding_account   
+							+ item.m_demanding_account   
+							+ item.l_demanding_account   
+							+ item.xl_demanding_account  
+							+ item.xxl_demanding_account 
+							+ item.xxxl_demanding_account
+							+ item.xxxxl_demanding_account
 				})
-			})
+			this.submitReceipt.demanding_account = total
 			return total
-		}
-	},
-	watch:{
-		diffKind:{
-			handler(curVal, oldVal){
-				let total = this.demanding_account
-				let value = []
-				curVal.forEach( (item, index)=>{
-					let obj = {};
-					value.push({
-					color:item.color,
-					// xxs_demanding_account :item.sizes[0].number ,
-					// xs_demanding_account :item.sizes[1].number ,
-					// s_demanding_account : item.sizes[2].number,
-					// m_demanding_account : item.sizes[3].number,
-					// l_demanding_account : item.sizes[4].number,
-					// xl_demanding_account : item.sizes[5].number,
-					// xxl_demanding_account : item.sizes[6].number,
-					// xxxl_demanding_account :item.sizes[7].number,
-					// xxxxl_demanding_account : item.sizes[8].number,
-					// xxxxxl_demanding_account : item.sizes[9].number
-
-					xs_demanding_account    : item.sizes[0].number ,
-					s_demanding_account     : item.sizes[1].number,
-					m_demanding_account     : item.sizes[2].number,
-					l_demanding_account     : item.sizes[3].number,
-					xl_demanding_account    : item.sizes[4].number,
-					xxl_demanding_account   : item.sizes[5].number,
-					xxxl_demanding_account  : item.sizes[6].number,
-					xxxxl_demanding_account : item.sizes[7].number,
-					})
-				})
-				this.$emit("setColor",value, total)
-			},
-			deep:true
 		}
 	},
 	methods:{
 		clickDisplay(index){
-			let self = this;
-			self.diffKind.forEach((item, _index)=>{
+			this.flags.forEach((item, _index)=>{
 				if( index == _index ){
-					self.$set(item,"flag", !item.flag)
+					this.$set(item,"flag", !item.flag)
 				}
 			});
 		},
 		clickDelete(index){
-			this.diffKind.splice(index,1)
+			this.submitReceipt.size.splice(index,1)
+			this.flags.splice(index,1)
 		},
 		addKind(){
-			let clothes= {
-				color: '',
-				number: '',
-				type: '',
-				sizes : [
-				// {size: "XXS", number: 0},
-				{size: "XS", number: 0},
-				{size: "S", number: 0},
-				{size: "M", number: 0},
-				{size: "L", number: 0},
-				{size: "XL", number: 0},
-				{size: "XXL", number: 0},
-				{size: "3XL", number: 0},
-				{size: "4XL", number: 0},
-				// {size: "5XL", number: 0}
-				], 
-				flag: false
-			};
-			this.diffKind.push( clothes );		
+			let clothes= 
+				{
+					color:null,
+					xs_demanding_account    : 0,
+					s_demanding_account     : 0,
+					m_demanding_account     : 0,
+					l_demanding_account     : 0,
+					xl_demanding_account    : 0,
+					xxl_demanding_account   : 0,
+					xxxl_demanding_account  : 0,
+					xxxxl_demanding_account : 0
+				}
+			this.submitReceipt.size.push( clothes );
+			this.flags.push({flag: true})	
 		},
 	}
 }

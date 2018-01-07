@@ -29,12 +29,26 @@ const router = new Router({
 
 
 
+import store  from '../store/index.js'
 
 router.beforeEach(function (to, from, next) {
+  let curPath = to.path
+        store.getters.getNavList.forEach((item, _index)=>{        
+        if( curPath == item.path ){
+          item.flag= true
+        }else{
+          item.flag=false
+        }
+      })
+
   if( to.path != '/login' && !Vue.cookies.get('yiyiphone')){
-    next({path: "/login" })
-  } else{
-    next()
+    next({path: "/login"})
+  } else{      
+    if(to.path == '/indent'){
+      next()
+    }else{
+      next()
+    }    
   }
 
   // if(userInfo){//如果有就直接到首页咯
@@ -46,8 +60,6 @@ router.beforeEach(function (to, from, next) {
   //     next('/login');
   //   }
   // }
-
-
 
 })
 

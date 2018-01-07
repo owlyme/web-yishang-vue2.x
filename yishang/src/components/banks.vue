@@ -89,6 +89,8 @@
 <script >
 import { mapGetters } from 'vuex'
 import qs from 'qs';
+import { mapMutations } from 'vuex'
+    
 
 export default{
 	props:['submitReceipt','receiptContent'],
@@ -260,6 +262,9 @@ export default{
 		this.getPayfront()
 	},
 	methods:{
+		...mapMutations([
+	      'setIndentBlock',
+	    ]),
 		toPayPage(val){
 			this.displayOrNot= val
 		},
@@ -297,6 +302,7 @@ export default{
 						pay_type: payType,
 						service_fee: this.receiptPayFront.service_fee}
 			if( payType == 'wxpay' ){
+				this.setIndentBlock(true)
 				this.showWeiChat= true;
 				this.axios.post(url+'/Receipt/payBeforeSubmit',qs.stringify(args))
 		       	.then((res)=>{
@@ -322,10 +328,11 @@ export default{
 					this.axios.post(url+'/Receipt/IswxPay',qs.stringify(args))
 			       	.then((res)=>{
 						// console.log(res)
-						if(res.data.status == 200 ){
-							this.receiptContent.order_id =  null
-							this.showWeiChat = false
+						if(res.data){
 							clearInterval(self.timer)
+							this.showWeiChat = false
+							this.receiptContent.order_id =  null
+							this.$router.push('/indent')
 						}else {
 							console.log('Waiting wxpay...')
 						}

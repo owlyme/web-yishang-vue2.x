@@ -92,17 +92,6 @@ export default {
 					let obj = {};
 					value.push({
 					color:item.color,
-					// xxs_demanding_account :item.sizes[0].number ,
-					// xs_demanding_account :item.sizes[1].number ,
-					// s_demanding_account : item.sizes[2].number,
-					// m_demanding_account : item.sizes[3].number,
-					// l_demanding_account : item.sizes[4].number,
-					// xl_demanding_account : item.sizes[5].number,
-					// xxl_demanding_account : item.sizes[6].number,
-					// xxxl_demanding_account :item.sizes[7].number,
-					// xxxxl_demanding_account : item.sizes[8].number,
-					// xxxxxl_demanding_account : item.sizes[9].number
-
 					xs_demanding_account    : item.sizes[0].number ,
 					s_demanding_account     : item.sizes[1].number,
 					m_demanding_account     : item.sizes[2].number,

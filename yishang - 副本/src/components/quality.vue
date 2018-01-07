@@ -29,7 +29,7 @@
 		  </el-col>
 		  <el-col :span="12">
 		  	  <el-form-item label="误差标准范围"  style="width:100%" >
-			    <el-input v-model="item.error" placeholder="请输入误差标准" style="width:60%"></el-input>
+			    <el-input v-model="item.err" placeholder="请输入误差标准" style="width:60%"></el-input>
 			  </el-form-item>	
 			  <!-- <el-form-item :label="'误差标准范围'+ (index+1)+':'" label-width="30%" >
 			    <el-select v-model="item.error" placeholder="请选择你的误差标准"  style="width:55%"	>
@@ -113,10 +113,7 @@ import { mapGetters } from 'vuex'
 	    },
 		watch:{
 			form:{
-				handler(curVal,oldVal){
-					if( !curVal.supplement[0].name && !curVal.supplement[0].err){
-						curVal.supplement= []
-					}
+				handler(curVal,oldVal){					
 					this.$emit("setQuality",curVal)
 		　　　　},
 		　　　　deep:true
@@ -148,7 +145,7 @@ import { mapGetters } from 'vuex'
 			addDetail(){	
 				let detail = {
 					name : "",
-					error: ""
+					err: ""
 				}
 				this.form.supplement.push(detail)
 			},

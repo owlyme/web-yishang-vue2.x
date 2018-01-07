@@ -2,7 +2,6 @@
 	<div >
 		<div v-if="receiptContent.order_id" id="banks" class=" padding-top-bottom color border-top">			
 			<div class="container " >		
-				<!-- <Banks :bankVal.sync="bankval"></Banks> -->
 				<Banks 
 				:submitReceipt="submitReceipt" 
 				:receiptContent="receiptContent" ></Banks>
@@ -52,7 +51,7 @@
 						<!-- 提交订单 -->
 						<div class="padding-left-right border-top padding-top-bottom text-center">
 							<el-button type="primary" @click="onSubmit">无忧发单</el-button>
-						    <el-button >保存草稿</el-button>
+						    <el-button @click="saveDraft">保存草稿</el-button>
 						  </el-form-item>
 						</div>			   
 					</el-form>			
@@ -130,28 +129,19 @@ export default {
       	return this.submitReceipt.total_fee
       } 
   },
- //  watch:{
-	// 	bankval:{
-	// 		handler(curVal,oldVal){
-	// 			// console.log(curVal)
-	// 		},
-	// 		deep:true
-	// 	}
-	// },
   mounted(){  
     let url = this.getUrl
     this.axios.post(url+'/Receipt/Index?type=2').then((res)=>{
         if(res.data.status == 200){
         	this.receiptContent = res.data.content
-        }         
+        }    
     })
     this.getpayfront();    
   },
 methods:{	
     onSubmit(){
     	this.$set(this.submitReceipt, 'type', 2)
-    	this.submitReceiptFn(this.submitReceipt)    	
-    	// console.log(this.submitReceipt)
+    	this.submitReceiptFn(this.submitReceipt)
     },
     getpayfront(){
     	let url = this.getUrl    		
@@ -162,14 +152,23 @@ methods:{
 	    }) 
     },    
     submitReceiptFn(args){
+    	console.log(args)
     	let url = this.getUrl
 	    this.axios.post(url+'/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
-			// console.log(res.data)
-			//临时开放————————————————————————————————————————————————————————————————————————————————————————————————————————
-	         // this.$set(this.receiptContent, 'order_id', 44444 )
-	        if(res.data.status == 200){
+			if(res.data.status == 200){
 	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
 	        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
+		    }else{
+		        this.openMessage({str: res.data.msg, ele:this})
+		    }
+	    })
+    },
+    saveDraft(){
+    	let url = this.getUrl
+    	let args = this.submitReceipt
+	    this.axios.post(url+'Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+			if(res.data.status == 200){
+	        	this.openMessage({str: res.data.msg, ele:this})	        	
 		    }else{
 		        this.openMessage({str: res.data.msg, ele:this})
 		    }
@@ -210,9 +209,17 @@ methods:{
     	let self = this;    	
 		self.$set(self.submitReceipt,'check', val.check)
 		self.$set(self.submitReceipt,'error' , val.error)
-		self.$set(self.submitReceipt,'supplement' , val.supplement)
+		// self.$set(self.submitReceipt,'supplement' , val.supplement)
 		self.$set(self.submitReceipt,'requirement', val.requirement)
 		self.$set(self.submitReceipt,'picture' , val.imageUrls)
+		let _supplement = []
+		val.supplement.forEach((item, index)=> {
+			if( item.name || item.err){	
+				_supplement.push(item)
+			}
+		})
+		self.$set(self.submitReceipt,'supplement' , _supplement)
+		
     },
     getFabric(val){
     	let self = this;

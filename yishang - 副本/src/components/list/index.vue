@@ -24,11 +24,20 @@
                 <div class="nav-h clearfix">
                       <a 
                       class="muneNav"                      
-                      v-for="(item, index) in listNav"
+                      v-for="(item, index) in getNavList"
                       :key="'mainnav'+ index"
                       @click="fliter(index)"
                       ><span :class="{ isactive: item.flag}">{{item.title}}</span></a>
                 </div>
+<!--                 <div class="nav-h clearfix">
+                      <router-link 
+                      class="muneNav"                      
+                      v-for="(item, index) in listNav"
+                      :key="'mainnav'+ index"
+                      :to="item.path"
+                      @click.native="fliter(index)"
+                      ><span >{{item.title}}</span></router-link>
+                </div> -->
               </div>
           </el-col>
         </el-row>  
@@ -36,7 +45,7 @@
   </div>
   <div class="bg-white"> 
     <keep-alive> <router-view/> </keep-alive> 
-    <!-- <router-view/> -->
+    <!--   <router-view /> -->
   </div>
   <Footerinfo/>
  </div>
@@ -48,7 +57,6 @@ import Popup from '../pop-up'
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
-
 export default {
   name: 'index1',
   components: { Footerinfo, Popup},
@@ -56,25 +64,27 @@ export default {
     return {
       popup: false,
       loginSucess: false,
-      listNav:[{title:'首页',path:"/", flag: true},
-      {title:'自主发单',path:"/zizhu", flag: false},
-      {title:'无忧发单',path:"/wuyou", flag: false},
-      {title:'我的订单',path:"/indent", flag: false}]
+      // listNav:[{title:'首页',path:"/", flag: true},
+      // {title:'自主发单',path:"/zizhu", flag: false},
+      // {title:'无忧发单',path:"/wuyou", flag: false},
+      // {title:'我的订单',path:"/indent", flag: false}]
+      listNav: window.listNav
     }
   },
   mounted(){
-    let curPath = this.$router.history.current.path
-    this.listNav.forEach((item, _index)=>{        
-        if( curPath == item.path ){
-          this.$set(item, 'flag', true)
-        }else{
-          this.$set(item, 'flag', false)
-        }
-    })
+    // let curPath = this.$router.history.current.path  
+    // this.listNav.forEach((item, _index)=>{        
+    //   if( curPath == item.path ){
+    //     this.$set(item, 'flag', true)
+    //   }else{
+    //     this.$set(item, 'flag', false)
+    //   }
+    // })
   },
   computed:{
       ...mapGetters([
          'getUrl',
+         'getNavList',
          'getSavePassword',
          'getCustomer',
          'getUploadUrl'
@@ -112,27 +122,18 @@ export default {
     },
     beforeReceipt(index){
         let url = this.getUrl
-        this.axios.post(url+'/Receipt/beforeReceipt').then((res)=>{
-              //临时开放————————————————————————————————————————————————————————————————————————————————————————————————————————
-              // this.$router.push(this.listNav[index].path)
+        this.axios.post(url+'/Receipt/beforeReceipt').then((res)=>{   
+        this.$router.push(this.getNavList[index].path)       
               if(res.data.status ==200){
-                this.$router.push(this.listNav[index].path)
+                this.$router.push(this.getNavList[index].path)
               }else {
-                this.msg = res.data.msg
                 this.popup = true
               }
         })
     },
     fliter(index){
-      let listNav = this.listNav
+      let listNav = this.getNavList
       this.setIndentBlock(true)
-      listNav.forEach((item, _index)=>{
-        if( index == _index){
-          this.$set(item, 'flag', true)
-        }else{
-          this.$set(item, 'flag', false)
-        }
-      })
       if(index% 3 ){
         this.beforeReceipt(index)
       }else{

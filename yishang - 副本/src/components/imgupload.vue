@@ -69,6 +69,7 @@ import { mapGetters } from 'vuex'
 
 	export	default{
 		name: 'imageuplaod',
+		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
 				ref: 'upload',
@@ -204,7 +205,6 @@ import { mapGetters } from 'vuex'
 	       	 	this.$refs.imgArr[index].submit();
 	     	},
 	     	addImgArr(){
-
 	     		let len = this.uploadImgArr.length
 				let otherPics = {
 						name:'',
@@ -214,34 +214,10 @@ import { mapGetters } from 'vuex'
 						imgUrls:[],						
 					}
 				this.uploadImgArr.push(otherPics)
-					
-
 	     	},
 	     	clickDelete(index){
 		      	this.uploadImgArr.splice(index,1)
-		    },
-			open3() {
-				this.$prompt('请输入其他细节名称', '衣依供应链平台提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',					
-					})
-					.then(({ value }) => {
-						let len = this.uploadImgArr.length
-						let otherPics = {
-								name:value,
-								title:value,
-								dialogVisible: false,
-								dialogImageUrl: false,
-								imgUrls:[],						
-							}
-						this.uploadImgArr.push(otherPics)
-					}).catch(() => {
-			          this.$message({
-			            type: 'info',
-			            message: '取消输入'
-			          });
-			        });
-			}
+		    }
 		}
 	}
 </script>

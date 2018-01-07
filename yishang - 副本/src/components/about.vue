@@ -1,15 +1,15 @@
 <template>
 	<div class="about border-top">
 		<div v-for="(item, index) in aboutList" class="padding-right add-row uploadimgs" :key=" 'about'+ index" >
-		<h5>其他要求{{index +1}}</h5>
+		<h5>其他要求</h5>
 		<el-row :gutter="10"  class="space padding-bottom" >		 
 		  <el-col :span="6"  class="text-right text-style-sm">
 		  	上传说明图片:
 		  </el-col>	
 		  <el-col :span="14">
-		  	<div  class="floatleft" v-if="item.showSrc">
-			  			<img :src="item.showSrc" class="show-demo1">
-			  </div>	
+		  	<div  class="floatleft" v-if="item.showSrc" v-for='(item1, index1) in item.showSrc'>
+			  	<img :src="item1" class="show-demo1">
+			</div>
 			<el-upload
 				class="floatleft"			  			
 	  			ref="supplements"
@@ -17,7 +17,7 @@
 		        list-type="picture-card"
 		        :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
 		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"		        
-		        :on-remove="(file, fileList) =>{ return  handleRemove(file, index)}">	
+		        :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">	
 		        <span  slot="trigger" class="remind" >点击上传</span>
 		        <!-- <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
 		      </el-upload>
@@ -42,45 +42,69 @@
 import { mapGetters } from 'vuex'
 	export default{
 		name: "quality",
+		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
-				aboutList:[
-					{
-					id: 0,
-					imgUrls:[],
-					showSrc: require('../assets/back-pic.jpg'),
-					requirement:"",
-					dialogVisible: false,
-					dialogImageUrl: false
-					}
-				],				
+				// aboutList:[
+				// 	// {
+				// 	// id: 0,
+				// 	// imgUrls:[],
+				// 	// showSrc: [require('../assets/back-pic.jpg')],
+				// 	// requirement:"",
+				// 	// dialogVisible: false,
+				// 	// dialogImageUrl: false
+				// 	// }
+				// ],				
 			}
 		},
-		watch:{
-			aboutList:{
-				handler(curVal,oldVal){
-					let value = [];
-					curVal.forEach((item, index) =>{
-						value[index] = {
-							requirement : item.requirement,
-							picture: item.imgUrls
-						}
-					})
-					this.$emit("setAbout",value)
-		　　　　　　},
-		　　　　deep:true
-			},
-		},
+
+
+		// watch:{
+		// 	aboutList:{
+		// 		handler(curVal,oldVal){
+		// 			let value = [];
+		// 			curVal.forEach((item, index) =>{
+		// 				value[index] = {
+		// 					requirement : item.requirement,
+		// 					picture: item.imgUrls
+		// 				}
+		// 			})
+		// 			this.submitReceipt.supplements = value
+		// 　　　　},
+		// 　　　　deep:true
+		// 	},
+		// },
 		computed:{
 	        ...mapGetters([
 	            'getUploadUrl'
 	          ]),
 	        actionUrl(){
 	          return this.getUploadUrl +'/picture/upload'
-	        }
+	        },
+	        aboutList(){
+				let _aboutList = []
+				this.submitReceipt.supplements.forEach( (item, index)=>{
+					let list = {
+								id: 0,
+								imgUrls:[],
+								showSrc: [require('../assets/back-pic.jpg')],
+								requirement:"",
+								dialogVisible: false,
+								dialogImageUrl: false
+							}
+					
+					_aboutList.push(list)
+					if( item.picture){
+						_aboutList[index].imgUrls = item.picture
+						_aboutList[index].showSrc = item.picture.slice(0, item.picture.length) 
+					}
+					_aboutList[index].requirement = item.requirement			
+				})
+				return _aboutList
+			}
 	     },
 		methods:{
-			 handleRemove(fileList,index) {
+			handleRemove(fileList,index) {
 		    	if(!this.aboutList[index].imgUrls.length) return;
 		        let imgs = [];
 		    	fileList.forEach((item ,index) =>{
@@ -99,35 +123,12 @@ import { mapGetters } from 'vuex'
 		        this.aboutList[index].dialogImageUrl = file.url;
 		        this.aboutList[index].dialogVisible = true;
 		    },	
-			// handleRemoveSingle(file,index) {
-		 //    	this.aboutList[index].imgUrl = ''
-		 //    },		      
-		 //    uploadImgeSuccessSingle(response, index){
-		 //        if (response.status == 200 ) {
-		 //        	 this.aboutList[index].imgUrl = response.content.url
-		 //        	}else{
-		 //        		//response.msg
-		 //        	}
-		 //    },
-		 //    handlePictureCardPreviewSingle(file,index) {
-		 //        this.aboutList[index].dialogImageUrl = file.url;
-		 //        this.aboutList[index].dialogVisible = true;
-		 //    },
-	  //       submitImg(index) {
-	  //      	 	this.$refs.supplements[index].submit();
-	  //    	}, 
 			addAbout(){
 		    	let about = {
-		    		id: '',
-					imgUrls:[],
-					requirement:"",
-					dialogVisible: false,
-					dialogImageUrl: false
-				}				
-		    	this.aboutList.push(about)
-		    	this.aboutList.forEach((item ,index) =>{
-		          this.aboutList[index].id = index
-		        })
+		    		picture: [],
+					requirement: null
+				}
+		    	this.submitReceipt.supplements.push(about)
 		    },
 		    clickDelete(index){
 		    	this.picId--
@@ -135,32 +136,7 @@ import { mapGetters } from 'vuex'
 		      	this.aboutList.forEach((item ,index) =>{
 		          this.aboutList[index].id = index
 		        })
-		    },
-	    	open3() {
-			this.$prompt('请输入其他细节名称', '衣依供应链平台提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',					
-				})
-				.then(({ value }) => {
-					let about = {
-		    		id: '',
-					imgUrl:'',
-					requirement:"",
-					dialogVisible: false,
-					dialogImageUrl: false
-					}				
-			    	this.aboutList.push(about)
-			    	this.aboutList.forEach((item ,index) =>{
-			          this.aboutList[index].id = index
-			        })
-				}).catch(() => {
-		          this.$message({
-		            type: 'info',
-		            message: '取消输入'
-		          });
-		        });
-			}
-
+		    }
 		}
 	}
 </script>

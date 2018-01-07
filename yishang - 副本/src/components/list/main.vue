@@ -51,9 +51,6 @@
                 <div  class="txt" :class="{'txt-active' : item.flag }" @click='displayOrNot(item.keyword)'>{{item.type}}
                   <div v-if="item.inner" class="updown">&#60;</div>
                 </div>
-                <!-- <ul v-if="item.inner" class="inner-ul">
-                  <li v-for="(item1, index) in item.inner" class="inner-li"  @click='displayOrNot(item1.keyword)'>{{item1.type}}</li>
-                </ul> -->
               </li>
         </ul>
 
@@ -115,24 +112,7 @@ export default{
           {
             type:"待发资料",
             keyword: '3000',
-            flag: false,
-            // inner: [
-            //         {
-            //           type:"待发样衣",
-            //           keyword: '3xx0',
-            //           flag: false
-            //         },
-            //         {
-            //           type:"待发面料",
-            //           keyword: '3x0x',
-            //           flag: false
-            //         },
-            //         {
-            //           type:"待发辅料",
-            //           keyword: '30xx',
-            //           flag: false
-            //         }
-            //        ]
+            flag: false            
           },          
           {
             type:"加工中",
@@ -198,7 +178,6 @@ export default{
     getMainlist(args){  
       let url= this.getUrl+'/Index/index'
       this.axios.post(url, qs.stringify(args)).then((res)=>{
-        // console.log(res)
           if(res.data.status == 200){
             this.perPage =  res.data.content.pageSize;
             this.totalRows = res.data.content.totalRows-0;

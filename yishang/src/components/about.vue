@@ -1,14 +1,14 @@
 <template>
 	<div class="about border-top">
 		<div v-for="(item, index) in aboutList" class="padding-right add-row uploadimgs" :key=" 'about'+ index" >
-		<h5>其他要求{{index +1}}</h5>
+		<h5>其他要求</h5>
 		<el-row :gutter="10"  class="space padding-bottom" >		 
 		  <el-col :span="6"  class="text-right text-style-sm">
 		  	上传说明图片:
 		  </el-col>	
 		  <el-col :span="14">
 		  	<div  class="floatleft" v-if="item.showSrc">
-			  			<img :src="item.showSrc" class="show-demo1">
+			  	<img :src="item.showSrc" class="show-demo1">
 			  </div>	
 			<el-upload
 				class="floatleft"			  			
@@ -17,7 +17,7 @@
 		        list-type="picture-card"
 		        :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
 		        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"		        
-		        :on-remove="(file, fileList) =>{ return  handleRemove(file, index)}">	
+		        :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">	
 		        <span  slot="trigger" class="remind" >点击上传</span>
 		        <!-- <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
 		      </el-upload>
@@ -80,7 +80,7 @@ import { mapGetters } from 'vuex'
 	        }
 	     },
 		methods:{
-			 handleRemove(fileList,index) {
+			handleRemove(fileList,index) {
 		    	if(!this.aboutList[index].imgUrls.length) return;
 		        let imgs = [];
 		    	fileList.forEach((item ,index) =>{

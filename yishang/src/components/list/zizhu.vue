@@ -40,7 +40,7 @@
 			<!-- 提交订单 -->
 			<div class=" border-top padding-top-bottom text-center">
 				<el-button type="primary" @click="onSubmit">自主发单</el-button>
-			    <el-button >保存草稿</el-button>
+			    <el-button @click="saveDraft">保存草稿</el-button>
 			  </el-form-item>
 			</div>			   
 		</el-form>			
@@ -137,6 +137,17 @@ export default {
 		        }         
 		    }) 
 	    },
+	    saveDraft(){
+	    	let url = this.getUrl
+	    	let args = this.submitReceipt
+		    this.axios.post(url+'Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+				if(res.data.status == 200){
+		        	this.openMessage({str: res.data.msg, ele:this})	        	
+			    }else{
+			        this.openMessage({str: res.data.msg, ele:this})
+			    }
+		    })
+	    },
 	    getWorkSheet(val){
 	    	let self = this;
 	    	self.$set(this.submitReceipt, 'name', val.name)
@@ -171,9 +182,16 @@ export default {
 	    	let self = this;
 			self.$set(this.submitReceipt,'check', val.check)
 			self.$set(this.submitReceipt,'error' , val.error)
-			self.$set(this.submitReceipt,'supplement' , val.supplement)
+			// self.$set(this.submitReceipt,'supplement' , val.supplement)
 			self.$set(this.submitReceipt,'requirement', val.requirement)
 			self.$set(this.submitReceipt,'picture' , val.imageUrls)
+			let _supplement = []
+			val.supplement.forEach((item, index)=> {
+				if( item.name || item.err){	
+					_supplement.push(item)
+				}
+			})
+			self.$set(self.submitReceipt,'supplement' , _supplement)
 	    },
 	    getFabric(val){
 	    	let self = this;
