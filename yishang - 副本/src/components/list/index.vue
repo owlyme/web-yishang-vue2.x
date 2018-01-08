@@ -29,15 +29,6 @@
                       @click="fliter(index)"
                       ><span :class="{ isactive: item.flag}">{{item.title}}</span></a>
                 </div>
-<!--                 <div class="nav-h clearfix">
-                      <router-link 
-                      class="muneNav"                      
-                      v-for="(item, index) in listNav"
-                      :key="'mainnav'+ index"
-                      :to="item.path"
-                      @click.native="fliter(index)"
-                      ><span >{{item.title}}</span></router-link>
-                </div> -->
               </div>
           </el-col>
         </el-row>  
@@ -64,22 +55,8 @@ export default {
     return {
       popup: false,
       loginSucess: false,
-      // listNav:[{title:'首页',path:"/", flag: true},
-      // {title:'自主发单',path:"/zizhu", flag: false},
-      // {title:'无忧发单',path:"/wuyou", flag: false},
-      // {title:'我的订单',path:"/indent", flag: false}]
       listNav: window.listNav
     }
-  },
-  mounted(){
-    // let curPath = this.$router.history.current.path  
-    // this.listNav.forEach((item, _index)=>{        
-    //   if( curPath == item.path ){
-    //     this.$set(item, 'flag', true)
-    //   }else{
-    //     this.$set(item, 'flag', false)
-    //   }
-    // })
   },
   computed:{
       ...mapGetters([

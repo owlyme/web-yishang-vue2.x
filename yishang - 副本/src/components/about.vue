@@ -11,7 +11,7 @@
 			  	<img :src="item1" class="show-demo1">
 			</div>
 			<el-upload
-				class="floatleft"			  			
+				class="floatleft"	
 	  			ref="supplements"
 		        :action="actionUrl"
 		        list-type="picture-card"
@@ -24,10 +24,10 @@
 		      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
 		        <img width="100%" :src="item.dialogImageUrl" alt="">
 		      </el-dialog>
-		  </el-col>	    			  
+		  </el-col>
 		</el-row>		
 			<el-form-item label="要求信息:" class="padding-top">
-			    <el-input type="textarea" v-model="item.requirement" placeholder="请填写要求信息"></el-input>
+			    <el-input type="textarea" v-model="submitReceipt.supplements[index].requirement"  placeholder="请填写要求信息"></el-input>
 			</el-form-item>
 			<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</div>
@@ -45,76 +45,64 @@ import { mapGetters } from 'vuex'
 		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
-				// aboutList:[
-				// 	// {
-				// 	// id: 0,
-				// 	// imgUrls:[],
-				// 	// showSrc: [require('../assets/back-pic.jpg')],
-				// 	// requirement:"",
-				// 	// dialogVisible: false,
-				// 	// dialogImageUrl: false
-				// 	// }
-				// ],				
+				image :  require('../assets/back-pic.jpg'),	
+				tempList: new Array()	
 			}
 		},
-
-
-		// watch:{
-		// 	aboutList:{
-		// 		handler(curVal,oldVal){
-		// 			let value = [];
-		// 			curVal.forEach((item, index) =>{
-		// 				value[index] = {
-		// 					requirement : item.requirement,
-		// 					picture: item.imgUrls
-		// 				}
-		// 			})
-		// 			this.submitReceipt.supplements = value
-		// 　　　　},
-		// 　　　　deep:true
-		// 	},
-		// },
 		computed:{
 	        ...mapGetters([
 	            'getUploadUrl'
-	          ]),
+	        ]),
 	        actionUrl(){
 	          return this.getUploadUrl +'/picture/upload'
 	        },
 	        aboutList(){
-				let _aboutList = []
+				let _aboutList = this.tempList
 				this.submitReceipt.supplements.forEach( (item, index)=>{
 					let list = {
 								id: 0,
 								imgUrls:[],
-								showSrc: [require('../assets/back-pic.jpg')],
+								showSrc: null,
 								requirement:"",
 								dialogVisible: false,
-								dialogImageUrl: false
+								dialogImageUrl: false,
+								loaded: false,
+								getImgUrl(val, clear){
+										if(clear){	
+											item.picture.splice(0, item.picture.length)
+											val.forEach( (item1, index1)=>{
+												item.picture.push( item1 )
+											})
+										}else{
+											item.picture.push(val)
+										}
+									}
 							}
-					
-					_aboutList.push(list)
-					if( item.picture){
-						_aboutList[index].imgUrls = item.picture
-						_aboutList[index].showSrc = item.picture.slice(0, item.picture.length) 
+					if( !_aboutList[index] ){
+						 _aboutList.push(list)
+						if( !item.picture ){ item.picture= [] }
+						if(!_aboutList[index].loaded){
+							_aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
+							_aboutList[index].showSrc = item.picture.length ? item.picture.slice(0, item.picture.length) : [this.image]		
+						}	
+						_aboutList[index].loaded = true			
 					}
-					_aboutList[index].requirement = item.requirement			
 				})
 				return _aboutList
 			}
 	     },
 		methods:{
 			handleRemove(fileList,index) {
-		    	if(!this.aboutList[index].imgUrls.length) return;
 		        let imgs = [];
+		        imgs = imgs.concat( this.aboutList[index].imgUrls )		      
 		    	fileList.forEach((item ,index) =>{
 		    		imgs.push(item.response.content.url)
 		    	})
-		    	this.aboutList[index].imgUrls = imgs.slice(0, imgs.length)
+		    	this.aboutList[index].getImgUrl( imgs.slice(0, imgs.length), true )
 		    },
 		    uploadImgeSuccess(response,index){
 		        if (response.status == 200 ) {
-		        	 this.aboutList[index].imgUrls.push(response.content.url)
+		        	this.aboutList[index].getImgUrl( response.content.url )
 		        	}else{
 		        		//response.msg
 		        	}
@@ -131,11 +119,8 @@ import { mapGetters } from 'vuex'
 		    	this.submitReceipt.supplements.push(about)
 		    },
 		    clickDelete(index){
-		    	this.picId--
-		      	this.aboutList.splice(index,1)
-		      	this.aboutList.forEach((item ,index) =>{
-		          this.aboutList[index].id = index
-		        })
+		      	this.submitReceipt.supplements.splice(index,1)
+		      	this.tempList.splice(index,1)
 		    }
 		}
 	}

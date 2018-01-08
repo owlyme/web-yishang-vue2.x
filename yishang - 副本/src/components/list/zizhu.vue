@@ -23,15 +23,13 @@
 			></Imgupload>		
 			<!-- 品质要求 quality -->
 			<Quality class="padding-left-right border-top padding-top-bottom" 
-				v-on:setQuality="getQuality"
-				:check="receiptContent.check" 
-				:error="receiptContent.error"
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"	
 			></Quality>	
 			<!-- 面料 -->
 			<Fabric class="padding-left-right border-top padding-top-bottom" 
-				v-on:setFabric="getFabric"
-				:component = "receiptContent.component"
-				:category = "receiptContent.category"
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"
 			></Fabric>
 			<!-- 其他要求1 -->
 			<About class="padding-left-right border-top padding-top-bottom" 
@@ -98,24 +96,32 @@ export default {
 				expire_time: null,
 				arrival_date: null,
 				delivery_date: null,
-				front_picture: null,
+				front_picture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg',
 				back_picture: null,
 				left_picture: null,
 				right_picture: null,
-				part_picture: null,
+				part_picture: ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg'],
 				other_picture: null,
 				check: null,
 				error: null,
 				supplement: null,
 				requirement: null,
-				picture: null,
-				fabric: null,
+				picture: ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg'],
+				fabric: [{
+	                name: '',
+	                component: '',
+	                grammage:'',
+	                width:'',  
+	                units: '', 
+	                weight:'',
+	                picture:[],
+	                is_main: 0
+	              }],
 				supplements: [
 					{
-						requirement : 111,
+						requirement : null,
 						picture: null
-					},
-					
+					}					
 				],
 				is_deposited: null,
 				receiver: null,
@@ -142,14 +148,18 @@ export default {
 
         }          
     })
-
-	    setTimeout(()=>{ 
-	    	this.submitReceipt.supplements.push({
-						requirement : 222,
-						picture: ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515349016291&di=4f11364a34d8686a87291e8d5f93efcd&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515349016291&di=4f11364a34d8686a87291e8d5f93efcd&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg']
-					})
-
-	    },3000)
+    setTimeout(()=>{
+    	return
+    	this.submitReceipt.fabric.push({ name: '',
+	                component: '2222',
+	                grammage:'',
+	                width:'',  
+	                units: '', 
+	                weight:'',
+	                picture:['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg'],
+	                is_main: 0
+	              })
+    },3000)
   },
   watch:{
 		submitReceipt:{
