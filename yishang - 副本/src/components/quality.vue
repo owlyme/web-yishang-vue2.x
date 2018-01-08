@@ -116,14 +116,7 @@ import { mapGetters } from 'vuex'
 				return _aboutList
 			}
 	    },
-		// watch:{
-		// 	form:{
-		// 		handler(curVal,oldVal){					
-		// 			this.$emit("setQuality",curVal)
-		// 　　　　},
-		// 　　　　deep:true
-		// 	}
-		// },
+
 		methods:{
 			handleRemove(fileList) {
 		        let imgs = [];

@@ -1,21 +1,20 @@
 <template>
 	<div class="pay" >
 		<el-form :model="selectAddress"  ref="selectAddress" label-width="30%" >
-			<el-form-item label="是否支付定金:" v-if='zizhu'>
-			    <el-radio-group v-model="selectAddress.is_deposited" style="padding-top:8px">
+			<el-form-item label="是否支付定金:" v-if='submitReceipt.type == 1'>
+			    <el-radio-group v-model="submitReceipt.is_deposited" style="padding-top:8px">
 			      <el-radio  :label="1">是</el-radio>
 			      <el-radio  :label="0">否</el-radio>
 			    </el-radio-group>
 			</el-form-item>
-			<el-form-item :label="percent" v-else  v-model="selectAddress.per">			
-			    	 <span class="color size">{{ depositFee.toFixed(2) }}</span> 元			   
+			<el-form-item :label="percent" v-else  v-model="receiptContent.per">			
+			    	<span class="color size">{{ depositFee.toFixed(2) }}</span> 元	
 			</el-form-item>
 			<el-form-item label="确认收货地址:" >
-			    <el-radio-group v-model="selectAddress.address" >
-			    	<div v-for="(item, index) in addressList">
+			    <el-radio-group v-model="receiptContent.address" >
+			    	<div v-for="(item, index) in receiptContent.address">
 			    		<el-radio :label="item" :key="'address'+ index" > 
-			    			{{item.province + item.city  + item.county
-						          + item.street  +' (' +item.receiver + ') '	+item.phone}}</el-radio>
+			    			{{item.province + item.city  + item.county + item.street  +' (' +item.receiver + ') ' +item.phone}}</el-radio>
 			    	</div>		     
 			    </el-radio-group>
 			</el-form-item>
@@ -52,7 +51,8 @@ import { mapGetters } from 'vuex'
 	export default{
 		name: "pay",
 		components:{ China},
-		props:['zizhu','addressList',"deposit","totalFee"],
+		
+		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
 				selectAddress: {
@@ -167,7 +167,6 @@ import { mapGetters } from 'vuex'
 		        });
 		    },
 		    getCity(val){
-		    	// console.log("get addr:"+ val)	
 		    	let self= this;
 					self.$set(self.ruleForm,'province', val.province.name)
 					self.$set(self.ruleForm,'city', val.city.name)

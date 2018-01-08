@@ -38,6 +38,8 @@
 			<!-- 收货人信息 -->
 			<Pay class="border-top padding-top-bottom" 
 				zizhu='true'
+				:receiptContent='receiptContent'
+				:submitReceipt="submitReceipt"
 				:addressList="receiptContent.address"
 				v-on:setNewAddr="getNewAddr"
 			></Pay>
@@ -74,7 +76,7 @@ export default {
 			passBefore: false,
 		   	receiptContent:{},
 		   	submitReceipt: {
-				type: null,
+				type: 1,
 				cate_name: null,
 				name: null,
 				style_name: null,
@@ -96,17 +98,17 @@ export default {
 				expire_time: null,
 				arrival_date: null,
 				delivery_date: null,
-				front_picture: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg',
+				front_picture: null,
 				back_picture: null,
 				left_picture: null,
 				right_picture: null,
-				part_picture: ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg'],
+				part_picture: [],
 				other_picture: null,
 				check: null,
 				error: null,
 				supplement: null,
 				requirement: null,
-				picture: ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg'],
+				picture: [],
 				fabric: [{
 	                name: '',
 	                component: '',
@@ -123,7 +125,7 @@ export default {
 						picture: null
 					}					
 				],
-				is_deposited: null,
+				is_deposited: 1,
 				receiver: null,
 				phone: null,
 				province: null,
@@ -172,6 +174,7 @@ export default {
 	methods:{
 	    onSubmit(){
 	    	this.$set(this.submitReceipt, 'type', 1)
+	    	this.getQuality();
 	    	this.submitReceiptFn(this.submitReceipt);
 	    },	   
 	    submitReceiptFn(args){
@@ -195,59 +198,16 @@ export default {
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
 		    })
-	    },
-	    getWorkSheet(val){
+	    },	   
+	    getQuality(){
 	    	let self = this;
-	    	self.$set(this.submitReceipt, 'name', val.name)
-	    	self.$set(this.submitReceipt, 'cate_name', val.fabricType)
-	    	self.$set(this.submitReceipt, 'style_name', val.kindType)
-	    	self.$set(this.submitReceipt, 'mode_name', val.status)
-	    },    
-	    getColornumber(val,total){
-	    	let self = this; 
-	    	self.$set(this.submitReceipt, 'size', val)
-	    	self.$set(this.submitReceipt, 'demanding_account', total)
-	    	self.$set(self.receiptContent, 'demanding_account', total)    	
-	    },
-	    getPeriod(val){
-	    	let self = this;
-	    	self.$set(this.submitReceipt, 'fee', val.fee)
-	    	self.$set(this.submitReceipt, 'total_fee', val.total_fee)
-	    	self.$set(this.submitReceipt, 'expire_time', val.expire_time)
-	    	self.$set(this.submitReceipt, 'arrival_date', val.arrival_date)
-	    	self.$set(this.submitReceipt, 'delivery_date', val.delivery_date)
-	    },
-	    getClothePic(val){
-	    	let self = this;
-			self.$set(this.submitReceipt,'front_picture', val.front_picture)
-			self.$set(this.submitReceipt,'back_picture' , val.back_picture)
-			self.$set(this.submitReceipt,'left_picture' , val.left_picture)
-			self.$set(this.submitReceipt,'right_picture', val.right_picture)
-			self.$set(this.submitReceipt,'part_picture' , val.part_picture)
-			self.$set(this.submitReceipt,'other_picture', val.other_picture)
-	    },
-	    getQuality(val){
-	    	let self = this;
-			self.$set(this.submitReceipt,'check', val.check)
-			self.$set(this.submitReceipt,'error' , val.error)
-			// self.$set(this.submitReceipt,'supplement' , val.supplement)
-			self.$set(this.submitReceipt,'requirement', val.requirement)
-			self.$set(this.submitReceipt,'picture' , val.imageUrls)
 			let _supplement = []
-			val.supplement.forEach((item, index)=> {
+			this.submitReceipt.supplement.forEach((item, index)=> {
 				if( item.name || item.err){	
 					_supplement.push(item)
 				}
 			})
 			self.$set(self.submitReceipt,'supplement' , _supplement)
-	    },
-	    getFabric(val){
-	    	let self = this;
-	    	self.$set(this.submitReceipt,'fabric', val)
-	    },
-	    getAbout(val){
-	    	let self = this;
-	    	self.$set(this.submitReceipt,'supplements', val)
 	    },
 	    getNewAddr(val){
 	    	let self = this;
