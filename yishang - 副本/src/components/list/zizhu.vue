@@ -37,11 +37,8 @@
 				:submitReceipt="submitReceipt"></About>
 			<!-- 收货人信息 -->
 			<Pay class="border-top padding-top-bottom" 
-				zizhu='true'
 				:receiptContent='receiptContent'
 				:submitReceipt="submitReceipt"
-				:addressList="receiptContent.address"
-				v-on:setNewAddr="getNewAddr"
 			></Pay>
 			<!-- 提交订单 -->
 			<div class=" border-top padding-top-bottom text-center">
@@ -135,35 +132,34 @@ export default {
 		   	}
 		}
 	},
-  computed:{
-      ...mapGetters([
-         'getUrl',
-      ]),
-      
-  },  
-  mounted(){
-    let url = this.getUrl
-    this.axios.post(url+'/Receipt/Index?type=1').then((res)=>{
-        if(res.data.status == 200){
-        	this.receiptContent = res.data.content
-        }else{
+	computed:{
+	  ...mapGetters([
+	     'getUrl',
+	  ])      
+	},  
+	mounted(){
+		let url = this.getUrl
+		this.axios.post(url+'/Receipt/Index?type=1').then((res)=>{
+		    if(res.data.status == 200){
+		    	this.receiptContent = res.data.content
+		    }else{
 
-        }          
-    })
-    setTimeout(()=>{
-    	return
-    	this.submitReceipt.fabric.push({ name: '',
-	                component: '2222',
-	                grammage:'',
-	                width:'',  
-	                units: '', 
-	                weight:'',
-	                picture:['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg'],
-	                is_main: 0
-	              })
-    },3000)
-  },
-  watch:{
+		    }          
+		})
+		setTimeout(()=>{
+			return
+			this.submitReceipt.fabric.push({ name: '',
+		                component: '2222',
+		                grammage:'',
+		                width:'',  
+		                units: '', 
+		                weight:'',
+		                picture:['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1515406594358&di=feaaba8a0ab5eb6afbe6020c0c0c05be&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F83025aafa40f4bfbee167839094f78f0f636189c.jpg'],
+		                is_main: 0
+		              })
+		},3000)
+	},
+	watch:{
 		submitReceipt:{
 			handler(curVal, oldVal){					
 				console.log(curVal)
@@ -208,16 +204,6 @@ export default {
 				}
 			})
 			self.$set(self.submitReceipt,'supplement' , _supplement)
-	    },
-	    getNewAddr(val){
-	    	let self = this;
-			self.$set(this.submitReceipt,'is_deposited', val.is_deposited)
-			self.$set(this.submitReceipt,'phone', val.phone)
-			self.$set(this.submitReceipt,'province', val.province)
-			self.$set(this.submitReceipt,'city', val.city)
-			self.$set(this.submitReceipt,'county', val.county)
-			self.$set(this.submitReceipt,'street', val.street)
-			self.$set(this.submitReceipt,'receiver', val.name)
 	    }
 	}
 }

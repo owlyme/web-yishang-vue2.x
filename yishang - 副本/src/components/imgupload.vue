@@ -103,7 +103,8 @@ import { mapGetters } from 'vuex'
 						imgUrls:[],
 						loaded: false
 					}
-				]
+				],
+				
 			}
 		},
 		computed:{
@@ -115,49 +116,73 @@ import { mapGetters } from 'vuex'
 			},
 			uploadSingleImg(){
 				let self = this
-				let _aboutList = this.tempList
-				_aboutList = [{
+				let _aboutList = []
+				_aboutList = [
+					{
 						name:'正面全览照',
-						showSrc: self.submitReceipt.front_picture || require('../assets/front-pic.jpg'),
+						showSrc: null, 
 						dialogVisible: false,
-						dialogImageUrl: false,						
+						dialogImageUrl: false,
+						loaded: false,
 						getImgUrl(val){
 							self.submitReceipt.front_picture = val 
 						}
 					},
 					{
 						name:'背面全览照',
-						showSrc: self.submitReceipt.back_picture || require('../assets/back-pic.jpg'),
+						showSrc: null, 
 						dialogVisible: false,
-						dialogImageUrl: false,						
+						dialogImageUrl: false,
+						loaded: false,						
 						getImgUrl(val){
 							self.submitReceipt.back_picture = val 
 						}
 					},
 					{
 						name:'左侧面全览照',
-						showSrc: self.submitReceipt.left_picture || require('../assets/left-pic.jpg'),
+						showSrc: null, 
 						dialogVisible: false,
-						dialogImageUrl: false,						
+						dialogImageUrl: false,
+						loaded: false,					
 						getImgUrl(val){
 							self.submitReceipt.left_picture = val 
 						}
 					},
 					{
 						name:'右侧面全览照',
-						showSrc: self.submitReceipt.right_picture || require('../assets/right-pic.jpg'),
+						showSrc: null, 
 						dialogVisible: false,
-						dialogImageUrl: false,						
+						dialogImageUrl: false,
+						loaded: false,					
 						getImgUrl(val){
 							console.log(self.submitReceipt)
 							self.submitReceipt.right_picture = val 
 						}
-					}]
+					}
+				]
+				
+					if( !_aboutList[0].loaded){
+						console.log(111111)						
+						_aboutList[0].showSrc= self.submitReceipt.front_picture ? (self.getUploadUrl + self.submitReceipt.front_picture) : require('../assets/front-pic.jpg')
+						_aboutList[0].loaded= true
+					}
+					if( !_aboutList[1].loaded){
+						_aboutList[1].showSrc= self.submitReceipt.back_picture ? (self.getUploadUrl + self.submitReceipt.back_picture) : require('../assets/back-pic.jpg')
+						_aboutList[1].loaded= true
+					}
+					if( !_aboutList[2].loaded){
+						_aboutList[2].showSrc= self.submitReceipt.left_picture ? (self.getUploadUrl + self.submitReceipt.left_picture) : require('../assets/left-pic.jpg')
+						_aboutList[2].loaded= true
+					}
+					if( !_aboutList[3].loaded){
+						_aboutList[3].showSrc= self.submitReceipt.right_picture ? (self.getUploadUrl + self.submitReceipt.right_picture) : require('../assets/right-pic.jpg')
+						_aboutList[3].loaded= true
+					}				
+				console.log(_aboutList)
 				return _aboutList
 			},
 			uploadImgArr(){
-				let self = this
-				
+				let self = this				
 				let index0 = self.tempList[0]
 				let part_picture = self.submitReceipt.part_picture
 				if( !part_picture ){ part_picture= [] }
@@ -205,7 +230,7 @@ import { mapGetters } from 'vuex'
 							if( !item.sub_picture ){ item.sub_picture= [] }
 							if( !_aboutList[index+1].loaded ){							
 								_aboutList[index+1].imgUrls = item.sub_picture.slice(0, item.sub_picture.length)
-								_aboutList[index+1].showSrc = item.sub_picture.length ? item.sub_picture.slice(0, item.picture.length) : []
+								_aboutList[index+1].showSrc = item.sub_picture.length ? this.addUploadUrl(this.getUploadUrl, item.sub_picture.slice(0, item.picture.length)) : []
 							}
 							_aboutList[index+1].loaded = true
 						}

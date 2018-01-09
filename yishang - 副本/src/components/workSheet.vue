@@ -4,7 +4,7 @@
 				    <el-input v-model="submitReceipt.name" placeholder="建议类目+面料+公司+日期" style="width:75%"></el-input>
 				  </el-form-item>
 				  <el-form-item label="面料属性大类:" >
-				    <el-select v-model="submitReceipt.fabricType" placeholder="面料属性大类" style="width:75%">
+				    <el-select v-model="submitReceipt.cate_name" placeholder="面料属性大类" style="width:75%">
 				      <el-option 
 				      		v-for="(item, index) in receiptContent.category"
 				    		:key="'category'+index"
@@ -13,7 +13,7 @@
 				   </el-select>
 				  </el-form-item>
 				  <el-form-item label="服装品类类目:" >
-				    <el-select v-model="submitReceipt.kindType" placeholder="服装品类类目" style="width:75%">
+				    <el-select v-model="submitReceipt.style_name" placeholder="服装品类类目" style="width:75%">
 				    	<el-option 
 				    		v-for="(item, index) in receiptContent.style"
 				    		:key="'styles'+index"
@@ -21,7 +21,7 @@
 				    </el-select>
 				  </el-form-item>
 				  <el-form-item label="加工模式:">
-				    <el-radio-group v-model="submitReceipt.status" style="padding-top:8px">
+				    <el-radio-group v-model="submitReceipt.mode_name" style="padding-top:8px">
 				    <el-radio 
 				    	v-for="(item, index) in receiptContent.mode"
 				    	:key="'mode'+ index"

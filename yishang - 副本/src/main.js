@@ -32,6 +32,13 @@ Vue.prototype.openMessage = (arg) =>{
               showClose: false
             });
         };
+Vue.prototype.addUploadUrl= (url, arr)=>{
+    let _arr = [];
+    arr.forEach( (item, index)=>{
+      _arr.push(url+ item)
+    })
+    return _arr
+}
 Vue.directive('focus', {
       inserted: function (el) {
           el.focus()
