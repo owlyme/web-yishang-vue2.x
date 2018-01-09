@@ -80,11 +80,11 @@ import { mapMutations } from 'vuex'
 
 
 export default {
-	name: "zizhu",
+	name: "wuyou",
 	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About, Banks},
 	data () {
 		return {
-			msg: '',			
+			msg: '',		
 			submitSuccess: true,
 		   	receiptContent:{order_id:null},
 		   	submitReceipt: {
@@ -111,7 +111,7 @@ export default {
 				arrival_date: null,
 				delivery_date: null,
 				front_picture: null,
-				back_picture: 'Uploads/Images/2018-01-09/6fa119c9708ba49ba3e70275957eeac3.jpg',
+				back_picture: null,
 				left_picture: null,
 				right_picture: null,
 				part_picture: [],
@@ -156,12 +156,7 @@ export default {
       } 
   },
   mounted(){  
-    let url = this.getUrl
-    this.axios.post(url+'/Receipt/Index?type=2').then((res)=>{
-        if(res.data.status == 200){
-        	this.receiptContent = res.data.content
-        }    
-    })
+  	this.getReceipt()
     this.getpayfront();    
   },
   watch:{
@@ -172,7 +167,29 @@ export default {
 			deep: true
 		}
 	},
-	methods:{	
+	methods:{
+		getReceipt(){
+			console.log(this.$route.query.order_id)
+			setTimeout(()=>{
+					console.log('3sssssss')
+					this.submitReceipt.part_picture= ['/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg','/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg']},3000)
+			let url = this.getUrl
+			let args = {
+				type: 1,
+				order_id : this.$route.query.order_id
+			}
+			this.axios.post(url+'/Receipt/Index',qs.stringify(args)).then((res)=>{
+				console.log(res)
+			    if(res.data.status == 200){
+			    	this.receiptContent = res.data.content
+			    	this.matchObj()
+			    	console.log('after ')
+			    	console.log(this.submitReceipt)
+			    }else{
+
+			    }          
+			})
+		},
 	    onSubmit(){
 	    	this.getQuality()
 	    	this.submitReceiptFn(this.submitReceipt)
@@ -199,8 +216,10 @@ export default {
 	    saveDraft(){
 	    	let url = this.getUrl
 	    	let args = this.submitReceipt
-		    this.axios.post(url+'Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
 				if(res.data.status == 200){
+					this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
+		        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
 		        	this.openMessage({str: res.data.msg, ele:this})	        	
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
@@ -216,6 +235,53 @@ export default {
 				}
 			})
 			self.$set(self.submitReceipt,'supplement' , _supplement)
+	    },
+	    matchObj(){
+	    	// if( this.receiptContent.done.length  == 0 ) return
+	    		console.log('macthing')
+	    	let done = this.receiptContent.done
+	    	let details = done.details
+	    	let quality = done.quality
+	    	this.submitReceipt = {
+				arrival_date: details.arrival_date,
+				back_picture: details.back_picture,
+				cate_name: 	  details.category,
+				delivery_date: details.delivery_date,
+				demanding_account: details.demanding_account,
+				expire_time: details.expire_time,
+				fee: details.fee,
+				front_picture: details.front_picture,
+				is_deposited: details.is_deposited,
+				left_picture: details.left_picture,
+				mode_name: details.mode,
+				name: details.name,
+				// part_picture: details.part_picture,
+				part_picture: ['/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg','/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg'],
+				right_picture: details.right_picture,
+				style_name: details.style,
+				total_fee: details.total_fee,
+				type: details.type,
+
+				fabric: done.fabric,
+				other_picture: done.part,
+				size: done.size,				
+							
+				check: quality.check,
+				error: quality.error,				
+				requirement: quality.requirement,
+				supplement: quality.supplement,
+				picture: quality.picture,
+			
+				supplements: done.supplement,
+				receiver: null,
+				phone: null,
+				province: null,
+				city: null,
+				county: null,
+				street: null,
+		   	}
+		   	console.log('macthed')
+		   	console.log(this.submitReceipt)
 	    }
 	}
 }

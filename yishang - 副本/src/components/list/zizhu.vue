@@ -138,14 +138,8 @@ export default {
 	  ])      
 	},  
 	mounted(){
-		let url = this.getUrl
-		this.axios.post(url+'/Receipt/Index?type=1').then((res)=>{
-		    if(res.data.status == 200){
-		    	this.receiptContent = res.data.content
-		    }else{
-
-		    }          
-		})
+		console.log(11111)
+		this.getReceipt()
 		setTimeout(()=>{
 			return
 			this.submitReceipt.fabric.push({ name: '',
@@ -168,6 +162,24 @@ export default {
 		}
 	},
 	methods:{
+		getReceipt(){
+			console.log(this.$route.query.order_id)
+			let url = this.getUrl
+			let args = {
+				type: 1,
+				order_id : this.$route.query.order_id
+			}
+			this.axios.post(url+'/Receipt/Index',qs.stringify(args)).then((res)=>{
+				console.log(res)
+			    if(res.data.status == 200){
+			    	this.receiptContent = res.data.content
+			    	this.matchObj()
+			    	console.log(this.submitReceipt)
+			    }else{
+
+			    }          
+			})
+		},
 	    onSubmit(){
 	    	this.$set(this.submitReceipt, 'type', 1)
 	    	this.getQuality();
@@ -187,9 +199,11 @@ export default {
 	    saveDraft(){
 	    	let url = this.getUrl
 	    	let args = this.submitReceipt
-		    this.axios.post(url+'Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+		    	console.log(args)
 				if(res.data.status == 200){
-		        	this.openMessage({str: res.data.msg, ele:this})	        	
+		        	this.openMessage({str: res.data.msg, ele:this})	
+					this.$router.push("/indent")       	
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
@@ -204,6 +218,52 @@ export default {
 				}
 			})
 			self.$set(self.submitReceipt,'supplement' , _supplement)
+	    },
+	    matchObj(){
+	    	if( this.receiptContent.done.length  == 0 ) return
+	    		console.log('macthing')
+	    	let done = this.receiptContent.done
+	    	let details = done.details
+	    	let quality = done.quality
+	    	this.submitReceipt = {
+				arrival_date: details.arrival_date,
+				back_picture: details.back_picture,
+				cate_name: 	  details.category,
+				delivery_date: details.delivery_date,
+				demanding_account: details.demanding_account,
+				expire_time: details.expire_time,
+				fee: details.fee,
+				front_picture: details.front_picture,
+				is_deposited: details.is_deposited,
+				left_picture: details.left_picture,
+				mode_name: details.mode,
+				name: details.name,
+				part_picture: details.part_picture,
+				right_picture: details.right_picture,
+				style_name: details.style,
+				total_fee: details.total_fee,
+				type: details.type,
+
+				fabric: done.fabric,
+				other_picture: done.part,
+				size: done.size,				
+							
+				check: quality.check,
+				error: quality.error,				
+				requirement: quality.requirement,
+				supplement: quality.supplement,
+				picture: quality.picture,
+			
+				supplements: done.supplement,
+				receiver: null,
+				phone: null,
+				province: null,
+				city: null,
+				county: null,
+				street: null,
+		   	}
+		   	console.log('macthed')
+		   	console.log(this.submitReceipt)
 	    }
 	}
 }

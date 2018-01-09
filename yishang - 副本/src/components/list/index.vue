@@ -35,8 +35,8 @@
     </div>
   </div>
   <div class="bg-white"> 
-    <keep-alive> <router-view/> </keep-alive> 
-    <!--   <router-view /> -->
+    <!-- <keep-alive> <router-view/> </keep-alive>  -->
+      <router-view />
   </div>
   <Footerinfo/>
  </div>

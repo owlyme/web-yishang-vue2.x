@@ -70,7 +70,7 @@ export default {
     data() {
       return {
         startCode: 65,
-        image :  require('../assets/back-pic.jpg'), 
+        image :  require('../assets/fabric-pic.jpg'), 
         tempList: new Array(),       
       }
     },
@@ -114,7 +114,7 @@ export default {
             if( !item.picture ){ item.picture= [] }
             if(!_aboutList[index].loaded ){
               _aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
-              _aboutList[index].showSrc = item.picture.length ? item.picture.slice(0, item.picture.length) : [this.image]
+              _aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice(0, item.picture.length)): [this.image]
             } 
               _aboutList[index].loaded =true 
           }

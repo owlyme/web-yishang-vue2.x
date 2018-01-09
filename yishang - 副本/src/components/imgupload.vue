@@ -161,8 +161,7 @@ import { mapGetters } from 'vuex'
 					}
 				]
 				
-					if( !_aboutList[0].loaded){
-						console.log(111111)						
+					if( !_aboutList[0].loaded){				
 						_aboutList[0].showSrc= self.submitReceipt.front_picture ? (self.getUploadUrl + self.submitReceipt.front_picture) : require('../assets/front-pic.jpg')
 						_aboutList[0].loaded= true
 					}
@@ -186,9 +185,9 @@ import { mapGetters } from 'vuex'
 				let index0 = self.tempList[0]
 				let part_picture = self.submitReceipt.part_picture
 				if( !part_picture ){ part_picture= [] }
-				if( !index0.loaded ){
-					index0.showSrc = part_picture.length ? part_picture.slice(0, part_picture.length) : index0.showSrc
-					index0.imgUrls = !index0.imgUrls.length ? part_picture.slice(0, part_picture.length) : []
+				if( !index0.loaded ){					
+					index0.imgUrls =  part_picture.slice(0, part_picture.length) 
+					index0.showSrc = part_picture.length ? this.addUploadUrl(this.getUploadUrl, part_picture.slice(0, part_picture.length)) : index0.showSrc
 					index0.getImgUrl = (val, clear)=>{
 						if(clear){	
 							part_picture.splice(0, part_picture.length)
@@ -198,6 +197,7 @@ import { mapGetters } from 'vuex'
 						}else{
 							part_picture.push(val)
 						}
+						console.log(part_picture)
 					}
 					index0.loaded = true
 				}

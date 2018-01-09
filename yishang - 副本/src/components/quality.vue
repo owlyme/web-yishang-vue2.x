@@ -83,7 +83,7 @@ import { mapGetters } from 'vuex'
 		        loaded: false,
 		        imgUrls:[],
 		        tempList: new Array(),
-		        image :  require('../assets/back-pic.jpg'),
+		        image :  require('../assets/mode-pic.jpg'),
 			}
 		},
 		mounted(){

@@ -1,7 +1,7 @@
 <template>
 	<div class="">
 		<h5>颜色数量</h5>
-		<div v-for="(item, index) in submitReceipt.size" class="border-box" >
+		<div v-for="(item, index) in size" class="border-box" >
 			<el-row :gutter="10"  class="bg">	 
 			  <el-col :span="6" class="text-center"> 款色(颜色): </el-col>
 			  <el-col :span="14">
@@ -146,7 +146,16 @@ export default {
 				})
 			this.submitReceipt.demanding_account = total
 			return total
+		},
+		size(){			
+			this.submitReceipt.size.forEach( (item, index)=>{
+				if(index+1 > this.flags.length ){
+					this.flags.push({flag: true})
+				}
+			})
+			return this.submitReceipt.size
 		}
+
 	},
 	methods:{
 		clickDisplay(index){
@@ -174,7 +183,7 @@ export default {
 					xxxxl_demanding_account : 0
 				}
 			this.submitReceipt.size.push( clothes );
-			this.flags.push({flag: true})	
+			// this.flags.push({flag: true})	
 		},
 	}
 }

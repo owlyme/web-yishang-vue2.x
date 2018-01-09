@@ -18,7 +18,7 @@
 							{{ goodsMsg.msg}} 			
 						</b-col>
 						<b-col cols="5">
-							<el-button type="primary" @click="view(goodsMsg.uid)">查看</el-button>
+							<el-button type="primary" @click="view(goodsMsg)">查看</el-button>
 						</b-col>
 					</b-row>
 				</b-col>
@@ -49,9 +49,23 @@
 	      }
 	    },
 		methods:{
-			view(uid){
-				this.$emit('change', uid)
-			}
+			view(goodsMsg){
+				if( goodsMsg.status == -1 ){
+					this.toEdit(goodsMsg)
+				}else{
+					this.$emit('change', goodsMsg.uid)
+				}
+			},
+			toEdit(goodsMsg){	    		
+	    			if(goodsMsg.type == 1){
+	    				this.$router.push({path: '/zizhu',
+	    									query:{order_id: goodsMsg.order_id }})
+	    			}
+	    			if(goodsMsg.type == 2){
+	    				this.$router.push({ path: '/wuyou',
+	    									query: { order_id: goodsMsg.order_id }})
+	    			}
+	    	}
 		}
 	}
 </script>
