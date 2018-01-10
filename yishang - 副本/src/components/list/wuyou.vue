@@ -93,17 +93,7 @@ export default {
 				name: null,
 				style_name: null,
 				mode_name: null,
-				size: [{
-					color:null,
-					xs_demanding_account    : 0,
-					s_demanding_account     : 0,
-					m_demanding_account     : 0,
-					l_demanding_account     : 0,
-					xl_demanding_account    : 0,
-					xxl_demanding_account   : 0,
-					xxxl_demanding_account  : 0,
-					xxxxl_demanding_account : 0
-					}],
+				size: [],
 				demanding_account: null,
 				fee: null,
 				total_fee: null,
@@ -114,29 +104,15 @@ export default {
 				back_picture: null,
 				left_picture: null,
 				right_picture: null,
-				part_picture: [],
+				part_picture: null,
 				other_picture: null,
 				check: null,
 				error: null,
 				supplement: null,
 				requirement: null,
-				picture: [],
-				fabric: [{
-	                name: '',
-	                component: '',
-	                grammage:'',
-	                width:'',  
-	                units: '', 
-	                weight:'',
-	                picture:[],
-	                is_main: 0
-	              }],
-				supplements: [
-					{
-						requirement : null,
-						picture: null
-					}					
-				],
+				picture: null,	
+				fabric: [],
+				supplements: [],
 				is_deposited: 1,
 				receiver: null,
 				phone: null,
@@ -186,7 +162,7 @@ export default {
 			    	console.log('after ')
 			    	console.log(this.submitReceipt)
 			    }else{
-
+			    	this.matchObj()
 			    }          
 			})
 		},
@@ -217,8 +193,9 @@ export default {
 	    	let url = this.getUrl
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+		    	console.log('saveDraft',res)
 				if(res.data.status == 200){
-					this.$router.push('/indent') 	
+					this.$router.push('/indent')
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
@@ -235,7 +212,42 @@ export default {
 			self.$set(self.submitReceipt,'supplement' , _supplement)
 	    },
 	    matchObj(){
-	    	// if( this.receiptContent.done.length  == 0 ) return
+	    	if( !this.receiptContent.done || Array.isArray( this.receiptContent.done ) ){ 
+	    		console.log(this.receiptContent)
+	    		this.submitReceipt = {
+	    			size: [{
+								color:null,
+								xs_demanding_account    : 0,
+								s_demanding_account     : 0,
+								m_demanding_account     : 0,
+								l_demanding_account     : 0,
+								xl_demanding_account    : 0,
+								xxl_demanding_account   : 0,
+								xxxl_demanding_account  : 0,
+								xxxxl_demanding_account : 0
+							}],
+					fabric: [{
+				                name: '',
+				                component: '',
+				                grammage:'',
+				                width:'',  
+				                units: '', 
+				                weight:'',
+				                picture:[],
+				                is_main: 0
+			              }],
+			        supplements: [
+							{
+								requirement : null,
+								picture: []
+							}],
+					part_picture: [],
+					other_picture: [],
+					picture: [],
+		   		}
+	    		return
+	    	}
+
 	    		console.log('macthing')
 	    	let done = this.receiptContent.done
 	    	let details = done.details
@@ -257,7 +269,7 @@ export default {
 				right_picture: details.right_picture,
 				style_name: details.style,
 				total_fee: details.total_fee,
-				type: details.type,
+				type: 2,
 
 				fabric: done.fabric,
 				other_picture: done.part,

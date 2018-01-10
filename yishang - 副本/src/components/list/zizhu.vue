@@ -242,7 +242,7 @@ export default {
 				right_picture: details.right_picture,
 				style_name: details.style,
 				total_fee: details.total_fee,
-				type: details.type,
+				type: 1,
 
 				fabric: done.fabric,
 				other_picture: done.part,

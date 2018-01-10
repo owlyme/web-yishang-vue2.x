@@ -101,18 +101,11 @@ import { mapGetters } from 'vuex'
 		    },
 		    showSrc(){
 				let _aboutList = this.tempList
-				if(!this.submitReceipt.picture){
-					this.submitReceipt.picture = []
-					_aboutList.push(this.image)
-				}else{
-					this.submitReceipt.picture.forEach( (item, index)=>{
-						if( !this.loaded ){
-							_aboutList.push(item)
-							this.imgUrls.push(item)
-						}
-					})
-				}				
-				this.loaded= true
+				let picture = this.submitReceipt.picture
+				if( Array.isArray( picture ) && !_aboutList[0] ){
+					this.imgUrls = picture.slice()
+					_aboutList = picture.length ? this.addUploadUrl(this.getUploadUrl, picture.slice()) : [this.image]	
+				}			
 				return _aboutList
 			}
 	    },

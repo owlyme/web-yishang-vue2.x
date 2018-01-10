@@ -82,7 +82,7 @@ export default {
         return this.getUploadUrl +'/picture/upload'
       },
       fabricList(){
-        let _aboutList = this.tempList
+        let _aboutList = this.tempList 
         this.submitReceipt.fabric.forEach( (item, index)=>{
           let list = {
                 name: '',
@@ -112,13 +112,13 @@ export default {
           if( !_aboutList[index] ){
             _aboutList.push(list)
             if( !item.picture ){ item.picture= [] }
-            if(!_aboutList[index].loaded ){
+            // if(!_aboutList[index].loaded ){
               console.log('aboutList ' + index)
               console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
               _aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
               _aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice(0, item.picture.length)): [this.image]
               console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
-            } 
+            // } 
               _aboutList[index].loaded =true 
           }
         })

@@ -83,7 +83,7 @@ import { mapGetters } from 'vuex'
 						if( !item.picture ){ item.picture= [] }
 						if(!_aboutList[index].loaded){
 							_aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
-							_aboutList[index].showSrc = item.picture.length ? item.picture.slice(0, item.picture.length) : [this.image]	
+							_aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice() ) : [this.image]	
 
 						}	
 						_aboutList[index].loaded = true			
