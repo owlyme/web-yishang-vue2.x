@@ -170,9 +170,9 @@ export default {
 	methods:{
 		getReceipt(){
 			console.log(this.$route.query.order_id)
-			setTimeout(()=>{
-					console.log('3sssssss')
-					this.submitReceipt.part_picture= ['/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg','/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg']},3000)
+			// setTimeout(()=>{
+			// 		console.log('3sssssss')
+			// 		this.submitReceipt.part_picture= ['/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg','/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg']},3000)
 			let url = this.getUrl
 			let args = {
 				type: 1,
@@ -218,9 +218,7 @@ export default {
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
 				if(res.data.status == 200){
-					this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
-		        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
-		        	this.openMessage({str: res.data.msg, ele:this})	        	
+					this.$router.push('/indent') 	
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
@@ -255,8 +253,7 @@ export default {
 				left_picture: details.left_picture,
 				mode_name: details.mode,
 				name: details.name,
-				// part_picture: details.part_picture,
-				part_picture: ['/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg','/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg'],
+				part_picture: details.part_picture,				
 				right_picture: details.right_picture,
 				style_name: details.style,
 				total_fee: details.total_fee,

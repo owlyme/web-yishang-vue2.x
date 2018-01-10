@@ -99,7 +99,7 @@ export default {
                 dialogVisible: false,
                 dialogImageUrl: false,
                 getImgUrl(val, clear){
-                    if(clear){  
+                    if(clear){
                       item.picture.splice(0, item.picture.length)
                       val.forEach( (item1, index1)=>{
                         item.picture.push( item1 )
@@ -110,11 +110,14 @@ export default {
                   }
               }
           if( !_aboutList[index] ){
-             _aboutList.push(list)        
+            _aboutList.push(list)
             if( !item.picture ){ item.picture= [] }
             if(!_aboutList[index].loaded ){
+              console.log('aboutList ' + index)
+              console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
               _aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
               _aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice(0, item.picture.length)): [this.image]
+              console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
             } 
               _aboutList[index].loaded =true 
           }
@@ -142,7 +145,7 @@ export default {
       handlePictureCardPreview(file,index) {
           this.fabricList[index].dialogImageUrl = file.url;
           this.fabricList[index].dialogVisible = true;
-      },       
+      },
       addFabric(){
           let fabric = {
                 name: '',

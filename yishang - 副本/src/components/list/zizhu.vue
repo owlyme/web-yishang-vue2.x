@@ -246,7 +246,7 @@ export default {
 
 				fabric: done.fabric,
 				other_picture: done.part,
-				size: done.size,				
+				size: done.size,
 							
 				check: quality.check,
 				error: quality.error,				
