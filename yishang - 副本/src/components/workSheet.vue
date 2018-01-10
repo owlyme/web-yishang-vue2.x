@@ -26,7 +26,7 @@
 				    	v-for="(item, index) in receiptContent.mode"
 				    	:key="'mode'+ index"
 						:label="item.mode_name" 
-						:value="item.mode_id"></el-radio>
+						:value="item.mode_name"></el-radio>
 					</el-radio-group>
 		 		</el-form-item>
 			</div>
