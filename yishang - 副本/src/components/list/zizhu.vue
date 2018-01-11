@@ -201,8 +201,8 @@ export default {
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
 		    	console.log(args)
-				if(res.data.status == 200){
-		        	this.openMessage({str: res.data.msg, ele:this})	
+				if(res.status == 200){
+					this.openMessage({str: res.data.msg, ele:this})
 					this.$router.push("/indent")       	
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
@@ -220,7 +220,42 @@ export default {
 			self.$set(self.submitReceipt,'supplement' , _supplement)
 	    },
 	    matchObj(){
-	    	if( this.receiptContent.done.length  == 0 ) return
+	    	if( !this.receiptContent.done || Array.isArray( this.receiptContent.done ) ){ 
+	    		console.log(this.receiptContent)
+	    		this.submitReceipt = {
+	    			size: [{
+								color:null,
+								xs_demanding_account    : 0,
+								s_demanding_account     : 0,
+								m_demanding_account     : 0,
+								l_demanding_account     : 0,
+								xl_demanding_account    : 0,
+								xxl_demanding_account   : 0,
+								xxxl_demanding_account  : 0,
+								xxxxl_demanding_account : 0
+							}],
+					fabric: [{
+				                name: '',
+				                component: '',
+				                grammage:'',
+				                width:'',  
+				                units: '', 
+				                weight:'',
+				                picture:[],
+				                is_main: 0
+			              }],
+			        supplements: [
+							{
+								requirement : null,
+								picture: []
+							}],
+					part_picture: [],
+					other_picture: [],
+					picture: [],
+		   		}
+	    		return
+	    	}
+
 	    		console.log('macthing')
 	    	let done = this.receiptContent.done
 	    	let details = done.details
@@ -238,15 +273,15 @@ export default {
 				left_picture: details.left_picture,
 				mode_name: details.mode,
 				name: details.name,
-				part_picture: details.part_picture,
+				part_picture: details.part_picture,				
 				right_picture: details.right_picture,
 				style_name: details.style,
 				total_fee: details.total_fee,
-				type: 1,
+				type: 2,
 
 				fabric: done.fabric,
 				other_picture: done.part,
-				size: done.size,
+				size: done.size,				
 							
 				check: quality.check,
 				error: quality.error,				

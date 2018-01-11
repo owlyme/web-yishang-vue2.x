@@ -15,7 +15,7 @@
 		      <el-option 
 		    				v-for="(item, index) in receiptContent.error"
 				    		:key="'error'+index"
-				    		:label="item.error_value" :value="item.error_id">
+				    		:label="item.error_value" :value="item.error_value">
 				</el-option>
 		    </el-select>
 		</el-form-item>

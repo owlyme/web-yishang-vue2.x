@@ -8,7 +8,7 @@
 				      <el-option 
 				      		v-for="(item, index) in receiptContent.category"
 				    		:key="'category'+index"
-				    		:label="item.category_name" :value="item.category_id">				    			
+				    		:label="item.category_name" :value="item.cate_name">				    			
 				    		</el-option>
 				   </el-select>
 				  </el-form-item>

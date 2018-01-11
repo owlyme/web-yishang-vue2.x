@@ -194,7 +194,8 @@ export default {
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
 		    	console.log('saveDraft',res)
-				if(res.data.status == 200){
+				if(res.status == 200){
+					this.openMessage({str: res.data.msg, ele:this})
 					this.$router.push('/indent')
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
@@ -242,7 +243,11 @@ export default {
 								picture: []
 							}],
 					part_picture: [],
-					other_picture: [],
+					other_picture: [{
+							picture:[],
+						title:'',
+						sub_picture:[]
+					}],
 					picture: [],
 		   		}
 	    		return
@@ -276,7 +281,7 @@ export default {
 				size: done.size,				
 							
 				check: quality.check,
-				error: quality.error,				
+				error: quality.error,
 				requirement: quality.requirement,
 				supplement: quality.supplement,
 				picture: quality.picture,

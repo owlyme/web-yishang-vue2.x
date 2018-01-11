@@ -31,22 +31,19 @@
 			<el-row :gutter="10"  class="space" v-for="(item, index) in uploadImgArr" :key="'uploadImgArr'+ index">		 
 			  <el-col :span="6" class="text-right text-style-sm">			   
 			  	<input 
+			  	v-if="index== 0"
 			  	v-model="item.title" 
 			  	type="text" name="" class="input-name" placeholder="请输入标题"
 			  	:class="{'el-input__inner': !item.title}"			
 			  	>
-		<!-- 		<input 
+				<input 
 			  	v-else
 			  	v-model="submitReceipt.other_picture[index-1].title" 
 			  	type="text" name="" class="input-name" placeholder="请输入标题"
 			  	:class="{'el-input__inner': !item.title}"			
-			  	> -->
+			  	>
 			  </el-col>	
-			  <el-col :span="14">
-			  	<!-- 	<div  class="floatleft" v-if="item.showSrc1">
-			  			<img :src="item.showSrc1" class="show-demo1">
-			  			<img :src="item.showSrc2" class="show-demo1">
-			  		</div> -->
+			  <el-col :span="14">			  	
 			  		<div  class="floatleft" v-if="item.showSrc" v-for='(item1, index1) in item.showSrc'>
 					  	<img :src="item1" class="show-demo1">
 					</div>
@@ -196,38 +193,49 @@ import { mapGetters } from 'vuex'
 						}
 					}
 				}
-				
-				self.submitReceipt.other_picture.forEach( (item, index)=>{
-					let list = {
-								name:'',
-								title:'',
-								showSrc: [],
-								dialogVisible: false,
-								dialogImageUrl: false,
-								imgUrls:[],
-								loaded: false,
-								getImgUrl(val, clear){
-									if(clear){	
-										item.sub_picture.splice(0, item.sub_picture.length)
-										val.forEach( (item1, index1)=>{
-											item.sub_picture.push( item1 )
-										})
-									}else{
-										item.sub_picture.push(val)
+				if( Array.isArray( self.submitReceipt.other_picture ) ){
+					console.log('self.submitReceipt.other_picture > ', self.submitReceipt.other_picture)
+					self.submitReceipt.other_picture.forEach( (item, index)=>{
+						let list = {
+									name:'',
+									title:'',
+									showSrc: [],
+									dialogVisible: false,
+									dialogImageUrl: false,
+									imgUrls:[],
+									loaded: false,
+									getImgUrl(val, clear){
+										if(clear){	
+											item.sub_picture.splice(0, item.sub_picture.length)
+											val.forEach( (item1, index1)=>{
+												item.sub_picture.push( item1 )
+											})
+										}else{
+											item.sub_picture.push(val)
+										}
 									}
 								}
-							}
 
-					if( !_aboutList[index+1] ){
-						_aboutList.push(list)
-						if( !item.sub_picture ){ item.sub_picture= [] }
-						if( !_aboutList[index+1].loaded ){							
-							_aboutList[index+1].imgUrls = item.picture.slice()
-							_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
+						if( !_aboutList[index+1] ){
+							_aboutList.push(list)
+							// if( !item.sub_picture ){ item.sub_picture= [] }
+							// if( !_aboutList[index+1].loaded ){							
+							// 	_aboutList[index+1].imgUrls = item.picture.slice()
+							// 	_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
+							// }
+							// _aboutList[index+1].loaded = true
+
+							item.title = _aboutList[index+1].title
+							item.sub_picture = []
+							if( item.picture ){	
+								item.picture =  Array.isArray( item.picture ) ? item.picture : []
+								item.sub_picture = item.picture.slice()
+								_aboutList[index+1].imgUrls = item.picture.slice()								
+								_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
+							}
 						}
-						_aboutList[index+1].loaded = true
-					}
-				})
+					})
+				}
 				return _aboutList
 			}
 	    },
