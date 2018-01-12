@@ -92,7 +92,7 @@ export default {
                 units: '',
                 weight:'',
                 imgUrls:[],
-                is_main: 1,
+                is_main: 0,
                 loaded: false,
                 label:'面料A:',
                 showSrc:[],

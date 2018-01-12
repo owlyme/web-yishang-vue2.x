@@ -1,6 +1,14 @@
 <template>
 	<div class="quality">
-		<h5 class="padding-bottom">品质要求</h5>
+		<h5 class="padding-bottom">质量要求</h5>
+		 <el-form-item label="加工模式:">
+				    <el-radio-group v-model="submitReceipt.quality_requirement" style="padding-top:8px">
+				    <el-radio  value="精品"></el-radio>
+				    <el-radio  value="半精品"></el-radio>
+				    <el-radio  value="中等"></el-radio>
+				    <el-radio  value="普通"></el-radio>
+					</el-radio-group>
+		</el-form-item>
 		<el-form-item label="查货选择:" >
 		    <el-select v-model="submitReceipt.check" placeholder="请选择你的查货模式" style="width:75%">
 		    	<el-option 

@@ -198,7 +198,7 @@ import { mapGetters } from 'vuex'
 					self.submitReceipt.other_picture.forEach( (item, index)=>{
 						let list = {
 									name:'',
-									title:'',
+									title:item,
 									showSrc: [],
 									dialogVisible: false,
 									dialogImageUrl: false,
@@ -224,14 +224,10 @@ import { mapGetters } from 'vuex'
 							// 	_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
 							// }
 							// _aboutList[index+1].loaded = true
-
-							item.title = _aboutList[index+1].title
-							item.sub_picture = []
-							if( item.picture ){	
-								item.picture =  Array.isArray( item.picture ) ? item.picture : []
-								item.sub_picture = item.picture.slice()
-								_aboutList[index+1].imgUrls = item.picture.slice()								
-								_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
+							
+							if( item.sub_picture ){	
+								_aboutList[index+1].imgUrls = item.sub_picture.slice()
+								_aboutList[index+1].showSrc = item.sub_picture.length ? this.addUploadUrl(this.getUploadUrl, item.sub_picture.slice()) : []
 							}
 						}
 					})

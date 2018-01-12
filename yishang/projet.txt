@@ -38,3 +38,7 @@ http://ii.ysintelligent.com/
 　　2. 　在main.ts中 import "babel-polyfill"
 
 　　3.    如果使用了vuex，则在vuex的index.ts文件中也要  import "babel-polyfill"，最好放在 import Vuex from 'vuex' 的前面
+
+https://mp.weixin.qq.com/wxopen/devprofile
+
+ae2201678e4f1841ab17bf9a8bf73b7a

@@ -235,7 +235,7 @@ export default {
 				                units: '', 
 				                weight:'',
 				                picture:[],
-				                is_main: 0
+				                is_main: 1
 			              }],
 			        supplements: [
 							{
@@ -244,7 +244,6 @@ export default {
 							}],
 					part_picture: [],
 					other_picture: [{
-							picture:[],
 						title:'',
 						sub_picture:[]
 					}],
