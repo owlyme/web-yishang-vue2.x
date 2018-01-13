@@ -28,17 +28,37 @@
 			</el-row>			
 		</div>
 		<div class="uploadimgs">
-			<el-row :gutter="10"  class="space" v-for="(item, index) in uploadImgArr" :key="'uploadImgArr'+ index">		 
+			 <el-row :gutter="10"  class="space" >
+			  <el-col :span="6" class="text-right text-style-sm"> 	局部细节图 </el-col>	
+		      <el-col :span="14">
+				<div  class="floatleft" v-if="showSrcPart" v-for='(item1, index1) in showSrcPart'>
+	              <img :src="item1" class="show-demo2">
+	            </div>
+				 <!-- :auto-upload="false" -->
+		      <el-upload
+		     		class="floatleft"	  			
+		  			ref="banxing"
+			        :action="actionUrl"
+			       
+			        list-type="picture-card"
+			        :on-preview="(file) =>{ return  handlePictureCardPreviewPart(file)}"
+			        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessPart(response, this.submitReceipt.part_picture)}"
+			        :on-remove="(file, fileList) =>{ return  handleRemoveP(fileList, imgUrlsPart, this.submitReceipt.part_picture)}">	
+			        <span  slot="trigger" class="remind" >点击上传</span>
+			       <!--  <el-button class="click-submit"	 @click="submitImg">点击上传</el-button> -->
+			      </el-upload>
+			      <el-dialog :visible.sync="dialogVisiblePart" size="tiny">
+			        <img width="100%" :src="dialogImageUrlPart" alt="">
+			      </el-dialog>
+		      </el-col>             
+		    </el-row>
+
+
+			<el-row :gutter="10"  class="space" v-for="(item, index) in otherList" :key="'otherList'+ index">		 
 			  <el-col :span="6" class="text-right text-style-sm">			   
-			  	<input 
-			  	v-if="index== 0"
-			  	v-model="item.title" 
-			  	type="text" name="" class="input-name" placeholder="请输入标题"
-			  	:class="{'el-input__inner': !item.title}"			
-			  	>
+			  	
 				<input 
-			  	v-else
-			  	v-model="submitReceipt.other_picture[index-1].title" 
+			  	v-model="submitReceipt.other_picture[index].title" 
 			  	type="text" name="" class="input-name" placeholder="请输入标题"
 			  	:class="{'el-input__inner': !item.title}"			
 			  	>
@@ -48,22 +68,22 @@
 					  	<img :src="item1" class="show-demo1">
 					</div>
 			  		<el-upload
-			  			ref="imgArr"
+						class="floatleft"	
+			  			ref="supplements"
 				        :action="actionUrl"
 				        list-type="picture-card"
 				        :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
 				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"		        
-				        :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">
-
+				        :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">	
 				        <span  slot="trigger" class="remind" >点击上传</span>
-				        <!-- <el-button class="click-submit"	 @click="submitImgArr(index)">点击上传</el-button> -->
+				        <!-- <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
 				      </el-upload>
 				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
 				        <img width="100%" :src="item.dialogImageUrl" alt="">
 				      </el-dialog>
 			  </el-col>
-			  <i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>			  
-			</el-row>
+			  <i class="el-icon-delete" @click.stop="clickDelete(index)"></i>			  
+			</el-row> 
 		</div>
 		<div class="middle-line">
 			<el-button type="primary" icon="el-icon-plus" @click="addImgArr" class="circle-btn"></el-button>
@@ -81,6 +101,8 @@ import { mapGetters } from 'vuex'
 			return{
 				ref: 'upload',
 				imageUrl: '',
+				dialogVisiblePart: false,
+				dialogImageUrlPart: false,
 				pictures:{
 					front_picture: '',
 					back_picture:'',
@@ -105,6 +127,9 @@ import { mapGetters } from 'vuex'
 								],
 				tempList : new Array(),
 				tempList1 : new Array(),
+				imgUrlsPart: new Array(),
+				tempListPart: new Array(),
+				tempListOther: new Array()
 			}
 		},
 		computed:{
@@ -188,37 +213,87 @@ import { mapGetters } from 'vuex'
 				console.log(this.tempList1)
 				return this.tempList1
 			},
-			uploadImgArr(){
-				let self = this			
-				let _aboutList = self.tempList
-				let part_picture = self.submitReceipt.part_picture				
-				if( Array.isArray( part_picture ) && !_aboutList[0] ){
-					_aboutList[0] = this.partPictures
-					_aboutList[0].imgUrls = part_picture.slice()
-					_aboutList[0].showSrc = part_picture.length ? this.addUploadUrl(this.getUploadUrl, part_picture.slice()) : _aboutList[0].showSrc
-					_aboutList[0].getImgUrl = (val, clear)=>{
-						if(clear){	
-							part_picture.splice(0, part_picture.length)
-							val.forEach( (item, index)=>{
-								part_picture.push( item )
-							})
-						}else{
-							part_picture.push(val)
-						}
-					}
-				}
-				if( Array.isArray( self.submitReceipt.other_picture ) ){
-					console.log('self.submitReceipt.other_picture > ', self.submitReceipt.other_picture)
-					self.submitReceipt.other_picture.forEach( (item, index)=>{
-						let list = {
-									name:'',
-									title:item,
-									showSrc: [],
-									dialogVisible: false,
-									dialogImageUrl: false,
-									imgUrls:[],
-									loaded: false,
-									getImgUrl(val, clear){
+			// uploadImgArr(){
+			// 	let self = this			
+			// 	let _aboutList = self.tempList
+			// 	let part_picture = self.submitReceipt.part_picture				
+			// 	if( Array.isArray( part_picture ) && !_aboutList[0] ){
+			// 		_aboutList[0] = this.partPictures
+			// 		_aboutList[0].imgUrls = part_picture.slice()
+			// 		_aboutList[0].showSrc = part_picture.length ? this.addUploadUrl(this.getUploadUrl, part_picture.slice()) : _aboutList[0].showSrc
+			// 		_aboutList[0].getImgUrl = (val, clear)=>{
+			// 			if(clear){	
+			// 				part_picture.splice(0, part_picture.length)
+			// 				val.forEach( (item, index)=>{
+			// 					part_picture.push( item )
+			// 				})
+			// 			}else{
+			// 				part_picture.push(val)
+			// 			}
+			// 		}
+			// 	}
+			// 	if( Array.isArray( self.submitReceipt.other_picture ) ){
+			// 		console.log('self.submitReceipt.other_picture > ', self.submitReceipt.other_picture)
+			// 		self.submitReceipt.other_picture.forEach( (item, index)=>{
+			// 			let list = {
+			// 						name:'',
+			// 						title:item,
+			// 						showSrc: [],
+			// 						dialogVisible: false,
+			// 						dialogImageUrl: false,
+			// 						imgUrls:[],
+			// 						loaded: false,
+			// 						getImgUrl(val, clear){
+			// 							if(clear){	
+			// 								item.sub_picture.splice(0, item.sub_picture.length)
+			// 								val.forEach( (item1, index1)=>{
+			// 									item.sub_picture.push( item1 )
+			// 								})
+			// 							}else{
+			// 								item.sub_picture.push(val)
+			// 							}
+			// 						}
+			// 					}
+
+			// 			if( !_aboutList[index+1] ){
+			// 				_aboutList.push(list)
+			// 				// if( !item.sub_picture ){ item.sub_picture= [] }
+			// 				// if( !_aboutList[index+1].loaded ){							
+			// 				// 	_aboutList[index+1].imgUrls = item.picture.slice()
+			// 				// 	_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
+			// 				// }
+			// 				// _aboutList[index+1].loaded = true
+			// 				console.log('item.sub_picture.slice()' ,item.sub_picture)
+			// 				if( item.sub_picture ){	
+			// 					_aboutList[index+1].imgUrls = item.sub_picture.slice()
+			// 					_aboutList[index+1].showSrc = item.sub_picture.length ? this.addUploadUrl(this.getUploadUrl, item.sub_picture.slice()) : []
+			// 				}
+			// 			}
+			// 		})
+			// 	}
+			// 	return _aboutList
+			// },
+			showSrcPart(){
+				let picture = this.submitReceipt.part_picture
+				if( Array.isArray( picture ) && !this.tempList[0] ){
+					this.imgUrls = picture.slice()
+					this.tempList = picture.length ? this.addUploadUrl(this.getUploadUrl, picture.slice()) :[require('../assets/part1-pic.jpg'), require('../assets/part2-pic.jpg')]
+				}			
+				return this.tempList
+			},
+			otherList(){
+				let _aboutList = this.tempListOther
+				if( Array.isArray( this.submitReceipt.other_picture )){
+				this.submitReceipt.other_picture.forEach( (item, index)=>{
+					let list = {
+								id: 0,
+								imgUrls:[],
+								showSrc: null,
+								title:"",
+								dialogVisible: false,
+								dialogImageUrl: false,
+								loaded: false,
+								getImgUrl(val, clear){
 										if(clear){	
 											item.sub_picture.splice(0, item.sub_picture.length)
 											val.forEach( (item1, index1)=>{
@@ -228,26 +303,22 @@ import { mapGetters } from 'vuex'
 											item.sub_picture.push(val)
 										}
 									}
-								}
-
-						if( !_aboutList[index+1] ){
-							_aboutList.push(list)
-							// if( !item.sub_picture ){ item.sub_picture= [] }
-							// if( !_aboutList[index+1].loaded ){							
-							// 	_aboutList[index+1].imgUrls = item.picture.slice()
-							// 	_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
-							// }
-							// _aboutList[index+1].loaded = true
-							console.log('item.sub_picture.slice()' ,item.sub_picture)
-							if( item.sub_picture ){	
-								_aboutList[index+1].imgUrls = item.sub_picture.slice()
-								_aboutList[index+1].showSrc = item.sub_picture.length ? this.addUploadUrl(this.getUploadUrl, item.sub_picture.slice()) : []
 							}
-						}
-					})
+					if( !_aboutList[index] ){
+						 _aboutList.push(list)
+						if( !item.sub_picture ){ item.sub_picture= [] }
+						if(!_aboutList[index].loaded){
+							_aboutList[index].imgUrls = item.sub_picture.slice(0, item.sub_picture.length)
+							_aboutList[index].showSrc = item.sub_picture.length ? this.addUploadUrl(this.getUploadUrl, item.sub_picture.slice() ) : []	
+
+						}	
+						_aboutList[index].loaded = true			
+					}
+				})
 				}
 				return _aboutList
 			}
+
 	    },
 		methods:{
 			handleRemoveSingle(file,index) {
@@ -290,28 +361,24 @@ import { mapGetters } from 'vuex'
 		        this.dialogVisible = true;
 		    },
 
-
-
-
-
-
 		    handleRemove(fileList,index) {
 		        let imgs = [];
-		       	imgs = imgs.concat( this.uploadImgArr[index].imgUrls )		       
-		    	fileList.forEach((item , _index) =>{
+		        imgs = imgs.concat( this.otherList[index].imgUrls )		      
+		    	fileList.forEach((item ,index) =>{
 		    		imgs.push(item.response.content.url)
 		    	})
-		    	this.uploadImgArr[index].getImgUrl( imgs.slice(0, imgs.length), true )
+		    	this.otherList[index].getImgUrl( imgs.slice(0, imgs.length), true )
 		    },
 		    uploadImgeSuccess(response,index){
 		        if (response.status == 200 ) {
-		        	 this.uploadImgArr[index].getImgUrl( response.content.url )
+		        	this.otherList[index].getImgUrl( response.content.url )
 		        	}else{
+		        		//response.msg
 		        	}
 		    },
 		    handlePictureCardPreview(file,index) {
-		        this.uploadImgArr[index].dialogImageUrl = file.url;
-		        this.uploadImgArr[index].dialogVisible = true;
+		        this.otherList[index].dialogImageUrl = file.url;
+		        this.otherList[index].dialogVisible = true;
 		    },	    
 	     	submitImgArr(index) {
 	       	 	this.$refs.imgArr[index].submit();
@@ -323,9 +390,9 @@ import { mapGetters } from 'vuex'
 					}
 				this.submitReceipt.other_picture.push(otherPics)
 	     	},
-	     	clickDelete(index){
-		      	this.submitReceipt.other_picture.splice(index-1,1)
-		      	this.uploadImgArr.splice(index,1)
+		    clickDelete(index){
+		      	this.submitReceipt.other_picture.splice(index,1)
+		      	this.tempListOther.splice(index,1)
 		    }
 		}
 	}

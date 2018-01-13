@@ -196,7 +196,7 @@ export default {
 							// 							province:"北京市",
 							// 							receiver:"22",
 							// 							street:"11"})
-	    		// 		    		this.$set(this.submitReceipt,'other_picture', [{title: 1111, sub_picture:['Uploads/Images/2018-01-13/51df5a9f4484772fed271c49dc2b9b0d.jpg']}])
+	    		// 		    		this.$set(this.submitReceipt,'other_picture', [{title: 1111, sub_picture:['Uploads/Images/2018-01-13/51df5a9f4484772fed271c49dc2b9b0d.jpg']},{title: 1111, sub_picture:['Uploads/Images/2018-01-13/51df5a9f4484772fed271c49dc2b9b0d.jpg']},{title: 1111, sub_picture:['Uploads/Images/2018-01-13/51df5a9f4484772fed271c49dc2b9b0d.jpg']}])
 	    		// },3000)
 
 	    		this.$set(this.submitReceipt,'size', [{
