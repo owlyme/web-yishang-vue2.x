@@ -82,46 +82,50 @@ export default {
         return this.getUploadUrl +'/picture/upload'
       },
       fabricList(){
-        let _aboutList = this.tempList 
-        this.submitReceipt.fabric.forEach( (item, index)=>{
-          let list = {
-                name: '',
-                component: '',
-                grammage:'',
-                width:'',  
-                units: '',
-                weight:'',
-                imgUrls:[],
-                is_main: 0,
-                loaded: false,
-                label:'面料A:',
-                showSrc:[],
-                dialogVisible: false,
-                dialogImageUrl: false,
-                getImgUrl(val, clear){
-                    if(clear){
-                      item.picture.splice(0, item.picture.length)
-                      val.forEach( (item1, index1)=>{
-                        item.picture.push( item1 )
-                      })
-                    }else{
-                      item.picture.push(val)
+        let _aboutList = this.tempList
+        if( Array.isArray( this.submitReceipt.fabric )){
+          this.submitReceipt.fabric.forEach( (item, index)=>{
+            let list = {
+                  name: '',
+                  component: '',
+                  grammage:'',
+                  width:'',  
+                  units: '',
+                  weight:'',
+                  imgUrls:[],
+                  is_main: 0,
+                  loaded: false,
+                  label:'',
+                  showSrc:[],
+                  dialogVisible: false,
+                  dialogImageUrl: false,
+                  getImgUrl(val, clear){
+                      if(clear){
+                        item.picture.splice(0, item.picture.length)
+                        val.forEach( (item1, index1)=>{
+                          item.picture.push( item1 )
+                        })
+                      }else{
+                        item.picture.push(val)
+                      }
                     }
-                  }
-              }
-          if( !_aboutList[index] ){
-            _aboutList.push(list)
-            if( !item.picture ){ item.picture= [] }
-            // if(!_aboutList[index].loaded ){
+                }
+            if( !_aboutList[index] ){
               console.log('aboutList ' + index)
-              console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
-              _aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
-              _aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice(0, item.picture.length)): [this.image]
-              console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
-            // } 
-              _aboutList[index].loaded =true 
-          }
-        })
+              _aboutList.push(list)
+              if( !item.picture ){ item.picture= [] }
+              // if(!_aboutList[index].loaded ){
+                console.log('aboutList ' + index)
+                console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
+                _aboutList[index].label = "面料" + String.fromCharCode( index+this.startCode )
+                _aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
+                _aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice(0, item.picture.length)): [this.image]
+                console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
+              // } 
+                _aboutList[index].loaded =true 
+            }
+          })
+        }
         return _aboutList
       }
     },

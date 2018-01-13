@@ -128,14 +128,16 @@ export default {
 	data () {
 		return {
 			displaySizeList: false,
-			flags: [{flag: true}]
+			flags: [{flag: true}],
+			
 		}
 	},
 	computed:{
-		demanding_account(){
-			let total=0 ;
+		demanding_account(){	
+			let total = 0;	
 			this.submitReceipt.size.forEach((item, index)=> {
-					total = item.xs_demanding_account  
+			console.log("this.submitReceipt.size.", item)
+					total += item.xs_demanding_account  
 							+ item.s_demanding_account   
 							+ item.m_demanding_account   
 							+ item.l_demanding_account   
@@ -144,7 +146,7 @@ export default {
 							+ item.xxxl_demanding_account
 							+ item.xxxxl_demanding_account
 				})
-			this.submitReceipt.demanding_account = total
+			this.submitReceipt.demanding_account =total
 			return total
 		},
 		size(){			

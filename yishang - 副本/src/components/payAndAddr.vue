@@ -3,8 +3,8 @@
 		<el-form  ref="selectAddress" label-width="30%" >
 			<el-form-item label="是否支付定金:" v-if='submitReceipt.type == 1'>
 			    <el-radio-group v-model="submitReceipt.is_deposited" style="padding-top:8px">
-			      <el-radio  :label="1">是</el-radio>
-			      <el-radio  :label="0">否</el-radio>
+			      <el-radio  label="1">是</el-radio>
+			      <el-radio  label="0">否</el-radio>
 			    </el-radio-group>
 			</el-form-item>
 			<el-form-item :label="percent" v-else  >			
@@ -12,8 +12,9 @@
 			</el-form-item>
 			<el-form-item label="确认收货地址:" >
 			    <el-radio-group v-model="selectAddress">
+			    	{{ addressId }}
 			    	<div v-for="(item, index) in addressList">
-			    		<el-radio :label="item" :key="'address'+ index" > 
+			    		<el-radio :label="item.id" :key="'address'+ index" > 
 			    			{{item.province + item.city  + item.county + item.street  + ' (' +item.receiver + ') ' +item.phone}} </el-radio>
 			    	</div>		     
 			    </el-radio-group>
@@ -54,8 +55,7 @@ import { mapGetters } from 'vuex'
 		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
-				selectAddress: {
-				},
+				selectAddress: null,
 				address:[],
 				ruleForm: {	
 				  address: '',
@@ -85,13 +85,19 @@ import { mapGetters } from 'vuex'
 		},
 		watch:{
 			selectAddress:{
-				handler(curVal,oldVal){			
-					this.$set(this.submitReceipt,'phone', curVal.phone)
-					this.$set(this.submitReceipt,'province', curVal.province)
-					this.$set(this.submitReceipt,'city', curVal.city)
-					this.$set(this.submitReceipt,'county', curVal.county)
-					this.$set(this.submitReceipt,'street', curVal.street)
-					this.$set(this.submitReceipt,'receiver', curVal.receiver)
+				handler(curVal,oldVal){	
+					console.log(curVal)
+					this.address.forEach((item, index)=>{
+
+						if(curVal == item.id){
+							this.$set(this.submitReceipt,'phone',item.phone)
+					this.$set(this.submitReceipt,'province',item.province)
+					this.$set(this.submitReceipt,'city',item.city)
+					this.$set(this.submitReceipt,'county',item.county)
+					this.$set(this.submitReceipt,'street',item.street)
+					this.$set(this.submitReceipt,'receiver',item.receiver)
+						}
+					})
 		　　　　},
 		　　　　deep:true
 			}
@@ -100,19 +106,24 @@ import { mapGetters } from 'vuex'
 	      ...mapGetters([
 	         'getUrl'
 	      ]),
-	      depositFee(){		 
+	      depositFee(){
 	      	return ( this.receiptContent.deposit -0 ) * (this.submitReceipt.total_fee || 0)
 	      },
 	      percent(){
 	      	return '支付服务费用(订单的金额的'+ ((this.receiptContent.deposit-0) * 100) + '%):'
 	      },
-	      addressList(){
-	      	let address  = this.address
-	      	if(this.receiptContent.address ){
-	      		address = address.concat(this.receiptContent.address)
+	      addressList(){	      	
+	      	if(this.receiptContent.address &&  !this.address.length){
+	      		console.log('(this.receiptContent.address is true', this.receiptContent.address)
+	      		 this.address =  this.address.concat(this.receiptContent.address)
 	      	}
-	      	return address
-	      }
+	      	if( !this.selectAddress ) this.selectAddress = this.submitReceipt.address_id
+	      	return  this.address
+	      },
+	      addressId(){				
+				// this.selectAddress  = this.submitReceipt.address_id
+				// return this.selectAddress
+			}
 		},
 		methods:{
 			submitForm(formName) {				
@@ -133,7 +144,7 @@ import { mapGetters } from 'vuex'
 						city: this.ruleForm.city,
 						county: this.ruleForm.county,
 						street: this.ruleForm.street,
-						is_default: 1
+						id: Date.now()
 			        }
 			        this.address.push(args)
 			    this.axios.post(url, qs.stringify(args)).then((res)=>{
@@ -173,12 +184,10 @@ import { mapGetters } from 'vuex'
 	}
 </script>
 <style scoped>
-
 .newAddr{
 	border: 1px solid rgb(238,238,238);
 	padding: 10px 40px;
 }
 .btns {
-
 }
 </style>

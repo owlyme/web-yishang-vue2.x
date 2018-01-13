@@ -12,7 +12,7 @@ const router = new Router({
   // mode: 'history',
   routes: [    
     {path: '/login',name: 'Login',component: Login    },
-    {path: '/', name: 'Indexlist',component: Indexlist,
+    {path: '/',component: Indexlist,
           children:[
             {path: "/", name: "Main", component:Main  },
             {path: "/zizhu",name: "Zizhu",component:Zizhu},

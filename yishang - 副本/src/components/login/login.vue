@@ -136,8 +136,8 @@ export default {
               if(this.account.save){
                 this.setSavePassword(true)
               }
-              this.$cookies.set('yiyiavatar', res.data.content.avatar, 10000*60);
-              this.$cookies.set('yiyiphone', res.data.content.phone, 10000*60);
+              this.$cookies.set('yiyiavatar', res.data.content.avatar, 1);
+              this.$cookies.set('yiyiphone', res.data.content.phone, 60*1000);
               this.account= { name: '',password:'', save : false}
               this.$router.push("/")
             }else{

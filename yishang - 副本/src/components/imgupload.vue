@@ -98,8 +98,13 @@ import { mapGetters } from 'vuex'
 						imgUrls:[],
 						loaded: false
 					},
+				defaultShowSrc:[require('../assets/front-pic.jpg'),
+								require('../assets/back-pic.jpg'),
+								require('../assets/left-pic.jpg'),
+								require('../assets/right-pic.jpg')
+								],
 				tempList : new Array(),
-				
+				tempList1 : new Array(),
 			}
 		},
 		computed:{
@@ -111,68 +116,77 @@ import { mapGetters } from 'vuex'
 			},
 			uploadSingleImg(){
 				let self = this
-				let _aboutList = []
-				_aboutList = [
-					{
-						name:'正面全览照',
-						showSrc: null, 
-						dialogVisible: false,
-						dialogImageUrl: false,
-						loaded: false,
-						getImgUrl(val){
-							self.submitReceipt.front_picture = val 
+				if( true){
+					this.tempList1 = [
+						{
+							name:'正面全览照',
+							showSrc: null, 
+							dialogVisible: false,
+							dialogImageUrl: false,
+							loaded: false,
+							getImgUrl(val){
+								self.$set(self.submitReceipt,'front_picture',val)
+							}
+						},
+						{
+							name:'背面全览照',
+							showSrc: null, 
+							dialogVisible: false,
+							dialogImageUrl: false,
+							loaded: false,						
+							getImgUrl(val){
+								self.$set(self.submitReceipt,'back_picture',val)
+							}
+						},
+						{
+							name:'左侧面全览照',
+							showSrc: null, 
+							dialogVisible: false,
+							dialogImageUrl: false,
+							loaded: false,					
+							getImgUrl(val){
+								self.$set(self.submitReceipt,'left_picture',val)
+							}
+						},
+						{
+							name:'右侧面全览照',
+							showSrc: null, 
+							dialogVisible: false,
+							dialogImageUrl: false,
+							loaded: false,					
+							getImgUrl(val){
+								self.$set(self.submitReceipt,'right_picture',val)
+							}
 						}
-					},
-					{
-						name:'背面全览照',
-						showSrc: null, 
-						dialogVisible: false,
-						dialogImageUrl: false,
-						loaded: false,						
-						getImgUrl(val){
-							self.submitReceipt.back_picture = val 
-						}
-					},
-					{
-						name:'左侧面全览照',
-						showSrc: null, 
-						dialogVisible: false,
-						dialogImageUrl: false,
-						loaded: false,					
-						getImgUrl(val){
-							self.submitReceipt.left_picture = val 
-						}
-					},
-					{
-						name:'右侧面全览照',
-						showSrc: null, 
-						dialogVisible: false,
-						dialogImageUrl: false,
-						loaded: false,					
-						getImgUrl(val){
-							self.submitReceipt.right_picture = val 
-						}
-					}
-				]
+					]
+					// if( !self.submitReceipt.front_picture){
+					// 	this.tempList1[0] = [
+					// 	{
+					// 		name:'正面全览照',
+					// 		showSrc: null, 
+					// 		dialogVisible: false,
+					// 		dialogImageUrl: false,
+					// 		loaded: false,
+					// 		getImgUrl(val){
+					// 			self.$set(self.submitReceipt,'front_picture',val)
+					// 		}
+					// 	},
+					// }
 				
-					if( !_aboutList[0].loaded){				
-						_aboutList[0].showSrc= self.submitReceipt.front_picture ? (self.getUploadUrl + self.submitReceipt.front_picture) : require('../assets/front-pic.jpg')
-						_aboutList[0].loaded= true
-					}
-					if( !_aboutList[1].loaded){
-						_aboutList[1].showSrc= self.submitReceipt.back_picture ? (self.getUploadUrl + self.submitReceipt.back_picture) : require('../assets/back-pic.jpg')
-						_aboutList[1].loaded= true
-					}
-					if( !_aboutList[2].loaded){
-						_aboutList[2].showSrc= self.submitReceipt.left_picture ? (self.getUploadUrl + self.submitReceipt.left_picture) : require('../assets/left-pic.jpg')
-						_aboutList[2].loaded= true
-					}
-					if( !_aboutList[3].loaded){
-						_aboutList[3].showSrc= self.submitReceipt.right_picture ? (self.getUploadUrl + self.submitReceipt.right_picture) : require('../assets/right-pic.jpg')
-						_aboutList[3].loaded= true
-					}				
-				console.log(_aboutList)
-				return _aboutList
+					this.tempList1[0].showSrc= self.submitReceipt.front_picture ? (self.getUploadUrl + self.submitReceipt.front_picture) : require('../assets/front-pic.jpg')
+					
+				
+					this.tempList1[1].showSrc= self.submitReceipt.back_picture ? (self.getUploadUrl + self.submitReceipt.back_picture) : require('../assets/back-pic.jpg')
+					
+				
+					this.tempList1[2].showSrc= self.submitReceipt.left_picture ? (self.getUploadUrl + self.submitReceipt.left_picture) : require('../assets/left-pic.jpg')
+					
+				
+					this.tempList1[3].showSrc= self.submitReceipt.right_picture ? (self.getUploadUrl + self.submitReceipt.right_picture) : require('../assets/right-pic.jpg')
+					
+				}				
+				console.log(this.tempList1)
+				return this.tempList1
 			},
 			uploadImgArr(){
 				let self = this			
@@ -224,7 +238,7 @@ import { mapGetters } from 'vuex'
 							// 	_aboutList[index+1].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice()) : []
 							// }
 							// _aboutList[index+1].loaded = true
-							
+							console.log('item.sub_picture.slice()' ,item.sub_picture)
 							if( item.sub_picture ){	
 								_aboutList[index+1].imgUrls = item.sub_picture.slice()
 								_aboutList[index+1].showSrc = item.sub_picture.length ? this.addUploadUrl(this.getUploadUrl, item.sub_picture.slice()) : []
@@ -252,6 +266,34 @@ import { mapGetters } from 'vuex'
 	        submitImg(index) {
 	       	 	this.$refs.imgSingle[index].submit();
 	     	},
+
+	     	handleRemovePart(fileList, imgUrls, picture) {
+		        let imgs = [];
+		        imgs = imgs.concat( imgUrls )
+		    	fileList.forEach((item ,index) =>{
+		    		imgs.push(item.response.content.url)
+		    	}) 
+		    	picture.splice(0, picture.length)
+		    	imgs.forEach((item ,index) =>{
+		    		picture.push(item)
+		    	})
+		    },
+		    uploadImgeSuccessPart(response, picture){
+		        if (response.status == 200 ) {
+		        	 picture.push(response.content.url)
+		        	}else{
+		        		//response.msg
+		        	}
+		    },
+		    handlePictureCardPreviewPart(file) {
+		        this.dialogImageUrl = file.url;
+		        this.dialogVisible = true;
+		    },
+
+
+
+
+
 
 		    handleRemove(fileList,index) {
 		        let imgs = [];

@@ -86,17 +86,18 @@ export default {
 		return {
 			msg: '',		
 			submitSuccess: true,
-		   	receiptContent:{order_id:null},
+		   	receiptContent:{order_id:null,address: []},
 		   	submitReceipt: {
 				type: 2,
-				cate_name: null,
+				cate_id: null,
 				name: null,
-				style_name: null,
-				mode_name: null,
+				style_if: null,
+				mode_id: null,
+
 				size: [],
-				demanding_account: null,
-				fee: null,
-				total_fee: null,
+				demanding_account: 0,
+				fee: 0,
+				total_fee: 0,
 				expire_time: null,
 				arrival_date: null,
 				delivery_date: null,
@@ -108,10 +109,12 @@ export default {
 				other_picture: null,
 				check: null,
 				error: null,
-				supplement: null,
+				quality_requirement: null,
 				requirement: null,
-				picture: null,	
-				fabric: [],
+				picture: null,
+				size_table:null,
+				process_list: null,
+				fabric: null,
 				supplements: [],
 				is_deposited: 1,
 				receiver: null,
@@ -120,6 +123,7 @@ export default {
 				city: null,
 				county: null,
 				street: null,
+				address_id:null
 		   	}
 		}
 	},
@@ -145,29 +149,23 @@ export default {
 	},
 	methods:{
 		getReceipt(){
-			console.log(this.$route.query.order_id)
-			// setTimeout(()=>{
-			// 		console.log('3sssssss')
-			// 		this.submitReceipt.part_picture= ['/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg','/Uploads/Images/2018-01-10/94e70cc59bdc9c389f9ea180d027a324.jpg']},3000)
 			let url = this.getUrl
 			let args = {
-				type: 1,
+				type: 2,
 				order_id : this.$route.query.order_id
 			}
 			this.axios.post(url+'/Receipt/Index',qs.stringify(args)).then((res)=>{
-				console.log(res)
+				console.log('Receipt/Index' ,res)
 			    if(res.data.status == 200){
 			    	this.receiptContent = res.data.content
 			    	this.matchObj()
-			    	console.log('after ')
-			    	console.log(this.submitReceipt)
 			    }else{
 			    	this.matchObj()
 			    }          
 			})
 		},
 	    onSubmit(){
-	    	this.getQuality()
+	    	this.$set(this.submitReceipt, 'type', 2)
 	    	this.submitReceiptFn(this.submitReceipt)
 	    },
 	    getpayfront(){
@@ -193,30 +191,18 @@ export default {
 	    	let url = this.getUrl
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
-		    	console.log('saveDraft',res)
-				if(res.status == 200){
+		    	console.log('save Draft',res)
+				if(res.data.status == 400){
 					this.openMessage({str: res.data.msg, ele:this})
-					this.$router.push('/indent')
+					// this.$router.push('/indent')
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
 		    })
 	    },   
-	    getQuality(){
-	    	let self = this;
-			let _supplement = []
-			this.submitReceipt.supplement.forEach((item, index)=> {
-				if( item.name || item.err){	
-					_supplement.push(item)
-				}
-			})
-			self.$set(self.submitReceipt,'supplement' , _supplement)
-	    },
 	    matchObj(){
 	    	if( !this.receiptContent.done || Array.isArray( this.receiptContent.done ) ){ 
-	    		console.log(this.receiptContent)
-	    		this.submitReceipt = {
-	    			size: [{
+	    		this.$set(this.submitReceipt,'size', [{
 								color:null,
 								xs_demanding_account    : 0,
 								s_demanding_account     : 0,
@@ -226,8 +212,8 @@ export default {
 								xxl_demanding_account   : 0,
 								xxxl_demanding_account  : 0,
 								xxxxl_demanding_account : 0
-							}],
-					fabric: [{
+							}])
+	    		this.$set(this.submitReceipt,'fabric', [{
 				                name: '',
 				                component: '',
 				                grammage:'',
@@ -236,65 +222,57 @@ export default {
 				                weight:'',
 				                picture:[],
 				                is_main: 1
-			              }],
-			        supplements: [
-							{
+			              }])
+	    		this.$set(this.submitReceipt,'supplements', [{
 								requirement : null,
 								picture: []
-							}],
-					part_picture: [],
-					other_picture: [{
-						title:'',
-						sub_picture:[]
-					}],
-					picture: [],
-		   		}
+							}])
+	    		this.$set(this.submitReceipt,'part_picture', [])
+	    		this.$set(this.submitReceipt,'other_picture', [])
+	    		this.$set(this.submitReceipt,'picture', [])
+	    		this.$set(this.submitReceipt,'size_table', [])
+	    		this.$set(this.submitReceipt,'process_list', [])
+	    		this.$set(this.submitReceipt,'is_deposited', '1')
+	    		this.$set(this.submitReceipt,'address_id','0')
 	    		return
-	    	}
-
+	    	}else{
 	    		console.log('macthing')
-	    	let done = this.receiptContent.done
-	    	let details = done.details
-	    	let quality = done.quality
-	    	this.submitReceipt = {
-				arrival_date: details.arrival_date,
-				back_picture: details.back_picture,
-				cate_name: 	  details.category,
-				delivery_date: details.delivery_date,
-				demanding_account: details.demanding_account,
-				expire_time: details.expire_time,
-				fee: details.fee,
-				front_picture: details.front_picture,
-				is_deposited: details.is_deposited,
-				left_picture: details.left_picture,
-				mode_name: details.mode,
-				name: details.name,
-				part_picture: details.part_picture,				
-				right_picture: details.right_picture,
-				style_name: details.style,
-				total_fee: details.total_fee,
-				type: 2,
-
-				fabric: done.fabric,
-				other_picture: done.part,
-				size: done.size,				
-							
-				check: quality.check,
-				error: quality.error,
-				requirement: quality.requirement,
-				supplement: quality.supplement,
-				picture: quality.picture,
-			
-				supplements: done.supplement,
-				receiver: null,
-				phone: null,
-				province: null,
-				city: null,
-				county: null,
-				street: null,
-		   	}
-		   	console.log('macthed')
-		   	console.log(this.submitReceipt)
+		    	let done = this.receiptContent.done
+		    	let details = done.details
+		    	let quality = done.quality
+		    	this.$set(this.submitReceipt,'type', details.type)
+		    	this.$set(this.submitReceipt,'arrival_date', details.arrival_date)
+		    	this.$set(this.submitReceipt,'back_picture', details.back_picture)	
+		    	this.$set(this.submitReceipt,'cate_id', details.category_id)
+		    	this.$set(this.submitReceipt,'delivery_date', details.delivery_date)
+		    	this.$set(this.submitReceipt,'demanding_account', details.demanding_account)
+		    	this.$set(this.submitReceipt,'expire_time', details.expire_time)
+		    	this.$set(this.submitReceipt,'fee', details.fee)	    
+		    	this.$set(this.submitReceipt,'front_picture', details.front_picture)
+		    	this.$set(this.submitReceipt,'is_deposited', details.is_deposited)
+		    	this.$set(this.submitReceipt,'left_picture', details.left_picture)
+		    	this.$set(this.submitReceipt,'mode_id', details.mode_id)
+		    	this.$set(this.submitReceipt,'name', details.name)
+		    	this.$set(this.submitReceipt,'part_picture', details.part_picture)
+		    	this.$set(this.submitReceipt,'right_picture', details.right_picture)
+		    	this.$set(this.submitReceipt,'style_id', details.style_id)
+		    	this.$set(this.submitReceipt,'total_fee', details.total_fee)
+		    	this.$set(this.submitReceipt,'order_id', details.order_id)
+		    	this.$set(this.submitReceipt,'fabric', done.fabric)
+		    	this.$set(this.submitReceipt,'part', done.part)
+		    	this.$set(this.submitReceipt,'size', done.size)
+		    	this.$set(this.submitReceipt,'address_id', done.address_id)
+		    	this.$set(this.submitReceipt,'check', quality.check)
+		    	this.$set(this.submitReceipt,'error', quality.error)
+		    	this.$set(this.submitReceipt,'requirement', quality.requirement)
+		    	this.$set(this.submitReceipt,'quality_requirement', quality.quality_requirement)
+		    	this.$set(this.submitReceipt,'picture', quality.picture)
+		    	this.$set(this.submitReceipt,'size_table', quality.size_table)
+		    	this.$set(this.submitReceipt,'process_list', quality.process_list)
+		    	this.$set(this.submitReceipt,'supplements', done.supplement)
+			   	console.log('macthed')
+			   	console.log(this.submitReceipt)
+			}	    	
 	    }
 	}
 }
