@@ -164,7 +164,7 @@
 								<li>面料成分： <span>{{selectDetails.main.component}}</span></li>
 								<li>面料克重： <span>{{selectDetails.main.weight}}</span>克/平方米</li>
 								<li>面料米重： <span>{{selectDetails.main.grammage}}</span>克/平方米</li>
-								<li>门幅宽度： <span>{{selectDetails.main.width}}/
+								<li>门幅宽度： <span>{{selectDetails.main.width}}
 													{{selectDetails.main.units}}</span></li>
 							</ul>
 							<div class="mianliao-icon border-top clearfix ">
@@ -259,10 +259,11 @@
 						<div class="pinzhi border-top detail-inner" v-if="selectDetails.quality">
 							<h6>品质要求</h6>
 							<div class="chahuo">
+								<p>品质要求： <span>{{selectDetails.quality.quality_requirement}}</span></p>
 								<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
 								<p>整体允许误差范围： <span>{{selectDetails.quality.error}}</span></p>
 							</div>
-							<div class="buwei border-top clearfix">
+							<!-- <div class="buwei border-top clearfix">
 								<ul class="thead">
 									<li>部位</li>
 									<li>误差标准范围</li>
@@ -271,9 +272,21 @@
 									<li>{{item.name}}</li>
 									<li>{{item.err}}</li>
 								</ul>
-							</div>
+							</div> -->
 						</div>
 						<div class="banxing border-top detail-inner" v-if="selectDetails.quality">
+							<h6>尺寸表</h6>
+							<div class="mianliao-icon clearfix ">
+								<div v-for="item in selectDetails.quality.size_table" class="inner-icon">
+									<img :src="getUploadUrl+'/'+ item" />
+								</div>
+							</div>
+							<h6>工艺单</h6>
+							<div class="mianliao-icon clearfix ">
+								<div v-for="item in selectDetails.quality.process_list" class="inner-icon">
+									<img :src="getUploadUrl+'/'+ item" />
+								</div>
+							</div>
 							<h6>版型图</h6>
 							<div class="mianliao-icon clearfix ">
 								<div v-for="item in selectDetails.quality.picture" class="inner-icon">

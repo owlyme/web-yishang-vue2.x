@@ -1,5 +1,5 @@
 <template>	
-<div>
+<div id="payWay">
 	<b-row  align-v="center" class="msg">
         <b-col cols="2" class="border-right" >
 			<div>
@@ -88,9 +88,10 @@
 </template>
 <script >
 import { mapGetters } from 'vuex'
-import qs from 'qs';
 import { mapMutations } from 'vuex'
-    
+import qs from 'qs';
+
+
 
 export default{
 	props:['submitReceipt','receiptContent'],
@@ -301,6 +302,7 @@ export default{
 			let args= { order_id: this.receiptPayFront.order_id,
 						pay_type: payType,
 						service_fee: this.receiptPayFront.service_fee}
+						console.log('weixin zhi fu >>>',args)
 			if( payType == 'wxpay' ){
 				this.setIndentBlock(true)
 				this.showWeiChat= true;
@@ -315,9 +317,11 @@ export default{
 					}
 		       	})		       	
 			}else if(payType == 'alipay'){
-				window.open(url+'/Receipt/payBeforeSubmit?pay_type='+args.pay_type
-					 										 +'&service_fee'+args.service_fee
-															 +'&order_id'+args.order_id)
+				this.alipay(args)
+				
+				// window.open(url+'/Receipt/payBeforeSubmit?pay_type='+args.pay_type
+				// 	 										 +'&service_fee='+args.service_fee
+				// 											 +'&order_id='+args.order_id)
 			}	       	
 		},
 		afterWxpay(){
@@ -339,7 +343,18 @@ export default{
 			       	})			   
 			}, 2000)
 		},
-		alipay(){}
+		alipay(args){
+			console.log("alipay>>>>>>>>>>>>")
+			let form = document.createElement('form')
+				form.setAttribute('method','post')
+				form.setAttribute('action',this.getUrl
+								+'/Receipt/payBeforeSubmit?pay_type='+args.pay_type
+							 	+'&service_fee='+args.service_fee
+								+'&order_id='+args.order_id)
+			let body = document.querySelector('#payWay')
+					body.appendChild(form)
+					form.submit()
+		}
 	}
 }
 </script>

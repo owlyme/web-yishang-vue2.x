@@ -55,7 +55,6 @@ a:hover{
 .owl .page-item.active .page-link{
   background: #C44DDC;
 }
-
 .el-icon-arrow-up:before {
     content: "▼";
 }

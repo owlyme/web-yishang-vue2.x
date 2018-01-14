@@ -13,40 +13,42 @@
 					<!-- 加工单编辑 -->
 					<h3 class="text-center padding-top-bottom">加工单编辑</h3>
 					<el-form ref="form" label-width="25%"  >		
-						<Sheet v-on:setWorkSheet="getWorkSheet" 
-							:category = "receiptContent.category" 
-							:styles="receiptContent.style"
-							:mode="receiptContent.mode"	
+						<Sheet 
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"
 							></Sheet>
 						<!-- 颜色数量 -->		
-						<ColorAndNumber class="padding-left-right border-top padding-top-bottom" v-on:setColor="getColornumber"></ColorAndNumber>
+						<ColorAndNumber class="padding-left-right border-top padding-top-bottom" 
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"></ColorAndNumber>
 						<!-- 加工详情与信息-->
 						<Date class="padding-left-right border-top padding-top-bottom" 
-							v-on:setPeriod="getPeriod"
-							:total="receiptContent.demanding_account || 0 "					
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"
 						></Date>
 						<!-- 上传图片 -->
-						<Imgupload class="padding-left-right border-top padding-top-bottom" v-on:setClothePic="getClothePic"></Imgupload>		
+						<Imgupload class="padding-left-right border-top padding-top-bottom" 
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"
+						></Imgupload>		
 						<!-- 品质要求 quality -->
 						<Quality class="padding-left-right border-top padding-top-bottom" 
-							v-on:setQuality="getQuality"
-							:check="receiptContent.check" 
-							:error="receiptContent.error"
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"	
 						></Quality>	
 						<!-- 面料 -->
 						<Fabric class="padding-left-right border-top padding-top-bottom" 
-							v-on:setFabric="getFabric"
-							:component = "receiptContent.component"
-							:category = "receiptContent.category"
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"
 						></Fabric>
 						<!-- 其他要求1 -->
-						<About class="padding-left-right border-top padding-top-bottom" v-on:setAbout="getAbout"></About>
+						<About class="padding-left-right border-top padding-top-bottom" 
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"></About>
 						<!-- 收货人信息 -->
 						<Pay class="border-top padding-top-bottom" 
-							:deposit="receiptContent.deposit"
-							:totalFee="submitotalFee"
-							:addressList="receiptContent.address"
-							v-on:setNewAddr="getNewAddr"
+							:receiptContent='receiptContent'
+							:submitReceipt="submitReceipt"
 						></Pay>
 						<!-- 提交订单 -->
 						<div class="padding-left-right border-top padding-top-bottom text-center">
@@ -78,23 +80,24 @@ import { mapMutations } from 'vuex'
 
 
 export default {
-	name: "zizhu",
+	name: "wuyou",
 	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About, Banks},
 	data () {
 		return {
-			msg: '',			
+			msg: '',		
 			submitSuccess: true,
-		   	receiptContent:{order_id:null},
+		   	receiptContent:{order_id:null,address: []},
 		   	submitReceipt: {
-				type: null,
-				cate_name: null,
+				type: 2,
+				cate_id: null,
 				name: null,
-				style_name: null,
-				mode_name: null,
-				size: null,
-				demanding_account: null,
-				fee: null,
-				total_fee: null,
+				style_if: null,
+				mode_id: null,
+
+				size: [],
+				demanding_account: 0,
+				fee: 0,
+				total_fee: 0,
 				expire_time: null,
 				arrival_date: null,
 				delivery_date: null,
@@ -106,19 +109,22 @@ export default {
 				other_picture: null,
 				check: null,
 				error: null,
-				supplement: null,
+				quality_requirement: null,
 				requirement: null,
 				picture: null,
+				size_table:null,
+				process_list: null,
 				fabric: null,
-				supplements: null,
-				is_deposited: null,
+				supplements: [],
+				is_deposited: 1,
 				receiver: null,
 				phone: null,
 				province: null,
 				city: null,
 				county: null,
 				street: null,
-			}
+				address_id:null
+		   	}
 		}
 	},
   computed:{
@@ -130,117 +136,147 @@ export default {
       } 
   },
   mounted(){  
-    let url = this.getUrl
-    this.axios.post(url+'/Receipt/Index?type=2').then((res)=>{
-        if(res.data.status == 200){
-        	this.receiptContent = res.data.content
-        }    
-    })
+  	this.getReceipt()
     this.getpayfront();    
   },
-methods:{	
-    onSubmit(){
-    	this.$set(this.submitReceipt, 'type', 2)
-    	this.submitReceiptFn(this.submitReceipt)
-    },
-    getpayfront(){
-    	let url = this.getUrl    		
-	    this.axios.post(url+'/Receipt/payfront?money').then((res)=>{
-	        if(res.data.status == 200){
-	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
-	        }        
-	    }) 
-    },    
-    submitReceiptFn(args){
-    	console.log(args)
-    	let url = this.getUrl
-	    this.axios.post(url+'/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
-			if(res.data.status == 200){
-	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
-	        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
-		    }else{
-		        this.openMessage({str: res.data.msg, ele:this})
-		    }
-	    })
-    },
-    saveDraft(){
-    	let url = this.getUrl
-    	let args = this.submitReceipt
-	    this.axios.post(url+'Receipt/submitDraft',qs.stringify(args)).then((res)=>{
-			if(res.data.status == 200){
-	        	this.openMessage({str: res.data.msg, ele:this})	        	
-		    }else{
-		        this.openMessage({str: res.data.msg, ele:this})
-		    }
-	    })
-    },
-    getWorkSheet(val){
-    	let self = this;
-    	self.$set(self.submitReceipt, 'name', val.name)
-    	self.$set(self.submitReceipt, 'cate_name', val.fabricType)
-    	self.$set(self.submitReceipt, 'style_name', val.kindType)
-    	self.$set(self.submitReceipt, 'mode_name', val.status)
-    },    
-    getColornumber(val,total){
-    	let self = this;
-    	self.$set(self.submitReceipt, 'size', val)    	
-    	self.$set(self.submitReceipt, 'demanding_account', total)
-    	self.$set(self.receiptContent, 'demanding_account', total)    	
-    },
-    getPeriod(val){
-    	let self = this;
-    	// console.log(val)
-    	self.$set(self.submitReceipt, 'fee', val.fee)
-    	self.$set(self.submitReceipt, 'total_fee', val.total_fee)
-    	self.$set(self.submitReceipt, 'expire_time', val.expire_time)
-    	self.$set(self.submitReceipt, 'arrival_date', val.arrival_date)
-    	self.$set(self.submitReceipt, 'delivery_date', val.delivery_date)
-    },
-    getClothePic(val){
-    	let self = this;
-		self.$set(self.submitReceipt,'front_picture', val.front_picture)
-		self.$set(self.submitReceipt,'back_picture' , val.back_picture)
-		self.$set(self.submitReceipt,'left_picture' , val.left_picture)
-		self.$set(self.submitReceipt,'right_picture', val.right_picture)
-		self.$set(self.submitReceipt,'part_picture' , val.part_picture)
-    	self.$set(self.submitReceipt,'other_picture', val.other_picture)
-    },
-    getQuality(val){
-    	let self = this;    	
-		self.$set(self.submitReceipt,'check', val.check)
-		self.$set(self.submitReceipt,'error' , val.error)
-		// self.$set(self.submitReceipt,'supplement' , val.supplement)
-		self.$set(self.submitReceipt,'requirement', val.requirement)
-		self.$set(self.submitReceipt,'picture' , val.imageUrls)
-		let _supplement = []
-		val.supplement.forEach((item, index)=> {
-			if( item.name || item.err){	
-				_supplement.push(item)
+  watch:{
+		submitReceipt:{
+			handler(curVal, oldVal){					
+				console.log('current draft >>',curVal)
+	　　　　},
+			deep: true
+		}
+	},
+	methods:{
+		getReceipt(){
+			let url = this.getUrl
+			let args = {
+				type: 2,
+				order_id : this.$route.query.order_id
 			}
-		})
-		self.$set(self.submitReceipt,'supplement' , _supplement)
-		
-    },
-    getFabric(val){
-    	let self = this;
-    	self.$set(self.submitReceipt,'fabric', val)
-    },
-    getAbout(val){
-    	let self = this;
-    	self.$set(self.submitReceipt,'supplements', val)
-    },
-    getNewAddr(val){
-    	let self = this;
-		self.$set(self.submitReceipt,'is_deposited', val.is_deposited)
-		self.$set(self.submitReceipt,'phone', val.phone)
-		self.$set(self.submitReceipt,'province', val.province)
-		self.$set(self.submitReceipt,'city', val.city)
-		self.$set(self.submitReceipt,'county', val.county)
-		self.$set(self.submitReceipt,'street', val.street)
-		self.$set(self.submitReceipt,'receiver', val.name)
-    }
-}
-
+			this.axios.post(url+'/Receipt/Index',qs.stringify(args)).then((res)=>{
+				console.log('Receipt/Index' ,res)
+			    if(res.data.status == 200){
+			    	this.receiptContent = res.data.content
+			    	this.matchObj()
+			    }else{
+			    	this.matchObj()
+			    }          
+			})
+		},
+	    onSubmit(){
+	    	this.$set(this.submitReceipt, 'type', 2)
+	    	this.submitReceiptFn(this.submitReceipt)
+	    },
+	    getpayfront(){
+	    	let url = this.getUrl    		
+		    this.axios.post(url+'/Receipt/payfront?money').then((res)=>{
+		        if(res.data.status == 200){
+		        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
+		        }        
+		    }) 
+	    },    
+	    submitReceiptFn(args){
+	    	let url = this.getUrl
+		    this.axios.post(url+'/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
+				if(res.data.status == 200){
+		        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
+		        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
+			    }else{
+			        this.openMessage({str: res.data.msg, ele:this})
+			    }
+		    })
+	    },
+	    saveDraft(){
+	    	let url = this.getUrl
+	    	let args = this.submitReceipt
+		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+		    	console.log('save Draft',res)
+		    	console.log( res.data.status)
+				if(res.data.status == 200){
+					// this.openMessage({str: res.data.msg, ele:this})
+					this.$router.push('/indent')
+			    }else{
+			        this.openMessage({str: res.data.msg, ele:this})
+			    }
+		    })
+	    },   
+	    matchObj(){
+	    	if( !this.receiptContent.done || Array.isArray( this.receiptContent.done ) ){ 
+	    		this.$set(this.submitReceipt,'size', [{
+								color:null,
+								xs_demanding_account    : 0,
+								s_demanding_account     : 0,
+								m_demanding_account     : 0,
+								l_demanding_account     : 0,
+								xl_demanding_account    : 0,
+								xxl_demanding_account   : 0,
+								xxxl_demanding_account  : 0,
+								xxxxl_demanding_account : 0
+							}])
+	    		this.$set(this.submitReceipt,'fabric', [{
+				                name: '',
+				               	component_id: '',
+				                grammage:'',
+				                width:'',  
+				                units: '', 
+				                weight:'',
+				                picture:[],
+				                is_main: 1
+			              }])
+	    		this.$set(this.submitReceipt,'supplements', [{
+								requirement : null,
+								picture: []
+							}])
+	    		this.$set(this.submitReceipt,'part_picture', [])
+	    		this.$set(this.submitReceipt,'other_picture', [])
+	    		this.$set(this.submitReceipt,'picture', [])
+	    		this.$set(this.submitReceipt,'size_table', [])
+	    		this.$set(this.submitReceipt,'process_list', [])
+	    		this.$set(this.submitReceipt,'is_deposited', '1')
+	    		this.$set(this.submitReceipt,'address_id','0')
+	    		return
+	    	}else{
+	    		console.log('macthing')
+		    	let done = this.receiptContent.done
+		    	let details = done.details
+		    	let quality = done.quality
+		    	this.$set(this.submitReceipt,'type', details.type)
+		    	this.$set(this.submitReceipt,'arrival_date', details.arrival_date)
+		    	this.$set(this.submitReceipt,'back_picture', details.back_picture)	
+		    	this.$set(this.submitReceipt,'cate_id', details.category_id)
+		    	this.$set(this.submitReceipt,'delivery_date', details.delivery_date)
+		    	this.$set(this.submitReceipt,'demanding_account', details.demanding_account)
+		    	this.$set(this.submitReceipt,'expire_time', details.expire_time)
+		    	this.$set(this.submitReceipt,'fee', details.fee)	    
+		    	this.$set(this.submitReceipt,'front_picture', details.front_picture)
+		    	this.$set(this.submitReceipt,'is_deposited', details.is_deposited)
+		    	this.$set(this.submitReceipt,'left_picture', details.left_picture)
+		    	this.$set(this.submitReceipt,'mode_id', details.mode_id)
+		    	this.$set(this.submitReceipt,'name', details.name)
+		    	this.$set(this.submitReceipt,'part_picture', details.part_picture)
+		    	this.$set(this.submitReceipt,'right_picture', details.right_picture)
+		    	this.$set(this.submitReceipt,'style_id', details.style_id)
+		    	this.$set(this.submitReceipt,'total_fee', details.total_fee)
+		    	this.$set(this.submitReceipt,'order_id', details.order_id)
+		    	this.$set(this.submitReceipt,'other_picture', done.part)
+		    	this.$set(this.submitReceipt,'fabric', done.fabric)
+		    	this.$set(this.submitReceipt,'part', done.part)
+		    	this.$set(this.submitReceipt,'size', done.size)
+		    	this.$set(this.submitReceipt,'address_id', done.address_id)
+		    	this.$set(this.submitReceipt,'check_id', quality.check_id)
+		    	this.$set(this.submitReceipt,'error_id', quality.error_id)
+		    	this.$set(this.submitReceipt,'requirement', quality.requirement)
+		    	this.$set(this.submitReceipt,'quality_requirement', quality.quality_requirement)
+		    	this.$set(this.submitReceipt,'picture', quality.picture)
+		    	this.$set(this.submitReceipt,'size_table', quality.size_table)
+		    	this.$set(this.submitReceipt,'process_list', quality.process_list)
+		    	this.$set(this.submitReceipt,'supplements', done.supplement)
+			   	console.log('macthed')
+			   	console.log(this.submitReceipt)
+			}	    	
+	    }
+	}
 }
 
 </script>

@@ -178,6 +178,7 @@ export default{
     getMainlist(args){  
       let url= this.getUrl+'/Index/index'
       this.axios.post(url, qs.stringify(args)).then((res)=>{
+        console.log(res)
           if(res.data.status == 200){
             this.perPage =  res.data.content.pageSize;
             this.totalRows = res.data.content.totalRows-0;
@@ -199,7 +200,7 @@ export default{
           self.$set(item,"flag",true)
           self.contentTitle= item.type
         }
-      });      
+      });
     },
     displayOrNot(keyword){
       this.currentStatus = keyword

@@ -13,13 +13,15 @@
 				<b-col>交货时间：{{ goodsMsg.delivery_date }} </b-col>
 				<b-col>  </b-col>
 				<b-col>  </b-col>
-				<b-col>  </b-col>
+				
 			</b-row>
     	</b-container>
 
 		<div class="plan " 
-		:class="{ danger: goodsMsg.msg_color == 0, cancel :  goodsMsg.msg_color == -1 }"
-		 v-html="goodsMsg.msg"> {{goodsMsg.msg}}</div>
+		:class="{ danger: goodsMsg.msg_color == 0,
+				 cancel :  goodsMsg.msg_color == -1 , 
+				 pointer : goodsMsg.status == -1}"
+		 v-html="goodsMsg.msg" @click="toEdit(goodsMsg)"> {{goodsMsg.msg}}</div>
 		<div class="type-wuyou" v-if="goodsMsg.type == 2"><div class="rotate">无忧</div></div>
 	</b-media>
 	
@@ -43,6 +45,20 @@ import { mapGetters } from 'vuex'
 	      	return this.getUploadUrl+this.goodsMsg.front_picture
 	      }
 	    },
+	    methods:{
+	    	toEdit(goodsMsg){
+	    		if( goodsMsg.status == -1 ){
+	    			if(goodsMsg.type == 1){
+	    				this.$router.push({path: '/zizhu',
+	    									query:{order_id: goodsMsg.order_id }})
+	    			}
+	    			if(goodsMsg.type == 2){
+	    				this.$router.push({ path: '/wuyou',
+	    									query: { order_id: goodsMsg.order_id }})
+	    			}	    			
+	    		}
+	    	}
+	    }
 	}
 </script>
 <style scoped>
@@ -123,5 +139,7 @@ import { mapGetters } from 'vuex'
 .cancel{
 	background: #eeeeee;
 }
-
+.pointer{
+	cursor: pointer;
+}
 </style>

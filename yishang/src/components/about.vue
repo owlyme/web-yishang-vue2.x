@@ -7,11 +7,11 @@
 		  	上传说明图片:
 		  </el-col>	
 		  <el-col :span="14">
-		  	<div  class="floatleft" v-if="item.showSrc">
-			  	<img :src="item.showSrc" class="show-demo1">
-			  </div>	
+		  	<div  class="floatleft" v-if="item.showSrc" v-for='(item1, index1) in item.showSrc'>
+			  	<img :src="item1" class="show-demo1">
+			</div>
 			<el-upload
-				class="floatleft"			  			
+				class="floatleft"	
 	  			ref="supplements"
 		        :action="actionUrl"
 		        list-type="picture-card"
@@ -24,10 +24,10 @@
 		      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
 		        <img width="100%" :src="item.dialogImageUrl" alt="">
 		      </el-dialog>
-		  </el-col>	    			  
+		  </el-col>
 		</el-row>		
 			<el-form-item label="要求信息:" class="padding-top">
-			    <el-input type="textarea" v-model="item.requirement" placeholder="请填写要求信息"></el-input>
+			    <el-input type="textarea" v-model="submitReceipt.supplements[index].requirement"  placeholder="请填写要求信息"></el-input>
 			</el-form-item>
 			<i v-if="index" class="el-icon-delete" @click.stop="clickDelete(index)"></i>
 		</div>
@@ -42,55 +42,68 @@
 import { mapGetters } from 'vuex'
 	export default{
 		name: "quality",
+		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
-				aboutList:[
-					{
-					id: 0,
-					imgUrls:[],
-					showSrc: require('../assets/back-pic.jpg'),
-					requirement:"",
-					dialogVisible: false,
-					dialogImageUrl: false
-					}
-				],				
+				image :  require('../assets/back-pic.jpg'),	
+				tempList: new Array()	
 			}
-		},
-		watch:{
-			aboutList:{
-				handler(curVal,oldVal){
-					let value = [];
-					curVal.forEach((item, index) =>{
-						value[index] = {
-							requirement : item.requirement,
-							picture: item.imgUrls
-						}
-					})
-					this.$emit("setAbout",value)
-		　　　　　　},
-		　　　　deep:true
-			},
 		},
 		computed:{
 	        ...mapGetters([
 	            'getUploadUrl'
-	          ]),
+	        ]),
 	        actionUrl(){
 	          return this.getUploadUrl +'/picture/upload'
-	        }
+	        },
+	        aboutList(){
+				let _aboutList = this.tempList
+				this.submitReceipt.supplements.forEach( (item, index)=>{
+					let list = {
+								id: 0,
+								imgUrls:[],
+								showSrc: null,
+								requirement:"",
+								dialogVisible: false,
+								dialogImageUrl: false,
+								loaded: false,
+								getImgUrl(val, clear){
+										if(clear){	
+											item.picture.splice(0, item.picture.length)
+											val.forEach( (item1, index1)=>{
+												item.picture.push( item1 )
+											})
+										}else{
+											item.picture.push(val)
+										}
+									}
+							}
+					if( !_aboutList[index] ){
+						 _aboutList.push(list)
+						if( !item.picture ){ item.picture= [] }
+						if(!_aboutList[index].loaded){
+							_aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
+							_aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice() ) : [this.image]	
+
+						}	
+						_aboutList[index].loaded = true			
+					}
+				})
+				return _aboutList
+			}
 	     },
 		methods:{
 			handleRemove(fileList,index) {
-		    	if(!this.aboutList[index].imgUrls.length) return;
 		        let imgs = [];
+		        imgs = imgs.concat( this.aboutList[index].imgUrls )		      
 		    	fileList.forEach((item ,index) =>{
 		    		imgs.push(item.response.content.url)
 		    	})
-		    	this.aboutList[index].imgUrls = imgs.slice(0, imgs.length)
+		    	this.aboutList[index].getImgUrl( imgs.slice(0, imgs.length), true )
 		    },
 		    uploadImgeSuccess(response,index){
 		        if (response.status == 200 ) {
-		        	 this.aboutList[index].imgUrls.push(response.content.url)
+		        	this.aboutList[index].getImgUrl( response.content.url )
 		        	}else{
 		        		//response.msg
 		        	}
@@ -99,68 +112,17 @@ import { mapGetters } from 'vuex'
 		        this.aboutList[index].dialogImageUrl = file.url;
 		        this.aboutList[index].dialogVisible = true;
 		    },	
-			// handleRemoveSingle(file,index) {
-		 //    	this.aboutList[index].imgUrl = ''
-		 //    },		      
-		 //    uploadImgeSuccessSingle(response, index){
-		 //        if (response.status == 200 ) {
-		 //        	 this.aboutList[index].imgUrl = response.content.url
-		 //        	}else{
-		 //        		//response.msg
-		 //        	}
-		 //    },
-		 //    handlePictureCardPreviewSingle(file,index) {
-		 //        this.aboutList[index].dialogImageUrl = file.url;
-		 //        this.aboutList[index].dialogVisible = true;
-		 //    },
-	  //       submitImg(index) {
-	  //      	 	this.$refs.supplements[index].submit();
-	  //    	}, 
 			addAbout(){
 		    	let about = {
-		    		id: '',
-					imgUrls:[],
-					requirement:"",
-					dialogVisible: false,
-					dialogImageUrl: false
-				}				
-		    	this.aboutList.push(about)
-		    	this.aboutList.forEach((item ,index) =>{
-		          this.aboutList[index].id = index
-		        })
+		    		picture: [],
+					requirement: null
+				}
+		    	this.submitReceipt.supplements.push(about)
 		    },
 		    clickDelete(index){
-		    	this.picId--
-		      	this.aboutList.splice(index,1)
-		      	this.aboutList.forEach((item ,index) =>{
-		          this.aboutList[index].id = index
-		        })
-		    },
-	    	open3() {
-			this.$prompt('请输入其他细节名称', '衣依供应链平台提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',					
-				})
-				.then(({ value }) => {
-					let about = {
-		    		id: '',
-					imgUrl:'',
-					requirement:"",
-					dialogVisible: false,
-					dialogImageUrl: false
-					}				
-			    	this.aboutList.push(about)
-			    	this.aboutList.forEach((item ,index) =>{
-			          this.aboutList[index].id = index
-			        })
-				}).catch(() => {
-		          this.$message({
-		            type: 'info',
-		            message: '取消输入'
-		          });
-		        });
-			}
-
+		      	this.submitReceipt.supplements.splice(index,1)
+		      	this.tempList.splice(index,1)
+		    }
 		}
 	}
 </script>

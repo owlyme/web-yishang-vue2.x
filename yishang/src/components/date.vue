@@ -3,7 +3,7 @@
 		<div>
 			<el-form-item label="加工单价:" class="dates">
 			     <div class="el-input">
-			     	<input autocomplete="off" v-model="dateForm.fee"  placeholder=""  rows="2" min="1" validateevent="true" class="el-input__inner"
+			     	<input autocomplete="off" v-model="submitReceipt.fee"  placeholder=""  rows="2" min="1" validateevent="true" class="el-input__inner"
 			     	:keyup="onlyNumber()">
 			     </div>
 			     <div class="after"> 元/件 </div>
@@ -13,17 +13,25 @@
 			 </el-form-item>
 			 <el-form-item label="抢单截止时间:" class="dates">
 			    <el-date-picker	 
-			    v-model="dateForm.expire_time"
+			    :picker-options="pickerOptions1"
+			    v-model="submitReceipt.expire_time"
 			    value-format="yyyy-MM-dd HH-mm-ss"
-			    type="datetime" style="width:100%" disabledDate="true" align='center' placeholder="选择时间">  </el-date-picker>
+			    type="datetime" style="width:100%"  align='center' placeholder="选择时间">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 			 <el-form-item label="面辅料完备到场日期:" class="dates">
-			    <el-date-picker 	v-model="dateForm.arrival_date"  value-format="yyyy-MM-dd" type="date"	  style="width:100%"  align='center' placeholder="选择日期">  </el-date-picker>
+			    <el-date-picker  
+			    :picker-options="pickerOptions2"	
+			    v-model="submitReceipt.arrival_date" 
+			     value-format="yyyy-MM-dd" 
+			     type="date"	 
+			     style="width:100%"  align='center' placeholder="选择日期">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 			<el-form-item label="交货日期:" class="dates">
-			    <el-date-picker	  v-model="dateForm.delivery_date"  value-format="yyyy-MM-dd" type="date"	style="width:100%" align='center' placeholder="选择日期">  </el-date-picker>
+			    <el-date-picker	
+			    :picker-options="pickerOptions3"
+			    v-model="submitReceipt.delivery_date"  value-format="yyyy-MM-dd" type="date"	style="width:100%" align='center' placeholder="选择日期">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 		</div>
@@ -32,7 +40,8 @@
 <script>
 	export default{
 		name: "date",
-		props: ['total'],
+		// props: ['total'],
+		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
 				dateForm: {
@@ -46,28 +55,53 @@
 		},
 		computed:{
 			total_fee(){
-				return this.total * this.dateForm.fee
-			}
-		},
-		watch:{
-			dateForm:{
-				handler(curVal,oldVal){
-						curVal.total_fee = this.total_fee
-						this.$emit("setPeriod",curVal)
-		　　　　　　},
-		　　　　deep:true
-			}
+				console.log('total_fee')
+				let total_fee = 0;
+				total_fee = this.submitReceipt.demanding_account * this.submitReceipt.fee
+				this.submitReceipt.total_fee = total_fee  || 0
+				return total_fee || 0
+			},
+			pickerOptions1(){
+				console.log(11111)
+				return {	
+						disabledDate(time) {
+		           				return time.getTime() < Date.now();
+					       	}
+					    }
+			},
+			pickerOptions2(){
+				console.log(22222)
+				let date = this.submitReceipt.expire_time || 0
+				let expire_time = (new Date(this.submitReceipt.expire_time)).getTime()  || Date.now()
+				return {	
+							disabledDate(time) {
+		           				return time.getTime() < expire_time;
+					       	}
+					    }
+			},
+			pickerOptions3(){
+				console.log(33333)
+				let date = this.submitReceipt.arrival_date || 0
+				let arrival_date = (new Date( date )).getTime()|| Date.now()
+				return {	disabledDate(time) {
+		           				return time.getTime() < arrival_date;
+					       	}
+					    }
+			},
 		},
 		methods:{
-			cantPiker(){
-			},
 			onlyNumber(){
-				if(this.dateForm.fee){
-					let str = this.dateForm.fee
-					str = str.toString().replace(/[^0-9]\D*$/,"")
-					this.$set(this.dateForm, 'fee', str)
-				}
-				
+				if(this.submitReceipt.fee){
+					let str = this.submitReceipt.fee
+					str = str.toString().replace(/[^0-9.]\D*$/,"")
+					this.$set(this.submitReceipt, 'fee', str)
+				}				
+			},
+			dateRange(){
+				let date = this.submitReceipt.expire_time || 0
+				let expire_time = (new Date(this.submitReceipt.expire_time)).getTime()  || Date.now()
+				let date1 = this.submitReceipt.arrival_date || 0
+				let arrival_date = (new Date( date )).getTime()|| Date.now()
 			}
 		}
 	}

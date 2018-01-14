@@ -19,7 +19,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'element-ui/lib/theme-chalk/index.css'
 require('./assets/css/myindex.css')
-
+require('./assets/css/animate.css')
 Vue.prototype.openMessage = (arg) =>{
           let html='';
           if( !arg.bool){
@@ -32,6 +32,13 @@ Vue.prototype.openMessage = (arg) =>{
               showClose: false
             });
         };
+Vue.prototype.addUploadUrl= (url, arr)=>{
+    let _arr = [];
+    arr.forEach( (item, index)=>{
+      _arr.push(url+ item)
+    })
+    return _arr
+}
 Vue.directive('focus', {
       inserted: function (el) {
           el.focus()
