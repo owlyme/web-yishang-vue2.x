@@ -139,14 +139,14 @@ export default {
   	this.getReceipt()
     this.getpayfront();    
   },
- //  watch:{
-	// 	submitReceipt:{
-	// 		handler(curVal, oldVal){					
-	// 			console.log(curVal)
-	// 　　　　},
-	// 		deep: true
-	// 	}
-	// },
+  watch:{
+		submitReceipt:{
+			handler(curVal, oldVal){					
+				console.log('current draft >>',curVal)
+	　　　　},
+			deep: true
+		}
+	},
 	methods:{
 		getReceipt(){
 			let url = this.getUrl
@@ -192,6 +192,7 @@ export default {
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
 		    	console.log('save Draft',res)
+		    	console.log( res.data.status)
 				if(res.data.status == 200){
 					// this.openMessage({str: res.data.msg, ele:this})
 					this.$router.push('/indent')
@@ -215,7 +216,7 @@ export default {
 							}])
 	    		this.$set(this.submitReceipt,'fabric', [{
 				                name: '',
-				                component: '',
+				               	component_id: '',
 				                grammage:'',
 				                width:'',  
 				                units: '', 
@@ -263,8 +264,8 @@ export default {
 		    	this.$set(this.submitReceipt,'part', done.part)
 		    	this.$set(this.submitReceipt,'size', done.size)
 		    	this.$set(this.submitReceipt,'address_id', done.address_id)
-		    	this.$set(this.submitReceipt,'check', quality.check)
-		    	this.$set(this.submitReceipt,'error', quality.error)
+		    	this.$set(this.submitReceipt,'check_id', quality.check_id)
+		    	this.$set(this.submitReceipt,'error_id', quality.error_id)
 		    	this.$set(this.submitReceipt,'requirement', quality.requirement)
 		    	this.$set(this.submitReceipt,'quality_requirement', quality.quality_requirement)
 		    	this.$set(this.submitReceipt,'picture', quality.picture)

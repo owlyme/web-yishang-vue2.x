@@ -13,12 +13,14 @@
 				<b-col>交货时间：{{ goodsMsg.delivery_date }} </b-col>
 				<b-col>  </b-col>
 				<b-col>  </b-col>
-				<b-col>  </b-col>
+				
 			</b-row>
     	</b-container>
 
 		<div class="plan " 
-		:class="{ danger: goodsMsg.msg_color == 0, cancel :  goodsMsg.msg_color == -1 }"
+		:class="{ danger: goodsMsg.msg_color == 0,
+				 cancel :  goodsMsg.msg_color == -1 , 
+				 pointer : goodsMsg.status == -1}"
 		 v-html="goodsMsg.msg" @click="toEdit(goodsMsg)"> {{goodsMsg.msg}}</div>
 		<div class="type-wuyou" v-if="goodsMsg.type == 2"><div class="rotate">无忧</div></div>
 	</b-media>

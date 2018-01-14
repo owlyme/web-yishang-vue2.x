@@ -31,7 +31,7 @@
         </el-col>
     </el-row>
       <el-form-item label="面料成分: " class="padding-right">
-            <el-select v-model="submitReceipt.fabric[index].component"  placeholder="请输入您的面料成分" style="width:100%">
+            <el-select v-model="submitReceipt.fabric[index].component_id"  placeholder="请输入您的面料成分" style="width:100%">
                <el-option 
                 v-for="(item1, index1) in receiptContent.component"
                 :key="'component'+index"

@@ -10,7 +10,7 @@
 					</el-radio-group>
 		</el-form-item>
 		<el-form-item label="查货选择:" >
-		    <el-select v-model="submitReceipt.check" placeholder="请选择你的查货模式" style="width:75%">
+		    <el-select v-model="submitReceipt.check_id" placeholder="请选择你的查货模式" style="width:75%">
 		    	<el-option 
 		    				v-for="(item, index) in receiptContent.check"
 				    		:key="'check'+index"
@@ -19,7 +19,7 @@
 		    </el-select>
 		</el-form-item>
 		<el-form-item label="整体允许误差范围:" >
-		    <el-select v-model="submitReceipt.error" placeholder="请选择你的误差标准" style="width:75%">
+		    <el-select v-model="submitReceipt.error_id" placeholder="请选择你的误差标准" style="width:75%">
 		      <el-option 
 		    				v-for="(item, index) in receiptContent.error"
 				    		:key="'error'+index"
