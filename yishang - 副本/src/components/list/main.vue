@@ -200,7 +200,7 @@ export default{
           self.$set(item,"flag",true)
           self.contentTitle= item.type
         }
-      });      
+      });
     },
     displayOrNot(keyword){
       this.currentStatus = keyword

@@ -137,5 +137,7 @@ import { mapGetters } from 'vuex'
 .cancel{
 	background: #eeeeee;
 }
-
+.pointer{
+	cursor: pointer;
+}
 </style>

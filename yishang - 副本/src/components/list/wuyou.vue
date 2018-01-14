@@ -139,14 +139,14 @@ export default {
   	this.getReceipt()
     this.getpayfront();    
   },
-  watch:{
-		submitReceipt:{
-			handler(curVal, oldVal){					
-				console.log(curVal)
-	　　　　},
-			deep: true
-		}
-	},
+ //  watch:{
+	// 	submitReceipt:{
+	// 		handler(curVal, oldVal){					
+	// 			console.log(curVal)
+	// 　　　　},
+	// 		deep: true
+	// 	}
+	// },
 	methods:{
 		getReceipt(){
 			let url = this.getUrl
@@ -192,9 +192,9 @@ export default {
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
 		    	console.log('save Draft',res)
-				if(res.data.status == 400){
-					this.openMessage({str: res.data.msg, ele:this})
-					// this.$router.push('/indent')
+				if(res.data.status == 200){
+					// this.openMessage({str: res.data.msg, ele:this})
+					this.$router.push('/indent')
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
@@ -258,6 +258,7 @@ export default {
 		    	this.$set(this.submitReceipt,'style_id', details.style_id)
 		    	this.$set(this.submitReceipt,'total_fee', details.total_fee)
 		    	this.$set(this.submitReceipt,'order_id', details.order_id)
+		    	this.$set(this.submitReceipt,'other_picture', done.part)
 		    	this.$set(this.submitReceipt,'fabric', done.fabric)
 		    	this.$set(this.submitReceipt,'part', done.part)
 		    	this.$set(this.submitReceipt,'size', done.size)

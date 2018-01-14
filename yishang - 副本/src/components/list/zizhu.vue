@@ -91,8 +91,8 @@ export default {
 				back_picture: null,
 				left_picture: null,
 				right_picture: null,
-				part_picture: [],
-				other_picture: [],
+				part_picture: null,
+				other_picture: null,
 				check: null,
 				error: null,
 				quality_requirement: null,
@@ -121,14 +121,14 @@ export default {
 	mounted(){
 		this.getReceipt()
 	},
-	watch:{
-		submitReceipt:{
-			handler(curVal, oldVal){					
-				console.log(curVal)
-	　　　　},
-			deep: true
-		}
-	},
+	// watch:{
+	// 	submitReceipt:{
+	// 		handler(curVal, oldVal){					
+	// 			console.log(curVal)
+	// 　　　　},
+	// 		deep: true
+	// 	}
+	// },
 	methods:{
 		getReceipt(){
 			console.log(this.$route.query.order_id)
@@ -168,9 +168,8 @@ export default {
 	    	let args = this.submitReceipt
 		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
 		    	console.log('save Draft>>',res)
-				if(res.data.status == 400){
-					this.openMessage({str: res.data.msg, ele:this})
-					// this.$router.push("/indent")
+				if(res.data.status == 200){
+					this.$router.push("/indent")
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
@@ -178,27 +177,7 @@ export default {
 	    },	  
 	    matchObj(){
 	    	if( !this.receiptContent.done || Array.isArray( this.receiptContent.done ) ){
-	    		console.log('receiptContent false')  
-	    		// setTimeout(()=>{
-	    		// 	console.log('receiptContent  set time out *****') 
-
-	    		// 		    		this.receiptContent.address.push({city:"深圳市",
-							// 							county:"宝安区",
-							// 							id:"30",
-							// 							phone:"123456",
-							// 							province:"广东省",
-							// 							receiver:"寻菜",
-							// 							street:"龙华大浪街"}) 
-	    		// 		    		this.receiptContent.address.push({city:"市辖区",
-							// 							county:"东城区",
-							// 							id:"53",
-							// 							phone:"13156565656",
-							// 							province:"北京市",
-							// 							receiver:"22",
-							// 							street:"11"})
-	    		// 		    		this.$set(this.submitReceipt,'other_picture', [{title: 1111, sub_picture:['Uploads/Images/2018-01-13/51df5a9f4484772fed271c49dc2b9b0d.jpg']},{title: 1111, sub_picture:['Uploads/Images/2018-01-13/51df5a9f4484772fed271c49dc2b9b0d.jpg']},{title: 1111, sub_picture:['Uploads/Images/2018-01-13/51df5a9f4484772fed271c49dc2b9b0d.jpg']}])
-	    		// },3000)
-
+	    		console.log('receiptContent false') 
 	    		this.$set(this.submitReceipt,'size', [{
 								color:null,
 								xs_demanding_account    : 0,
@@ -255,6 +234,7 @@ export default {
 		    	this.$set(this.submitReceipt,'style_id', details.style_id)
 		    	this.$set(this.submitReceipt,'total_fee', details.total_fee)
 		    	this.$set(this.submitReceipt,'order_id', details.order_id)
+		    	this.$set(this.submitReceipt,'other_picture', done.part)
 		    	this.$set(this.submitReceipt,'fabric', done.fabric)
 		    	this.$set(this.submitReceipt,'part', done.part)
 		    	this.$set(this.submitReceipt,'size', done.size)

@@ -301,6 +301,7 @@ export default{
 			let args= { order_id: this.receiptPayFront.order_id,
 						pay_type: payType,
 						service_fee: this.receiptPayFront.service_fee}
+						console.log('weixin zhi fu >>>',args)
 			if( payType == 'wxpay' ){
 				this.setIndentBlock(true)
 				this.showWeiChat= true;

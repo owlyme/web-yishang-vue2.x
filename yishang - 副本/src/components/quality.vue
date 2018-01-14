@@ -128,12 +128,6 @@ import { mapGetters } from 'vuex'
 		        image :  require('../assets/mode-pic.jpg'),
 			}
 		},
-		// mounted(){
-		// 	this.submitReceipt.supplement = [{
-		// 						name : "",
-		// 						err: "",
-		// 					}]
-		// },
 		computed:{
 		    ...mapGetters([
 		        'getUploadUrl'
@@ -145,7 +139,7 @@ import { mapGetters } from 'vuex'
 				let picture = this.submitReceipt.picture
 				if( Array.isArray( picture ) && !this.tempList[0] ){
 					this.imgUrls = picture.slice()
-					this.tempList = picture.length ? this.addUploadUrl(this.getUploadUrl, picture.slice()) : [this.image]	
+					this.tempList = picture.length ? this.addUploadUrl(this.getUploadUrl, picture.slice()) : [this.image]
 				}			
 				return this.tempList
 			},
