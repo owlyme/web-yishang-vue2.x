@@ -44,7 +44,6 @@
 			<div class=" border-top padding-top-bottom text-center">
 				<el-button type="primary" @click="onSubmit">自主发单</el-button>
 			    <el-button @click="saveDraft">保存草稿</el-button>
-			  </el-form-item>
 			</div>			   
 		</el-form>			
 	</div>

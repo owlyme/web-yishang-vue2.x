@@ -100,7 +100,7 @@ export default {
     beforeReceipt(index){
         let url = this.getUrl
         this.axios.post(url+'/Receipt/beforeReceipt').then((res)=>{   
-        // this.$router.push(this.getNavList[index].path)       
+        this.$router.push(this.getNavList[index].path)       
               if(res.data.status ==200){
                 this.$router.push(this.getNavList[index].path)
               }else {

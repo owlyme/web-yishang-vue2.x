@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/login'
-import test from '@/components/login/test10010'
 import Indexlist from '@/components/list/index'
 	import Main from '@/components/list/main'
 	import Zizhu from '@/components/list/zizhu'
@@ -13,7 +12,6 @@ const router = new Router({
   // mode: 'history',
   routes: [    
     {path: '/login',name: 'Login',component: Login    },
-    {path: '/test10010',name: 'test',component: test},
     {path: '/',component: Indexlist,
           children:[
             {path: "/", name: "Main", component:Main  },
