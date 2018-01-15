@@ -19,7 +19,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'element-ui/lib/theme-chalk/index.css'
 require('./assets/css/myindex.css')
-require('./assets/css/animate.css')
 Vue.prototype.openMessage = (arg) =>{
           let html='';
           if( !arg.bool){

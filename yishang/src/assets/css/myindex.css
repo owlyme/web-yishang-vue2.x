@@ -276,11 +276,11 @@ border-radius: 50px 0 0 50px;
   -o-transform:rotate(-42deg);
 }
 /*imgupload */
-.avatar-uploader .el-upload img{
+/* .avatar-uploader .el-upload img{
     width: 100%;
     height: 100%;
 }
-
+ */
 .uploadimg .space {
   height: 145px
 }

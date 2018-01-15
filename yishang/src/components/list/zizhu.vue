@@ -1,5 +1,8 @@
-<template>	
-	<div class="container bg-white" id='zizhu'>
+<template>
+<div>
+	<Uploadfiles :getImgList="list" ></Uploadfiles>
+	
+	<div class="container bg-white" id='zizhu' v-if='false'>
 		<!-- 加工单编辑 -->
 		<h3 class="text-center padding-top-bottom">加工单编辑</h3>
 		<el-form ref="form" label-width="25%"  >		
@@ -47,6 +50,8 @@
 			</div>			   
 		</el-form>			
 	</div>
+
+</div>	
 </template>
 
 <script>
@@ -58,16 +63,18 @@ import Imgupload from "../imgupload"
 import Pay from "../payAndAddr"
 import Fabric from "../fabric"
 import About from "../about"
-
+import Uploadfiles from "@/components/uploadfiles"
 import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 
 export default {
 	name: "zizhu",
-	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About },
+	components: { Sheet, ColorAndNumber,Quality, Date, Imgupload, Pay, Fabric, About, Uploadfiles },
 	data () {
+		let self = this
 		return {
+			list:[],
 			msg: '',
 			passBefore: false,
 		   	receiptContent:{
@@ -115,9 +122,13 @@ export default {
 	computed:{
 	  ...mapGetters([
 	     'getUrl',
+	      'getUploadUrl'
 	  ])      
 	},  
 	mounted(){
+		setTimeout( ()=>{
+			this.list =[this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg' ]
+		},5000)
 		this.getReceipt()
 	},
 	watch:{
