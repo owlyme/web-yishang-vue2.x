@@ -2,9 +2,9 @@
 <div class="fabric">
   <h5>面料信息</h5>
 <el-form label-width="25%">
-  <div v-for="(item, index) in fabricList">
-    <el-form-item :label="item.label" class="bg">
-      <el-input v-model="submitReceipt.fabric[index].name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
+  <div v-for="(item, index) in doneFabric" :key="index">
+    <el-form-item :label="labels[index]" class="bg">
+      <el-input v-model="item.name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
       <i  v-if="index > 0" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
     </el-form-item>
     <el-row :gutter="10"  class="space padding-bottom  uploadimgs" >    
@@ -12,44 +12,34 @@
           面料图片: 
         </el-col> 
         <el-col :span="14">
-          <div  class="floatleft" v-if="item.showSrc" v-for='(item1, index1) in item.showSrc'>
-              <img :src="item1" class="show-demo1">
-          </div>
-        <el-upload 
-          class="floatleft"          
-              ref="fabric"
-                :action="actionUrl"                
-                list-type="picture-card"
-                :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
-                :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"            
-                :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">
-                <span  slot="trigger" class="remind" >点击上传</span>
-          </el-upload>
-          <el-dialog :visible.sync="item.dialogVisible" size="tiny">
-              <img width="100%" :src="item.dialogImageUrl" alt="">
-          </el-dialog>
+          <Uploadfiles 
+            :getUploadUrl="getUploadUrl"
+            :defaultImg  ="image"
+            :getImgList  ="item.picture"
+            :returnImgList = 'submitReceiptFabric[index].picture'
+          ></Uploadfiles>
         </el-col>
     </el-row>
       <el-form-item label="面料成分: " class="padding-right">
-            <el-select v-model="submitReceipt.fabric[index].component_id"  placeholder="请输入您的面料成分" style="width:100%">
+            <el-select v-model="item.component_id"  placeholder="请输入您的面料成分" style="width:100%">
                <el-option 
-                v-for="(item1, index1) in receiptContent.component"
+                v-for="(item1, index1) in component"
                 :key="'component'+index"
                 :label="item1.component_name" :value="item1.component_id">
-                </el-option>  
+                </el-option>
           </el-select>
       </el-form-item>
       <el-form-item label="面料克重:" class="padding-right">
-        <el-input v-model="submitReceipt.fabric[index].weight"  placeholder="请输入克重">  </el-input>
+        <el-input v-model="item.weight"  placeholder="请输入克重">  </el-input>
         <div class="after"> 克/平方米 </div>
       </el-form-item>
       <el-form-item label="面料米重:" class="padding-right">
-        <el-input v-model="submitReceipt.fabric[index].grammage"  placeholder="请输入克重">  </el-input>
+        <el-input v-model="item.grammage"  placeholder="请输入克重">  </el-input>
         <div class="after"> 克/米 </div>
       </el-form-item>
       <el-form-item label="门幅宽度:" class="padding-right">
-        <el-input v-model="submitReceipt.fabric[index].width"  placeholder="请输入克重"  style="width: 70%;">  </el-input>
-        <el-radio-group v-model="submitReceipt.fabric[index].units" style="padding-left:18px">
+        <el-input v-model="item.width"  placeholder="请输入克重"  style="width: 70%;">  </el-input>
+        <el-radio-group v-model="item.units" style="padding-left:18px">
             <el-radio  label="厘米">厘米</el-radio>
             <el-radio  label="英寸">英寸</el-radio>
         </el-radio-group>
@@ -65,13 +55,55 @@
 <script>
 
 import { mapGetters } from 'vuex'
+import Uploadfiles from "@/components/uploadfiles"
 export default {
-  props:['receiptContent','submitReceipt'],
+    // props:['receiptContent','submitReceipt'],
+    components: { Uploadfiles},
+    props:{
+      component:{
+        type: Array,
+        default(){
+          return []
+        }
+      },
+      doneFabric:{
+        type: Array,
+        default(){
+          return [{
+                name: '',
+                component_id: '',
+                grammage:'',
+                width:'',  
+                units: '', 
+                weight:'',
+                picture:[],
+                is_main: 1
+            }]          
+        }
+      },
+      submitReceiptFabric:{
+        type: Array,
+        default(){
+          return [{
+                name: '',
+                component_id: '',
+                grammage:'',
+                width:'',  
+                units: '', 
+                weight:'',
+                picture:[],
+                is_main: 1
+            }]
+        }
+      }
+    },
     data() {
       return {
+        labels: ['面料A'],
+        returnedList: [],
         startCode: 65,
         image :  require('../assets/fabric-pic.jpg'), 
-        tempList: new Array(),       
+        tempList: new Array(),
       }
     },
     computed:{
@@ -80,92 +112,33 @@ export default {
         ]),
       actionUrl(){
         return this.getUploadUrl +'/picture/upload'
-      },
-      fabricList(){
-        let _aboutList = this.tempList
-        if( Array.isArray( this.submitReceipt.fabric )){
-          this.submitReceipt.fabric.forEach( (item, index)=>{
-            let list = {
-                  name: '',
-                  component: '',
-                  grammage:'',
-                  width:'',  
-                  units: '',
-                  weight:'',
-                  imgUrls:[],
-                  is_main: 0,
-                  loaded: false,
-                  label:'',
-                  showSrc:[],
-                  dialogVisible: false,
-                  dialogImageUrl: false,
-                  getImgUrl(val, clear){
-                      if(clear){
-                        item.picture.splice(0, item.picture.length)
-                        val.forEach( (item1, index1)=>{
-                          item.picture.push( item1 )
-                        })
-                      }else{
-                        item.picture.push(val)
-                      }
-                    }
-                }
-            if( !_aboutList[index] ){
-              console.log('aboutList ' + index)
-              _aboutList.push(list)
-              if( !item.picture ){ item.picture= [] }
-              // if(!_aboutList[index].loaded ){
-                console.log('aboutList ' + index)
-                console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
-                _aboutList[index].label = "面料" + String.fromCharCode( index+this.startCode )
-                _aboutList[index].imgUrls = item.picture.slice(0, item.picture.length)
-                _aboutList[index].showSrc = item.picture.length ? this.addUploadUrl(this.getUploadUrl, item.picture.slice(0, item.picture.length)): [this.image]
-                console.log('_aboutList[index].showSrc ' +_aboutList[index].showSrc)
-              // } 
-                _aboutList[index].loaded =true 
-            }
-          })
-        }
-        return _aboutList
       }
     },
-    methods: { 
-      handleRemove(fileList,index) {
-        let imgs = [];
-        imgs = imgs.concat( this.fabricList[index].imgUrls )    
-        fileList.forEach((item ,index) =>{
-          imgs.push(item.response.content.url)
-        })
-       
-        this.fabricList[index].getImgUrl( imgs.slice(0, imgs.length), true )
-      },
-      uploadImgeSuccess(response,index){
-          if (response.status == 200 ) {
-             this.fabricList[index].getImgUrl( response.content.url )
-            }else{
-              //response.msg
-            }
-      },
-      handlePictureCardPreview(file,index) {
-          this.fabricList[index].dialogImageUrl = file.url;
-          this.fabricList[index].dialogVisible = true;
-      },
+    watch:{
+      doneFabric:{
+        handler(curVal){
+          console.log(curVal)
+          this.$emit('update:submitReceiptFabric', curVal)
+        },
+        deep: true
+      }
+    },
+    methods: {       
       addFabric(){
-          let fabric = {
-                name: '',
-                component: '',
-                grammage:'',
-                width:'',
-                units: '', 
-                weight:'',
-                picture:[],
-                is_main: 0
-              }
-           this.submitReceipt.fabric.push(fabric)
+        let fabric = {
+              name: '',
+              component: '',
+              grammage:'',
+              width:'',
+              units: '', 
+              weight:'',
+              picture:[],
+              is_main: 0
+            }
+        this.doneFabric.push(fabric)
       },
       deleteFabric(index){
-          this.submitReceipt.fabric.splice(index,1)
-          this.tempList.splice(index,1)
+          this.doneFabric.splice(index,1)
       }
     }
   }

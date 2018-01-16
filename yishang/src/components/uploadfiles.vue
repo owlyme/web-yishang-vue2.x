@@ -2,11 +2,11 @@
  <div >
   <ul class="clearfixed">
     <!-- default image -->
-    <li class="img-li" v-if="!computedImgList.length">
-      <img src=""  />
+    <li class="img-li" v-if="!getImgList.length">
+      <img :src="defaultImg"  />
     </li>
     <!-- uploaded image/images -->
-    <li class="img-li" v-for="(img, index) in computedImgList" :key="index">
+    <li class="img-li" v-for="(img, index) in getImgList" :key="index">
       <img :src="img" class="" />
     <span class=" top-right" @click="handleDeleteImg(index)">
       <img src="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhFBMVEX/////4eH/3t7/WVn/AwP/AgL/sbH/DQ3/DAz/pqb/kJD/jo7/qKj/Wlr/WFj/4OD/39//p6f/jIz/paX/3d3/h4f/Rkb/HBz/Bwf/DAz/KCj/R0f/AAD/AQH/GRn/enr/FBT/iIj/////09P/FRX/1NT/Gxv/Fhb/Bgb+Bgb/Ghr/BQX6OfJ6AAAAFXRSTlMAHiKn/f1O8/NacHJYpacgIFh0WiJkiCngAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+IBDw8YJEcfEnoAAADESURBVCjPdVKJFoIgEFwzy8o8KsxyzQup9P//L2xVJGMeD9gZYA8WgGCx+Jrc7ilbwRyWvcYBjm0pfrPFGdzdyO8d1JAdiPcy/EHmfd93cQG393PEP/ABAnLwyIt+KfIHxRZASUfyquaIvK5ysktIacMbqcip4WSnIHBSGjmegykgQaUoHl/w1gSuBONTseJ151O4PSWVKdyQEmzHBFtKMATwDSUxFxGiZdkjw0edDF97njWDP11yfEvvExaLrhMxuwzEB3AXMzQf9NL7AAAAAElFTkSuQmCC" />
@@ -30,6 +30,12 @@ import { mapGetters } from 'vuex'
  export default {
     name: 'imgUpload',
     props:{
+      getUploadUrl: {
+        type: String
+      },
+      defaultImg: {
+        type: String
+      },
       getImgList:{
         type: Array,
         default(){
@@ -45,48 +51,57 @@ import { mapGetters } from 'vuex'
     },
     data() {
       return {
+
       };
     },
-    mounted(){
-      console.log(this.getImgList)
-        setTimeout(()=>{
-        // this.getImgList.push(this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg')
-          // this.getImgList= [this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg' ]
-        },10000)
-    },
     computed:{
-      ...mapGetters([
-        'getUploadUrl'
-      ]),
+      // ...mapGetters([
+      //   'getUploadUrl'
+      // ]),
       actionUrl(){
         return this.getUploadUrl +'/picture/upload'
-      },
-      computedImgList(){
-        return this.getImgList
+      }
+    },
+    watch:{
+      getImgList:{
+        handler(curVal,oldVal){
+          // let arr = []
+          // curVal.forEach( (item, index)=>{
+          //   arr.push( item.match(/uploads(\S*)/ig)[0] )
+          // } ) 
+          let arr =  Array.from(curVal , (item) => {
+            return item.match(/uploads(\S*)/ig)[0]
+          })
+          this.$emit('update:returnImgList', arr)
+          console.log( this.returnImgList )
+        },
+        deep:true
       }
     },
     methods: {
       handleDeleteImg(index){
         console.log('handleDeleteImg')
         this.getImgList.splice(index, 1)
-        this.returnImgList.splice(index, 1)
       },
       handleAvatarSuccess(res, file) {
         console.log('Img uploand success', file)
-        this.getImgList.push(this.getUploadUrl + file.response.content.url)
-        this.returnImgList(file.response.content.url)
+        this.getImgList.push(this.getUploadUrl + file.response.content.url)        
       },
       beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
+        const isJPG = file.type === 'image/jpeg'
+                       || file.type === 'image/jpg' 
+                       || file.type === 'image/png'
+                       || file.type === 'image/pjpeg'
+                       || file.type === 'image/bmp';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
+          this.$message.error('上传图片只能是 jpeg/jpg/png/pjpeg/bmp 格式!');
         }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
-        return isJPG && isLt2M;
+        return isJPG;
       }
     }
   }
