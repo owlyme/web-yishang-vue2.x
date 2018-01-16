@@ -16,12 +16,12 @@
             :getUploadUrl="getUploadUrl"
             :defaultImg  ="image"
             :getImgList  ="item.picture"
-            :returnImgList = 'submitReceiptFabric[index].picture'
+            :returnImgList.sync ='returnedList[index]'
           ></Uploadfiles>
         </el-col>
     </el-row>
       <el-form-item label="面料成分: " class="padding-right">
-            <el-select v-model="item.component_id"  placeholder="请输入您的面料成分" style="width:100%">
+          <el-select v-model="item.component_id"  placeholder="请输入您的面料成分" style="width:100%">
                <el-option 
                 v-for="(item1, index1) in component"
                 :key="'component'+index"
@@ -62,9 +62,7 @@ export default {
     props:{
       component:{
         type: Array,
-        default(){
-          return []
-        }
+        default(){ return [] }
       },
       doneFabric:{
         type: Array,
@@ -83,24 +81,13 @@ export default {
       },
       submitReceiptFabric:{
         type: Array,
-        default(){
-          return [{
-                name: '',
-                component_id: '',
-                grammage:'',
-                width:'',  
-                units: '', 
-                weight:'',
-                picture:[],
-                is_main: 1
-            }]
-        }
+        default(){ return [] }
       }
     },
     data() {
       return {
         labels: ['面料A'],
-        returnedList: [],
+        returnedList: [[]],
         startCode: 65,
         image :  require('../assets/fabric-pic.jpg'), 
         tempList: new Array(),
@@ -117,8 +104,17 @@ export default {
     watch:{
       doneFabric:{
         handler(curVal){
-          console.log(curVal)
-          this.$emit('update:submitReceiptFabric', curVal)
+          let arr = curVal.slice()
+          console.log('this.returnedList[0]>>> ', this.returnedList[0] )
+
+          arr.forEach( (item, index)=>{ 
+            console.log('this.returnedList>>> ', this.returnedList )
+            item.picture= this.returnedList[index]
+            console.log(item) 
+            //return item
+           })
+    
+          this.$emit( 'update:submitReceiptFabric', arr)
         },
         deep: true
       }
@@ -136,9 +132,11 @@ export default {
               is_main: 0
             }
         this.doneFabric.push(fabric)
+        this.returnedList.push( [] )
       },
       deleteFabric(index){
           this.doneFabric.splice(index,1)
+          this.returnedList.splice(index,1)
       }
     }
   }
