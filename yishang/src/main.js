@@ -38,6 +38,9 @@ Vue.prototype.addUploadUrl= (url, arr)=>{
     })
     return _arr
 }
+Vue.prototype.removeDomain= (arr)=>{
+  return  Array.from(arr , item => item.match(/uploads(\S*)/ig)[0] )
+}
 Vue.directive('focus', {
       inserted: function (el) {
           el.focus()

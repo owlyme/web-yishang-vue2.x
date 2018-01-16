@@ -2,7 +2,7 @@
 <div class="fabric">
   <h5>面料信息</h5>
 <el-form label-width="25%">
-  <div v-for="(item, index) in doneFabric" :key="index">
+  <div v-for="(item, index) in computedDoneFabric" :key="index">
     <el-form-item :label="labels[index]" class="bg">
       <el-input v-model="item.name" placeholder="请填写您的面料名称" class="padding-right"></el-input>
       <i  v-if="index > 0" class="el-icon-delete" @click.stop="deleteFabric(index)"></i>
@@ -16,17 +16,16 @@
             :getUploadUrl="getUploadUrl"
             :defaultImg  ="image"
             :getImgList  ="item.picture"
-            :returnImgList.sync ='returnedList[index]'
           ></Uploadfiles>
         </el-col>
     </el-row>
       <el-form-item label="面料成分: " class="padding-right">
           <el-select v-model="item.component_id"  placeholder="请输入您的面料成分" style="width:100%">
-               <el-option 
-                v-for="(item1, index1) in component"
-                :key="'component'+index"
-                :label="item1.component_name" :value="item1.component_id">
-                </el-option>
+             <el-option 
+              v-for="(item1, index1) in component"
+              :key="'component'+index"
+              :label="item1.component_name" :value="item1.component_id">
+              </el-option>
           </el-select>
       </el-form-item>
       <el-form-item label="面料克重:" class="padding-right">
@@ -64,9 +63,28 @@ export default {
         type: Array,
         default(){ return [] }
       },
-      doneFabric:{
+      doneFabric: {},
+      submitReceiptFabric:{
         type: Array,
-        default(){
+        default(){ return [] }
+      }
+    },
+    data() {
+      return {
+        labels: ['面料A'],
+        startCode: 65,
+        image :  require('../assets/fabric-pic.jpg'),
+      }
+    },
+    computed:{
+      ...mapGetters([
+        'getUploadUrl'
+      ]),
+      actionUrl(){
+        return this.getUploadUrl +'/picture/upload'
+      },
+      computedDoneFabric(){
+        if(!this.doneFabric || !Array.isArray(this.doneFabric) || !this.doneFabric.length){
           return [{
                 name: '',
                 component_id: '',
@@ -76,50 +94,27 @@ export default {
                 weight:'',
                 picture:[],
                 is_main: 1
-            }]          
+            }] 
+        }else{
+          return this.doneFabric
         }
-      },
-      submitReceiptFabric:{
-        type: Array,
-        default(){ return [] }
-      }
-    },
-    data() {
-      return {
-        labels: ['面料A'],
-        returnedList: [[]],
-        startCode: 65,
-        image :  require('../assets/fabric-pic.jpg'), 
-        tempList: new Array(),
-      }
-    },
-    computed:{
-      ...mapGetters([
-          'getUploadUrl'
-        ]),
-      actionUrl(){
-        return this.getUploadUrl +'/picture/upload'
       }
     },
     watch:{
       doneFabric:{
         handler(curVal){
-          let arr = curVal.slice()
-          console.log('this.returnedList[0]>>> ', this.returnedList[0] )
-
-          arr.forEach( (item, index)=>{ 
-            console.log('this.returnedList>>> ', this.returnedList )
-            item.picture= this.returnedList[index]
-            console.log(item) 
-            //return item
-           })
-    
-          this.$emit( 'update:submitReceiptFabric', arr)
+          this.$emit( 'update:submitReceiptFabric',  
+                      curVal.map( (item, index)=>{ 
+                        let obj = Object.assign({}, item)
+                        obj.picture =  this.removeDomain( obj.picture )  
+                        return obj
+                      })
+                    )
         },
         deep: true
       }
     },
-    methods: {       
+    methods: {
       addFabric(){
         let fabric = {
               name: '',
@@ -132,11 +127,11 @@ export default {
               is_main: 0
             }
         this.doneFabric.push(fabric)
-        this.returnedList.push( [] )
+        this.labels.push( "面料" + String.fromCharCode( this.labels.length +this.startCode ))
       },
       deleteFabric(index){
           this.doneFabric.splice(index,1)
-          this.returnedList.splice(index,1)
+          this.labels.pop()
       }
     }
   }

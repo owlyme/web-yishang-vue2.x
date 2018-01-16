@@ -29,10 +29,7 @@
 			></Quality>	
 			<!-- 面料 -->
 			<Fabric class="padding-left-right border-top padding-top-bottom" 
-				:receiptContent='receiptContent'
-				:submitReceipt="submitReceipt"
-
-		
+				:doneFabric = 'receiptContent.done.fabric'
 				:submitReceiptFabric.sync = 'submitReceipt.fabric'
 			></Fabric>
 			<!-- 其他要求1 -->
@@ -74,6 +71,7 @@ export default {
 	data () {
 		let self = this
 		return {
+			list: 77,
 			msg: '',
 			passBefore: false,
 		   	receiptContent:{
@@ -125,9 +123,18 @@ export default {
 	  ])      
 	},  
 	mounted(){
-		// setTimeout( ()=>{
-		// 	this.list =[this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg' ]
-		// },5000)
+		setTimeout( ()=>{
+			this.list =[{
+                name: '',
+                component_id: '',
+                grammage:'',
+                width:'',  
+                units: '', 
+                weight:'',
+                picture:[this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg',this.getUploadUrl + '/Uploads/Images/2018-01-15/1870ce5610ea93610c1f5d9dad90c071.jpg' ],
+                is_main: 1
+            }]
+		},5000)
 		this.getReceipt()
 	},
 	watch:{
