@@ -3,7 +3,7 @@
 		<div>
 			<el-form-item label="加工单价:" class="dates">
 			     <div class="el-input">
-			     	<input autocomplete="off" v-model="submitReceipt.fee"  placeholder=""  rows="2" min="1" validateevent="true" class="el-input__inner"
+			     	<input autocomplete="off" v-model="computedForm.fee"  placeholder=""  rows="2" min="1" validateevent="true" class="el-input__inner"
 			     	:keyup="onlyNumber()">
 			     </div>
 			     <div class="after"> 元/件 </div>
@@ -14,7 +14,7 @@
 			 <el-form-item label="抢单截止时间:" class="dates">
 			    <el-date-picker	 
 			    :picker-options="pickerOptions1"
-			    v-model="submitReceipt.expire_time"
+			    v-model="computedForm.expire_time"
 			    value-format="yyyy-MM-dd HH-mm-ss"
 			    type="datetime" style="width:100%"  align='center' placeholder="选择时间">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
@@ -22,7 +22,7 @@
 			 <el-form-item label="面辅料完备到场日期:" class="dates">
 			    <el-date-picker  
 			    :picker-options="pickerOptions2"	
-			    v-model="submitReceipt.arrival_date" 
+			    v-model="computedForm.arrival_date" 
 			     value-format="yyyy-MM-dd" 
 			     type="date"	 
 			     style="width:100%"  align='center' placeholder="选择日期">  </el-date-picker>
@@ -31,7 +31,7 @@
 			<el-form-item label="交货日期:" class="dates">
 			    <el-date-picker	
 			    :picker-options="pickerOptions3"
-			    v-model="submitReceipt.delivery_date"  value-format="yyyy-MM-dd" type="date"	style="width:100%" align='center' placeholder="选择日期">  </el-date-picker>
+			    v-model="computedForm.delivery_date"  value-format="yyyy-MM-dd" type="date"	style="width:100%" align='center' placeholder="选择日期">  </el-date-picker>
 			    <div class="el-icon-date after"></div>
 			 </el-form-item>
 		</div>
@@ -40,11 +40,10 @@
 <script>
 	export default{
 		name: "date",
-		// props: ['total'],
 		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
-				dateForm: {
+				form: {
 		          fee: '',
 		          total_fee:'',
 				  expire_time: '',
@@ -62,7 +61,6 @@
 				return total_fee || 0
 			},
 			pickerOptions1(){
-				console.log(11111)
 				return {	
 						disabledDate(time) {
 		           				return time.getTime() < Date.now();
@@ -70,7 +68,6 @@
 					    }
 			},
 			pickerOptions2(){
-				console.log(22222)
 				let date = this.submitReceipt.expire_time || 0
 				let expire_time = (new Date(this.submitReceipt.expire_time)).getTime()  || Date.now()
 				return {	
@@ -80,7 +77,6 @@
 					    }
 			},
 			pickerOptions3(){
-				console.log(33333)
 				let date = this.submitReceipt.arrival_date || 0
 				let arrival_date = (new Date( date )).getTime()|| Date.now()
 				return {	disabledDate(time) {
@@ -88,6 +84,28 @@
 					       	}
 					    }
 			},
+			computedForm(){
+				if( !Array.isArray(this.receiptContent.done) ){
+					this.form.fee = this.receiptContent.done.details.fee
+					this.form.total_fee= this.receiptContent.done.details.total_fee
+					this.form.expire_time= this.receiptContent.done.details.expire_time
+					this.form.arrival_date= this.receiptContent.done.details.arrival_date
+					this.form.delivery_date= this.receiptContent.done.details.delivery_date
+				}
+				return this.form
+			}
+		},
+		watch:{
+			form:{
+				handler(cur){
+					this.submitReceipt.fee = cur.fee
+					this.submitReceipt.total_fee= cur.total_fee
+					this.submitReceipt.expire_time= cur.expire_time
+					this.submitReceipt.arrival_date= cur.arrival_date
+					this.submitReceipt.delivery_date= cur.delivery_date
+				},
+				deep: true
+			}
 		},
 		methods:{
 			onlyNumber(){

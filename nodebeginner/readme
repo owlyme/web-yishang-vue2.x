@@ -1,0 +1,21 @@
+server.js
+
+Making some code a module means we need to export those parts of its functionality that we want to provide to scripts that require our module.
+
+modules  http
+			request => handle request
+			reponse => answer request
+		 url => parse url 
+		 querystring => query parma
+		 child_process   non-blocking operation: exec().
+
+
+books
+	Kingdom of Nouns
+	http://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html
+
+https://github.com/joyent/node/wiki
+http://www.nodecloud.org/
+
+
+<video  src=""  controls="" x5-playsinline="" playsinline="" webkit-playsinline="" poster="" preload="auto"></video>

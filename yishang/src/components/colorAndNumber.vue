@@ -1,7 +1,7 @@
 <template>
 	<div class="">
 		<h5>颜色数量</h5>
-		<div v-for="(item, index) in size" class="border-box" >
+		<div v-for="(item, index) in computedSized" class="border-box" >
 			<el-row :gutter="10"  class="bg">	 
 			  <el-col :span="6" class="text-center"> 款色(颜色): </el-col>
 			  <el-col :span="14">
@@ -15,6 +15,7 @@
 	 		  	</div>
 	 		  </el-col>
 			</el-row>
+			 <transition name="el-zoom-in-top">
 			<div v-if="flags[index].flag" >
 				<el-row :gutter="10"  class="number" >
 					  <el-col :span="6" class="textright">
@@ -113,6 +114,7 @@
 					  </el-col>				  
 				</el-row>
 			</div>
+			 </transition>
 		</div>		
 		<div class="middle-line">
 			<el-button type="primary" icon="el-icon-plus" @click="addKind" class="circle-btn"></el-button>
@@ -129,13 +131,24 @@ export default {
 		return {
 			displaySizeList: false,
 			flags: [{flag: true}],
-			
+			models:['S','M','XL','XXL','3XL','4XL'],
+			size:[{
+					color:null,
+					xs_demanding_account    : 0,
+					s_demanding_account     : 0,
+					m_demanding_account     : 0,
+					l_demanding_account     : 0,
+					xl_demanding_account    : 0,
+					xxl_demanding_account   : 0,
+					xxxl_demanding_account  : 0,
+					xxxxl_demanding_account : 0
+			}]
 		}
 	},
 	computed:{
 		demanding_account(){	
 			let total = 0;	
-			this.submitReceipt.size.forEach((item, index)=> {
+			this.size.forEach((item, index)=> {
 			console.log("this.submitReceipt.size.", item)
 					total += item.xs_demanding_account  
 							+ item.s_demanding_account   
@@ -146,18 +159,31 @@ export default {
 							+ item.xxxl_demanding_account
 							+ item.xxxxl_demanding_account
 				})
-			this.submitReceipt.demanding_account =total
+			this.submitReceipt.demanding_account = total
 			return total
 		},
-		size(){			
-			this.submitReceipt.size.forEach( (item, index)=>{
-				if(index+1 > this.flags.length ){
-					this.flags.push({flag: true})
-				}
-			})
-			return this.submitReceipt.size
+		// size(){			
+		// 	this.submitReceipt.size.forEach( (item, index)=>{
+		// 		if(index+1 > this.flags.length ){
+		// 			this.flags.push({flag: true})
+		// 		}
+		// 	})
+		// 	return this.submitReceipt.size
+		// },
+		computedSized(){
+			if( !Array.isArray( this.receiptContent.done )){
+				this.size = this.receiptContent.done.size
+			}
+			return this.size
 		}
-
+	},
+	watch:{
+		size:{
+			handler(cur){
+				this.submitReceipt.size = this.size
+			},
+			deep: true
+		}
 	},
 	methods:{
 		clickDisplay(index){
@@ -168,12 +194,11 @@ export default {
 			});
 		},
 		clickDelete(index){
-			this.submitReceipt.size.splice(index,1)
+			this.size.splice(index,1)
 			this.flags.splice(index,1)
 		},
 		addKind(){
-			let clothes= 
-				{
+			let clothes= {
 					color:null,
 					xs_demanding_account    : 0,
 					s_demanding_account     : 0,
@@ -185,7 +210,7 @@ export default {
 					xxxxl_demanding_account : 0
 				}
 			this.submitReceipt.size.push( clothes );
-			// this.flags.push({flag: true})	
+			this.flags.push({flag: true})	
 		},
 	}
 }

@@ -39,6 +39,7 @@ const getters = {
 	getCustomer(state){
 		return state.customer
 	}
+	
 }
 
 const actions = {

@@ -65,7 +65,6 @@
 	    </b-col>
     </div>
     <div class="weichatpay" v-else>
-
     	<b-row >
     		<b-col >
     			<div class="weichatpayqrcode center">
@@ -94,7 +93,7 @@ import qs from 'qs';
 
 
 export default{
-	props:['submitReceipt','receiptContent'],
+	props:['serverfee','orderId'],
 	data(){
 		return{
 			displayOrNot: 'thd',
@@ -246,9 +245,7 @@ export default{
 					logo: require('../assets/bank/shanghainongshang.jpg')
 				}
 			],
-			receiptPayFront:{
-
-			}
+			receiptPayFront:{}
 		}
 	},
 	computed:{
@@ -256,7 +253,7 @@ export default{
          'getUrl',
       	]),
 		servantFee(){
-			return submitReceipt.total_fee * receiptContents.deposit
+			return this.serverfee
 		}
 	},
 	created(){
@@ -282,8 +279,7 @@ export default{
 		},
 		getPayfront(){
 			let url = this.getUrl
-			let args= { order_id: this.receiptContent.order_id}
-			// console.log(this.receiptContent.order_id)
+			let args= { order_id: this.orderId}
 	        this.axios.post(url+'/Receipt/payfront',qs.stringify(args)).then((res)=>{	  
 	        	console.log(res)
 				if(res.data.status == 200 ){
@@ -318,15 +314,10 @@ export default{
 		       	})		       	
 			}else if(payType == 'alipay'){
 				this.alipay(args)
-				
-				// window.open(url+'/Receipt/payBeforeSubmit?pay_type='+args.pay_type
-				// 	 										 +'&service_fee='+args.service_fee
-				// 											 +'&order_id='+args.order_id)
 			}	       	
 		},
 		afterWxpay(){
-			let self = this
-			let url = self.getUrl
+			let url = this.getUrl
 			let args= { order_id: this.receiptPayFront.order_id}			
 				self.timer = setInterval(()=>{
 					this.axios.post(url+'/Receipt/IswxPay',qs.stringify(args))
@@ -340,7 +331,7 @@ export default{
 						}else {
 							console.log('Waiting wxpay...')
 						}
-			       	})			   
+			       	})
 			}, 2000)
 		},
 		alipay(args){
@@ -412,15 +403,15 @@ export default{
 	.banklogo{
 		padding: 10px;
 		padding-right: 30px;
-		border: 2px solid rgba(70, 70, 70, 0.2);
+		border: 3px solid rgba(70, 70, 70, 0.2);
 	}
 	.banklogo:hover{
 		padding: 10px;
 		padding-right: 30px;
-		border: 2px solid rgb(148, 46, 234);
+		border: 3px solid rgb(148, 46, 234);
 	}
 	.checked .banklogo{
-		border: 2px solid rgb(148, 46, 234);	
+		border: 3px solid rgb(148, 46, 234);	
 	}
   .size1{ 
   	width: 25%;
@@ -445,7 +436,7 @@ export default{
 		left: initial;
     	top: initial;
     	right: 0;
-    	bottom: 0;
+    	bottom: -2px;
 		height: 16px;
 	    width: 16px;
 	    border-radius: 0;
@@ -458,8 +449,7 @@ export default{
  	.size2 .banklogo{
  		display: inline-block;
  		padding: 0;
- 	}
- 
+ 	} 
   .inline{
   	display: inline-block;
   	padding: 2px;

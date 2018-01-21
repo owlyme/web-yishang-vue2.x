@@ -1,4 +1,3 @@
-//http://blog.csdn.net/qq673318522/article/details/55506650
 
 
 router.beforeEach((to, from, next) => {

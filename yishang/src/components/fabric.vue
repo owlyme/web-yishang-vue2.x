@@ -39,8 +39,8 @@
       <el-form-item label="门幅宽度:" class="padding-right">
         <el-input v-model="item.width"  placeholder="请输入克重"  style="width: 70%;">  </el-input>
         <el-radio-group v-model="item.units" style="padding-left:18px">
-            <el-radio  label="厘米">厘米</el-radio>
-            <el-radio  label="英寸">英寸</el-radio>
+            <el-radio  label="厘米" value="厘米">厘米</el-radio>
+            <el-radio  label="英寸" value="英寸">英寸</el-radio>
         </el-radio-group>
       </el-form-item>
     </div>
@@ -71,6 +71,16 @@ export default {
     },
     data() {
       return {
+        list: [{
+                name: '',
+                component_id: '',
+                grammage:'',
+                width:'',  
+                units: "厘米", 
+                weight:'',
+                picture:[],
+                is_main: 1
+            }],
         labels: ['面料A'],
         startCode: 65,
         image :  require('../assets/fabric-pic.jpg'),
@@ -84,29 +94,19 @@ export default {
         return this.getUploadUrl +'/picture/upload'
       },
       computedDoneFabric(){
-        if(!this.doneFabric || !Array.isArray(this.doneFabric) || !this.doneFabric.length){
-          return [{
-                name: '',
-                component_id: '',
-                grammage:'',
-                width:'',  
-                units: '', 
-                weight:'',
-                picture:[],
-                is_main: 1
-            }] 
-        }else{
-          return this.doneFabric
+        if(this.doneFabric && Array.isArray(this.doneFabric) && this.doneFabric.length){
+          this.list = this.doneFabric
         }
+        return this.list 
       }
     },
     watch:{
-      doneFabric:{
+      list:{
         handler(curVal){
-          this.$emit( 'update:submitReceiptFabric',  
-                      curVal.map( (item, index)=>{ 
-                        let obj = Object.assign({}, item)
-                        obj.picture =  this.removeDomain( obj.picture )  
+          this.$emit( 'update:submitReceiptFabric',  curVal.map( (item, index)=>{ 
+                        // let obj = Object.assign({}, item)
+                        let obj = JSON.parse( JSON.stringify(item) )
+                        obj.picture =  this.removeDomain( obj.picture )
                         return obj
                       })
                     )
@@ -121,16 +121,16 @@ export default {
               component: '',
               grammage:'',
               width:'',
-              units: '', 
+              units: "厘米", 
               weight:'',
               picture:[],
               is_main: 0
             }
-        this.doneFabric.push(fabric)
+        this.list.push(fabric)
         this.labels.push( "面料" + String.fromCharCode( this.labels.length +this.startCode ))
       },
       deleteFabric(index){
-          this.doneFabric.splice(index,1)
+          this.list.splice(index,1)
           this.labels.pop()
       }
     }

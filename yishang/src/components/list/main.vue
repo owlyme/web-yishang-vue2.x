@@ -215,8 +215,9 @@ export default{
               this.msg = res.data.msg
               this.popup = true
             }
-        })
-    }
+      })
+    },
+   
 	}
 }
 </script>

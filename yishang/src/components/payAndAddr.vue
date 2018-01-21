@@ -2,26 +2,29 @@
 	<div class="pay" >
 		<el-form  ref="selectAddress" label-width="30%" >
 			<el-form-item label="是否支付定金:" v-if='submitReceipt.type == 1'>
-			    <el-radio-group v-model="submitReceipt.is_deposited" style="padding-top:8px">
-			      <el-radio  label="1">是</el-radio>
-			      <el-radio  label="0">否</el-radio>
+			    <el-radio-group v-model="computedDeposited" style="padding-top:8px">
+			    	<el-radio label="1">是</el-radio>
+					<el-radio label="0">否</el-radio>
 			    </el-radio-group>
 			</el-form-item>
-			<el-form-item :label="percent" v-else  >			
-			    	<span class="color size">{{ depositFee.toFixed(2) }}</span> 元	
+			<el-form-item :label="percent" v-else  >
+			    	<span class="color size">{{ depositFee }}</span> 元	
 			</el-form-item>
 			<el-form-item label="确认收货地址:" >
-			    <el-radio-group v-model="selectAddress">
-			    	<div v-for="(item, index) in addressList">
+			    <el-radio-group v-model="computedId">
+			    	<transition-group tag='div' name="el-fade-in">
+			    	<div v-for="(item, index) in computedList" :key="index">			    		
 			    		<el-radio :label="item.id" :key="'address'+ index" > 
-			    			{{item.province + item.city  + item.county + item.street  + ' (' +item.receiver + ') ' +item.phone}} </el-radio>
-			    	</div>		     
+			    			{{item.province + item.city  + item.county + item.street  + ' (' +item.receiver + ') ' +item.phone}} </el-radio>			    		
+			    	</div>
+			    	</transition-group>
 			    </el-radio-group>
 			</el-form-item>
 		</el-form>
 		<h6 class="padding-left-right" >
 			<el-button @click.native="emptyAddressList = !emptyAddressList" >添加新地址</el-button>
 		</h6>
+		<transition name="el-zoom-in-top">
 		<el-form 
 		v-if="emptyAddressList"
 		:model="ruleForm" 
@@ -38,8 +41,7 @@
 				  </el-form-item>
 				  <el-form-item label="所在地区:" prop="region">
 				  	<!-- cheng shi di dian  -->
-				  <China v-on:setCity="getCity"></China>
-
+				  	<China v-on:setCity="getCity"></China>
 				  </el-form-item>
 				  <el-form-item label="详细地址:" prop="street">
 				    <el-input type="textarea" v-model="ruleForm.street" placeholder="请填写您的详细地址"></el-input>
@@ -50,6 +52,7 @@
 			    <el-button type="primary" @click="submitForm('ruleForm')">确认添加</el-button>
 			</el-form-item>
 		</el-form>
+		</transition>
 	</div>
 </template>
 <script>
@@ -62,9 +65,7 @@ import { mapGetters } from 'vuex'
 		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
-				emptyAddressList:true,
-				selectAddress: null,
-				address:[],
+				emptyAddressList:false,
 				ruleForm: {	
 				  address: '',
 		          name: '',
@@ -89,49 +90,74 @@ import { mapGetters } from 'vuex'
 		            { required: true, message: '请填写活动形式', trigger: 'blur' }
 		          ]
 		        },
+		        is_deposited: null,
+		        addressList:[],
+		        address_id: null
 			}
 		},
 		watch:{
-			selectAddress:{
+			address_id:{
 				handler(curVal,oldVal){	
-					console.log(curVal)
-					this.address.forEach((item, index)=>{
-
+					this.computedList.forEach((item, index)=>{
 						if(curVal == item.id){
 							this.$set(this.submitReceipt,'phone',item.phone)
-					this.$set(this.submitReceipt,'province',item.province)
-					this.$set(this.submitReceipt,'city',item.city)
-					this.$set(this.submitReceipt,'county',item.county)
-					this.$set(this.submitReceipt,'street',item.street)
-					this.$set(this.submitReceipt,'receiver',item.receiver)
+							this.$set(this.submitReceipt,'province',item.province)
+							this.$set(this.submitReceipt,'city',item.city)
+							this.$set(this.submitReceipt,'county',item.county)
+							this.$set(this.submitReceipt,'street',item.street)
+							this.$set(this.submitReceipt,'receiver',item.receiver)
 						}
 					})
-		　　　　},
-		　　　　deep:true
-			}
+				},
+				deep:true
+			},
+			is_deposited:{
+				handler(curVal,oldVal){	
+					this.submitReceipt.is_deposited= curVal
+				},
+				deep:true
+			},
+
 		},		
 		computed:{
 	      ...mapGetters([
 	         'getUrl'
 	      ]),
 	      depositFee(){
-	      	return ( this.receiptContent.deposit -0 ) * (this.submitReceipt.total_fee || 0)
+	      	return (( this.receiptContent.deposit -0 ) * (this.submitReceipt.total_fee || 0)).toFixed(2)
 	      },
 	      percent(){
 	      	return '支付服务费用(订单的金额的'+ ((this.receiptContent.deposit-0) * 100) + '%):'
 	      },
-	      addressList(){
-	      	if(this.receiptContent.address &&  !this.address.length){
-	      		if(this.receiptContent.address.length) this.emptyAddressList = false
-	      		console.log('(this.receiptContent.address is true', this.receiptContent.address)
-	      		 this.address =  this.address.concat(this.receiptContent.address)
-	      	}
-	      	if( !this.selectAddress ) {
-	      		this.selectAddress = this.submitReceipt.address_id	      		
-	      	}
-	      	return  this.address
+	      computedList(){
+	      	if(  Array.isArray( this.receiptContent.address ) && !this.addressList.length ){
+	      		this.emptyAddressList = !this.emptyAddressList
+		        this.addressList = this.receiptContent.address
+		    }
+		    return this.addressList
 	      },
-
+	      computedId:{
+			    get: function () {
+			       if( !Array.isArray( this.receiptContent.done ) && !this.address_id ){
+				       this.address_id = this.receiptContent.done.address_id
+				    }
+				    return this.address_id
+			    },
+			    set: function (v) {
+			       this.address_id = v
+			    }
+	      },
+	      computedDeposited:{
+	      		get: function () {
+			        if( !Array.isArray( this.receiptContent.done ) && !this.is_deposited ){
+			        	this.is_deposited = this.receiptContent.done.details.is_deposited
+				    }
+				    return this.is_deposited
+			    },
+			    set: function (v) {
+			       this.is_deposited = v
+			    }
+	      }
 		},
 		methods:{
 			submitForm(formName) {				
@@ -141,9 +167,9 @@ import { mapGetters } from 'vuex'
 		          } else {
 		            return false;
 		          }
-		        });		           
+		        });
 		     },
-		     addAddress(formName){
+		    addAddress(formName){
 		     	let url = this.getUrl+ '/Address/addAddress';
 		        let args = {
 		        		receiver: this.ruleForm.name,
@@ -154,13 +180,11 @@ import { mapGetters } from 'vuex'
 						street: this.ruleForm.street,
 						id: Date.now()
 			        }
-			        this.address.push(args)
 			    this.axios.post(url, qs.stringify(args)).then((res)=>{
 			    	// console.log(res)
 			        if(res.data.status == 200){
 			        	//添加成功
-			        	// console.log(args)
-			        	this.address.push(args)
+			        	this.addressList.push(args)
 			        	this.resetForm(formName)
 			        	this.openMessage( res.data.msg )
 			        }else{

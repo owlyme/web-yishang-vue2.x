@@ -1,86 +1,48 @@
 <template>
 	<div>
 		<h5>样衣照片</h5>
-		<div class="uploadimg ">
+		<div class="uploadimg "  >
 			<el-row :gutter="10"  class="space " 
-				v-for="(item, index) in uploadSingleImg" :key="'uploadSingleImg'+ index"	>		 
+				v-for="(item, index) in computedSingleImg" :key="'uploadSingleImg'+ index"	>		 
 			  <el-col :span="6" class="text-right text-style-sm"> 	{{ item.name }}	  </el-col>	
 			  <el-col :span="14" >
-			  		<div  class="floatleft">
-			  			<img :src="item.showSrc" class="show-demo1">
-			  		</div>			  		
-			  		<el-upload	
-			  			class="floatleft"			  					  			
-			  			ref="imgSingle"
-				        :action="actionUrl"				        
-				        list-type="picture-card"
-				        :on-preview="(file) =>{ return  handlePictureCardPreviewSingle(file, index)}"
-				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessSingle(response, index)}"    
-				        :on-remove="(file, fileList) =>{ return  handleRemoveSingle(file, index)}">
-
-				        <span  slot="trigger" class="remind" >点击上传</span>
-				       <!--  <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
-				      </el-upload>
-				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
-				        <img width="100%" :src="item.dialogImageUrl" alt="">
-				      </el-dialog>
+			  		<Uploadfiles
+            			:oneImage= 'true'
+			            :getUploadUrl="getUploadUrl"
+			            :defaultImg  ="item.image"
+			            :getImgList  ="item.picture"
+			        ></Uploadfiles>
 			  </el-col>	    			  
 			</el-row>			
 		</div>
 		<div class="uploadimgs">
-			 <el-row :gutter="10"  class="space" >
+			<el-row :gutter="10"  class="space" >
 			  <el-col :span="6" class="text-right text-style-sm">局部细节图</el-col>	
 		      <el-col :span="14">
-				<div  class="floatleft" v-for='(item1, index1) in showSrcPart'>
-	              <img :src="item1" class="show-demo1">
-	            </div>
-				 <!-- :auto-upload="false" -->
-		      <el-upload
-		     		class="floatleft"	  			
-		  			ref="banxing"
-			        :action="actionUrl"
-			       
-			        list-type="picture-card"
-			        :on-preview="(file) =>{ return  handlePictureCardPreviewPart(file)}"
-			        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccessPart(response, this.submitReceipt.part_picture)}"
-			        :on-remove="(file, fileList) =>{ return  handleRemovePart(fileList, imgUrlsPart, this.submitReceipt.part_picture)}">	
-			        <span  slot="trigger" class="remind" >点击上传</span>
-			       <!--  <el-button class="click-submit"	 @click="submitImg">点击上传</el-button> -->
-			      </el-upload>
-			      <el-dialog :visible.sync="dialogVisiblePart" size="tiny">
-			        <img width="100%" :src="dialogImageUrlPart" alt="">
-			      </el-dialog>
+				<Uploadfiles
+		            :getUploadUrl="getUploadUrl"
+		            :defaultImg  ="image1"
+		            :defaultImg2 ="image2"
+		            :getImgList  ="computedPartPicture"
+			    ></Uploadfiles>
 		      </el-col>             
 		    </el-row>
 
 
-			<el-row :gutter="10"  class="space" v-for="(item, index) in otherList" :key="'otherList'+ index">		 
-			  <el-col :span="6" class="text-right text-style-sm">			   
-			  	
+			<el-row :gutter="10"  class="space" v-for="(item, index) in computedOtherPicture" :key="'otherList'+ index">		 
+			  <el-col :span="6" class="text-right text-style-sm"> 
 				<input 
-			  	v-model="submitReceipt.other_picture[index].title" 
+			  	v-model="item.title" 
 			  	type="text" name="" class="input-name" placeholder="请输入标题"
 			  	:class="{'el-input__inner': !item.title}"			
 			  	>
 			  </el-col>	
 			  <el-col :span="14">			  	
-			  		<div  class="floatleft" v-if="item.showSrc" v-for='(item1, index1) in item.showSrc'>
-					  	<img :src="item1" class="show-demo1">
-					</div>
-			  		<el-upload
-						class="floatleft"	
-			  			ref="supplements"
-				        :action="actionUrl"
-				        list-type="picture-card"
-				        :on-preview="(file) =>{ return  handlePictureCardPreview(file, index)}"
-				        :on-success="(response, file, fileList) =>{ return  uploadImgeSuccess(response, index)}"		        
-				        :on-remove="(file, fileList) =>{ return  handleRemove(fileList, index)}">	
-				        <span  slot="trigger" class="remind" >点击上传</span>
-				        <!-- <el-button class="click-submit"	 @click="submitImg(index)">点击上传</el-button> -->
-				      </el-upload>
-				      <el-dialog :visible.sync="item.dialogVisible" size="tiny">
-				        <img width="100%" :src="item.dialogImageUrl" alt="">
-				      </el-dialog>
+			  		<Uploadfiles
+		            :getUploadUrl="getUploadUrl"
+		            
+		            :getImgList  ="item.sub_picture"
+			    ></Uploadfiles>
 			  </el-col>
 			  <i class="el-icon-delete" @click.stop="clickDelete(index)"></i>			  
 			</el-row> 
@@ -92,22 +54,40 @@
 
 </template>
 <script>
-
+import Uploadfiles from "@/components/uploadfiles"
 import { mapGetters } from 'vuex'
 	export	default{
 		name: 'imageuplaod',
 		props:['receiptContent','submitReceipt'],
+		components: { Uploadfiles},
 		data(){
 			return{
-				ref: 'upload',
-				imageUrl: '',
-				dialogVisiblePart: false,
-				dialogImageUrlPart: false,
-				tempList : new Array(),
-				tempList1 : new Array(),
-				imgUrlsPart: new Array(),
-				tempListPart: new Array(),
-				tempListOther: new Array()
+				list : [
+						{
+							name:'正面全览照',
+							picture:[],
+							image: require('../assets/front-pic.jpg')
+						},
+						{
+							name:'背面全览照',
+							picture:[],
+							image: require('../assets/back-pic.jpg')
+						},
+						{
+							name:'左侧面全览照',
+							picture:[],
+							image: require('../assets/left-pic.jpg')
+						},
+						{
+							name:'右侧面全览照',
+							picture:[],
+							image: require('../assets/right-pic.jpg')
+						}
+					],
+				image1: require('../assets/part1-pic.jpg'), 
+				image2: require('../assets/part2-pic.jpg'), 
+				partPicture: [],
+				otherPicture: []
 			}
 		},
 		computed:{
@@ -117,187 +97,75 @@ import { mapGetters } from 'vuex'
 			actionUrl(){
 				return this.getUploadUrl +'/picture/upload'
 			},
-			uploadSingleImg(){
-				let self = this
-				if( true){
-					this.tempList1 = [
-						{
-							name:'正面全览照',
-							showSrc: null, 
-							dialogVisible: false,
-							dialogImageUrl: false,
-							loaded: false,
-							getImgUrl(val){
-								self.$set(self.submitReceipt,'front_picture',val)
-							}
-						},
-						{
-							name:'背面全览照',
-							showSrc: null, 
-							dialogVisible: false,
-							dialogImageUrl: false,
-							loaded: false,						
-							getImgUrl(val){
-								self.$set(self.submitReceipt,'back_picture',val)
-							}
-						},
-						{
-							name:'左侧面全览照',
-							showSrc: null, 
-							dialogVisible: false,
-							dialogImageUrl: false,
-							loaded: false,					
-							getImgUrl(val){
-								self.$set(self.submitReceipt,'left_picture',val)
-							}
-						},
-						{
-							name:'右侧面全览照',
-							showSrc: null, 
-							dialogVisible: false,
-							dialogImageUrl: false,
-							loaded: false,					
-							getImgUrl(val){
-								self.$set(self.submitReceipt,'right_picture',val)
-							}
-						}
-					]
-					this.tempList1[0].showSrc= self.submitReceipt.front_picture ? (self.getUploadUrl + self.submitReceipt.front_picture) : require('../assets/front-pic.jpg')
-					
-				
-					this.tempList1[1].showSrc= self.submitReceipt.back_picture ? (self.getUploadUrl + self.submitReceipt.back_picture) : require('../assets/back-pic.jpg')
-					
-				
-					this.tempList1[2].showSrc= self.submitReceipt.left_picture ? (self.getUploadUrl + self.submitReceipt.left_picture) : require('../assets/left-pic.jpg')
-					
-				
-					this.tempList1[3].showSrc= self.submitReceipt.right_picture ? (self.getUploadUrl + self.submitReceipt.right_picture) : require('../assets/right-pic.jpg')
-					
+			computedSingleImg(){
+				if(this.receiptContent.done.details){
+					// console.log(this.receiptContent.done.details)
+					this.list[0].picture.pop() 
+					this.list[1].picture.pop()
+					this.list[2].picture.pop()
+					this.list[3].picture.pop()
+					this.list[0].picture.push( this.receiptContent.done.details.front_picture)
+					this.list[1].picture.push( this.receiptContent.done.details.back_picture)
+					this.list[2].picture.push( this.receiptContent.done.details.left_picture)
+					this.list[3].picture.push( this.receiptContent.done.details.right_picture)
+				}	
+				return this.list
+			},
+			computedPartPicture(){
+				if(this.receiptContent.done.details){
+					this.partPicture = this.receiptContent.done.details.part_picture
 				}				
-				console.log(this.tempList1)
-				return this.tempList1
+				return this.partPicture
 			},
-			showSrcPart(){
-				let picture = this.submitReceipt.part_picture
-				if( Array.isArray( picture ) && !this.tempListPart[0] ){
-					this.imgUrlsPart = picture.slice()
-					this.tempListPart = picture.length ? this.addUploadUrl(this.getUploadUrl, picture.slice()) :[require('../assets/part1-pic.jpg'), require('../assets/part2-pic.jpg')]
-					console.log('part_picture********', picture)
-				}			
-				return this.tempListPart
-			},
-			otherList(){
-				let _aboutList = this.tempListOther
-				if( Array.isArray( this.submitReceipt.other_picture )){
-				this.submitReceipt.other_picture.forEach( (item, index)=>{
-					let list = {
-								id: 0,
-								imgUrls:[],
-								showSrc: null,
-								title:"",
-								dialogVisible: false,
-								dialogImageUrl: false,
-								loaded: false,
-								getImgUrl(val, clear){
-										if(clear){	
-											item.sub_picture.splice(0, item.sub_picture.length)
-											val.forEach( (item1, index1)=>{
-												item.sub_picture.push( item1 )
-											})
-										}else{
-											item.sub_picture.push(val)
-										}
-									}
-							}
-					if( !_aboutList[index] ){
-						 _aboutList.push(list)
-						if( !item.sub_picture ){ item.sub_picture= [] }
-						if(!_aboutList[index].loaded){
-							_aboutList[index].imgUrls = item.sub_picture.slice(0, item.sub_picture.length)
-							_aboutList[index].showSrc = item.sub_picture.length ? this.addUploadUrl(this.getUploadUrl, item.sub_picture.slice() ) : []	
-
-						}	
-						_aboutList[index].loaded = true			
-					}
-				})
-				}
-				return _aboutList
+			computedOtherPicture(){
+				if( this.receiptContent.done.details 
+					&& Array.isArray(this.receiptContent.done.details.part)
+					&& this.receiptContent.done.details.part.length ){
+		          this.otherPicture = this.receiptContent.done.details.part
+		        }			
+				return this.otherPicture
 			}
-
+		},
+	    watch:{
+	    	list:{
+	    		handler(curVal){	    			   
+	    			let obj = JSON.parse( JSON.stringify(curVal) )
+	    			this.submitReceipt.front_picture = this.removeDomain( obj[0].picture )[0]
+					this.submitReceipt.back_picture = this.removeDomain( obj[1].picture )[0]
+					this.submitReceipt.left_picture = this.removeDomain( obj[2].picture )[0]
+					this.submitReceipt.right_picture = this.removeDomain( obj[3].picture )[0]
+	    		},
+	    		deep: true
+	    	},
+	    	partPicture:{
+	    		handler(curVal){
+	    			let obj = JSON.parse( JSON.stringify(curVal) )
+                    this.submitReceipt.part_picture  =  this.removeDomain( obj )
+	    		},
+	    		deep: true
+	    	},
+	    	otherPicture:{
+	    		handler(curVal){	
+	    			let obj = JSON.parse( JSON.stringify(curVal) )
+                    this.submitReceipt.other_picture = curVal.map( (item, index)=>{ 
+                        let obj = JSON.parse( JSON.stringify(item) )
+                        obj.sub_picture =  this.removeDomain( obj.sub_picture )
+                        return obj
+                    })
+	    		},
+	    		deep: true
+	    	},
 	    },
 		methods:{
-			handleRemoveSingle(file,index) {
-		    	this.uploadSingleImg[index].getImgUrl('')
-		    },		      
-		    uploadImgeSuccessSingle(response, index){
-		        if (response.status == 200 ) {
-		        	 this.uploadSingleImg[index].getImgUrl(response.content.url)
-		        	}else{
-		        	}
-		    },
-		    handlePictureCardPreviewSingle(file,index) {
-		        this.uploadSingleImg[index].dialogImageUrl = file.url;
-		        this.uploadSingleImg[index].dialogVisible = true;
-		    },
-	        submitImg(index) {
-	       	 	this.$refs.imgSingle[index].submit();
-	     	},
-
-	     	handleRemovePart(fileList, imgUrls, picture) {
-		        let imgs = [];
-		        imgs = imgs.concat( imgUrls )
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	}) 
-		    	picture.splice(0, picture.length)
-		    	imgs.forEach((item ,index) =>{
-		    		picture.push(item)
-		    	})
-		    },
-		    uploadImgeSuccessPart(response, picture){
-		        if (response.status == 200 ) {
-		        	 picture.push(response.content.url)
-		        	}else{
-		        		//response.msg
-		        	}
-		    },
-		    handlePictureCardPreviewPart(file) {
-		        this.dialogImageUrl = file.url;
-		        this.dialogVisible = true;
-		    },
-
-		    handleRemove(fileList,index) {
-		        let imgs = [];
-		        imgs = imgs.concat( this.otherList[index].imgUrls )		      
-		    	fileList.forEach((item ,index) =>{
-		    		imgs.push(item.response.content.url)
-		    	})
-		    	this.otherList[index].getImgUrl( imgs.slice(0, imgs.length), true )
-		    },
-		    uploadImgeSuccess(response,index){
-		        if (response.status == 200 ) {
-		        	this.otherList[index].getImgUrl( response.content.url )
-		        	}else{
-		        		//response.msg
-		        	}
-		    },
-		    handlePictureCardPreview(file,index) {
-		        this.otherList[index].dialogImageUrl = file.url;
-		        this.otherList[index].dialogVisible = true;
-		    },	    
-	     	submitImgArr(index) {
-	       	 	this.$refs.imgArr[index].submit();
-	     	},
 	     	addImgArr(){
 				let otherPics = {
 						title:'',
 						sub_picture:[]
 					}
-				this.submitReceipt.other_picture.push(otherPics)
+				this.otherPicture.push(otherPics)
 	     	},
 		    clickDelete(index){
-		      	this.submitReceipt.other_picture.splice(index,1)
-		      	this.tempListOther.splice(index,1)
+		      	this.otherPicture.splice(index,1)
 		    }
 		}
 	}
