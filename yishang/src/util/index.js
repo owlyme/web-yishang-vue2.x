@@ -1,7 +1,16 @@
 import Api from './api.js'
+import axios from './http.js'
+import qs from 'qs'
 
+let post = ( reqstr, args, fn) => {
+	axios.post( reqstr, qs.stringify(args) ).then( (res) =>{
+		console.log(res)
+		fn(res)
+	})  
+}
+console.log('util')
 export default{
-	install(Vue, options){
+	install(Vue, options){		
 		Vue.prototype.setCookie = function (userInfo) {
 	      let cookieStr = 'mlogin0001=' + userInfo;
 	      let date = new Date;
@@ -14,7 +23,6 @@ export default{
 	    Vue.prototype.removeCookie = function () {
 	    	this.$cookies.remove('yiyiphone')
 	    };
-		Vue.prototype.Api = Api;
 		Vue.prototype.openMessage = (arg) =>{
 		    	let html='';
 		    	if( !arg.bool){
@@ -27,6 +35,16 @@ export default{
 		          showClose: false
 		        });
 		    };
+			Vue.prototype.addUploadUrl= (url, arr)=>{
+		    let _arr = [];
+		    arr.forEach( (item, index)=>{
+		      _arr.push(url+ item)
+		    })
+		    return _arr
+		};
+		Vue.prototype.removeDomain= (arr)=>{
+		  return  Array.from(arr , item => item.match(/uploads(\S*)/ig)[0] )
+		};
 		Vue.directive('focus', {
 		  // 当绑定元素插入到 DOM 中。        
 		  inserted: function (el) {
@@ -39,5 +57,64 @@ export default{
 		      //el.focus()
 		  //}
 		});
+		Vue.prototype.Api = Api;
+		Vue.prototype.LoginCheck = function(args){
+					return axios.post( Api.loginCheck,  qs.stringify(args))
+				};
+		Vue.prototype.LogOut = function(args){
+					return axios.post( Api.logOut,  qs.stringify(args))
+				};
+		Vue.prototype.Qrcode = function(args){
+					return axios.post( Api.qrcode,  qs.stringify(args))
+				};
+		Vue.prototype.QrcodeLoop = function(args){
+					return axios.post( Api.qrcodeLoop,  qs.stringify(args))
+				};
+		Vue.prototype.QrcodeLogin = function(args){
+					return axios.post( Api.qrcodeLogin,  qs.stringify(args))
+				};
+		Vue.prototype.Index = function(args){
+					return axios.post( Api.index,  qs.stringify(args))
+				};
+		Vue.prototype.Banner = function(args){
+					return axios.post( Api.getBanner,  qs.stringify(args))
+				};
+		Vue.prototype.BeforeReceipt = function(args){
+					return axios.post( Api.beforeReceipt,  qs.stringify(args))
+				};
+		Vue.prototype.ReceiptIndex = function(args){
+					return axios.post( Api.receiptIndex,  qs.stringify(args))
+				};
+		Vue.prototype.GetRegion = function(args){
+					return axios.post( Api.getRegion,  qs.stringify(args))
+				};
+		Vue.prototype.AddAddress = function(args){
+					return axios.post( Api.addAddress,  qs.stringify(args))
+				};
+		Vue.prototype.SubmitReceipt = function(args){
+					return axios.post( Api.submitReceipt,  qs.stringify(args))
+				};
+		Vue.prototype.Payfront = function(args){
+					return axios.post( Api.payfront,  qs.stringify(args))
+				};
+		Vue.prototype.PayBeforeSubmit = function(args){
+					return axios.post( Api.payBeforeSubmit,  qs.stringify(args))
+				};
+		Vue.prototype.WxPay = function(args){
+					return axios.post( Api.wxPay,  qs.stringify(args))
+				};
+		Vue.prototype.SubmitDraft = function(args){
+					return axios.post( Api.submitDraft,  qs.stringify(args))
+				};
+		Vue.prototype.OrderIndex = function(args){
+					return axios.post( Api.orderIndex,  qs.stringify(args))
+				};
+		Vue.prototype.Schedule = function(args){
+					return axios.post( Api.schedule,  qs.stringify(args))
+				};
+		Vue.prototype.Details = function(args){
+					return axios.post( Api.details,  qs.stringify(args))
+				};
+
 	}
 }

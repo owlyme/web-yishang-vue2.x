@@ -87,9 +87,7 @@
 import Carousel from  "../carousel"
 import ListElemnt from "../listEl"
 import Popup from '../pop-up'
-import qs from 'qs';
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
+
 export default{
 	name: 'main',
 	components: {Carousel,ListElemnt,Popup },
@@ -147,11 +145,6 @@ export default{
 	watch:{
 		currentPage: "getMoreList"
 	},
-  computed:{
-      ...mapGetters([
-         'getUrl'
-      ]),
-  },
   mounted(){  
     this.getBanner()
     this.getMainlist({page: this.currentPage,status: 'x'})
@@ -166,27 +159,22 @@ export default{
   },
 	methods:{
     getBanner(){
-      let url= this.getUrl+'/Index/getBanner'
-      this.axios.post(url).then((res)=>{
+      this.Banner().then( (res)=>{
           if(res.data.status == 200){
               this.banner = res.data.content
-          }else{
-
-          }          
+              console.log(this.banner)
+          }        
       }) 
     },
-    getMainlist(args){  
-      let url= this.getUrl+'/Index/index'
-      this.axios.post(url, qs.stringify(args)).then((res)=>{
+    getMainlist(args){
+      this.Index(args).then((res)=>{
         console.log(res)
           if(res.data.status == 200){
             this.perPage =  res.data.content.pageSize;
             this.totalRows = res.data.content.totalRows-0;
             this.savedList =  res.data.content.list;
             this.goodsList = this.savedList.slice(0, this.savedList.length)
-          }else{
-
-          }          
+          }        
       })  
     },
 		getMoreList (curVal) {
@@ -207,8 +195,7 @@ export default{
       this.getMainlist({status: keyword})
     },
     beforeReceipt(path){
-        let url = this.getUrl
-        this.axios.post(url+'/Receipt/beforeReceipt').then((res)=>{
+      this.BeforeReceipt().then((res)=>{
             if(res.data.status ==200){
               this.$router.push(path)
             }else {
@@ -216,8 +203,7 @@ export default{
               this.popup = true
             }
       })
-    },
-   
+    }   
 	}
 }
 </script>
