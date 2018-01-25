@@ -22,37 +22,10 @@ Vue.use(Utils)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'element-ui/lib/theme-chalk/index.css'
-
 require('./assets/css/myindex.css')
-// Vue.prototype.openMessage = (arg) =>{
-//           let html='';
-//           if( !arg.bool){
-//             html = '<span style="color: #C44DDC">'+arg.str+'</span>';
-//           }else{
-//             html = '<i style="color: red">'+arg.str+'</i>';
-//           } 
-//             arg.ele.$alert( html, {
-//               dangerouslyUseHTMLString: true,
-//               showClose: false
-//             });
-//         };
-// Vue.prototype.addUploadUrl= (url, arr)=>{
-//     let _arr = [];
-//     arr.forEach( (item, index)=>{
-//       _arr.push(url+ item)
-//     })
-//     return _arr
-// }
-// Vue.prototype.removeDomain= (arr)=>{
-//   return  Array.from(arr , item => item.match(/uploads(\S*)/ig)[0] )
-// }
-// Vue.directive('focus', {
-//       inserted: function (el) {
-//           el.focus()
-//       }
-// });
 
 Vue.config.productionTip = false
+
 new Vue({
   el: '#app',
   router,

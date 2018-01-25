@@ -86,11 +86,7 @@
 </div>
 </template>
 <script >
-import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
-import qs from 'qs';
-
-
 
 export default{
 	props:['serverfee','orderId'],
@@ -249,9 +245,6 @@ export default{
 		}
 	},
 	computed:{
-		...mapGetters([
-         'getUrl',
-      	]),
 		servantFee(){
 			return this.serverfee
 		}
@@ -278,14 +271,11 @@ export default{
 			})
 		},
 		getPayfront(){
-			let url = this.getUrl
 			let args= { order_id: this.orderId}
-	        this.axios.post(url+'/Receipt/payfront',qs.stringify(args)).then((res)=>{	  
+	        this.Payfront(args).then((res)=>{
 	        	console.log(res)
 				if(res.data.status == 200 ){
 					this.receiptPayFront = res.data.content
-				}else {
-					
 				}
 	      	})
 		},
@@ -294,16 +284,14 @@ export default{
 			clearInterval(this.timer)
 		},
 		nextPay(payType){
-			let url = this.getUrl
 			let args= { order_id: this.receiptPayFront.order_id,
 						pay_type: payType,
 						service_fee: this.receiptPayFront.service_fee}
-						console.log('weixin zhi fu >>>',args)
+			console.log('weixin zhi fu >>>',args)
 			if( payType == 'wxpay' ){
 				this.setIndentBlock(true)
 				this.showWeiChat= true;
-				this.axios.post(url+'/Receipt/payBeforeSubmit',qs.stringify(args))
-		       	.then((res)=>{
+				this.PayBeforeSubmit(args).then((res)=>{
 		       		// console.log(res)
 					if(res.data.status == 200 ){
 						this.payQrcode =  res.data.content.url
@@ -317,21 +305,19 @@ export default{
 			}	       	
 		},
 		afterWxpay(){
-			let url = this.getUrl
 			let args= { order_id: this.receiptPayFront.order_id}			
-				self.timer = setInterval(()=>{
-					this.axios.post(url+'/Receipt/IswxPay',qs.stringify(args))
-			       	.then((res)=>{
-						// console.log(res)
-						if(res.data){
-							clearInterval(self.timer)
-							this.showWeiChat = false
-							this.receiptContent.order_id =  null
-							this.$router.push('/indent')
-						}else {
-							console.log('Waiting wxpay...')
-						}
-			       	})
+			this.timer = setInterval(()=>{
+				this.WxPay(args).then((res)=>{
+					// console.log(res)
+					if(res.data){
+						clearInterval(this.timer)
+						this.showWeiChat = false
+						this.receiptContent.order_id = null
+						this.$router.push('/indent')
+					}else {
+						console.log('Waiting wxpay...')
+					}
+		       	})
 			}, 2000)
 		},
 		alipay(args){

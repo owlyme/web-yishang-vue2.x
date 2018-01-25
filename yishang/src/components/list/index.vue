@@ -36,7 +36,7 @@
   </div>
   <div class="bg-white"> 
     <!-- <keep-alive> <router-view/> </keep-alive>  -->
-      <router-view />
+    <router-view />
   </div>
   <Footerinfo/>
  </div>
@@ -60,7 +60,6 @@ export default {
   },
   computed:{
       ...mapGetters([
-         'getUrl',
          'getNavList',
          'getSavePassword',
          'getCustomer',
@@ -78,9 +77,7 @@ export default {
       'setIndentBlock',
     ]),
     logOut(){
-      let url= this.getUrl+'/User/logOut'
-      this.axios.get(url)
-        .then((res)=>{
+      this.LogOut().then((res)=>{
           if(res.data.status == 200){ 
               this.clearCustomer()        
               this.$router.push("/login")
@@ -88,9 +85,7 @@ export default {
                 this.$cookies.remove('yiyiphone');
                 this.$cookies.remove('yiyiavatar');
               }
-          }else{
-
-          }          
+          }         
      })
     },
     send(){
@@ -98,14 +93,14 @@ export default {
       this.account= { name: '', password: '', save : false}
     },
     beforeReceipt(index){
-        let url = this.getUrl
-        this.axios.post(url+'/Receipt/beforeReceipt').then((res)=>{   
-        this.$router.push(this.getNavList[index].path)       
-              if(res.data.status ==200){
-                this.$router.push(this.getNavList[index].path)
-              }else {
-                this.popup = true
-              }
+        this.BeforeReceipt().then((res)=>{ 
+          // zan shi da kai tiao shi yong -----------------------------------------------------------------------  
+          // this.$router.push(this.getNavList[index].path)       
+          if(res.data.status ==200){
+            this.$router.push(this.getNavList[index].path)
+          }else {
+            this.popup = true
+          }
         })
     },
     fliter(index){

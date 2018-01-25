@@ -61,8 +61,6 @@ import Imgupload from "../imgupload"
 import Pay from "../payAndAddr"
 import Fabric from "../fabric"
 import About from "../about"
-
-import qs from 'qs';
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 
@@ -78,15 +76,14 @@ export default {
 	},
 	computed:{
 	  ...mapGetters([
-	     'getUrl',
 	     'getUploadUrl',
 	     'getReceiptContent',
 	     'getSubmitReceipt'
 	  ])      
 	},
-	created(){	
-		this.receiptContent = JSON.parse( JSON.stringify( this.getReceiptContent) )
-		this.submitReceipt = JSON.parse( JSON.stringify( this.getSubmitReceipt) )
+	created(){
+		this.receiptContent = this.objStringfy( this.getReceiptContent)
+		this.submitReceipt = this.objStringfy( this.getSubmitReceipt)
 		this.getReceipt()
 	},
 	mounted(){
@@ -106,19 +103,16 @@ export default {
 	},
 	methods:{
 		getReceipt(){
-			console.log(this.$route.query.order_id)
-			let url = this.getUrl
 			let args = {
 				type: 1,
 				order_id : this.$route.query.order_id
 			}
-			this.axios.post(url+'/Receipt/Index',qs.stringify(args)).then((res)=>{
+			this.ReceiptIndex(args).then( (res)=>{
 				console.log(res)
 			    if(res.data.status == 200){
 			    	this.receiptContent = res.data.content
 			    	console.log(this.submitReceipt)
-			    }else{
-			    }          
+			    }         
 			})
 		},
 	    onSubmit(){
@@ -126,20 +120,17 @@ export default {
 	    	this.submitReceiptFn(this.submitReceipt);
 	    },	   
 	    submitReceiptFn(args){
-	    	let url = this.getUrl
-		    this.axios.post(url+'/Receipt/submitReceipt',qs.stringify(args)).then((res)=>{
+		    this.SubmitReceipt(args).then((res)=>{
 		       if(res.data.status == 200){
-	        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
-	        	this.$router.push("/indent")
+		        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
+		        	this.$router.push("/indent")
 		        }else{
 		        	this.openMessage({str: res.data.msg, ele:this})
 		        }         
 		    }) 
 	    },
 	    saveDraft(){
-	    	let url = this.getUrl
-	    	let args = this.submitReceipt
-		    this.axios.post(url+'/Receipt/submitDraft',qs.stringify(args)).then((res)=>{
+		    this.SubmitDraft( this.submitReceipt ).then((res)=>{
 		    	console.log('save Draft>>',res)
 		    	console.log( res.data.status)
 				if(res.data.status == 200){
@@ -148,8 +139,6 @@ export default {
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
 		    })
-	    },	  
-	    matchObj(){
 	    }
 	}
 }

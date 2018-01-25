@@ -1,5 +1,3 @@
-import qs from 'qs'
-
 const url= 'http://101.132.187.244:8082/Home'
 const uploadUrl= 'http://101.132.187.244:8083/'
 // const url = "http://ii.ysintelligent.com"

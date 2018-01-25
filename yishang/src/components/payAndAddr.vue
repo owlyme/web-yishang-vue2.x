@@ -57,8 +57,6 @@
 </template>
 <script>
 import China from "./address/china.vue"
-import qs from 'qs';
-import { mapGetters } from 'vuex'
 	export default{
 		name: "pay",
 		components:{ China},
@@ -116,13 +114,9 @@ import { mapGetters } from 'vuex'
 					this.submitReceipt.is_deposited= curVal
 				},
 				deep:true
-			},
-
+			}
 		},		
 		computed:{
-	      ...mapGetters([
-	         'getUrl'
-	      ]),
 	      depositFee(){
 	      	return (( this.receiptContent.deposit -0 ) * (this.submitReceipt.total_fee || 0)).toFixed(2)
 	      },
@@ -170,7 +164,6 @@ import { mapGetters } from 'vuex'
 		        });
 		     },
 		    addAddress(formName){
-		     	let url = this.getUrl+ '/Address/addAddress';
 		        let args = {
 		        		receiver: this.ruleForm.name,
 						phone: this.ruleForm.mobile,
@@ -180,7 +173,7 @@ import { mapGetters } from 'vuex'
 						street: this.ruleForm.street,
 						id: Date.now()
 			        }
-			    this.axios.post(url, qs.stringify(args)).then((res)=>{
+			    this.AddAddress(args).then((res)=>{
 			    	// console.log(res)
 			        if(res.data.status == 200){
 			        	//添加成功

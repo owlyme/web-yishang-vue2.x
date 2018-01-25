@@ -392,16 +392,16 @@
 			}
 		},
 		mounted(){
-			this.getMainlist({status: 'x'})			
+			this.getMainlist({status: 'x'})
 		},
 		watch:{
 		    currentPage:{
 		      handler(curVal,oldVal){
-		        this.getMainlist({page: curVal,status: this.currentStatus})
+		        this.getMainlist( {page: curVal,status: this.currentStatus} )
 		      },
 		      deep:true
 		    }
-		  },
+		},
 		computed:{
 			...mapGetters([
 		      'getIndentBlock',
@@ -420,21 +420,17 @@
 		      'setIndentBlock'
 		    ]),
 		    getMainlist(args){
-		      let url= this.getUrl+'/Index/index'
-		      this.axios.post(url, qs.stringify(args)).then((res)=>{
+		      this.Index(args).then((res)=>{
 		      	if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;
 		            this.savedList =  res.data.content.list;
 		            this.goodsList = this.savedList.slice(0, this.savedList.length)
-		          }else{
 		          }          
-		      })  
+		      	})  
 		    },
 		    getSchedule(id){
-		    	let url= this.getUrl+'/ReceiptOrder/schedule'
-		      	this.axios.post(url, qs.stringify({order_id: id }))
-		      	.then((res)=>{
+		      	this.Schedule({order_id: id }).then((res)=>{
 		          if(res.data.status == 200){
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
@@ -445,14 +441,11 @@
 		      	})  
 		    },
 		    getDetails(id){
-		    	let url= this.getUrl+'/ReceiptOrder/details'
-			      this.axios.post(url, qs.stringify({order_id: id }))
-			      .then((res)=>{
-			          if(res.data.status == 200){
-			          		this.$set(this,'selectDetails',res.data.content)
-			          		this.isLoading = 0;         	
-			          }else{
-			        }
+			  this.Details({order_id: id }).then((res)=>{
+		          if(res.data.status == 200){
+		          		this.$set(this,'selectDetails',res.data.content)
+		          		this.isLoading = 0;         	
+		          }
 		      })
 		    },
 		    switchBlock(uid){

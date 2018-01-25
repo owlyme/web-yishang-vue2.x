@@ -75,8 +75,6 @@
 
 <script>
 import Footerinfo from "../footer"
-import qs from 'qs';
-import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapMutations } from 'vuex'
 
@@ -98,11 +96,6 @@ export default {
   created(){    
     this.refreshQr()
   },  
-  computed:{
-      ...mapGetters([
-          'getUrl'
-        ]),
-    },
   mounted(){
     if(this.$cookies.get("yiyiphone")){
         this.$router.push('/login')
@@ -120,13 +113,12 @@ export default {
       this.message = val
       this.resFalse = false
     },
-    login(){
-      let url= this.getUrl+'/User/loginCheck'   
+    login(){  
       let args = {
         phone : this.account.name,
         password: this.account.password
       }
-      this.axios.post(url, qs.stringify(args))
+      this.LoginCheck(args)
       .then((res)=>{
             if(res.data.status == 200){
               this.setCustomerInfo({
@@ -147,9 +139,7 @@ export default {
       })
     },
     refreshQr(){
-      let url= this.getUrl+'/User/qrcode'
-      //console.log(url)
-      this.axios.get(url).then((res)=>{
+      this.Qrcode().then((res)=>{
         //console.log(res)
           if(res.status == 200){
             this.qrCodeUrl =res.data
@@ -158,26 +148,23 @@ export default {
       });
     },
     loopQr(){
-      let url= this.getUrl+'/User/qrcodeLoop'
       let args = {code: this.customCode}
       let timer = setInterval(()=>{
           if( !this.switchToPC ){
              clearInterval(timer)
           }
-          this.axios.post(url,qs.stringify(args)).then((res)=>{
+          this.QrcodeLoop(args).then((res)=>{
                 // console.log(res)
                 if(res.data){
                  this.qrcodeLogin()
                  clearInterval(timer)
                 }      
             });
-          },3000)
+      },3000)
     },
     qrcodeLogin(){
-      let url= this.getUrl+'/User/qrcodeLogin'
-
       let args = {code: this.customCode}
-      this.axios.post(url,qs.stringify(args)).then((res)=>{
+      this.QrcodeLogin(args).then((res)=>{
           // console.log(res)
           if(res.status == 200){
             if(res.data.status == 200){

@@ -7,6 +7,8 @@ import Indexlist from '@/components/list/index'
 	import Wuyou from '@/components/list/wuyou'
 	import Indent from '@/components/list/indent'
 
+import store  from '../store/index.js'
+
 Vue.use(Router)
 const router = new Router({
   mode:'hash',
@@ -15,10 +17,10 @@ const router = new Router({
     {path: '/login',name: 'Login',component: Login },
     {path: '/',component: Indexlist,
       children:[
-        {path: "/", name: "Main", component:Main },
-        {path: "/zizhu",name: "Zizhu",component:Zizhu},
-        {path: "/wuyou",name: "Wuyou",component:Wuyou},
-        {path: "/indent",name: "Indent",component:Indent}
+        {path: "", name: "Main", component:Main },
+        {path: "zizhu",name: "Zizhu",component:Zizhu},
+        {path: "wuyou",name: "Wuyou",component:Wuyou},
+        {path: "indent",name: "Indent",component:Indent}
       ]
     },
     {
@@ -28,7 +30,6 @@ const router = new Router({
   ],
 })
 
-import store  from '../store/index.js'
 
 router.beforeEach(function (to, from, next) {
   let curPath = to.path
