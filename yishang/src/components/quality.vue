@@ -35,7 +35,7 @@
 		  <h6>尺寸表图片</h6>
 	      <el-col :span="14" :offset="6">
 			<Uploadfiles 
-            :getUploadUrl="getUploadUrl"
+            :getUploadUrl="actionUrl"
             :defaultImg  ="image"
             :getImgList  ="computedForm.size_table"
           	></Uploadfiles>
@@ -46,7 +46,7 @@
 		  <h6>工艺单图片</h6>
 	      <el-col :span="14" :offset="6">
 			<Uploadfiles 
-            :getUploadUrl="getUploadUrl"
+            :getUploadUrl="actionUrl"
             :defaultImg  ="image"
             :getImgList  ="computedForm.process_list"
           	></Uploadfiles>
@@ -57,7 +57,7 @@
 		  <h6>版型图(若有版型图请上传)</h6>
 	      <el-col :span="14" :offset="6">
 			<Uploadfiles 
-            :getUploadUrl="getUploadUrl"
+            :getUploadUrl="actionUrl"
             :defaultImg  ="image"
             :getImgList  ="computedForm.picture"
           	></Uploadfiles>
@@ -66,8 +66,6 @@
 	</div>
 </template>
 <script>
-
-import { mapGetters } from 'vuex'
 import Uploadfiles from "@/components/uploadfiles"
 	export default{
 		name: "quality",
@@ -91,11 +89,8 @@ import Uploadfiles from "@/components/uploadfiles"
 			}
 		},
 		computed:{
-		    ...mapGetters([
-		        'getUploadUrl'
-		    ]),
 		    actionUrl(){
-		     	return this.getUploadUrl +'/picture/upload'
+		     	return this.Api.upload
 		    },
 		    computedForm(){
 		    	if( !Array.isArray(this.receiptContent.done) ){
@@ -114,7 +109,7 @@ import Uploadfiles from "@/components/uploadfiles"
 		watch:{
 	      form:{
 	        handler(curVal){
-		        let obj = JSON.parse( JSON.stringify(curVal) )	
+		        let obj = this.objStringfy(curVal)
 				this.submitReceipt.check_id = obj.check_id
 				this.submitReceipt.error_id = obj.error_id
 				this.submitReceipt.requirement = obj.requirement

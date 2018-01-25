@@ -23,7 +23,7 @@
 		  <el-form-item label="加工模式:">
 		    <el-radio-group v-model="computedForm.mode_id" style="padding-top:8px">
 		    <el-radio 
-		    	v-for="(item, index) in receiptContent.mode"
+		    	v-for="(item, index) in computedMode"
 		    	:key="'mode'+ index"
 		    	:label="item.mode_id">  {{item.mode_name}} </el-radio>					
 			</el-radio-group>				
@@ -53,6 +53,12 @@
 					this.form.mode_id= this.receiptContent.done.details.mode_id
 				}
 				return this.form
+			},
+			computedMode(){
+				if(this.receiptContent.mode.length == 1){
+					this.form.mode_id = this.receiptContent.mode[0].mode_id
+				}
+				return this.receiptContent.mode
 			}
 		},
 		watch:{

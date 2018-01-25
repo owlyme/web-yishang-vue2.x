@@ -31,7 +31,6 @@
 </div>
 </template>
 <script>
-	import { mapGetters } from 'vuex'
 	export default{
 		name: "",
 		props: ["goodsMsg","change"],
@@ -40,12 +39,8 @@
 			}
 		},
 		computed:{
-	      ...mapGetters([
-	          'getUploadUrl',
-	          'getUrl'
-	        ]),
 	      imgsrc(){
-	      	return this.getUploadUrl+this.goodsMsg.front_picture
+	      	return this.Api.loadImgUrl+this.goodsMsg.front_picture
 	      }
 	    },
 		methods:{

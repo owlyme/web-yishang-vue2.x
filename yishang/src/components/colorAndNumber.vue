@@ -162,14 +162,6 @@ export default {
 			this.submitReceipt.demanding_account = total
 			return total
 		},
-		// size(){			
-		// 	this.submitReceipt.size.forEach( (item, index)=>{
-		// 		if(index+1 > this.flags.length ){
-		// 			this.flags.push({flag: true})
-		// 		}
-		// 	})
-		// 	return this.submitReceipt.size
-		// },
 		computedSized(){
 			if( !Array.isArray( this.receiptContent.done )){
 				this.size = this.receiptContent.done.size

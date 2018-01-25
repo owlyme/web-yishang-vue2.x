@@ -263,16 +263,6 @@
 								<p>查货选择： <span>{{selectDetails.quality.check}}</span> 要求信息： <span>{{selectDetails.quality.requirement}}</span></p>
 								<p>整体允许误差范围： <span>{{selectDetails.quality.error}}</span></p>
 							</div>
-							<!-- <div class="buwei border-top clearfix">
-								<ul class="thead">
-									<li>部位</li>
-									<li>误差标准范围</li>
-								</ul>
-								<ul class="tbody" v-for="(item, index) in selectDetails.quality.supplement" :key="'supplement1'+index">
-									<li>{{item.name}}</li>
-									<li>{{item.err}}</li>
-								</ul>
-							</div> -->
 						</div>
 						<div class="banxing border-top detail-inner" v-if="selectDetails.quality">
 							<h6>尺寸表</h6>
@@ -406,7 +396,6 @@
 			...mapGetters([
 		      'getIndentBlock',
 		      'getUploadUrl',
-		      'getUrl'
 		    ]),
 		    curSchedule(){
 		    	return this.selectSchedule

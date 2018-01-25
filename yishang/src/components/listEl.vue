@@ -28,7 +28,6 @@
 </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 	export default{
 		name: "listelement",
 		props: ["goodsMsg"],
@@ -38,11 +37,8 @@ import { mapGetters } from 'vuex'
 			}
 		},
 		computed:{
-	      ...mapGetters([
-	          'getUploadUrl'
-	        ]),
 	      imgsrc(){
-	      	return this.getUploadUrl+this.goodsMsg.front_picture
+	      	return this.Api.loadImgUrl+this.goodsMsg.front_picture
 	      }
 	    },
 	    methods:{

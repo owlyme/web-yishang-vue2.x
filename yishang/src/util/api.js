@@ -4,6 +4,8 @@ const uploadUrl= 'http://101.132.187.244:8083/'
 // const uploadUrl = "http://iiadmin.ysintelligent.com/"
 
 const api = {
+	url: url,
+	loadImgUrl: uploadUrl,
 	loginCheck: url + '/User/loginCheck',
 	logOut: url + '/User/logOut',
 	qrcode: url + '/User/qrcode',
@@ -23,7 +25,7 @@ const api = {
 	orderIndex: url + '/ReceiptOrder/index',
 	schedule: url + '/ReceiptOrder/schedule',
 	details: url + '/ReceiptOrder/details',
-	upload: uploadUrl +'/picture/upload'	
+	upload: uploadUrl +'picture/upload'
 }
 export default api
 

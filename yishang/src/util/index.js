@@ -8,7 +8,6 @@ let post = ( reqstr, args, fn) => {
 		fn(res)
 	})  
 }
-console.log('util')
 export default{
 	install(Vue, options){		
 		Vue.prototype.setCookie = function (userInfo) {
@@ -57,6 +56,29 @@ export default{
 		      //el.focus()
 		  //}
 		});
+		Vue.prototype.windowSize = function(){
+			let footerEle = document.getElementById("footer")
+			window.onscroll = () => {
+				var pageWidth=window.innerWidth,
+			    pageHeight=window.innerHeight;
+			    if ( typeof pageWidth !="number"){
+			       if ( document.compatMode== "CSSICompat"){
+				       pageWidth=document.documentElement.clientWidth;
+				       pageHeight=document.documentElement.clientHeight;
+			       } else{
+				       pageWidth=document.body.clientWidth;
+				       pageHeight=document.body.clientHeight;
+			       }
+			    }
+
+				let scrolltop=document.documentElement.scrollTop||document.body.scrollTop
+				if(scrolltop + pageHeight>= footerEle.offsetTop ){
+					this.fixed = false					
+				}else{
+					this.fixed = true					
+				}
+			}
+		}
 		//objStringfy
 		Vue.prototype.objStringfy =  function(args){ return JSON.parse( JSON.stringify(args) ) };
 		//axios

@@ -53,7 +53,7 @@ import { mapGetters } from 'vuex'
 	            'getUploadUrl'
 	        ]),
 	        actionUrl(){
-	          return this.getUploadUrl +'/picture/upload'
+	          return this.Api.upload
 	        },
 	        computedDoneSupplements(){
 		        if(this.doneSupplements && Array.isArray(this.doneSupplements) && this.doneSupplements.length){
@@ -67,7 +67,7 @@ import { mapGetters } from 'vuex'
 	        handler(curVal){
 	          this.$emit( 'update:submitReceiptSupplements',  curVal.map( (item, index)=>{ 
 	                        // let obj = Object.assign({}, item)
-	                        let obj = JSON.parse( JSON.stringify(item) )
+	                        let obj = this.objStringfy(item)
 	                        obj.picture =  this.removeDomain( obj.picture )
 	                        return obj
 	                      })

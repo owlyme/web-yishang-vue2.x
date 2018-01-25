@@ -201,10 +201,9 @@ import China from "./address/china.vue"
 		        });
 		    },
 		    getCity(val){
-		    	let self= this;
-				self.$set(self.ruleForm,'province', val.province.name)
-				self.$set(self.ruleForm,'city', val.city.name)
-				self.$set(self.ruleForm,'county', val.block.name)
+				this.$set(this.ruleForm,'province', val.province.name)
+				this.$set(this.ruleForm,'city', val.city.name)
+				this.$set(this.ruleForm,'county', val.block.name)
 		    },
 		}
 	}

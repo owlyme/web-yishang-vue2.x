@@ -1,5 +1,5 @@
 <template>
-<div style="padding-top: 40px">
+<div style="padding-top: 40px" id="footer">
    <div class=" footer" >
       <div class="foot-info">
         <span v-for="(item, index)  in certificate" :key="index">{{item}}</span>

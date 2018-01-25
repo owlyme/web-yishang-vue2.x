@@ -2,10 +2,10 @@
  <div >
   <ul class="clearfixed">
     <!-- default image -->
-    <li class="img-li" v-if="!computedList.length && defaultImg">
+    <li class="img-li" v-if="defaultImg">
       <img :src="defaultImg"  />
     </li>
-    <li class="img-li" v-if="!computedList.length && defaultImg2">
+    <li class="img-li" v-if="defaultImg2">
       <img :src="defaultImg2"  />
     </li>
 
@@ -32,7 +32,7 @@
 <script>
 import { mapGetters } from 'vuex'
  export default {
-    name: 'imgUpload',
+    name: 'uploadfiles',
     props:{
       oneImage: {
         type: Boolean,
@@ -67,7 +67,7 @@ import { mapGetters } from 'vuex'
     },
     computed:{
       actionUrl(){
-        return this.getUploadUrl +'/picture/upload'
+        return this.getUploadUrl
       },
       computedList(){
         this.list = this.getImgList
@@ -95,9 +95,9 @@ import { mapGetters } from 'vuex'
         // console.log('Img uploand success', file)
         if(this.oneImage){
            this.list.pop()
-           this.list.push(this.getUploadUrl + file.response.content.url)
+           this.list.push(this.Api.loadImgUrl + file.response.content.url)
         }else{
-          this.list.push(this.getUploadUrl + file.response.content.url)
+          this.list.push(this.Api.loadImgUrl + file.response.content.url)
         }        
       },
       beforeAvatarUpload(file) {

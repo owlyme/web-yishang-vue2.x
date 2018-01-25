@@ -8,7 +8,7 @@
 			  <el-col :span="14" >
 			  		<Uploadfiles
             			:oneImage= 'true'
-			            :getUploadUrl="getUploadUrl"
+			            :getUploadUrl="actionUrl"
 			            :defaultImg  ="item.image"
 			            :getImgList  ="item.picture"
 			        ></Uploadfiles>
@@ -20,7 +20,7 @@
 			  <el-col :span="6" class="text-right text-style-sm">局部细节图</el-col>	
 		      <el-col :span="14">
 				<Uploadfiles
-		            :getUploadUrl="getUploadUrl"
+		            :getUploadUrl="actionUrl"
 		            :defaultImg  ="image1"
 		            :defaultImg2 ="image2"
 		            :getImgList  ="computedPartPicture"
@@ -39,8 +39,7 @@
 			  </el-col>	
 			  <el-col :span="14">			  	
 			  		<Uploadfiles
-		            :getUploadUrl="getUploadUrl"
-		            
+		            :getUploadUrl="actionUrl"		            
 		            :getImgList  ="item.sub_picture"
 			    ></Uploadfiles>
 			  </el-col>
@@ -91,11 +90,8 @@ import { mapGetters } from 'vuex'
 			}
 		},
 		computed:{
-			...mapGetters([
-			  'getUploadUrl'
-			]),
 			actionUrl(){
-				return this.getUploadUrl +'/picture/upload'
+				return this.Api.upload
 			},
 			computedSingleImg(){
 				if(this.receiptContent.done.details){
@@ -129,7 +125,7 @@ import { mapGetters } from 'vuex'
 	    watch:{
 	    	list:{
 	    		handler(curVal){	    			   
-	    			let obj = JSON.parse( JSON.stringify(curVal) )
+	    			let obj = this.objStringfy(curVal)
 	    			this.submitReceipt.front_picture = this.removeDomain( obj[0].picture )[0]
 					this.submitReceipt.back_picture = this.removeDomain( obj[1].picture )[0]
 					this.submitReceipt.left_picture = this.removeDomain( obj[2].picture )[0]
@@ -139,14 +135,14 @@ import { mapGetters } from 'vuex'
 	    	},
 	    	partPicture:{
 	    		handler(curVal){
-	    			let obj = JSON.parse( JSON.stringify(curVal) )
+	    			let obj = this.objStringfy(curVal)
                     this.submitReceipt.part_picture  =  this.removeDomain( obj )
 	    		},
 	    		deep: true
 	    	},
 	    	otherPicture:{
 	    		handler(curVal){	
-	    			let obj = JSON.parse( JSON.stringify(curVal) )
+	    			let obj = this.objStringfy(curVal)
                     this.submitReceipt.other_picture = curVal.map( (item, index)=>{ 
                         let obj = JSON.parse( JSON.stringify(item) )
                         obj.sub_picture =  this.removeDomain( obj.sub_picture )

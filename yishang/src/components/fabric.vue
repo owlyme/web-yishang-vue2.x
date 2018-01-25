@@ -13,7 +13,7 @@
         </el-col> 
         <el-col :span="14">
           <Uploadfiles 
-            :getUploadUrl="getUploadUrl"
+            :getUploadUrl="actionUrl"
             :defaultImg  ="image"
             :getImgList  ="item.picture"
           ></Uploadfiles>
@@ -52,8 +52,6 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
 import Uploadfiles from "@/components/uploadfiles"
 export default {
     // props:['receiptContent','submitReceipt'],
@@ -87,11 +85,8 @@ export default {
       }
     },
     computed:{
-      ...mapGetters([
-        'getUploadUrl'
-      ]),
       actionUrl(){
-        return this.getUploadUrl +'/picture/upload'
+        return this.Api.upload
       },
       computedDoneFabric(){
         if(this.doneFabric && Array.isArray(this.doneFabric) && this.doneFabric.length){
@@ -105,7 +100,7 @@ export default {
         handler(curVal){
           this.$emit( 'update:submitReceiptFabric',  curVal.map( (item, index)=>{ 
                         // let obj = Object.assign({}, item)
-                        let obj = JSON.parse( JSON.stringify(item) )
+                        let obj = this.objStringfy(item) 
                         obj.picture =  this.removeDomain( obj.picture )
                         return obj
                       })

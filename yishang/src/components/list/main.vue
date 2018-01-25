@@ -12,7 +12,7 @@
         <el-row  >
           <el-col :span="12">
             <div class="grid-content bg-purple">
-              <a @click="beforeReceipt('/zizhu')">
+              <a target="_blank" @click="beforeReceipt('zizhu')">
                 <div class="zizhu-bg"></div>
                 <h4>自主发单</h4>
               </a>
@@ -25,7 +25,7 @@
           </el-col>
           <el-col :span="12">
             <div class="grid-content bg-purple-light ">
-              <a  @click="beforeReceipt('/wuyou')">
+              <a  @click="beforeReceipt('wuyou')">
                  <div class="wuyou-bg"></div>
                  <h4>无忧发单</h4>
               </a> 
@@ -157,6 +157,15 @@ export default{
       deep:true
     }
   },
+  computed:{
+    newzhizhu(){
+      console.log(location.href)
+      return location.href+'zizhu'
+    },
+    newwuyou(){
+      return location.href+ 'wuyou'
+    }
+  },
 	methods:{
     getBanner(){
       this.Banner().then( (res)=>{
@@ -195,9 +204,9 @@ export default{
       this.getMainlist({status: keyword})
     },
     beforeReceipt(path){
-      this.BeforeReceipt().then((res)=>{
+      this.BeforeReceipt().then((res)=>{ 
             if(res.data.status ==200){
-              this.$router.push(path)
+             window.open( location.href+path )  
             }else {
               this.msg = res.data.msg
               this.popup = true
@@ -277,7 +286,6 @@ export default{
     background-position:  -75px;
     /*background-size: 100% 100%;*/
   }
-
   .nav-h{
     background: #fff;
     height: 80px;
