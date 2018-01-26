@@ -87,7 +87,6 @@ export default {
 			fixed: true,
 		   	receiptContent:{},
 		   	submitReceipt: {},
-
 		}
 	},
 	computed:{

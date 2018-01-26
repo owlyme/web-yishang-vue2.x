@@ -96,6 +96,9 @@ import { mapGetters } from 'vuex'
 			computedSingleImg(){
 				if(this.receiptContent.done.details){
 					// console.log(this.receiptContent.done.details)
+					if( this.list[0].picture[0].trim() ){
+						
+					}
 					this.list[0].picture.pop() 
 					this.list[1].picture.pop()
 					this.list[2].picture.pop()
