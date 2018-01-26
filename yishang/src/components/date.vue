@@ -57,7 +57,8 @@
 				console.log('total_fee')
 				let total_fee = 0;
 				total_fee = this.submitReceipt.demanding_account * this.submitReceipt.fee
-				this.submitReceipt.total_fee = total_fee  || 0
+				// this.submitReceipt.total_fee = total_fee
+				this.$set(this.submitReceipt, 'total_fee',total_fee)
 				return total_fee || 0
 			},
 			pickerOptions1(){
