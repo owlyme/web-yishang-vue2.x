@@ -65,22 +65,26 @@ import { mapGetters } from 'vuex'
 						{
 							name:'正面全览照',
 							picture:[],
-							image: require('../assets/front-pic.jpg')
+							image: require('../assets/front-pic.jpg'),
+							loaded: false
 						},
 						{
 							name:'背面全览照',
 							picture:[],
-							image: require('../assets/back-pic.jpg')
+							image: require('../assets/back-pic.jpg'),
+							loaded: false
 						},
 						{
 							name:'左侧面全览照',
 							picture:[],
-							image: require('../assets/left-pic.jpg')
+							image: require('../assets/left-pic.jpg'),
+							loaded: false
 						},
 						{
 							name:'右侧面全览照',
 							picture:[],
-							image: require('../assets/right-pic.jpg')
+							image: require('../assets/right-pic.jpg'),
+							loaded: false
 						}
 					],
 				image1: require('../assets/part1-pic.jpg'), 
@@ -96,15 +100,24 @@ import { mapGetters } from 'vuex'
 			computedSingleImg(){
 				if(this.receiptContent.done.details){
 					// console.log(this.receiptContent.done.details)
-					this.list[0].picture.pop() 
-					this.list[1].picture.pop()
-					this.list[2].picture.pop()
-					this.list[3].picture.pop()
-					this.list[0].picture.push( this.receiptContent.done.details.front_picture)
-					this.list[1].picture.push( this.receiptContent.done.details.back_picture)
-					this.list[2].picture.push( this.receiptContent.done.details.left_picture)
-					this.list[3].picture.push( this.receiptContent.done.details.right_picture)
-				}	
+					if( !this.list[0].loaded ){
+						console.log(this.list[0].picture)
+						this.list[0].picture.push( this.receiptContent.done.details.front_picture )
+						this.list[0].loaded = true
+					}
+					if( !this.list[1].loaded ){
+						this.list[1].picture.push( this.receiptContent.done.details.back_picture )
+						this.list[1].loaded = true
+					}
+					if( !this.list[2].loaded ){
+						this.list[2].picture.push( this.receiptContent.done.details.left_picture )
+						this.list[2].loaded = true
+					}
+					if( !this.list[3].loaded ){
+						this.list[3].picture.push( this.receiptContent.done.details.right_picture )
+						this.list[3].loaded = true
+					}
+				}
 				return this.list
 			},
 			computedPartPicture(){

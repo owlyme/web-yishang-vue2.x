@@ -70,6 +70,11 @@ import { mapGetters } from 'vuex'
         return this.getUploadUrl
       },
       computedList(){
+        this.getImgList.forEach((item, index )=>{
+          if( !item.includes( this.Api.loadImgUrl ) ){
+            this.getImgList[index]= this.Api.loadImgUrl + item
+          }          
+        })
         this.list = this.getImgList
         return this.list
       }
