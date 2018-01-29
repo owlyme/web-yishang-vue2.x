@@ -52,7 +52,7 @@
                   <span class="bg-icon input-secret"></span>
               </div>
               <div >
-                <input type="checkbox" value="checked" v-model="account.save" />记住密码
+               <label> <input type="checkbox" value="checked" v-model="account.save" />记住密码</label>
               </div>
               <div class="input-group">
                 <span :class="{ err : resFalse }">{{ message }}</span>
@@ -124,8 +124,10 @@ export default {
               if(this.account.save){
                 this.setSavePassword(true)
               }
+
               this.$cookies.set('yiyiavatar', res.data.content.avatar, 60*1000);
               this.$cookies.set('yiyiphone', res.data.content.phone, 60*1000);
+              
               this.account= { name: '',password:'', save : false}
               this.$router.push("/")
             }else{

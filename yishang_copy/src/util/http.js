@@ -5,16 +5,16 @@ import axios from 'axios' //引用axios
 // axios.defaults.timeout = 5000; 
 // //axios.defaults.baseURL = 'http://localhost/pjm-shield-api/public/v1/'; //这是调用数据接口
  
-// // http request 拦截器，通过这个，我们就可以把Cookie传到后台
+// http request 拦截器，通过这个，我们就可以把Cookie传到后台
 // axios.interceptors.request.use(
 //   config => {
-//     // const token = getCookie('session'); //获取Cookie
+//     // // const token = getCookie('session'); //获取Cookie
 //     // config.data = JSON.stringify(config.data);
 //     config.headers = {
 //       'Content-Type':'application/x-www-form-urlencoded' //设置跨域头部
 //     };
 //     if (token) {
-//       config.params = {'token': token} //后台接收的参数，后面我们将说明后台如何接收
+//       // config.params = {'token': token} //后台接收的参数，后面我们将说明后台如何接收
 //     }
 //     return config;
 //   },

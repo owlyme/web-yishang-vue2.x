@@ -31,7 +31,8 @@ const router = new Router({
 })
 
 router.beforeEach(function (to, from, next) {
-  if( to.path != '/login' && !Vue.cookies.get('yiyiphone')){
+  //  !Vue.cookies.get('PHPSESSID')
+  if( to.path != '/login' && !Vue.cookies.get('yiyiphone') ){
     next({path: "/login"})
   }else{   
     next()

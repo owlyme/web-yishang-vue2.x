@@ -182,8 +182,6 @@ export default{
             this.totalRows = res.data.content.totalRows-0;
             this.savedList =  res.data.content.list;
             this.goodsList = this.savedList.slice(0, this.savedList.length)
-
-            this.paginationWidth()
           }        
       })  
     },
