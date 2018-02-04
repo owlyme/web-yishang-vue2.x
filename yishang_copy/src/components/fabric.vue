@@ -24,7 +24,7 @@
         :class="{hasbefore : !item.picture.length}">
          面料图片: 
         </el-col> 
-        <el-col :span="14">
+        <el-col :span="18">
           <Uploadfiles 
             :getUploadUrl="actionUrl"
             :defaultImg  ="image"
@@ -135,7 +135,7 @@ export default {
     },
     methods: {
       onlyNumber(prop,index){
-          console.log( this.list[index][prop] )
+          // console.log( this.list[index][prop] )
           let str = this.list[index][prop]
           str = str.toString().replace(/[^0-9.]\D*$/,"")
           this.list[index][prop] = str

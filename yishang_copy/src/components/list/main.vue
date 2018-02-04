@@ -39,7 +39,7 @@
         </el-row>
       </div>	
         <!-- 过滤订单 -->
-      <div class="list-nav ">
+      <div id="listnav" class="list-nav ">
         <ul class="nav-h clearfix">
               <li  v-for="(item, index) in listNav"
                 :index="index " 
@@ -62,15 +62,18 @@
       </div>   
       <!-- pagination -->
         <div class="container owlfater" >
+          <!-- class="owl" -->
          <b-row  class="owl" >
             <b-col >
-              <b-pagination  
+              <b-pagination   
+              align="center"      
+              :limit="10"
               :total-rows="totalRows" 
               v-model="currentPage" 
-              first-text="首页"
-              prev-text="上一页"
-              next-text="下一页"
-              last-text="末页"
+              first-text="<<首页"
+              prev-text="<"
+              next-text=">"
+              last-text="末页>>"
               :per-page="perPage" >
               </b-pagination>
               <span >共{{ Math.ceil( totalRows / perPage) }}页</span>
@@ -133,15 +136,13 @@ export default{
 			totalRows: 1,
 			perPage : 1,
    		currentPage: 1,
+
       currentStatus: 'x',
    		goodsList:[],
       savedList:[],
       banner: null,
       activeWidth: "0px"
 		}
-	},
-	watch:{
-		currentPage: "getMoreList"
 	},
   mounted(){ 
     this.getBanner()
@@ -150,7 +151,7 @@ export default{
   watch:{
     currentPage:{
       handler(curVal,oldVal){
-        this.getMainlist({page: curVal,status: this.currentStatus})  
+        this.getMainlist({page: curVal,status: this.currentStatus})        
       },
       deep:true
     }
@@ -182,12 +183,13 @@ export default{
             this.totalRows = res.data.content.totalRows-0;
             this.savedList =  res.data.content.list;
             this.goodsList = this.savedList.slice(0, this.savedList.length)
-          }        
+          } 
+          //加载列表信息完成后滚动到指定位置
+          if(this.currentPage>1){
+            this.srcollTo(document.getElementById("listnav"))  
+          }               
       })  
     },
-		getMoreList (curVal) {
-			let page = this.currentPage
-	   },
     fliter(index, keyword){
       let self = this;
       self.listNav.forEach((item, _index)=>{            

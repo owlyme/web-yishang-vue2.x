@@ -68,7 +68,10 @@
     	<b-row >
     		<b-col >
     			<div class="weichatpayqrcode center">
-    				<img :src="payQrcode">
+    				<img :src="payQrcode" alt="微信二位码">
+    				<div class="isloading" v-if="!payQrcode">
+						<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
+					</div>
     			</div>
     			<div class="weichatpaybutton center">
     				<img src="/static/weichat/weichatpaybutton.jpg">
@@ -253,9 +256,7 @@ export default{
 		this.getPayfront()
 	},
 	methods:{
-		...mapMutations([
-	      'setIndentBlock',
-	    ]),
+		...mapMutations(['setIndentBlock','closeBanks']),
 		toPayPage(val){
 			this.displayOrNot= val
 		},
@@ -273,7 +274,7 @@ export default{
 		getPayfront(){
 			let args= { order_id: this.orderId}
 	        this.Payfront(args).then((res)=>{
-	        	console.log(res)
+	        	// console.log(res)
 				if(res.data.status == 200 ){
 					this.receiptPayFront = res.data.content
 				}
@@ -281,13 +282,13 @@ export default{
 		},
 		back(){
 			this.showWeiChat = false
-			clearInterval(this.timer)
+			clearInterval(this.timerWx)
 		},
 		nextPay(payType){
 			let args= { order_id: this.receiptPayFront.order_id,
 						pay_type: payType,
 						service_fee: this.receiptPayFront.service_fee}
-			console.log('weixin zhi fu >>>',args)
+			// console.log('weixin zhi fu >>>',args)
 			if( payType == 'wxpay' ){
 				this.setIndentBlock(true)
 				this.showWeiChat= true;
@@ -305,23 +306,24 @@ export default{
 			}	       	
 		},
 		afterWxpay(){
-			let args= { order_id: this.receiptPayFront.order_id}			
-			this.timer = setInterval(()=>{
-				this.WxPay(args).then((res)=>{
+			let args= { order_id: this.receiptPayFront.order_id }		
+			this.timerWx = setInterval(()=>{
+				this.WxPay(args).then( (res)=>{
 					// console.log(res)
+					// console.log(res.data)
 					if(res.data){
-						clearInterval(this.timer)
+						clearInterval(this.timerWx)
 						this.showWeiChat = false
-						this.receiptContent.order_id = null
+						this.closeBanks(false)
 						this.$router.push('/indent')
 					}else {
-						console.log('Waiting wxpay...')
+						// console.log('Waiting wxpay...')
 					}
 		       	})
 			}, 2000)
 		},
 		alipay(args){
-			console.log("alipay>>>>>>>>>>>>")
+			// console.log("alipay>>>>>>>>>>>>")
 			let form = document.createElement('form')
 				form.setAttribute('method','post')
 				form.setAttribute('action',this.Api.url
@@ -485,11 +487,25 @@ export default{
  	color: rgb(51, 51, 51);
  	border: 2px solid rgb(148, 46, 234);
  }
- .weichatpayqrcode img{
+ .weichatpayqrcode {
+ 	position: relative;
  	padding: 30px;
  	border: 1px solid rgba(104,104, 104,0.5);
 	width: 212px;
 	height: 212px;
+ }
+ .weichatpayqrcode img{
+ 	width: 100%;
+ 	height:100%;
+ }
+ .weichatpayqrcode .isloading{
+ 	position: absolute;
+ 	top: 0;
+ 	left: 0;
+ 	font-size: 25px;
+ 	width: 100%;
+ 	height:100%;
+
  }
  .weichatpaybutton{
  	margin-top: 60px;

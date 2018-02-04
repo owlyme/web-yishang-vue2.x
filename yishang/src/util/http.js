@@ -21,12 +21,12 @@ axios.interceptors.request.use(
     const token = getCookie('PHPSESSID'); //获取Cookie
     config.data = JSON.stringify(config.data);
     console.log(document.cookie)
-    // config.headers = {
-    //   'Content-Type':'application/x-www-form-urlencoded' //设置跨域头部
-    // };
-    // if (true) {//nlk7969qepf43h4s52kvchaas4
-    //   config.params = {'token': '2l669thjdlb1br0tvdbviuej04'} //后台接收的参数，后面我们将说明后台如何接收
-    // }
+    config.headers = {
+      'Content-Type':'application/x-www-form-urlencoded' //设置跨域头部
+    };
+    if (false) {//nlk7969qepf43h4s52kvchaas4
+      config.params = {'token': '2l669thjdlb1br0tvdbviuej04'} //后台接收的参数，后面我们将说明后台如何接收
+    }
     return config;
   },
   err => {

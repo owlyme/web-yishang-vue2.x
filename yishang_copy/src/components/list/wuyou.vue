@@ -1,13 +1,13 @@
 <template>
 	<div>
-		<div v-if="receiptContent.order_id" id="banks" class=" padding-top-bottom color border-top">	
-			<div class="container">		
+		<div v-show="getShowBanks" id="banks" class=" padding-top-bottom color border-top">	
+			<div class="container" v-if="getShowBanks">		
 				<Banks 
 				:serverfee="receiptContent.service_fee"
 				:orderId="receiptContent.order_id" ></Banks>
 			</div>
 		</div>
-		<div v-else>
+		<div v-show="!getShowBanks">
 			<div  id="wuyou">
 				<div class="container bg-white">
 					<!-- 加工单编辑 -->
@@ -90,17 +90,19 @@ export default {
 		...mapGetters([
 		 'getReceiptContent',
 		 'getSubmitReceipt',
-		 'getPopup'
+		 'getPopup',
+		 'getShowBanks',
+		 'getDraft'
 		])
 	},
-		beforeCreate(){
-	    	this.BeforeReceipt().then( (res)=>{
-		        if(res.data.status ==200){		            
-		          }else {
-		          	this.switchPupop()
-		            this.$router.push('/')
-		          }
-		 })	    
+	beforeCreate(){
+    	this.BeforeReceipt().then( (res)=>{
+	        if(res.data.status ==200){		            
+	          }else {
+	          	this.switchPupop()
+	            this.$router.push('/')
+	        }
+	 })	    
 	},
   created(){
 	this.receiptContent = this.objStringfy( this.getReceiptContent)
@@ -112,23 +114,24 @@ export default {
   mounted(){
 	this.fixed = this.windowSize()
 	},   
-	  watch:{
-			submitReceipt:{
-				handler(curVal, oldVal){					
-					console.log('current draft >>',curVal)
-		　　　　},
-				deep: true
-			}
-	  },
+	// watch:{
+	// 	submitReceipt:{
+	// 		handler(curVal, oldVal){
+	// 			this.setDraft('wuyou')
+	// 			console.log('current draft >>', curVal)
+	// 　　　　},
+	// 		deep: true
+	// 	}
+	// },
 	methods:{
-		...mapMutations(['clearCustomer','setIndentBlock','switchPupop']),
+		...mapMutations(['clearCustomer','setIndentBlock','switchPupop','closeBanks','setDraft']),
 		getReceipt(){
 			let args = {
 				type: 2,
 				order_id : this.$route.query.order_id
 			}
 			this.ReceiptIndex(args).then((res)=>{
-				console.log('Receipt/Index' ,res)
+				// console.log('Receipt/Index' ,res)
 			    if(res.data.status == 200){
 			    	this.receiptContent = res.data.content
 			    	if(!Array.isArray( this.receiptContent.done )){
@@ -137,8 +140,7 @@ export default {
 			    }         
 			})
 		},
-	    onSubmit(){
-	    	
+	    onSubmit(){	    	
 	    	this.submitReceiptFn(this.submitReceipt)
 	    },
 	    getpayfront(){
@@ -149,13 +151,13 @@ export default {
 			})
 	    },    
 	    submitReceiptFn(args){
-	    	//----------------------------------------------------------------------------------------------------------------
-	    	// this.$set(this.receiptContent, 'order_id',111 )
+	    	//--------------------------------------------------------------------------------------------------------------
 	    	if( this.verfy() ){
 		    this.SubmitReceipt(args).then((res)=>{
 				if(res.data.status == 200){
-		        	this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
-		        	this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
+					this.$set(this.receiptContent, 'service_fee', res.data.content.service_fee )
+					this.$set(this.receiptContent, 'order_id', res.data.content.order_id )
+					this.closeBanks(true)
 			    }else{
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
@@ -166,8 +168,7 @@ export default {
 	    	if( this.verfy() ){
 	    	let args = this.submitReceipt
 		    this.SubmitDraft(args).then((res)=>{
-		    	console.log('save Draft',res)
-		    	console.log( res.data.status)
+		    	// console.log('save Draft',res)
 				if(res.data.status == 200){
 					// this.openMessage({str: res.data.msg, ele:this})
 					this.$router.push('/indent')
@@ -179,6 +180,18 @@ export default {
 	    },
 	    verfy(){
 	    	let flag= true
+	    	if(!this.submitReceipt.quality_requirement){
+	    		this.openMessage({str: '请选择你的品质要求', ele:this})
+	    		flag= false
+	    	}
+	    	if(!this.submitReceipt.check_id){
+	    		this.openMessage({str: '请选择你的查货模式', ele:this})
+	    		flag= false
+	    	}
+	    	if(!this.submitReceipt.error_id){
+	    		this.openMessage({str: '请选择你的误差标准', ele:this})
+	    		flag= false
+	    	}
 	    	this.submitReceipt.fabric.forEach((item, index)=>{
 	    		if(!item.name){
 	    			this.openMessage({str: "请填写面料" + String.fromCharCode( index+65 )+"的名称", ele:this})
@@ -189,8 +202,8 @@ export default {
 	    			flag= false
 	    		}
 	    	})
+	    	
 	    	return flag
-
 	    }
 	}
 }

@@ -149,7 +149,7 @@ export default {
 		demanding_account(){	
 			let total = 0;	
 			this.size.forEach((item, index)=> {
-			console.log("this.submitReceipt.size.", item)
+			// console.log("this.submitReceipt.size.", item)
 					total += item.xs_demanding_account  
 							+ item.s_demanding_account   
 							+ item.m_demanding_account   
@@ -204,7 +204,7 @@ export default {
 					xxxl_demanding_account  : 0,
 					xxxxl_demanding_account : 0
 				}
-			this.submitReceipt.size.push( clothes );
+			this.size.push( clothes );
 			this.flags.push({flag: true})	
 		},
 	}

@@ -6,9 +6,11 @@ import Indexlist from '@/components/list/index'
 	import Zizhu from '@/components/list/zizhu'
 	import Wuyou from '@/components/list/wuyou'
 	import Indent from '@/components/list/indent'
+// import store from '../store/index.js'
+
 
 Vue.use(Router)
-
+// 
 
 const router = new Router({
   mode:'hash',
@@ -31,6 +33,12 @@ const router = new Router({
 })
 
 router.beforeEach(function (to, from, next) {
+  // if(['/zizhu', '/wuyou'].includes( from.path )){
+  //   console.log(store.state.draft)
+  //   store.commit('setDraft', 312)
+  //    console.log(store.state.draft)
+  // }
+  window.scrollTo(0,0)
   if( to.path != '/login' && !Vue.cookies.get('yiyiphone')){
     next({path: "/login"})
   }else{   

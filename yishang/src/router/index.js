@@ -32,11 +32,12 @@ const router = new Router({
 
 router.beforeEach(function (to, from, next) {
   //  !Vue.cookies.get('PHPSESSID')
-  if( to.path != '/login' && !Vue.cookies.get('yiyiphone') ){
-    next({path: "/login"})
-  }else{   
-    next()
-  }
+  // if( to.path != '/login' && !Vue.cookies.get('yiyiphone') ){
+  //   next({path: "/login"})
+  // }else{   
+  //   next()
+  // }
+  next()
 })
 
 export default router

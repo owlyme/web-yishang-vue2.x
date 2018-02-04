@@ -1,7 +1,7 @@
 <template>
 	<div class="quality" >
 		<h5 class="padding-bottom">质量要求</h5>
-		 <el-form-item label="品质要求:">
+		 <el-form-item label="品质要求:"  :class="{hasbefore : !computedForm.quality_requirement}">
 				    <el-radio-group v-model="computedForm.quality_requirement" style="padding-top:8px">
 				    <el-radio label="精品" value="精品"></el-radio>
 				    <el-radio label="半精品" value="半精品"></el-radio>
@@ -9,7 +9,7 @@
 				    <el-radio label="普通" value="普通"></el-radio>
 					</el-radio-group>
 		</el-form-item>
-		<el-form-item label="查货选择:" >
+		<el-form-item label="查货选择:"  :class="{hasbefore : !computedForm.check_id}">
 		    <el-select v-model="computedForm.check_id" placeholder="请选择你的查货模式" style="width:75%">
 		    	<el-option 
 		    				v-for="(item, index) in receiptContent.check"
@@ -18,7 +18,7 @@
 				</el-option>
 		    </el-select>
 		</el-form-item>
-		<el-form-item label="整体允许误差范围:" >
+		<el-form-item label="整体允许误差范围:"  :class="{hasbefore : !computedForm.error_id}" >
 		    <el-select v-model="computedForm.error_id" placeholder="请选择你的误差标准" style="width:75%">
 		      <el-option 
 		    				v-for="(item, index) in receiptContent.error"
@@ -33,7 +33,7 @@
 
 		<el-row :gutter="10"  class="space" >
 		  <h6>尺寸表图片</h6>
-	      <el-col :span="14" :offset="6">
+	      <el-col :span="18" :offset="6">
 			<Uploadfiles 
             :getUploadUrl="actionUrl"
             :defaultImg  ="image"
@@ -44,7 +44,7 @@
 
 	    <el-row :gutter="10"  class="space" >
 		  <h6>工艺单图片</h6>
-	      <el-col :span="14" :offset="6">
+	      <el-col :span="18" :offset="6">
 			<Uploadfiles 
             :getUploadUrl="actionUrl"
             :defaultImg  ="image"
@@ -55,7 +55,7 @@
 
 	    <el-row :gutter="10"  class="space" >
 		  <h6>版型图(若有版型图请上传)</h6>
-	      <el-col :span="14" :offset="6">
+	      <el-col :span="18" :offset="6">
 			<Uploadfiles 
             :getUploadUrl="actionUrl"
             :defaultImg  ="image"
@@ -79,7 +79,7 @@ import Uploadfiles from "@/components/uploadfiles"
 				form: {					
 					check_id:'',				
 					error_id:'',
-					quality_requirement:"精品",
+					quality_requirement:null,
 					requirement:'',
 					picture:[],
 					process_list:[],
@@ -153,5 +153,13 @@ import Uploadfiles from "@/components/uploadfiles"
   .floatleft{
   	float: left;
   	margin-right: 10px;
+  }
+    .hasbefore:before{
+    content: '*';
+    font-size: 25px;
+    color: #F44336;
+    font-weight: 800;
+    position: absolute;
+    
   }
 </style>

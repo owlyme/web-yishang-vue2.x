@@ -26,8 +26,7 @@
 		</h6>
 		<transition name="el-zoom-in-top">
 		<el-form 
-		v-if="emptyAddressList"
-		:model="ruleForm" 
+		v-if="emptyAddressList" trueodel="ruleForm" 
 		:rules="rules" 
 		ref="ruleForm" 
 		label-width="16.667%"  
@@ -63,7 +62,7 @@ import China from "./address/china.vue"
 		props:['receiptContent','submitReceipt'],
 		data(){
 			return{
-				emptyAddressList:false,
+				emptyAddressList: true,
 				ruleForm: {	
 				  address: '',
 		          name: '',
@@ -124,10 +123,12 @@ import China from "./address/china.vue"
 	      	return '支付服务费用(订单的金额的'+ ((this.receiptContent.deposit-0) * 100) + '%):'
 	      },
 	      computedList(){
-	      	if(  Array.isArray( this.receiptContent.address ) && !this.addressList.length ){
-	      		this.emptyAddressList = !this.emptyAddressList
+	      	if(  Array.isArray( this.receiptContent.address ) && !this.addressList.length ){  		
 		        this.addressList = this.receiptContent.address
 		    }
+		    if( !this.addressList.length ){
+		    	this.emptyAddressList = false
+		    }   
 		    return this.addressList
 	      },
 	      computedId:{
@@ -146,7 +147,7 @@ import China from "./address/china.vue"
 			        if( !Array.isArray( this.receiptContent.done ) && !this.is_deposited ){
 			        	this.is_deposited = this.receiptContent.done.details.is_deposited
 				    }
-				    return this.is_deposited
+				    return this.is_deposited  || '1'
 			    },
 			    set: function (v) {
 			       this.is_deposited = v

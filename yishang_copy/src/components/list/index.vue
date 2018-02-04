@@ -19,12 +19,12 @@
               <img class="avatarImg" :src="avatarSrc" />
             </router-link>                  
           </el-col>
-          <el-col :span="14">
+          <el-col :span="20">
               <div class="link-nav">
                 <div class="nav-h clearfix">
                     <router-link  class="muneNav"  to='/' >首页</router-link>
                     <router-link  class="muneNav"  to='/zizhu' >自主发单</router-link>
-                    <router-link  class="muneNav"  to='/wuyou' >无忧发单</router-link>
+                    <router-link @click.native="closeBanks(false)" class="muneNav"  to='/wuyou' >无忧发单</router-link>
                     <router-link  class="muneNav"  to='/indent'
                      @click.native="setIndentBlock(true)" >我的订单</router-link>
                 </div>
@@ -61,6 +61,8 @@ export default {
   beforeRouteUpdate (to, from, next) {
     if( ['/zizhu', '/wuyou'].includes( to.path ) ){
       this.BeforeReceipt().then( (res)=>{
+        // next() // ------------------------------------------------------------
+        
         if(res.data.status ==200){
             next()
           }else {
@@ -76,7 +78,7 @@ export default {
       ...mapGetters([
          'getSavePassword',
          'getCustomer',
-         'getPopup'
+         'getPopup'       
       ]),
       avatarSrc(){
         if( this.$cookies.get('yiyiavatar') ) return this.$cookies.get('yiyiavatar')
@@ -91,7 +93,7 @@ export default {
       }
   },
   methods:{
-    ...mapMutations(['clearCustomer','setIndentBlock','switchPupop']),
+    ...mapMutations(['clearCustomer','setIndentBlock','switchPupop', 'closeBanks']),
     logOut(){
       this.LogOut().then((res)=>{
           if(res.data.status == 200){

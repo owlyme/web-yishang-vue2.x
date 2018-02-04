@@ -5,7 +5,7 @@
 			<el-row :gutter="10"  class="space " 
 				v-for="(item, index) in computedSingleImg" :key="'uploadSingleImg'+ index"	>		 
 			  <el-col :span="6" class="text-right text-style-sm"> 	{{ item.name }}	  </el-col>	
-			  <el-col :span="14" >
+			  <el-col :span="18" >
 			  		<Uploadfiles
             			:oneImage= 'true'
 			            :getUploadUrl="actionUrl"
@@ -18,7 +18,7 @@
 		<div class="uploadimgs">
 			<el-row :gutter="10"  class="space" >
 			  <el-col :span="6" class="text-right text-style-sm">局部细节图</el-col>	
-		      <el-col :span="14">
+		      <el-col :span="18">
 				<Uploadfiles
 		            :getUploadUrl="actionUrl"
 		            :defaultImg  ="image1"
@@ -37,7 +37,7 @@
 			  	:class="{'el-input__inner': !item.title}"			
 			  	>
 			  </el-col>	
-			  <el-col :span="14">			  	
+			  <el-col :span="18">
 			  		<Uploadfiles
 		            :getUploadUrl="actionUrl"		            
 		            :getImgList  ="item.sub_picture"
@@ -102,7 +102,7 @@ import { mapGetters } from 'vuex'
 					// console.log(this.receiptContent.done.details)
 
 					if( !this.list[0].loaded ){
-						console.log(this.list[0].picture)
+						// console.log(this.list[0].picture)
 						this.list[0].picture.push( this.receiptContent.done.details.front_picture )
 						this.list[0].loaded = true
 					}

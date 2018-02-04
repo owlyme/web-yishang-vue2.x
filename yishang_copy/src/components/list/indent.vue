@@ -2,11 +2,11 @@
 	<div id="indent">
 		<div class="container">
 			<!-- 我的订单信息 -->
-			<div v-if="getIndentBlock">
-				<el-row :gutter="10"  style="weidth : 100%">
-				  <el-col :span="5">
-				  	<div class="myIndent">我的订单</div>
-					    <ul class="nav-vertal">
+			<div v-if="getIndentBlock" id='listnavindent'>
+				<el-row :gutter="10"  style="width : 100%">
+				  <el-col :span="5" id="fixedElePa">
+				  	<div class="myIndent" >我的订单</div>
+					    <ul class="nav-vertal" id="fixedEle">
 			          	<li  v-for="(item, index) in listNav"
 			          		:index="index" 
 			          		class="muneNav"
@@ -29,12 +29,13 @@
 		         <b-row  class="owl">
 		            <b-col >
 		              <b-pagination
+		              :limit="10"
 		              :total-rows="totalRows" 
 		              v-model="currentPage" 
-		              first-text="首页"
-		              prev-text="上一页"
-		              next-text="下一页"
-		              last-text="末页"
+		              first-text="<<首页"
+		              prev-text="<"
+		              next-text=">"
+		              last-text="末页>>"
 		              :per-page="perPage" >
 		              </b-pagination>
 		              <span>共{{ Math.ceil( totalRows / perPage) }}页</span>
@@ -383,28 +384,22 @@
 		},
 		mounted(){
 			this.getMainlist({status: 'x'})
+			// this.stickybits('#fixedElePa')
+			// this.fixedEle()
 		},
 		watch:{
 		    currentPage:{
-		      handler(curVal,oldVal){
+		      handler(curVal,oldVal){		        
 		        this.getMainlist( {page: curVal,status: this.currentStatus} )
 		      },
 		      deep:true
 		    }
 		},
 		computed:{
-			...mapGetters([
-		      'getIndentBlock',
-		    ]),
-		    getUploadUrl(){
-		    	return this.Api.loadImgUrl
-		    },
-		    curSchedule(){
-		    	return this.selectSchedule
-		    },
-		    curDetails(){
-		    	return this.selectDetails
-		    }
+			...mapGetters(['getIndentBlock']),
+		    getUploadUrl(){  return this.Api.loadImgUrl },
+		    curSchedule(){	return this.selectSchedule  },
+		    curDetails(){	return this.selectDetails }
 		},
 		methods:{
 			...mapMutations([
@@ -417,7 +412,10 @@
 		            this.totalRows = res.data.content.totalRows-0;
 		            this.savedList =  res.data.content.list;
 		            this.goodsList = this.savedList.slice(0, this.savedList.length)
-		          }          
+		          }
+		          if(this.currentPage>1){
+		          	this.srcollTo( document.getElementById("listnavindent") )  
+		          }   
 		      	})  
 		    },
 		    getSchedule(id){
@@ -494,12 +492,38 @@
 		    		this.graph2Active=parseInt(status[0])+step -1
 		    		this.graph3Active=5
 		    	}
+		    },
+		    fixedEle(){
+		    	const Pa = document.getElementById("fixedElePa")
+		    	const ele = document.getElementById("fixedEle")
+		    	let scrolling = ()=>{
+		    		let Patop = this.totalTop( Pa )
+		    		let scrolltop=document.documentElement.scrollTop||document.body.scrollTop
+		    		console.log(1111111)
+		    		if( Patop <= scrolltop){
+		    			console.log(22222222221)
+		    			ele.style.position = "fixed"
+		    			ele.style.top = '50px'
+		    			ele.style.width = Pa.offsetWidth+'px'
+		    			Pa.style.height = '432px'
+		    		}else{
+		    			console.log(3333333331)
+		    			ele.removeAttribute('style')
+		    		}
+		    	}
+				window.onresize = scrolling
+				window.onscroll = scrolling
 		    }		 
 		}
 	}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+	#fixedElePa.js-is-sticky {
+	  top: initial;
+	}
+	#fixedElePa.js-is-stuck {
+	}
 	#indent{
 		margin-top: 20px;
 		background: rgb(248,248,248);

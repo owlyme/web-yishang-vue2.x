@@ -64,7 +64,7 @@
 		watch:{
 			form:{
 				handler(cur){
-					console.log(cur)
+					// console.log(cur)
 					this.submitReceipt.name = cur.name
 					this.submitReceipt.cate_id = cur.cate_id
 					this.submitReceipt.style_id = cur.style_id

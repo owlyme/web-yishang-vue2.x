@@ -1,6 +1,7 @@
 import Api from './api.js'
 import axios from './http.js'
 import qs from 'qs'
+import stickybits from 'stickybits'
 
 let post = ( reqstr, args, fn) => {
 	axios.post( reqstr, qs.stringify(args) ).then( (res) =>{
@@ -79,14 +80,34 @@ export default{
 				if(scrolltop + pageHeight>= footerEle.offsetTop ){
 					this.fixed = false					
 				}else{
-					save.style.left = pageWidth/2- 100+"px"
-					this.fixed = true					
+					if(save){
+						save.style.left = pageWidth/2- 100+"px"
+						this.fixed = true	
+					}				
 				}
 			}
 			scrolling()
 			window.onresize = scrolling
 			window.onscroll = scrolling
+		};
+		Vue.prototype.srcollTo = function(ele){
+			let _top=0;
+			do{
+				_top += ele.offsetTop
+				ele = ele.offsetParent
+			} while ( ele.tagName !== 'BODY')
+			window.scrollTo(0, _top)
+			// setTimeout( function(){window.scrollTo(0, _top)} , 300)
 		}
+		Vue.prototype.totalTop = function(ele){
+			let _top=0;
+			do{
+				_top += ele.offsetTop
+				ele = ele.offsetParent
+			} while ( ele.tagName !== 'BODY')
+			return _top
+		}
+		Vue.prototype.stickybits= stickybits;
 		//objStringfy
 		Vue.prototype.objStringfy =  function(args){ return JSON.parse( JSON.stringify(args) ) };
 		//axios

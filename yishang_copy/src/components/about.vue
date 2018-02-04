@@ -6,7 +6,7 @@
 		  <el-col :span="6"  class="text-right text-style-sm">
 		  	上传说明图片:
 		  </el-col>	
-		  <el-col :span="14">
+		  <el-col :span="18">
 		  	<Uploadfiles 
             :getUploadUrl="actionUrl"
             :defaultImg  ="image"
@@ -61,7 +61,7 @@ import { mapGetters } from 'vuex'
 	    watch:{
 	      list:{
 	        handler(curVal){
-	        	console.log(curVal)
+	        	// console.log(curVal)
 	          this.$emit( 'update:submitReceiptSupplements',  curVal.map( (item, index)=>{ 
 	                        // let obj = Object.assign({}, item)
 	                        let obj = this.objStringfy(item)

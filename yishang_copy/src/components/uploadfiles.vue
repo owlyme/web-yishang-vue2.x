@@ -97,7 +97,7 @@ import { mapGetters } from 'vuex'
         this.list.splice(index, 1)
       },
       handleAvatarSuccess(res, file) {
-         console.log('Img uploand success', file)
+         // console.log('Img uploand success', file)
         if(this.oneImage){
            this.list.pop()
            this.list.push(this.Api.loadImgUrl + file.response.content.url)

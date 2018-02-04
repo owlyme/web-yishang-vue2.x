@@ -79,7 +79,7 @@
 	border-bottom: 2px dashed #eeeeee;
 }
 .bv-example-row{
-	height: 80%;
+	width: 100%;
 	height: 50px;
 	line-height: 50px;	
 }

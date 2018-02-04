@@ -81,18 +81,19 @@ export default {
 	  ...mapGetters([
 	     'getReceiptContent',
 	     'getSubmitReceipt',
-	     'getPopup'
+	     'getPopup',
+	     'getDraft'
 	  ])      
 	},
-	// beforeCreate(){
-	//     	this.BeforeReceipt().then( (res)=>{
-	// 	        if(res.data.status ==200){		            
-	// 	          }else {
-	// 	          	this.switchPupop()
-	// 	            this.$router.push('/')
-	// 	          }
-	// 	     })	    
-	// },
+	beforeCreate(){
+    	this.BeforeReceipt().then( (res)=>{
+	        if(res.data.status ==200){
+	          }else {
+	          	this.switchPupop()
+	            this.$router.push('/')
+	          }
+	     })	    
+	},
 	created(){
 		this.receiptContent = this.objStringfy( this.getReceiptContent)		
 		this.submitReceipt = this.objStringfy( this.getSubmitReceipt)
@@ -100,28 +101,26 @@ export default {
 		this.getReceipt()
 	},
 	mounted(){
-		// setTimeout(()=>{
-		// 	this.receiptContent = JSON.parse(this.str) 
-		// }, 3000)
 		this.windowSize()
 	},
-	watch:{
-		submitReceipt:{
-			handler(curVal, oldVal){					
-				console.log('submitReceipt draft >>', curVal)
-			},
-			deep: true
-		}
-	},
+	// watch:{
+	// 	submitReceipt:{
+	// 		handler(curVal, oldVal){
+	// 			this.setDraft('zizhu')					
+	// 			console.log('submitReceipt draft >>', curVal)
+	// 		},
+	// 		deep: true
+	// 	}
+	// },
 	methods:{
-		...mapMutations(['clearCustomer','setIndentBlock','switchPupop']),
+		...mapMutations(['clearCustomer','setIndentBlock','switchPupop','setDraft']),
 		getReceipt(){
 			let args = {
 				type: 1,
 				order_id : this.$route.query.order_id
 			}
 			this.ReceiptIndex(args).then( (res)=>{
-				console.log(res)
+				// console.log(res)
 			    if(res.data.status == 200){
 			    	this.receiptContent = res.data.content
 			    	if(!Array.isArray( this.receiptContent.done )){
@@ -148,8 +147,8 @@ export default {
 	    saveDraft(){
 	    	if( this.verfy() ){
 			    this.SubmitDraft( this.submitReceipt ).then((res)=>{
-			    	console.log('save Draft>>',res)
-			    	console.log( res.data.status)
+			    	// console.log('save Draft>>',res)
+			    	// console.log( res.data.status)
 					if(res.data.status == 200){
 						this.$router.push("/indent")
 				    }else{
@@ -160,6 +159,18 @@ export default {
 	    },
 	    verfy(){
 	    	let flag= true
+	    	if(!this.submitReceipt.quality_requirement){
+	    		this.openMessage({str: '请选择你的品质要求', ele:this})
+	    		flag= false
+	    	}
+	    	if(!this.submitReceipt.check_id){
+	    		this.openMessage({str: '请选择你的查货模式', ele:this})
+	    		flag= false
+	    	}
+	    	if(!this.submitReceipt.error_id){
+	    		this.openMessage({str: '请选择你的误差标准', ele:this})
+	    		flag= false
+	    	}
 	    	this.submitReceipt.fabric.forEach((item, index)=>{
 	    		if(!item.name){
 	    			this.openMessage({str: "请填写面料" + String.fromCharCode( index+65 )+"的名称", ele:this})
@@ -170,12 +181,15 @@ export default {
 	    			flag= false
 	    		}
 	    	})
+	    	
 	    	return flag
 	    }
 	}
 }
 </script>
 <style scoped>
+
+
 	#zizhu{
 		margin-top: 20px;
 		background: rgb(248,248,248);

@@ -17,7 +17,7 @@
 			          	</li>
 			          </ul>
 				  </el-col>
-				  <el-col :span="19">
+				  <el-col :span="19" id="listnavindent">
 				  		<div class="myIndent">{{contentTitle}}</div>
 				  		<div v-if="goodsList.length" v-for="(item,index) in goodsList" :key="index+'indent'">
 				  			<IndentList :goodsMsg="item" v-on:change="switchBlock(item.order_id)"></IndentList>
@@ -30,11 +30,12 @@
 		            <b-col >
 		              <b-pagination
 		              :total-rows="totalRows" 
+		              :limit="10"
 		              v-model="currentPage" 
-		              first-text="首页"
-		              prev-text="上一页"
-		              next-text="下一页"
-		              last-text="末页"
+		              first-text="<<首页"
+		              prev-text="<"
+		              next-text=">"
+		              last-text="末页>>"
 		              :per-page="perPage" >
 		              </b-pagination>
 		              <span>共{{ Math.ceil( totalRows / perPage) }}页</span>
@@ -387,6 +388,8 @@
 		watch:{
 		    currentPage:{
 		      handler(curVal,oldVal){
+		      	console.log(document.getElementById("listnavindent").offsetTop)
+        		document.documentElement.scrollTop = document.getElementById("listnavindent").offsetTop
 		        this.getMainlist( {page: curVal,status: this.currentStatus} )
 		      },
 		      deep:true

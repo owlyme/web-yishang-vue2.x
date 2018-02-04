@@ -114,8 +114,11 @@ export default {
         phone : this.account.name,
         password: this.account.password
       }
+
+              console.log("account ", args)
       this.LoginCheck(args)
       .then((res)=>{
+            console.log( res)
             if(res.data.status == 200){
               this.setCustomerInfo({
                 avatar: res.data.content.avatar,
@@ -124,10 +127,9 @@ export default {
               if(this.account.save){
                 this.setSavePassword(true)
               }
-
               this.$cookies.set('yiyiavatar', res.data.content.avatar, 60*1000);
               this.$cookies.set('yiyiphone', res.data.content.phone, 60*1000);
-              
+
               this.account= { name: '',password:'', save : false}
               this.$router.push("/")
             }else{

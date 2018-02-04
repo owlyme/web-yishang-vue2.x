@@ -53,7 +53,7 @@ a:hover{
   text-align: center;
 }
 .owl *{
-display: inline-block;
+display: inline-block !important;
 }
 .owl ul li{
     padding: 5px;

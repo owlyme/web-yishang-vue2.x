@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import "babel-polyfill"
-import Vuex from  'vuex'					
+import Vuex from 'vuex'					
 Vue.use(Vuex)
 
 const state={
@@ -12,6 +12,8 @@ const state={
 		avatar: null,
 		id: null
 	},
+	draft: null,
+	showBanks: false,
 	savePassword: false,
 	indentBlock: true,	
 	popup: false,
@@ -85,6 +87,12 @@ const getters = {
 	},
 	getSubmitReceipt(state){
 		return state.submitReceipt
+	},
+	getShowBanks(state){
+		return state.showBanks
+	},
+	getDraft(state){
+		return state.draft
 	}
 }
 
@@ -103,8 +111,13 @@ const mutations = {
  }, 
  switchPupop(state,val){
  	Vue.set(state,'popup', !state.popup);
+ },
+ closeBanks(state, val){
+ 	Vue.set(state,'showBanks', val);
+ },
+ setDraft(state,val){
+ 	Vue.set(state,'draft', val);
  }
-
 }
 
 const actions = {
