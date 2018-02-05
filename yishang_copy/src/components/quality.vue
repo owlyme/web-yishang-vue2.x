@@ -32,11 +32,12 @@
 		</el-form-item>
 
 		<el-row :gutter="10"  class="space" >
-		  <h6>尺寸表图片</h6>
+		  <h6>尺寸表（生产制单）</h6>
 	      <el-col :span="18" :offset="6">
 			<Uploadfiles 
             :getUploadUrl="actionUrl"
-            :defaultImg  ="image"
+            :defaultImg  ="size_table1"
+            :defaultImg2 ="size_table2"
             :getImgList  ="computedForm.size_table"
           	></Uploadfiles>
 	      </el-col>
@@ -47,7 +48,7 @@
 	      <el-col :span="18" :offset="6">
 			<Uploadfiles 
             :getUploadUrl="actionUrl"
-            :defaultImg  ="image"
+            :defaultImg  ="gongyiImage"
             :getImgList  ="computedForm.process_list"
           	></Uploadfiles>
 	      </el-col>
@@ -86,6 +87,9 @@ import Uploadfiles from "@/components/uploadfiles"
 					size_table:[]
 				},
 		        image : require('../assets/mode-pic.jpg'),
+		        gongyiImage : require('../assets/gongyi.png'),
+		        size_table1: require('../assets/size_table1.png'),
+		        size_table2: require('../assets/size_table2.png')
 			}
 		},
 		computed:{

@@ -163,9 +163,10 @@ export default {
 			return total
 		},
 		computedSized(){
-			if( !Array.isArray( this.receiptContent.done )){
-				this.size = this.receiptContent.done.size
-				this.receiptContent.done.size.forEach( (item, index)=>{
+			let done = this.receiptContent.done
+			if( !Array.isArray( done ) && done.size.length){
+				this.size = done.size
+				done.size.forEach( (item, index)=>{
 					this.flags[index] = this.flags[index] ? this.flags[index] : {flag: true}
 				})
 			}

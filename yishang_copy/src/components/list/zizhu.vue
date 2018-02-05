@@ -145,7 +145,7 @@ export default {
 			}
 	    },
 	    saveDraft(){
-	    	if( this.verfy() ){
+	    
 			    this.SubmitDraft( this.submitReceipt ).then((res)=>{
 			    	// console.log('save Draft>>',res)
 			    	// console.log( res.data.status)
@@ -155,7 +155,7 @@ export default {
 				        this.openMessage({str: res.data.msg, ele:this})
 				    }
 			    })
-		    }
+		
 	    },
 	    verfy(){
 	    	let flag= true

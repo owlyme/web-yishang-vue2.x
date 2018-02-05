@@ -96,7 +96,7 @@ export default {
 		])
 	},
 	beforeCreate(){
-    	this.BeforeReceipt().then( (res)=>{
+		this.BeforeReceipt().then( (res)=>{
 	        if(res.data.status ==200){		            
 	          }else {
 	          	this.switchPupop()
@@ -112,6 +112,7 @@ export default {
 	this.getpayfront()
   }, 
   mounted(){
+  	// this.receiptContent =  this.objStringfy(this.str)
 	this.fixed = this.windowSize()
 	},   
 	// watch:{
@@ -165,7 +166,6 @@ export default {
 			}
 	    },
 	    saveDraft(){
-	    	if( this.verfy() ){
 	    	let args = this.submitReceipt
 		    this.SubmitDraft(args).then((res)=>{
 		    	// console.log('save Draft',res)
@@ -176,9 +176,9 @@ export default {
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
 		    })
-			}
+	
 	    },
-	    verfy(){
+	    verfy(isDraft){
 	    	let flag= true
 	    	if(!this.submitReceipt.quality_requirement){
 	    		this.openMessage({str: '请选择你的品质要求', ele:this})
@@ -188,7 +188,7 @@ export default {
 	    		this.openMessage({str: '请选择你的查货模式', ele:this})
 	    		flag= false
 	    	}
-	    	if(!this.submitReceipt.error_id){
+	    	if(!this.submitReceipt.error_id ){
 	    		this.openMessage({str: '请选择你的误差标准', ele:this})
 	    		flag= false
 	    	}

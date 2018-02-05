@@ -1,7 +1,7 @@
 <template>
 	<div class="padding-left-right " >
 		<el-form-item label="产品名称:">
-		    <el-input v-model="computedForm.name" placeholder="建议类目+面料+公司+日期" style="width:75%"></el-input>
+		    <el-input v-model="computedForm.name" placeholder="建议填写如：女装 针织 毛衫 杭州 100件" style="width:75%"></el-input>
 		  </el-form-item>
 		  <el-form-item label="面料属性大类:" >
 		    <el-select v-model="computedForm.cate_id" placeholder="面料属性大类" style="width:75%">

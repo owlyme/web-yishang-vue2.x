@@ -98,24 +98,33 @@ import { mapGetters } from 'vuex'
 				return this.Api.upload
 			},
 			computedSingleImg(){
-				if(this.receiptContent.done.details){
+				let details = this.receiptContent.done.details
+				if(details){
 					// console.log(this.receiptContent.done.details)
 
 					if( !this.list[0].loaded ){
 						// console.log(this.list[0].picture)
-						this.list[0].picture.push( this.receiptContent.done.details.front_picture )
+						if(details.front_picture) {
+							this.list[0].picture.push( details.front_picture )
+						}
 						this.list[0].loaded = true
 					}
 					if( !this.list[1].loaded ){
-						this.list[1].picture.push( this.receiptContent.done.details.back_picture )
+						if(details.front_picture) {
+							this.list[1].picture.push( details.back_picture )
+						}
 						this.list[1].loaded = true
 					}
 					if( !this.list[2].loaded ){
-						this.list[2].picture.push( this.receiptContent.done.details.left_picture )
+						if(details.front_picture) {
+							this.list[2].picture.push( details.left_picture )
+						}
 						this.list[2].loaded = true
 					}
 					if( !this.list[3].loaded ){
-						this.list[3].picture.push( this.receiptContent.done.details.right_picture )
+						if(details.front_picture) {
+							this.list[3].picture.push( details.right_picture )
+						}
 						this.list[3].loaded = true
 					}
 				}
