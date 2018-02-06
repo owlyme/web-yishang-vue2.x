@@ -147,6 +147,7 @@ export default{
   mounted(){ 
     this.getBanner()
     this.getMainlist({page: this.currentPage,status: 'x'})
+    this.fadan('main')
   },
   watch:{
     currentPage:{

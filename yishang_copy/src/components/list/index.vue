@@ -22,13 +22,17 @@
           <el-col :span="20">
               <div class="link-nav">
                 <div class="nav-h clearfix">
-                    <router-link  class="muneNav"  to='/' >首页</router-link>
-                    <router-link id="zizhupage" class="muneNav"  to='/zizhu' >自主发单</router-link>
-                    <router-link id="wuyoupage" @click.native="closeBanks(false)" class="muneNav"  to='/wuyou' >无忧发单</router-link>
-                    <router-link  class="muneNav"  to='/indent'
-                     @click.native="setIndentBlock(true)" >我的订单</router-link>
-                </div>
-                
+                    <span id="mainpage" class="muneNav"  @click="link('/')" >首页</span>
+                    <span id="zizhupage" class="muneNav" @click="link('/zizhu')" >自主发单</span>
+                    <!-- <span id="wuyoupage" @click.native="closeBanks(false)" class="muneNav"  to='/wuyou' >无忧发单</span> -->
+                    <!-- <span id="indentpage" class="muneNav"  to='/indent' 
+                     @click.native="setIndentBlock(true)" >我的订单</span>
+                      , function(){ return closeBanks(false)}
+                      , function(){ return setIndentBlock(true)}
+                      -->
+                     <span id="wuyoupage"  class="muneNav" @click="link('/wuyou')" >无忧发单</span>
+                     <span id="indentpage" class="muneNav" @click="link('/indent')" >我的订单</span>
+                </div>                
               </div>
           </el-col>
         </el-row>  
@@ -72,7 +76,7 @@ export default {
       })
     }else{
       next()
-    }    
+    }
   },
   computed:{
       ...mapGetters([
@@ -106,6 +110,14 @@ export default {
           }         
      })
     },
+    link(page, fn){
+      this.$router.push(page)
+      if(page == '/wuyou') this.closeBanks(false)
+      if(page == '/indent') this.setIndentBlock(true)
+      if( fn){
+        fn()
+      }
+    }
   }
 }
 </script>

@@ -91,8 +91,8 @@ export default {
 	          }else {
 	          	this.switchPupop()
 	            this.$router.push('/')
-	          }
-	     })
+	        }
+	    })
 	},
 	created(){
 		this.receiptContent = this.objStringfy( this.getReceiptContent)		
@@ -101,6 +101,7 @@ export default {
 		this.getReceipt()
 	},
 	mounted(){
+		this.fadan('zizhu')
 		this.windowSize()
 	},
 	// watch:{
@@ -129,7 +130,7 @@ export default {
 			    }
 			})
 		},
-	    onSubmit(){	    	
+	    onSubmit(){	   	
 	    	this.submitReceiptFn(this.submitReceipt);
 	    },
 	    submitReceiptFn(args){

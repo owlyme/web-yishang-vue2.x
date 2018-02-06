@@ -383,6 +383,7 @@
 			}
 		},
 		mounted(){
+			this.fadan('indent')
 			this.getMainlist({status: 'x'})
 			// this.stickybits('#fixedElePa')
 			// this.fixedEle()

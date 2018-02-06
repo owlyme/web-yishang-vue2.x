@@ -325,3 +325,7 @@ border-radius: 50px 0 0 50px;
     background: rgba(193, 72, 213, 0.4);
     z-index: 97;    
 }
+  .isactive,
+  .router-link-exact-active{
+    color: #C44DDC;
+  }

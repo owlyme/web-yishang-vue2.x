@@ -26,7 +26,7 @@
       <span class="avatar-uploader-text">点击上传</span>
     </el-upload>
   </ul>
-    <el-dialog :visible.sync="dialogVisible">
+  <el-dialog :visible.sync="dialogVisible">
     <img width="100%" :src="dialogImageUrl" alt="">
   </el-dialog>
  </div>
@@ -87,7 +87,7 @@ import { mapGetters } from 'vuex'
         return this.list
       },
       edit(){
-        return this.$route.query.order_id === undefined
+        return (this.$route.query.order_id === undefined) && (this.list.length != 0)
       }
     },
     watch:{
@@ -133,8 +133,8 @@ import { mapGetters } from 'vuex'
         return isJPG;
       },
       showBig(src){
-          dialogImageUrl= src
-          dialogVisible= true
+          this.dialogImageUrl= src
+          this.dialogVisible= true
       }
     }
   }

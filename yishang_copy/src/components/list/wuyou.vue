@@ -112,7 +112,7 @@ export default {
 	this.getpayfront()
   }, 
   mounted(){
-  	
+  	this.fadan('wuyou')
 	this.fixed = this.windowSize()
 	},   
 	// watch:{
