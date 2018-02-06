@@ -112,8 +112,10 @@ export default {
         if(this.doneFabric && Array.isArray(this.doneFabric) && this.doneFabric.length){
           this.list = this.doneFabric
             this.list.forEach( (item, index)=>{
-            this.labels[index] = this.labels[index] ? this.labels[index] 
-                        : "面料" + String.fromCharCode( this.labels.length +this.startCode )
+              if(item.picture){
+                item.picture = []
+              }
+              this.labels[index] = this.labels[index] ? this.labels[index] : "面料" + String.fromCharCode( this.labels.length +this.startCode )
           })
         }
         return this.list 

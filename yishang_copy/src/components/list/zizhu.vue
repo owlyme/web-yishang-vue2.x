@@ -92,7 +92,7 @@ export default {
 	          	this.switchPupop()
 	            this.$router.push('/')
 	          }
-	     })	    
+	     })
 	},
 	created(){
 		this.receiptContent = this.objStringfy( this.getReceiptContent)		

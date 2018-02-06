@@ -4,7 +4,7 @@
 			<el-form-item label="加工单价:" class="dates">
 			     <div class="el-input">
 			     	<input autocomplete="off" v-model="computedForm.fee"  placeholder="0"  rows="2" min="1" validateevent="true" class="el-input__inner"
-			     	:keyup="onlyNumber()">
+			     	@keyup="onlyNumber($event)">
 			     </div>
 			     <div class="after"> 元/件 </div>
 			 </el-form-item>
@@ -106,9 +106,17 @@
 			}
 		},
 		methods:{
-			onlyNumber(){
+			onlyNumber(event){
+					if(event.keyCode === 8 || event.keyCode === 46 ) return ;
 					let str = this.form.fee
 					str = str.toString().replace(/[^0-9.]\D*$/,"")
+					if( str.indexOf('0') == "0" && str.length == 1){
+						str += "."
+					}
+					if(str.indexOf('.') !== -1 ){
+						str = str.substring( 0,  str.indexOf('.') +3)
+					}
+					str = str.replace('..', '.')
 					this.form.fee = str
 			},
 			dateRange(){

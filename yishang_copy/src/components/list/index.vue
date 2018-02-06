@@ -17,14 +17,14 @@
           <el-col :span="4" class="center">
             <router-link to="/" >
               <img class="avatarImg" :src="avatarSrc" />
-            </router-link>                  
+            </router-link> 
           </el-col>
           <el-col :span="20">
               <div class="link-nav">
                 <div class="nav-h clearfix">
                     <router-link  class="muneNav"  to='/' >首页</router-link>
-                    <router-link  class="muneNav"  to='/zizhu' >自主发单</router-link>
-                    <router-link @click.native="closeBanks(false)" class="muneNav"  to='/wuyou' >无忧发单</router-link>
+                    <router-link id="zizhupage" class="muneNav"  to='/zizhu' >自主发单</router-link>
+                    <router-link id="wuyoupage" @click.native="closeBanks(false)" class="muneNav"  to='/wuyou' >无忧发单</router-link>
                     <router-link  class="muneNav"  to='/indent'
                      @click.native="setIndentBlock(true)" >我的订单</router-link>
                 </div>

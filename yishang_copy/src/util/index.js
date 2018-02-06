@@ -131,7 +131,12 @@ export default{
 		Vue.prototype.OrderIndex = function(args){	return axios.post( Api.orderIndex, qs.stringify(args) ) };
 		Vue.prototype.Schedule = function(args){	return axios.post( Api.schedule, qs.stringify(args) ) };
 		Vue.prototype.Details = function(args){	return axios.post( Api.details, qs.stringify(args) ) };
-
+		// Vue.prototype.fadan = function(){
+		// 	let zizhupage =  document.getElementById("zizhupage"),
+		// 		wuyoupage = document.getElementById("wuyoupage");
+		// 	// router-link-exact-active
+			
+		// }
 		Vue.prototype.str = str;
 
 	}

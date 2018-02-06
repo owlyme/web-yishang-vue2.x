@@ -32,7 +32,7 @@
 						<!-- 品质要求 quality -->
 						<Quality class="padding-left-right border-top padding-top-bottom" 
 							:receiptContent='receiptContent'
-							:submitReceipt="submitReceipt"				
+							:submitReceipt="submitReceipt"
 						></Quality>	
 						<!-- 面料 -->
 						<Fabric class="padding-left-right border-top padding-top-bottom" 
@@ -112,6 +112,7 @@ export default {
 	this.getpayfront()
   }, 
   mounted(){
+  	
 	this.fixed = this.windowSize()
 	},   
 	// watch:{

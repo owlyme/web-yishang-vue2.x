@@ -26,7 +26,8 @@
 		</h6>
 		<transition name="el-zoom-in-top">
 		<el-form 
-		v-if="emptyAddressList" trueodel="ruleForm" 
+		v-show="emptyAddressList" 
+		:model="ruleForm" 
 		:rules="rules" 
 		ref="ruleForm" 
 		label-width="16.667%"  
@@ -126,7 +127,7 @@ import China from "./address/china.vue"
 	      	if(  Array.isArray( this.receiptContent.address ) && !this.addressList.length ){  		
 		        this.addressList = this.receiptContent.address
 		    }
-		    if( !this.addressList.length ){
+		    if( this.addressList.length ){
 		    	this.emptyAddressList = false
 		    }   
 		    return this.addressList
