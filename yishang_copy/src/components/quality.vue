@@ -103,9 +103,9 @@ import Uploadfiles from "@/components/uploadfiles"
 					this.form.error_id= this.receiptContent.done.quality.error_id
 					this.form.quality_requirement= this.receiptContent.done.quality.quality_requirement
 					this.form.requirement= this.receiptContent.done.quality.requirement
-					this.form.picture = this.receiptContent.done.quality.picture
-					this.form.process_list= this.receiptContent.done.quality.process_list
-					this.form.size_table= this.receiptContent.done.quality.size_table
+					this.form.picture = this.receiptContent.done.quality.picture || []
+					this.form.process_list= this.receiptContent.done.quality.process_list || []
+					this.form.size_table= this.receiptContent.done.quality.size_table || []
 				}
 				return this.form
 		    }

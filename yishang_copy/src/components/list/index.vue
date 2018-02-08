@@ -24,12 +24,6 @@
                 <div class="nav-h clearfix">
                     <span id="mainpage" class="muneNav"  @click="link('/')" >首页</span>
                     <span id="zizhupage" class="muneNav" @click="link('/zizhu')" >自主发单</span>
-                    <!-- <span id="wuyoupage" @click.native="closeBanks(false)" class="muneNav"  to='/wuyou' >无忧发单</span> -->
-                    <!-- <span id="indentpage" class="muneNav"  to='/indent' 
-                     @click.native="setIndentBlock(true)" >我的订单</span>
-                      , function(){ return closeBanks(false)}
-                      , function(){ return setIndentBlock(true)}
-                      -->
                      <span id="wuyoupage"  class="muneNav" @click="link('/wuyou')" >无忧发单</span>
                      <span id="indentpage" class="muneNav" @click="link('/indent')" >我的订单</span>
                 </div>                
@@ -65,14 +59,14 @@ export default {
   beforeRouteUpdate (to, from, next) {
     if( ['/zizhu', '/wuyou'].includes( to.path ) ){
       this.BeforeReceipt().then( (res)=>{
-        // next() // ------------------------------------------------------------
+        next() // ------------------------------------------------------------
         
-        if(res.data.status ==200){
-            next()
-          }else {
-            this.switchPupop()
-            next(false)
-          }
+        // if(res.data.status ==200){
+        //     next()
+        //   }else {
+        //     this.switchPupop()
+        //     next(false)
+        //   }
       })
     }else{
       next()
@@ -110,13 +104,10 @@ export default {
           }         
      })
     },
-    link(page, fn){
-      this.$router.push(page)
+    link(page){      
       if(page == '/wuyou') this.closeBanks(false)
       if(page == '/indent') this.setIndentBlock(true)
-      if( fn){
-        fn()
-      }
+        this.$router.push(page)
     }
   }
 }

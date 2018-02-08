@@ -12,12 +12,12 @@
     <!-- uploaded image/images -->
     <li class="img-li" v-for="(img, index) in computedList" :key="index">
       <img :src="img" class="" @click="showBig(img)"/>
-      <span class=" top-right" @click="handleDeleteImg(index)" v-if="edit">
+      <span class="top-right" @click="handleDeleteImg(index)" >
         <img src="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhFBMVEX/////4eH/3t7/WVn/AwP/AgL/sbH/DQ3/DAz/pqb/kJD/jo7/qKj/Wlr/WFj/4OD/39//p6f/jIz/paX/3d3/h4f/Rkb/HBz/Bwf/DAz/KCj/R0f/AAD/AQH/GRn/enr/FBT/iIj/////09P/FRX/1NT/Gxv/Fhb/Bgb+Bgb/Ghr/BQX6OfJ6AAAAFXRSTlMAHiKn/f1O8/NacHJYpacgIFh0WiJkiCngAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+IBDw8YJEcfEnoAAADESURBVCjPdVKJFoIgEFwzy8o8KsxyzQup9P//L2xVJGMeD9gZYA8WgGCx+Jrc7ilbwRyWvcYBjm0pfrPFGdzdyO8d1JAdiPcy/EHmfd93cQG393PEP/ABAnLwyIt+KfIHxRZASUfyquaIvK5ysktIacMbqcip4WSnIHBSGjmegykgQaUoHl/w1gSuBONTseJ151O4PSWVKdyQEmzHBFtKMATwDSUxFxGiZdkjw0edDF97njWDP11yfEvvExaLrhMxuwzEB3AXMzQf9NL7AAAAAElFTkSuQmCC" />
       </span>
     </li>
     <el-upload class="avatar-uploader" 
-      v-if="edit" 
+      
       multiple
       :action="actionUrl"
       :show-file-list="false"

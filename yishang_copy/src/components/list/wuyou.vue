@@ -53,7 +53,8 @@
 						<div style="height:103px">
 							<div class=" border-top padding-top-bottom text-center">
 								<el-button type="primary" @click="onSubmit">无忧发单</el-button>
-							    <el-button id='save'  class="fixed-btn" :class="{fixed: fixed}"@click="saveDraft">保存草稿</el-button>						   
+							    <el-button id='save'  class="fixed-btn" :class="{fixed: fixed}" 
+							    @click="saveDraft">保存草稿</el-button>						   
 							</div>
 						</div>			   
 					</el-form>			
@@ -95,35 +96,27 @@ export default {
 		 'getDraft'
 		])
 	},
-	beforeCreate(){
-    	this.BeforeReceipt().then( (res)=>{
-	        if(res.data.status ==200){		            
-	          }else {
-	          	this.switchPupop()
-	            this.$router.push('/')
-	        }
-	 })	    
-	},
-  created(){
-	this.receiptContent = this.objStringfy( this.getReceiptContent)
-	this.submitReceipt = this.objStringfy( this.getSubmitReceipt)
-	this.$set(this.submitReceipt, 'type', 2)
-	this.getReceipt()
-	this.getpayfront()
-  }, 
-  mounted(){
-  	this.fadan('wuyou')
-	this.fixed = this.windowSize()
-	},   
-	// watch:{
-	// 	submitReceipt:{
-	// 		handler(curVal, oldVal){
-	// 			this.setDraft('wuyou')
-	// 			console.log('current draft >>', curVal)
-	// 　　　　},
-	// 		deep: true
-	// 	}
+	// beforeCreate(){
+ //    	this.BeforeReceipt().then( (res)=>{
+	//         if(res.data.status ==200){		            
+	//         }else {
+	//           	this.switchPupop()
+	//             this.$router.push('/')
+	//         }
+	//  	})	    
 	// },
+	created(){
+		this.receiptContent = this.objStringfy( this.getReceiptContent)
+		this.submitReceipt = this.objStringfy( this.getSubmitReceipt)
+		this.$set(this.submitReceipt, 'type', 2)
+		this.getReceipt()
+		this.getpayfront()
+		console.log( this.getShowBanks )
+	}, 
+  	mounted(){
+	  	this.fadan('wuyou');
+		this.fixed = this.windowSize()
+	},   
 	methods:{
 		...mapMutations(['clearCustomer','setIndentBlock','switchPupop','closeBanks','setDraft']),
 		getReceipt(){
@@ -132,7 +125,7 @@ export default {
 				order_id : this.$route.query.order_id
 			}
 			this.ReceiptIndex(args).then((res)=>{
-				// console.log('Receipt/Index' ,res)
+				console.log('Receipt/Index' ,res)
 			    if(res.data.status == 200){
 			    	this.receiptContent = res.data.content
 			    	if(!Array.isArray( this.receiptContent.done )){
@@ -166,7 +159,6 @@ export default {
 			}
 	    },
 	    saveDraft(){
-	    	if( this.verfy() ){
 	    	let args = this.submitReceipt
 		    this.SubmitDraft(args).then((res)=>{
 		    	// console.log('save Draft',res)
@@ -177,7 +169,7 @@ export default {
 			        this.openMessage({str: res.data.msg, ele:this})
 			    }
 		    })
-			}
+			
 	    },
 	    verfy(){
 	    	let flag= true

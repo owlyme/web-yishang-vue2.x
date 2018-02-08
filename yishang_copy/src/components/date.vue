@@ -4,6 +4,7 @@
 			<el-form-item label="加工单价:" class="dates">
 			     <div class="el-input">
 			     	<input autocomplete="off" v-model="computedForm.fee"  placeholder="0"  rows="2" min="1" validateevent="true" class="el-input__inner"
+			     	type="number" 
 			     	@keyup="onlyNumber($event)">
 			     </div>
 			     <div class="after"> 元/件 </div>
@@ -103,21 +104,32 @@
 					this.submitReceipt.delivery_date= cur.delivery_date
 				},
 				deep: true
+			},
+			form:{
+				handler(cur){
+					this.submitReceipt.fee = cur.fee
+					this.submitReceipt.total_fee= cur.total_fee
+					this.submitReceipt.expire_time= cur.expire_time
+					this.submitReceipt.arrival_date= cur.arrival_date
+					this.submitReceipt.delivery_date= cur.delivery_date
+				},
+				deep: true
 			}
 		},
 		methods:{
 			onlyNumber(event){
-					if(event.keyCode === 8 || event.keyCode === 46 ) return ;
-					let str = this.form.fee
-					str = str.toString().replace(/[^0-9.]\D*$/,"")
-					if( str.indexOf('0') == "0" && str.length == 1){
-						str += "."
-					}
-					if(str.indexOf('.') !== -1 ){
-						str = str.substring( 0,  str.indexOf('.') +3)
-					}
-					str = str.replace('..', '.')
-					this.form.fee = str
+				console.log(event.keyCode)
+				if(event.keyCode === 8 || event.keyCode === 46 ) return ;
+				let str = this.form.fee
+				str = str.toString().replace(/[^0-9.]\D*$/g,"")
+				if( str.indexOf('0') == "0" && str.length == 1){
+					str += "."
+				}
+				if(str.indexOf('.') !== -1 ){
+					str = str.substring( 0,  str.indexOf('.') +3)
+				}
+				str = str.replace('..', '.')
+				this.form.fee = str
 			},
 			dateRange(){
 				let date = this.submitReceipt.expire_time || 0

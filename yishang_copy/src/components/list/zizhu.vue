@@ -104,15 +104,6 @@ export default {
 		this.fadan('zizhu')
 		this.windowSize()
 	},
-	// watch:{
-	// 	submitReceipt:{
-	// 		handler(curVal, oldVal){
-	// 			this.setDraft('zizhu')					
-	// 			console.log('submitReceipt draft >>', curVal)
-	// 		},
-	// 		deep: true
-	// 	}
-	// },
 	methods:{
 		...mapMutations(['clearCustomer','setIndentBlock','switchPupop','setDraft']),
 		getReceipt(){
@@ -146,7 +137,7 @@ export default {
 			}
 	    },
 	    saveDraft(){
-	    	if( this.verfy() ){
+	    	
 			    this.SubmitDraft( this.submitReceipt ).then((res)=>{
 			    	// console.log('save Draft>>',res)
 			    	// console.log( res.data.status)
@@ -156,7 +147,7 @@ export default {
 				        this.openMessage({str: res.data.msg, ele:this})
 				    }
 			    })
-		    }
+		    
 	    },
 	    verfy(){
 	    	let flag= true
@@ -182,15 +173,12 @@ export default {
 	    			flag= false
 	    		}
 	    	})
-	    	
 	    	return flag
 	    }
 	}
 }
 </script>
 <style scoped>
-
-
 	#zizhu{
 		margin-top: 20px;
 		background: rgb(248,248,248);

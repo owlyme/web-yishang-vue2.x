@@ -132,14 +132,14 @@ import { mapGetters } from 'vuex'
 			},
 			computedPartPicture(){
 				if(this.receiptContent.done.details && this.receiptContent.done.details.part_picture.length	){
-					this.partPicture = this.receiptContent.done.details.part_picture
+					this.partPicture = this.receiptContent.done.details.part_picture || []
 				}				
 				return this.partPicture
 			},
 			computedOtherPicture(){
 				if(  Array.isArray(this.receiptContent.done.part)
 					&& this.receiptContent.done.part.length ){
-		          this.otherPicture = this.receiptContent.done.part
+		          this.otherPicture = this.receiptContent.done.part || []
 		        }			
 				return this.otherPicture
 			}
