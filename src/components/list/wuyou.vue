@@ -111,7 +111,6 @@ export default {
 		this.$set(this.submitReceipt, 'type', 2)
 		this.getReceipt()
 		this.getpayfront()
-		console.log( this.getShowBanks )
 	}, 
   	mounted(){
 	  	this.fadan('wuyou');
@@ -125,7 +124,7 @@ export default {
 				order_id : this.$route.query.order_id
 			}
 			this.ReceiptIndex(args).then((res)=>{
-				console.log('Receipt/Index' ,res)
+				// console.log('Receipt/Index' ,res)
 			    if(res.data.status == 200){
 			    	this.receiptContent = res.data.content
 			    	if(!Array.isArray( this.receiptContent.done )){
