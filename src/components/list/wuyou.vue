@@ -96,15 +96,15 @@ export default {
 		 'getDraft'
 		])
 	},
-	// beforeCreate(){
- //    	this.BeforeReceipt().then( (res)=>{
-	//         if(res.data.status ==200){		            
-	//         }else {
-	//           	this.switchPupop()
-	//             this.$router.push('/')
-	//         }
-	//  	})	    
-	// },
+	beforeCreate(){
+    	this.BeforeReceipt().then( (res)=>{
+	        if(res.data.status ==200){		            
+	        }else {
+	          	this.switchPupop()
+	            this.$router.push('/')
+	        }
+	 	})	    
+	},
 	created(){
 		this.receiptContent = this.objStringfy( this.getReceiptContent)
 		this.submitReceipt = this.objStringfy( this.getSubmitReceipt)
