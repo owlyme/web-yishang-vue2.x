@@ -102,7 +102,7 @@ export default {
 	},
 	mounted(){
 		this.fadan('zizhu')
-		this.windowSize()
+		this.windowSize()		
 	},
 	methods:{
 		...mapMutations(['clearCustomer','setIndentBlock','switchPupop','setDraft']),

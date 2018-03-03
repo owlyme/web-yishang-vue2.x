@@ -42,22 +42,34 @@
           </el-select>
       </el-form-item>
       <el-form-item label="面料克重:" class="padding-right">
-        <el-input v-model="item.weight"  placeholder="请输入克重" 
+        <!-- <el-input v-model="item.weight"  placeholder="请输入克重" 
         ref="weight"
-        @keyup.native="onlyNumber('weight', index)">  </el-input>
+        @keyup.native="onlyNumber('weight', index)">  </el-input> -->
+
+         <div class="el-input">
+            <input autocomplete="off" v-model="item.weight"  placeholder="0"  rows="2" min="1" validateevent="true" class="el-input__inner">
+         </div>
+
+
         <div class="after"> 克/平方米 </div>
       </el-form-item>
       <el-form-item label="面料米重:" class="padding-right">
-        <el-input v-model="item.grammage"  placeholder="请输入克重" 
+        <!-- <el-input v-model="item.grammage"  placeholder="请输入克重" 
         ref="grammage"
-        @keyup.native="onlyNumber('grammage', index)">  </el-input>
+        @keyup.native="onlyNumber('grammage', index)">  </el-input> -->
+        <div class="el-input">
+            <input autocomplete="off" v-model="item.grammage"  placeholder="0"  rows="2" min="1" validateevent="true" class="el-input__inner">
+         </div>
         <div class="after"> 克/米 </div>
       </el-form-item>
-      <el-form-item label="门幅宽度:" class="padding-right">
-        <el-input v-model="item.width"  placeholder="请输入克重"  style="width: 70%;"
+      <el-form-item label="门幅宽度:" class="padding-right" >
+        <!-- <el-input v-model="item.width"  placeholder="请输入克重"  
           ref="width"
-         @keyup.native="onlyNumber('width', index)">  </el-input>
-        <el-radio-group v-model="item.units" style="padding-left:18px">
+         @keyup.native="onlyNumber('width', index)">  </el-input> -->
+         <div class="el-input" style="width: 70%;">
+            <input autocomplete="off" v-model="item.width"  placeholder="0"  rows="2" min="1" validateevent="true" class="el-input__inner">
+         </div>
+        <el-radio-group v-model="item.units" style="padding-left:18px;">
             <el-radio  label="厘米" value="厘米">厘米</el-radio>
             <el-radio  label="英寸" value="英寸">英寸</el-radio>
         </el-radio-group>
@@ -118,14 +130,23 @@ export default {
               this.labels[index] = this.labels[index] ? this.labels[index] : "面料" + String.fromCharCode( this.labels.length +this.startCode )
           })
         }
+                 this.list.forEach((item,index)=>{
+                      console.log(item.grammage,item.width)
+          item.grammage = this.floatNum(item.grammage)
+          item.width = this.floatNum(item.width)
+          item.weight = this.floatNum(item.weight)
+                    })
+                 console.log(this.list)
         return this.list 
       }
     },
     watch:{
       list:{
         handler(curVal){
+
           this.$emit( 'update:submitReceiptFabric',  curVal.map( (item, index)=>{ 
                         // let obj = Object.assign({}, item)
+                
                         let obj = this.objStringfy(item) 
                         obj.picture =  this.removeDomain( obj.picture )
                         return obj
@@ -136,11 +157,10 @@ export default {
       }
     },
     methods: {
-      onlyNumber(prop,index){
-          // console.log( this.list[index][prop] )
-          let str = this.list[index][prop]
-          str = str.toString().replace(/[^0-9.]\D*$/,"")
-          this.list[index][prop] = str
+      floatNum(str){
+        str = str.replace(/^0\d/,'0.')
+        let wantstr = /[1-9]\d*\.?\d{0,5}|0\.?\d{0,5}/.exec(str)
+        return Array.isArray(wantstr) ? wantstr[0] : ''
       },
       addFabric(){
         let fabric = {

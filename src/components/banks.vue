@@ -315,7 +315,10 @@ export default{
 						clearInterval(this.timerWx)
 						this.showWeiChat = false
 						this.closeBanks(false)
-						this.$router.push('/indent')
+						this.openMessage({str: '支付成功', ele:this})
+						setTimeout(()=>{
+							this.$router.push('/indent')
+						},1500)						
 					}else {
 						// console.log('Waiting wxpay...')
 					}
