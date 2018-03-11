@@ -311,16 +311,18 @@ export default{
 				this.WxPay(args).then( (res)=>{
 					// console.log(res)
 					// console.log(res.data)
-					if(res.data){
+					if(res.data.status == 200){
 						clearInterval(this.timerWx)
 						this.showWeiChat = false
 						this.closeBanks(false)
-						this.openMessage({str: '支付成功', ele:this})
-						setTimeout(()=>{
+						this.openMessage({
+							str: '<div><p>订单编号: '+res.data.content.order_id+'<br/>付款编号: '+res.data.content.transaction_id+'</p></div>',
+							title: '支付成功',  
+							ele:this }, ()=>{
 							this.$router.push('/indent')
-						},1500)						
+						})					
 					}else {
-						// console.log('Waiting wxpay...')
+						console.log('Waiting wxpay...')
 					}
 		       	})
 			}, 2000)

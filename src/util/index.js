@@ -1,7 +1,7 @@
 import Api from './api.js'
 import axios from './http.js'
 import qs from 'qs'
-import stickybits from 'stickybits'
+
 
 let post = ( reqstr, args, fn) => {
 	axios.post( reqstr, qs.stringify(args) ).then( (res) =>{
@@ -24,16 +24,19 @@ export default{
 	    Vue.prototype.removeCookie = function () {
 	    	this.$cookies.remove('yiyiphone')
 	    };
-		Vue.prototype.openMessage = (arg) =>{
+		Vue.prototype.openMessage = (arg, fn) =>{
 		    let html='';
 		    	if( !arg.bool){
 		    		html = '<span style="color: #C44DDC">'+arg.str+'</span>';
 		    	}else{
 		    		html = '<i style="color: red">'+arg.str+'</i>';
 		    	} 
-		        arg.ele.$alert( html, {
+		        arg.ele.$alert( html, arg.title,{
 		          dangerouslyUseHTMLString: true,
-		          showClose: false
+		          showClose: false,
+		          callback: () => {
+		           	if(fn ) fn();
+		          }
 		        });
 		};
 		Vue.prototype.addUploadUrl= (url, arr)=>{
@@ -105,7 +108,6 @@ export default{
 			} while ( ele.tagName !== 'BODY')
 			return _top
 		}
-		Vue.prototype.stickybits= stickybits;
 		//objStringfy
 		Vue.prototype.objStringfy =  function(args){ return JSON.parse( JSON.stringify(args) ) };
 		//axios
