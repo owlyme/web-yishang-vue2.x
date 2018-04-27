@@ -1,5 +1,8 @@
 <template>
 	<div id="indent">
+		
+	      <router-view/>
+	    
 		<div class="container">
 			<!-- 我的订单信息 -->
 			<div v-if="getIndentBlock" id='listnavindent'>
@@ -129,7 +132,7 @@
 						</div>
 					</div>
 				</div>
-
+				<!-- 订单详情 -->
 				<div class="container-detail1" v-else>
 					<div class="isloading border-top" v-if="isLoading">
 						<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>

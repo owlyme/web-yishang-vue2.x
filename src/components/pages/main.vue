@@ -136,7 +136,6 @@ export default{
 			totalRows: 1,
 			perPage : 1,
    		currentPage: 1,
-
       currentStatus: 'x',
    		goodsList:[],
       savedList:[],
@@ -152,7 +151,7 @@ export default{
   watch:{
     currentPage:{
       handler(curVal,oldVal){
-        this.getMainlist({page: curVal,status: this.currentStatus})        
+        this.getMainlist({page: curVal,status: this.currentStatus})
       },
       deep:true
     }
