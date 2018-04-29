@@ -42,7 +42,7 @@ const router = new Router({
                     children: [
                         {path: "",name: "IndentMsg",component:IndentMsg},
                         {path: "schedule/:order_id",name: "Schedule", component:Schedule, props: true},
-                        {path: "detail/:order_id",name: "Detail",component:Detail, props: true}
+                        {path: "detail/:order_id",name: "Detail",  component:Detail, props: true}
                     ]
             }
       ]

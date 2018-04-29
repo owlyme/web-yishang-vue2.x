@@ -81,8 +81,6 @@
 
 <script>
 	import { mapGetters } from 'vuex'
-	import { mapActions } from 'vuex'
-	import { mapMutations } from 'vuex'
 	export default{
 		name: 'schedule',
 		props: ['order_id'],
@@ -92,13 +90,11 @@
 				graph2Active: 0,
 				graph3Active: 0,
 				isLoading: 1,
-				size : ["颜色(数量)","尺码 XS","S","M","L","XL","XXL","3XL","4XL"],
 				selectSchedule:{},
 			}
 		},
 		mounted(){
-			console.log(this.order_id)
-			this.getSchedule(73)
+			this.getSchedule(this.order_id)
 		},
 		computed:{
 			...mapGetters(['getIndentBlock']),
@@ -106,9 +102,6 @@
 		    curSchedule(){	return this.selectSchedule  },
 		},
 		methods:{
-			...mapMutations([
-		      'setIndentBlock'
-		    ]),
 		    getSchedule(id){
 		      	this.Schedule({order_id: id }).then((res)=>{
 		      		res.data = this.Schedule11 
@@ -136,7 +129,7 @@
 		    		this.graph2Active=parseInt(status[0])+step -1
 		    		this.graph3Active=5
 		    	}
-		    },
+		    }
 		}
 	}
 </script>

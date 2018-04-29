@@ -45,17 +45,12 @@
 <script>
 	import IndentList from "../indentlistEl"
 	import { mapGetters } from 'vuex'
-	import { mapActions } from 'vuex'
 	import { mapMutations } from 'vuex'
 	export default{
 		name: 'indent1',
 		components:{ IndentList},
 		data(){
 			return{
-				isLoading: 1,
-				displayIndent:true,
-				isActive: false,
-				activeIndex: true,
 				listNav: [
 					  {
 			            type: "所有订单",
@@ -114,11 +109,11 @@
 		    }
 		},
 		computed:{
-			...mapGetters(['getIndentBlock']),
+			...mapGetters(['getCurrentOrderID']),
 		},
 		methods:{
 			...mapMutations([
-		      'setIndentBlock'
+		      'setCurrentOrderID'
 		    ]),
 		    getMainlist(args){
 		      this.Index(args).then((res)=>{
@@ -136,13 +131,11 @@
 		      	})  
 		    },
 		    switchBlock(uid){
-		    	this.setIndentBlock(false);
+		    	this.setCurrentOrderID(uid);
 		    	console.log('uid ', uid)
 		    	this.$router.push({ name: "Schedule",
-	    							params: { order_id: 73 }
+	    							params: { order_id: uid }
 	    						});
-		    	// this.getSchedule(uid)
-		    	// this.getDetails(uid)
 		    },
 		    fliter(index, keyword){
 		    	let self = this;
@@ -180,7 +173,7 @@
 	}
 </script>
 
-<style type="text/css">
+<style scoped>
 	li{
 		list-style: none;
 	}

@@ -1,6 +1,5 @@
 <template>
-	<div>detail</div>
-<!-- <div class="container-detail1" v-else>
+<div class="container-detail1" v-else>
 	<div class="isloading border-top" v-if="isLoading">
 		<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
 	</div>
@@ -181,211 +180,106 @@
 			</div>									
 		</div>
 	</div>
-</div> -->
+</div>
 </template>
 
 <script>
-	import IndentList from "../indentlistEl"
 	import { mapGetters } from 'vuex'
-	import { mapActions } from 'vuex'
 	import { mapMutations } from 'vuex'
 	export default{
-		name: 'indent2',
-		components:{ IndentList},
+		name: 'detail',
+		props: ['order_id'],
 		data(){
 			return{
-				graph1Active: 0,
-				graph2Active: 0,
-				graph3Active: 0,
 				isLoading: 1,
-				displayIndent:true,
-				isActive: false,
-				activeIndex: true,
-				listNav: [
-					  {
-			            type: "所有订单",
-			            keyword: 'x',
-			            flag: true
-			          },
-			          {
-			            type:"待接单",
-			            keyword: '1000',
-			            flag: false
-			          },
-			          {
-			            type:"待发资料",
-			            keyword: '3000',
-			            flag: false,
-		          	  },
-			          {
-			            type:"加工中",
-			            keyword: '4000',
-			            flag: false
-			          },
-			          {
-			            type:"待收货",
-			            keyword: '5000',
-			            flag: false
-			          },
-			          {
-			            type:"待评价",
-			            keyword: '6000',
-			            flag: false
-			          },			     
-			          {
-			            type:"已完成",
-			            keyword: '7000',
-			            flag: false
-			          }],
+				isActive: false,				
 				size : ["颜色(数量)","尺码 XS","S","M","L","XL","XXL","3XL","4XL"], 
-				contentTitle:"所有订单",
-				currentStatus: 'x',
-				goodsList:[],
-				savedList:[],
-				selectSchedule:{},
-				selectDetails: {},
-				totalRows: 1,
-				perPage : 1,
-		   		currentPage: 1
+				selectDetails: {}
 			}
 		},
 		mounted(){
-			this.fadan('indent');
-			this.getMainlist({status: 'x'});
-		},
-		watch:{
-		    currentPage:{
-		      handler(curVal,oldVal){		        
-		        this.getMainlist( {page: curVal,status: this.currentStatus} )
-		      },
-		      deep:true
-		    }
+			this.getDetails(this.order_id);
 		},
 		computed:{
 			...mapGetters(['getIndentBlock']),
 		    getUploadUrl(){  return this.Api.loadImgUrl },
-		    curSchedule(){	return this.selectSchedule  },
 		    curDetails(){	return this.selectDetails }
 		},
 		methods:{
-			...mapMutations([
-		      'setIndentBlock'
-		    ]),
-		    getMainlist(args){
-		      this.Index(args).then((res)=>{
-		      	res.data = this.datas;
-		      	console.log(res)
-		      	if(res.data.status == 200){
-		            this.perPage =  res.data.content.pageSize;
-		            this.totalRows = res.data.content.totalRows-0;
-		            this.savedList =  res.data.content.list;
-		            this.goodsList = this.savedList.slice(0, this.savedList.length)
-		          }
-		          if(this.currentPage>1){
-		          	this.srcollTo( document.getElementById("listnavindent") )  
-		          }   
-		      	})  
-		    },
-		    getSchedule(id){
-		      	this.Schedule({order_id: id }).then((res)=>{
-		          if(res.data.status == 200){
-		          	this.$set(this.selectSchedule,'details',res.data.content.details)
-		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
-		          	this.setGraph(this.selectSchedule.details.status)
-		          	this.isLoading = 0;
-		          }else{
-		          }          
-		      	})  
-		    },
 		    getDetails(id){
 			  this.Details({order_id: id }).then((res)=>{
+			  	res.data = this.detail11 
 		          if(res.data.status == 200){
-		          		this.$set(this,'selectDetails',res.data.content)
+		          		this.$set(this,'selectDetails', res.data.content)
 		          		this.isLoading = 0;         	
 		          }
 		      })
-		    },
-		    switchBlock(uid){
-		    	this.setIndentBlock(false)
-		    	this.getSchedule(uid)
-		    	this.getDetails(uid)
-		    },
-		    changeActiveIndex(index){
-		    	this.activeIndex = !this.activeIndex
-		    },
-		    fliter(index, keyword){
-		    	let self = this;
-		    	self.listNav.forEach((item, _index)=>{		    		
-		    		self.$set(item,"flag",false)
-		    		if(index == _index){
-		    			self.$set(item,"flag",true)
-		    			self.contentTitle= item.type
-		    		}
-		    	});
-		    	this.displayOrNot(keyword)
-		    },		    
-		    displayOrNot(keyword){
-		      this.getMainlist({status: keyword})
-		      return 
-		      let self = this;
-		      self.goodsList= [];
-		      self.savedList.forEach((item, _index)=>{
-		         if(item.status[0] == '3' && item.status.indexOf('000') == -1 ){
-		            if(keyword[1] == item.status[1] ){
-		               self.goodsList.push(self.savedList[_index])
-		            }
-		            if(keyword[2] == item.status[2] ){
-		               self.goodsList.push(self.savedList[_index])
-		            }
-		            if(keyword[3] == item.status[3] ){
-		               self.goodsList.push(self.savedList[_index])
-		            }
-		         }else if(item.status == keyword || keyword == 'x') {
-		           self.goodsList.push(self.savedList[_index])
-		         }
-		      })
-		    },
-		    setGraph(status){
-		    	let step = 3;
-		    	if( status[0] < 3 ){
-		    		this.graph1Active=0
-		    		this.graph2Active= parseInt(status[0])
-		    		this.graph3Active=0
-		    	}else if(status[0] == '3'){
-		    		this.graph1Active=parseInt(status[1])+step
-		    		this.graph2Active=parseInt(status[2])+step
-		    		this.graph3Active=parseInt(status[3])+step
-		    	}else if( status[0] > '3'){
-		    		this.graph1Active=5
-		    		this.graph2Active=parseInt(status[0])+step -1
-		    		this.graph3Active=5
-		    	}
-		    },
-		    fixedEle(){
-		    	const Pa = document.getElementById("fixedElePa")
-		    	const ele = document.getElementById("fixedEle")
-		    	let scrolling = ()=>{
-		    		let Patop = this.totalTop( Pa )
-		    		let scrolltop=document.documentElement.scrollTop||document.body.scrollTop
-		    		console.log(1111111)
-		    		if( Patop <= scrolltop){
-		    			console.log(22222222221)
-		    			ele.style.position = "fixed"
-		    			ele.style.top = '50px'
-		    			ele.style.width = Pa.offsetWidth+'px'
-		    			Pa.style.height = '432px'
-		    		}else{
-		    			console.log(3333333331)
-		    			ele.removeAttribute('style')
-		    		}
-		    	}
-				window.onresize = scrolling
-				window.onscroll = scrolling
-		    }		 
+		    }
 		}
 	}
 </script>
 
-<style type="text/css">
+<style scoped>
+	.isloading{
+		position: relative;
+    	height: 200px;
+	}
 	
+	/*detail*/
+	.detail-inner{
+		padding: 30px;
+	}
+	.nav-schedule-details li{
+		float: left;
+		width: 25%;
+		height: 55px;
+		line-height: 55px;
+		text-align: center;
+		border-bottom: 2px solid rgba(255,255,255,0);
+	}
+	.nav-schedule-details li:hover{
+		cursor: pointer;
+		color: #C44DDC;
+		border-bottom: 2px solid #C44DDC;
+	}
+	.jiben ul li {
+		float: left;
+		width: 33.33%;
+		height: 35px;
+		line-height: 35px;
+		font-size: 14px;
+	}
+	.buwei ul,
+	.yanseshuliang ul{		
+		float: left;
+		margin-right: 20px;
+	}
+	.yanseshuliang .thead li{
+		text-align: right;
+	}
+
+	.thead li,.tbody li{
+		font-size: 14px;
+		color: rgb(102, 102, 102);
+		margin-bottom: 20px;
+	}
+	.tbody li{
+		text-align: center;
+		color: rgb(6, 6, 6);
+	}
+	.inner-icon{
+		float: left;
+		margin: 30px 30px 0 0;
+		padding:1px;
+		text-align: center;
+		border: 1px solid #e0e0e0;
+	}
+	.inner-icon img{
+		width: 140px;
+		height: 140px;
+		padding: 5px;
+	}
+	.banxing .inner-icon img{
+		width: 200px;
+	}
 </style>

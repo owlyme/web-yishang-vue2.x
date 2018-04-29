@@ -1,8 +1,5 @@
 <template>
-	<div id="indent">
-		
-	      <router-view/>
-	    
+	<div id="indent">	    
 		<div class="container">
 			<!-- 我的订单信息 -->
 			<div v-if="getIndentBlock" id='listnavindent'>
