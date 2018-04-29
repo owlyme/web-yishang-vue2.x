@@ -10,12 +10,12 @@
 		<b-container class="bv-example-row" >
 			<b-row align-v="center"  class="xy-row">
 				<b-col >完成件数：{{ goodsMsg.done_account }}/{{ goodsMsg.demanding_account }} </b-col>
-				<b-col >单间价格：{{ goodsMsg.fee}}元 </b-col>
-				<b-col >交货时间：{{  goodsMsg.delivery_date }} </b-col>
+				<b-col >单间价格：{{ goodsMsg.fee }}元 </b-col>
+				<b-col >交货时间：{{ goodsMsg.delivery_date }} </b-col>
 				<b-col>
 					<b-row align-v="center" class="inner">
 						<b-col cols="5" v-html="goodsMsg.msg">
-							{{ goodsMsg.msg}} 			
+							{{ goodsMsg.msg }}
 						</b-col>
 						<b-col cols="5">
 							<el-button type="primary" @click="view(goodsMsg)">查看</el-button>
@@ -25,7 +25,7 @@
 				
 			</b-row>
     	</b-container>
-    	<div class="type-wuyou" v-if="goodsMsg.type == 2"><div class="rotate">无忧</div></div>	
+    	<div class="type-wuyou" v-if="goodsMsg.type == 2 " ><div class="rotate">无忧</div></div>	
 	</b-media>
 	
 </div>
@@ -45,9 +45,11 @@
 	    },
 		methods:{
 			view(goodsMsg){
+				console.log('to indent ')
 				if( goodsMsg.status == -1 ){
 					this.toEdit(goodsMsg)
 				}else{
+					console.log('to indent children')
 					this.$emit('change', goodsMsg.uid)
 				}
 			},

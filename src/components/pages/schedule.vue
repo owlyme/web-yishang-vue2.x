@@ -1,6 +1,5 @@
 <template>
-	<div>schedule</div>
-<!-- <div class="container-detail" v-if="activeIndex">
+<div class="container-detail">
 	<div class="isloading border-top" v-if="isLoading">
 		<div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
 	</div>
@@ -77,13 +76,221 @@
 			</div>
 		</div>
 	</div>
-</div> -->
+</div>
 </template>
 
 <script>
-	
+	import { mapGetters } from 'vuex'
+	import { mapActions } from 'vuex'
+	import { mapMutations } from 'vuex'
+	export default{
+		name: 'schedule',
+		props: ['order_id'],
+		data(){
+			return{
+				graph1Active: 0,
+				graph2Active: 0,
+				graph3Active: 0,
+				isLoading: 1,
+				size : ["颜色(数量)","尺码 XS","S","M","L","XL","XXL","3XL","4XL"],
+				selectSchedule:{},
+			}
+		},
+		mounted(){
+			console.log(this.order_id)
+			this.getSchedule(73)
+		},
+		computed:{
+			...mapGetters(['getIndentBlock']),
+		    getUploadUrl(){  return this.Api.loadImgUrl },
+		    curSchedule(){	return this.selectSchedule  },
+		},
+		methods:{
+			...mapMutations([
+		      'setIndentBlock'
+		    ]),
+		    getSchedule(id){
+		      	this.Schedule({order_id: id }).then((res)=>{
+		      		res.data = this.Schedule11 
+		          if(res.data.status == 200){
+		          	this.$set(this.selectSchedule,'details',res.data.content.details)
+		          	this.$set(this.selectSchedule,'history',res.data.content.history) 
+		          	this.setGraph(this.selectSchedule.details.status)
+		          	this.isLoading = 0;
+		          }else{
+		          }          
+		      	})  
+		    },		    
+		    setGraph(status){
+		    	let step = 3;
+		    	if( status[0] < 3 ){
+		    		this.graph1Active=0
+		    		this.graph2Active= parseInt(status[0])
+		    		this.graph3Active=0
+		    	}else if(status[0] == '3'){
+		    		this.graph1Active=parseInt(status[1])+step
+		    		this.graph2Active=parseInt(status[2])+step
+		    		this.graph3Active=parseInt(status[3])+step
+		    	}else if( status[0] > '3'){
+		    		this.graph1Active=5
+		    		this.graph2Active=parseInt(status[0])+step -1
+		    		this.graph3Active=5
+		    	}
+		    },
+		}
+	}
 </script>
 
-<style type="text/css">
-	
+<style scoped>
+	#indent{
+		margin-top: 20px;
+		background: rgb(248,248,248);
+	}
+	li{
+		list-style: none;
+	}
+	.myIndent{
+		color: #555;
+		height: 54px;
+		line-height: 54px;
+		/*width: 220px;*/
+		background: rgb(238,238,238);
+		font-size: 0.8em;
+		text-indent: 20px;
+	}
+	.nav-vertal{
+		background: #fff;
+	}
+	.muneNav{
+		color: #555;
+		border: 2px solid rgba(255,255,255,0);
+		height: 54px;
+		line-height: 54px;
+		/*width: 220px;*/
+		font-size: 0.8em;
+		text-indent: 30px;
+		cursor: pointer;
+	}
+	.muneNav:hover{
+		background: #C44DDC;
+		color: #fff;
+	}
+	.active{
+		color: #C44DDC;
+		border-left-color: #C44DDC;
+	}
+	.col-3 img{
+		width: 100%;
+	}
+	.isloading{
+		position: relative;
+    	height: 200px;
+	}
+	.text-style{
+		text-indent: 1.5em;
+		height: 30px;
+	}	
+	.container-detail-list{
+		height: 345px;		
+	}
+	.stephidden{
+		height: 0px;overflow: hidden;
+	}
+	.graph{
+		position: relative;
+		height: 350px;
+		padding-top: 50px;
+		width: 100%;
+	}
+	.graph1,
+	.graph2,
+	.graph3{
+		position: relative;		
+		height: 100px;
+		width: 100%;
+		z-index:4;
+	}	
+	.graph-bg{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+	}
+	.graph-bg .rect{
+		position: absolute;
+		left: 22.22%;
+		top: 10px;
+		width: 33.334%;
+		height: 201px;
+		border: 2px solid #C44DDC;
+	}
+	.graph-bg .rectp-round{
+		position: absolute;
+		left: 23.99%;
+	    top: -29px;
+	    width: 29.22%;
+	    height: 300px;
+		height: 300px;
+		border: 2px dashed #C44DDC;
+		border-radius: 20px;
+		border-color: #C44DDC;
+		background:  rgba(196,77,220,0.07);
+	}
+	/*detail*/
+	.detail-inner{
+		padding: 30px;
+	}
+	.nav-schedule-details li{
+		float: left;
+		width: 25%;
+		height: 55px;
+		line-height: 55px;
+		text-align: center;
+		border-bottom: 2px solid rgba(255,255,255,0);
+	}
+	.nav-schedule-details li:hover{
+		cursor: pointer;
+		color: #C44DDC;
+		border-bottom: 2px solid #C44DDC;
+	}
+	.jiben ul li {
+		float: left;
+		width: 33.33%;
+		height: 35px;
+		line-height: 35px;
+		font-size: 14px;
+	}
+	.buwei ul,
+	.yanseshuliang ul{		
+		float: left;
+		margin-right: 20px;
+	}
+	.yanseshuliang .thead li{
+		text-align: right;
+	}
+
+	.thead li,.tbody li{
+		font-size: 14px;
+		color: rgb(102, 102, 102);
+		margin-bottom: 20px;
+	}
+	.tbody li{
+		text-align: center;
+		color: rgb(6, 6, 6);
+	}
+	.inner-icon{
+		float: left;
+		margin: 30px 30px 0 0;
+		padding:1px;
+		text-align: center;
+		border: 1px solid #e0e0e0;
+	}
+	.inner-icon img{
+		width: 140px;
+		height: 140px;
+		padding: 5px;
+	}
+	.banxing .inner-icon img{
+		width: 200px;
+	}
 </style>

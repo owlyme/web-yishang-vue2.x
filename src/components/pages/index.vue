@@ -24,8 +24,8 @@
                 <div class="nav-h clearfix">
                     <span id="mainpage" class="muneNav"  @click="link('/')" >首页</span>
                     <span id="zizhupage" class="muneNav" @click="link('/zizhu')" >自主发单</span>
-                     <span id="wuyoupage"  class="muneNav" @click="link('/wuyou')" >无忧发单</span>
-                     <span id="indentpage" class="muneNav" @click="link('/indent')" >我的订单</span>
+                    <span id="wuyoupage"  class="muneNav" @click="link('/wuyou')" >无忧发单</span>
+                    <span id="indentpage" class="muneNav" @click="link('/indent')" >我的订单</span>
                 </div>                
               </div>
           </el-col>
