@@ -113,7 +113,7 @@ export default {
 		this.getpayfront()
 	}, 
   	mounted(){
-	  	this.fadan('wuyou');
+	  	// this.fadan('wuyou');
 		this.fixed = this.windowSize()
 	},   
 	methods:{

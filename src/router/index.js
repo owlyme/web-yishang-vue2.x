@@ -5,44 +5,37 @@ import Login from '@/components/login/login'
 // 	import Main from '@/components/pages/main'
 // 	import Zizhu from '@/components/pages/zizhu'
 // 	import Wuyou from '@/components/pages/wuyou'
-//   import Indent from '@/components/pages/indent'
-//   import IndentMsg from '@/components/pages/indentMsg'
+//  import Indent from '@/components/pages/indent'
+//  import IndentMain from '@/components/pages/IndentMain'
 // 	import Schedule from '@/components/pages/schedule'
-//   import Detail from '@/components/pages/detail'
+//  import Detail from '@/components/pages/detail'
 
-// resolve => require(['../page/any/any.vue'], resolve)
-const Main =  resolve => require(['@/components/pages/main'], resolve)
+const Main      =  resolve => require(['@/components/pages/main'], resolve)
 const Indexlist =  resolve => require(['@/components/pages/index'], resolve)
-  const Zizhu =  resolve => require(['@/components/pages/zizhu'], resolve)
-  const Wuyou =  resolve => require(['@/components/pages/wuyou'], resolve)
-  const Indent =  resolve => require(['@/components/pages/indent'], resolve)
-  const IndentMsg =  resolve => require(['@/components/pages/indentMsg'], resolve)
+  const Zizhu   =  resolve => require(['@/components/pages/zizhu'], resolve)
+  const Wuyou   =  resolve => require(['@/components/pages/wuyou'], resolve)
+  const Indent  =  resolve => require(['@/components/pages/indent'], resolve)
+  const IndentMain =  resolve => require(['@/components/pages/indentMsg'], resolve)
   const Schedule =  resolve => require(['@/components/pages/schedule'], resolve)
   const Detail =  resolve => require(['@/components/pages/detail'], resolve)
 
-
-
-
-
-
 Vue.use(Router)
-// 
 
 const router = new Router({
   mode:'hash',
   // mode: 'history',
   routes: [    
     {path: '/login',name: 'Login',component: Login },
-    {path: '/',component: Indexlist, //在子视图有默认界面时，父视图不需要那么属性
+    {path: '/',component: Indexlist, //在子视图有默认界面时，父视图不需要name属性
       children:[
-            {path: "", name: "Main", component:Main, },
-            {path: "zizhu",name: "Zizhu",component:Zizhu},
-            {path: "wuyou",name: "Wuyou",component:Wuyou},
+            {path: "", name: "Main", component:Main, meta: {requiresAuth: true}},
+            {path: "zizhu",name: "Zizhu",component:Zizhu, meta: {requiresAuth: true}},
+            {path: "wuyou",name: "Wuyou",component:Wuyou, meta: {requiresAuth: true}},
             {path: "indent",component:Indent,
                     children: [
-                        {path: "",name: "IndentMsg",component:IndentMsg},
-                        {path: "schedule/:order_id",name: "Schedule", component:Schedule, props: true},
-                        {path: "detail/:order_id",name: "Detail",  component:Detail, props: true}
+                        {path: "",name: "IndentMain",component:IndentMain, meta: {requiresAuth: true}},
+                        {path: "schedule/:order_id",name: "Schedule", component:Schedule, meta: {requiresAuth: true}, props: true},
+                        {path: "detail/:order_id",name: "Detail",  component:Detail,meta: {requiresAuth: true}, props: true}
                     ]
             }
       ]
@@ -54,14 +47,20 @@ const router = new Router({
   ],
 })
 
-router.beforeEach(function (to, from, next) {
+router.beforeEach((to, from, next) => {
   window.scrollTo(0,0)
-  console.log(Vue.cookies.get('yiyiphone'))
-  if( to.path != '/login' && !Vue.cookies.get('yiyiphone') ){
-    console.log('yiyiphone')
-    next({path: "/login"})
-  }else{   
-    next()
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!Vue.cookies.get('yiyiphone')) {
+      next({
+        path: '/login'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // 确保一定要调用 next()
   }
 })
 

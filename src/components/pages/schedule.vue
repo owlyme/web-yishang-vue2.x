@@ -104,7 +104,8 @@
 		methods:{
 		    getSchedule(id){
 		      	this.Schedule({order_id: id }).then((res)=>{
-		      		res.data = this.Schedule11 
+		      		console.log('schedule')
+		      		// res.data = this.Schedule11 
 		          if(res.data.status == 200){
 		          	this.$set(this.selectSchedule,'details',res.data.content.details)
 		          	this.$set(this.selectSchedule,'history',res.data.content.history) 

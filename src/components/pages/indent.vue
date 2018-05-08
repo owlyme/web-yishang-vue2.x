@@ -2,16 +2,19 @@
 	<div id="indent">		
 		<div class="container">
 			<div class="bg-white">
-			<div class="nav-schedule-details el-menu-demo clearfix" 
-				v-if='!computedListView'>
-				<ul>
-					<router-link :to="{name:'Schedule', params: { order_id: getCurrentOrderID }}">订单进度</router-link>
-					<router-link :to="{name:'Detail', params: { order_id: getCurrentOrderID }}">订单详情</router-link>
-				</ul>
+				<div v-if='!computedListView'>
+					<div class="nav-schedule-details el-menu-demo clearfix">
+						<ul>
+							<router-link :to="{name:'Schedule', params: { order_id: getCurrentOrderID }}">订单进度</router-link>
+							<router-link :to="{name:'Detail', params: { order_id: getCurrentOrderID }}">订单详情</router-link>
+						</ul>
+					</div>
+					<keep-alive><router-view/></keep-alive>
+				</div>
+				<div v-else>
+					<router-view/>
+				</div>			
 			</div>
-			
-			<router-view/>
-		</div>
 		</div>
 	</div>
 </template>
@@ -22,7 +25,7 @@
 			return{	
 				indentMessage: true,
 			}
-		},
+		},		
 		computed:{
 			...mapGetters(['getCurrentOrderID']),
 			computedListView() {

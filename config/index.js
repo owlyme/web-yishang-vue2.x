@@ -11,21 +11,19 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        // '/api': {
-        //             target: 'http://101.132.187.244:8082',   
-        //             changeOrigin: true,
-        //             pathRewrite: { '^/api': '' } 
-        //         }
-        '/api': {
-        target: 'http://jsonplaceholder.typicode.com',
-        pathRewrite: { '^/api': ''}
-        }
+         "/" : {
+                target: 'http://ii.ysintelligent.com',
+                changeOrigin: true,
+                pathRewrite: {
+                  '/': '/'
+                }
+         }
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: false,
+    autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-

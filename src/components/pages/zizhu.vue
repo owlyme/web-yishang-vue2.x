@@ -86,6 +86,7 @@ export default {
 	  ])      
 	},
 	beforeCreate(){
+		console.log("beforeCreate")
     	this.BeforeReceipt().then( (res)=>{
 	        if(res.data.status ==200){
 	          }else {
@@ -101,7 +102,7 @@ export default {
 		this.getReceipt()
 	},
 	mounted(){
-		this.fadan('zizhu')
+		// this.fadan('zizhu')
 		this.windowSize()		
 	},
 	methods:{

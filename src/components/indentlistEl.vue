@@ -45,11 +45,9 @@
 	    },
 		methods:{
 			view(goodsMsg){
-				console.log('to indent ')
 				if( goodsMsg.status == -1 ){
 					this.toEdit(goodsMsg)
 				}else{
-					console.log('to indent children')
 					this.$emit('change', goodsMsg.uid)
 				}
 			},

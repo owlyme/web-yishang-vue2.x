@@ -21,11 +21,17 @@
           </el-col>
           <el-col :span="20">
               <div class="link-nav">
-                <div class="nav-h clearfix">
+                <div class="nav-h clearfix"><!-- 
                     <span id="mainpage" class="muneNav"  @click="link('/')" >首页</span>
                     <span id="zizhupage" class="muneNav" @click="link('/zizhu')" >自主发单</span>
                     <span id="wuyoupage"  class="muneNav" @click="link('/wuyou')" >无忧发单</span>
-                    <span id="indentpage" class="muneNav" @click="link('/indent')" >我的订单</span>
+                    <span id="indentpage" class="muneNav" @click="link('/indent')" >我的订单</span> -->
+
+
+                    <router-link v-for="(item, index) in navlist " 
+                                 :key = "'nav' + index"
+                      :to="{path: item.path}">{{item.title}}</router-link>
+          
                 </div>                
               </div>
           </el-col>

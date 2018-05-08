@@ -17,7 +17,7 @@
 	  <el-col :span="19">
 	  		<div class="myIndent">{{contentTitle}}</div>
 	  		<div v-if="goodsList.length" v-for="(item,index) in goodsList" :key="index+'indent'">
-	  			<IndentList :goodsMsg="item" v-on:change="switchBlock(item.order_id)"></IndentList>
+	  			<IndentList :goodsMsg="item" v-on:change="routerToSchedule(item.order_id)"></IndentList>
 	  		</div>
 	  </el-col>
 	</el-row>
@@ -47,7 +47,7 @@
 	import { mapGetters } from 'vuex'
 	import { mapMutations } from 'vuex'
 	export default{
-		name: 'indent1',
+		name: 'IndentMain',
 		components:{ IndentList},
 		data(){
 			return{
@@ -96,8 +96,10 @@
 		   		currentPage: 1
 			}
 		},
+		
 		mounted(){
-			this.fadan('indent');
+			console.log('mounted')
+			// sthis.fadan('indent');
 			this.getMainlist({status: 'x'});
 		},
 		watch:{
@@ -117,7 +119,7 @@
 		    ]),
 		    getMainlist(args){
 		      this.Index(args).then((res)=>{
-		      	res.data = this.datas;
+		      	// res.data = this.datas;
 		      	console.log(res)
 		      	if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
@@ -125,14 +127,13 @@
 		            this.savedList =  res.data.content.list;
 		            this.goodsList = this.savedList.slice(0, this.savedList.length)
 		          }
-		          if(this.currentPage>1){
+		          // if(this.currentPage>1){
 		          	this.srcollTo( document.getElementById("listnavindent") )
-		          }   
+		          // }   
 		      	})  
 		    },
-		    switchBlock(uid){
+		    routerToSchedule(uid){
 		    	this.setCurrentOrderID(uid);
-		    	console.log('uid ', uid)
 		    	this.$router.push({ name: "Schedule",
 	    							params: { order_id: uid }
 	    						});
