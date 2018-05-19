@@ -1,48 +1,42 @@
 <template>
  <div class="bg">
-  <Popup v-if="popup" :popup.sync="popup"></Popup>
-  <!-- header -->
-  <div class="container head-height">
-     <div class="login-sucess clearfix">
-      <div class="fl"><span>欢迎登陆衣依供应链平台！</span></div>
-      <div class="fr back" @click="logOut">
-        <span class="logOut bg-icon"></span>退出登录
+    <Popup v-if="popup" :popup.sync="popup"></Popup>
+    <!-- header -->
+    <div class="container head-height">
+       <div class="login-sucess clearfix">
+        <div class="fl"><span>欢迎登陆衣依供应链平台！</span></div>
+        <div class="fr back" @click="logOut">
+          <span class="logOut bg-icon"></span>退出登录
+        </div>
       </div>
     </div>
-  </div>
-  <!-- nav -->
-  <div class="bg-white pages-nav  clearfix">
-    <div class="container">
-        <el-row >
-          <el-col :span="4" class="center">
-            <router-link to="/" >
-              <img class="avatarImg" :src="avatarSrc" />
-            </router-link> 
-          </el-col>
-          <el-col :span="20">
-              <div class="link-nav">
-                <div class="nav-h clearfix"><!-- 
-                    <span id="mainpage" class="muneNav"  @click="link('/')" >首页</span>
-                    <span id="zizhupage" class="muneNav" @click="link('/zizhu')" >自主发单</span>
-                    <span id="wuyoupage"  class="muneNav" @click="link('/wuyou')" >无忧发单</span>
-                    <span id="indentpage" class="muneNav" @click="link('/indent')" >我的订单</span> -->
-
-
-                    <router-link v-for="(item, index) in navlist " 
-                                 :key = "'nav' + index"
-                      :to="{path: item.path}">{{item.title}}</router-link>
-          
-                </div>                
-              </div>
-          </el-col>
-        </el-row>  
+    <!-- nav -->
+    <div class="bg-white pages-nav  clearfix">
+      <div class="container">
+          <el-row >
+            <el-col :span="4" class="center">
+              <router-link to="/" >
+                <img class="avatarImg" :src="avatarSrc" />
+              </router-link> 
+            </el-col>
+            <el-col :span="20">
+                <div class="link-nav">
+                  <div class="nav-h clearfix">
+                      <router-link class="muneNav"                    
+                                    v-for="(item, index) in navlist " 
+                                   :key = "'nav' + index"
+                        :to="{path: item.path}">{{item.title}}</router-link>
+                  </div>                
+                </div>
+            </el-col>
+          </el-row>  
+      </div>
     </div>
-  </div>
-  <div class="bg-white"> 
-    <!-- <keep-alive> <router-view/> </keep-alive>  -->
-    <router-view />
-  </div>
-  <Footerinfo/>
+    <div class="bg-white"> 
+      <!-- <keep-alive> <router-view/> </keep-alive>  -->
+      <router-view />
+    </div>
+    <Footerinfo/>
  </div>
 </template>
 
@@ -63,18 +57,16 @@ export default {
     }
   },
   beforeRouteUpdate (to, from, next) {
-    if( ['/zizhu', '/wuyou'].includes( to.path ) ){
-      this.BeforeReceipt().then( (res)=>{
-        next() // ------------------------------------------------------------
-        
-        // if(res.data.status ==200){
-        //     next()
-        //   }else {
-        //     this.switchPupop()
-        //     next(false)
-        //   }
-      })
-    }else{
+    if( ['/zizhu', '/wuyou'].includes( to.path ) ){      
+        this.BeforeReceipt().then( (res)=>{    
+          if(res.data.status ==200){
+              next()
+            }else {
+              this.switchPupop()
+              next(false)
+            }
+        })
+    } else {
       next()
     }
   },
@@ -112,7 +104,6 @@ export default {
     },
     link(page){      
       if(page == '/wuyou') this.closeBanks(false)
-      if(page == '/indent') this.setIndentBlock(true)
         this.$router.push(page)
     }
   }
@@ -198,5 +189,8 @@ export default {
   .isactive,
   .router-link-exact-active{
     color: #C44DDC;
+  }
+  .nav-h a.router-link-active:nth-child(4){
+     color: #C44DDC;
   }
 </style>

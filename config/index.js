@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-         "/" : {
+         "/api" : {
                 target: 'http://ii.ysintelligent.com',
                 changeOrigin: true,
                 pathRewrite: {
-                  '/': '/'
+                  '/api': '/'
                 }
          }
     },

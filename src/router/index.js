@@ -18,7 +18,7 @@ const Indexlist =  resolve => require(['@/components/pages/index'], resolve)
   const IndentMain =  resolve => require(['@/components/pages/indentMsg'], resolve)
   const Schedule =  resolve => require(['@/components/pages/schedule'], resolve)
   const Detail =  resolve => require(['@/components/pages/detail'], resolve)
-
+  const News = resolve => require(["@/components/pages/news"], resolve);
 Vue.use(Router)
 
 const router = new Router({
@@ -29,6 +29,7 @@ const router = new Router({
     {path: '/',component: Indexlist, //在子视图有默认界面时，父视图不需要name属性
       children:[
             {path: "", name: "Main", component:Main, meta: {requiresAuth: true}},
+            {path: "news",name: "News",component:News, meta: {requiresAuth: true}, props: true},
             {path: "zizhu",name: "Zizhu",component:Zizhu, meta: {requiresAuth: true}},
             {path: "wuyou",name: "Wuyou",component:Wuyou, meta: {requiresAuth: true}},
             {path: "indent",component:Indent,
@@ -47,6 +48,8 @@ const router = new Router({
   ],
 })
 
+
+const _VUE = new Vue();
 router.beforeEach((to, from, next) => {
   window.scrollTo(0,0)
   if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -57,7 +60,7 @@ router.beforeEach((to, from, next) => {
         path: '/login'
       })
     } else {
-      next()
+      next();
     }
   } else {
     next() // 确保一定要调用 next()

@@ -198,7 +198,7 @@
 			}
 		},
 		mounted(){
-			console.log('detail')
+			// console.log('detail')
 			this.getDetails(this.order_id);
 		},
 		computed:{
@@ -209,7 +209,6 @@
 		methods:{
 		    getDetails(id){
 			  this.Details({order_id: id }).then((res)=>{
-			  	// res.data = this.detail11 
 		          if(res.data.status == 200){
 		          		this.$set(this,'selectDetails', res.data.content)
 		          		this.isLoading = 0;         	

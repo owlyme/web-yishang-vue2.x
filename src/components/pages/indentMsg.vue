@@ -98,8 +98,6 @@
 		},
 		
 		mounted(){
-			console.log('mounted')
-			// sthis.fadan('indent');
 			this.getMainlist({status: 'x'});
 		},
 		watch:{
@@ -120,7 +118,7 @@
 		    getMainlist(args){
 		      this.Index(args).then((res)=>{
 		      	// res.data = this.datas;
-		      	console.log(res)
+		      	// console.log(res)
 		      	if(res.data.status == 200){
 		            this.perPage =  res.data.content.pageSize;
 		            this.totalRows = res.data.content.totalRows-0;

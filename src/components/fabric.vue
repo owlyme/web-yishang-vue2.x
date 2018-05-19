@@ -131,12 +131,12 @@ export default {
           })
         }
                  this.list.forEach((item,index)=>{
-                      console.log(item.grammage,item.width)
+                      // console.log(item.grammage,item.width)
           item.grammage = this.floatNum(item.grammage)
           item.width = this.floatNum(item.width)
           item.weight = this.floatNum(item.weight)
                     })
-                 console.log(this.list)
+                 // console.log(this.list)
         return this.list 
       }
     },
