@@ -332,3 +332,6 @@ border-radius: 50px 0 0 50px;
 .bg-white{
   background: #fff;
 }
+  .news img{
+    max-width: 100%;
+  }

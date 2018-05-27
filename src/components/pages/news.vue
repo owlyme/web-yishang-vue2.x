@@ -14,7 +14,7 @@
     <div class="isloading" v-if="isLoading">
       <div class="el-loading-spinner"><i class="el-icon-loading"></i><p class="el-loading-text">拼命加载中</p></div>
     </div>
-    <div v-else class="container">
+    <div v-else class="container news">
         <h2 class="title">
             <span><i>{{newsInfo.create_time}}</i></span> 
             {{newsInfo.title}} 
@@ -106,5 +106,8 @@ export default {
     position: relative;
     display: inline-block;
     transform: rotate(-13deg);
+  }
+  .news img{
+    width: 100%;
   }
 </style>
