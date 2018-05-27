@@ -35,6 +35,7 @@ export default {
     }
   },
   created(){
+    console.log(this.newsId);
     this.getNews({id: this.newsId})
         .then(res=> {
             if(res.data.status ==200){

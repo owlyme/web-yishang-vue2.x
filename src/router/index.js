@@ -1,14 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/login'
-// import Indexlist from '@/components/pages/index'
-// 	import Main from '@/components/pages/main'
-// 	import Zizhu from '@/components/pages/zizhu'
-// 	import Wuyou from '@/components/pages/wuyou'
-//  import Indent from '@/components/pages/indent'
-//  import IndentMain from '@/components/pages/IndentMain'
-// 	import Schedule from '@/components/pages/schedule'
-//  import Detail from '@/components/pages/detail'
+
 
 const Main      =  resolve => require(['@/components/pages/main'], resolve)
 const Indexlist =  resolve => require(['@/components/pages/index'], resolve)
@@ -29,7 +22,7 @@ const router = new Router({
     {path: '/',component: Indexlist, //在子视图有默认界面时，父视图不需要name属性
       children:[
             {path: "", name: "Main", component:Main, meta: {requiresAuth: true}},
-            {path: "news",name: "News",component:News, meta: {requiresAuth: true}, props: true},
+            {path: "news/:id",name: "News",component:News, meta: {requiresAuth: true}, props: true},
             {path: "zizhu",name: "Zizhu",component:Zizhu, meta: {requiresAuth: true}},
             {path: "wuyou",name: "Wuyou",component:Wuyou, meta: {requiresAuth: true}},
             {path: "indent",component:Indent,

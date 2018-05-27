@@ -18,8 +18,8 @@
             :key="'banners'+ index"                 
             :img-src="item.picture"
       > 
-        <a v-if="item.url.match('http')" :href="item.url" target="_blank" class="bannerLink"></a>
-        <router-link v-else  :to="{name:'News', params: { newsId: item.url.replace('news://','') }}" class="bannerLink"> </router-link>
+        <div @click="toNewspage( item.url )" class="bannerLink"></div>
+       <!--  <router-link v-else  :to="{name:'News', params: { newsId: item.url.replace('news://','') }}" class="bannerLink"> </router-link> -->
  
       </b-carousel-slide>
       <!-- :caption="item.title"     -->
@@ -51,6 +51,15 @@ export default {
     },
     onSlideEnd (slide) {
       this.sliding = false
+    },
+    toNewspage(url){
+
+      if(url.match('http')){
+        window.location.href= url;
+      } else {
+        let newsId= url.replace('news://','')
+        window.location.href = window.location.href+'news/'+newsId;
+      };
     }
   }
 }
