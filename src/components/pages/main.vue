@@ -11,7 +11,7 @@
         <el-row  >
           <el-col :span="12">
             <div class="grid-content bg-purple">
-              <a target="_blank" :href="newzhizhu" >
+              <a target="_blank" :href="newzizhu" >
                 <div class="zizhu-bg"></div>
                 <h4>自主发单</h4>
               </a>
@@ -63,7 +63,7 @@
       <!-- pagination -->
         <div class="container owlfater" >
           <!-- class="owl" -->
-         <b-row  class="owl" >
+         <b-row class="owl" >
             <b-col >
               <b-pagination   
               align="center"      
@@ -78,10 +78,9 @@
               </b-pagination>
               <span >共{{ Math.ceil( totalRows / perPage) }}页</span>
             </b-col> 
-         </b-row>  
+         </b-row>
   	   </div>
   </div>
-  
 </div>
 </template>
 <script>
@@ -136,7 +135,6 @@ export default{
 			totalRows: 1,
 			perPage : 1,
    		currentPage: 1,
-
       currentStatus: 'x',
    		goodsList:[],
       savedList:[],
@@ -145,14 +143,13 @@ export default{
 		}
 	},
   mounted(){ 
-    this.getBanner()
+    this.getBanner();  
     this.getMainlist({page: this.currentPage,status: 'x'})
-    this.fadan('main')
   },
   watch:{
     currentPage:{
       handler(curVal,oldVal){
-        this.getMainlist({page: curVal,status: this.currentStatus})        
+        this.getMainlist({page: curVal,status: this.currentStatus})
       },
       deep:true
     }
@@ -161,7 +158,7 @@ export default{
     ...mapGetters([
        'getPopup'
     ]),
-    newzhizhu(){
+    newzizhu(){
       return location.href + 'zizhu'
     },
     newwuyou(){

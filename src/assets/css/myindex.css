@@ -329,3 +329,9 @@ border-radius: 50px 0 0 50px;
   .router-link-exact-active{
     color: #C44DDC;
   }
+.bg-white{
+  background: #fff;
+}
+  .news img{
+    max-width: 100%;
+  }

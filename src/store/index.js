@@ -63,7 +63,8 @@ const state={
 				city: null,
 				county: null,
 				street: null
-	}
+	},
+	currentOrderID: null
 }
 
 const getters = {
@@ -93,7 +94,10 @@ const getters = {
 	},
 	getDraft(state){
 		return state.draft
-	}
+	},
+	getCurrentOrderID(state){
+		return state.currentOrderID
+	},
 }
 
 const mutations = {
@@ -107,7 +111,7 @@ const mutations = {
   Vue.set(state,'customer',info);
  },
  clearCustomer(state){
- 	Vue.set(state,'customer',{ avatar: null,id: null});
+ 	Vue.set(state,'customer',{ avatar: null, id: null});
  }, 
  switchPupop(state,val){
  	Vue.set(state,'popup', !state.popup);
@@ -117,6 +121,9 @@ const mutations = {
  },
  setDraft(state,val){
  	Vue.set(state,'draft', val);
+ },
+ setCurrentOrderID(state,val){
+	Vue.set(state,'currentOrderID',val || null )
  }
 }
 

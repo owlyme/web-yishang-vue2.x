@@ -98,7 +98,6 @@ export default{
 				ele = ele.offsetParent
 			} while ( ele.tagName !== 'BODY')
 			window.scrollTo(0, _top)
-			// setTimeout( function(){window.scrollTo(0, _top)} , 300)
 		}
 		Vue.prototype.totalTop = function(ele){
 			let _top=0;
@@ -131,23 +130,6 @@ export default{
 		Vue.prototype.OrderIndex = function(args){	return axios.post( Api.orderIndex, qs.stringify(args) ) };
 		Vue.prototype.Schedule = function(args){	return axios.post( Api.schedule, qs.stringify(args) ) };
 		Vue.prototype.Details = function(args){	return axios.post( Api.details, qs.stringify(args) ) };
-		Vue.prototype.fadan = function(page){
-			let zizhupage =  document.getElementById("zizhupage"),
-				mainpage =  document.getElementById("mainpage"),
-				indentpage =  document.getElementById("indentpage"),
-				wuyoupage = document.getElementById("wuyoupage"),
-				_classname = 'muneNav',
-				classname = 'muneNav isactive';
-
-			let pages = [mainpage, zizhupage, wuyoupage, indentpage]
-			let classes = [_classname, _classname, _classname, _classname]
-			if(page == 'main'){ classes[0] = classname }
-			if(page == 'zizhu'){ classes[1] = classname }
-			if(page == 'wuyou'){ classes[2] = classname }
-			if(page == 'indent'){ classes[3] = classname }
-			pages.forEach( (item, index)=>{
-				item.className= classes[index]
-			})
-		}
+		Vue.prototype.getNews = function(args) { return axios.get(Api.news, qs.stringify(args)); };
 	}
 }

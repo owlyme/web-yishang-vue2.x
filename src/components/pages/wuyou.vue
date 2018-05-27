@@ -98,7 +98,7 @@ export default {
 	},
 	beforeCreate(){
     	this.BeforeReceipt().then( (res)=>{
-	        if(res.data.status ==200){		            
+	        if(res.data.status ==200){
 	        }else {
 	          	this.switchPupop()
 	            this.$router.push('/')
@@ -113,7 +113,6 @@ export default {
 		this.getpayfront()
 	}, 
   	mounted(){
-	  	this.fadan('wuyou');
 		this.fixed = this.windowSize()
 	},   
 	methods:{

@@ -101,7 +101,6 @@ export default {
 		this.getReceipt()
 	},
 	mounted(){
-		this.fadan('zizhu')
 		this.windowSize()		
 	},
 	methods:{

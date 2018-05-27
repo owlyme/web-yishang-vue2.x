@@ -17,9 +17,10 @@
             v-for="(item, index) in banners"
             :key="'banners'+ index"                 
             :img-src="item.picture"
-      >      
-        <a :href="item.url" class="bannerLink"></a>
-        
+      > 
+        <a v-if="item.url.match('http')" :href="item.url" target="_blank" class="bannerLink"></a>
+        <router-link v-else  :to="{name:'News', params: { newsId: item.url.replace('news://','') }}" class="bannerLink"> </router-link>
+ 
       </b-carousel-slide>
       <!-- :caption="item.title"     -->
       <!-- Text slides with image -->

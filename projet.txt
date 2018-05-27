@@ -43,3 +43,11 @@ http://ii.ysintelligent.com/
 　　3.    如果使用了vuex，则在vuex的index.ts文件中也要  import "babel-polyfill"，最好放在 import Vuex from 'vuex' 的前面
 
 watch   yu  computed de qubie 
+
+
+this.$router.push({ path: "Schedule", //path 会出错
+ 							params: { indentID: 73 }
+	    						});
+this.$router.push({ name: "Schedule", //name 没问题
+	    							params: { indentID: 73 }
+	    						});
