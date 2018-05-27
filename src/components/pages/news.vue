@@ -107,7 +107,5 @@ export default {
     display: inline-block;
     transform: rotate(-13deg);
   }
-  .news img{
-    width: 100%;
-  }
+
 </style>
