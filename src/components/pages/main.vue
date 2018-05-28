@@ -84,9 +84,13 @@
 </div>
 </template>
 <script>
-import Carousel from  "../carousel"
-import ListElemnt from "../listEl"
-import Popup from '../pop-up'
+// import Carousel from  "../carousel"
+// import ListElemnt from "../listEl"
+// import Popup from '../pop-up'
+const Carousel  =  () => import(/* webpackChunkName: "carousel" */ '../carousel')
+const ListElemnt  =  () => import(/* webpackChunkName: "listEl" */ '../listEl')
+const Popup  =  () => import(/* webpackChunkName: "popup" */ '../pop-up')
+
 import { mapGetters } from 'vuex'
 export default{
 	name: 'main',

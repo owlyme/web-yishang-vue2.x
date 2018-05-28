@@ -1,6 +1,6 @@
 <template>
 <div style="padding-top: 40px" id="footer">
-   <div class=" footer" >
+   <div class="footer" >
       <div class="foot-info">
         <span v-for="(item, index)  in certificate" :key="index">{{item}}</span>
       </div>
@@ -26,7 +26,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .footer{
   padding: 30px 0;
   background: #fff;

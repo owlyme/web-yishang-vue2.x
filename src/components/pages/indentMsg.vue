@@ -43,7 +43,8 @@
 </template>
 	
 <script>
-	import IndentList from "../indentlistEl"
+	// import IndentList from "../indentlistEl"
+	const IndentList =  () => import(/* webpackChunkName: "indentList" */ '../indentlistEl')
 	import { mapGetters } from 'vuex'
 	import { mapMutations } from 'vuex'
 	export default{

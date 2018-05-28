@@ -65,15 +65,26 @@
 </template>
 
 <script>
-import Sheet from "../workSheet"
-import ColorAndNumber from "../colorAndNumber"
-import Quality from "../quality"
-import Date from "../date"
-import Imgupload from "../imgupload"
-import Pay from "../payAndAddr"
-import Fabric from "../fabric"
-import About from "../about"
-import Banks from "../banks"
+// import Sheet from "../workSheet"
+// import ColorAndNumber from "../colorAndNumber"
+// import Quality from "../quality"
+// import Date from "../date"
+// import Imgupload from "../imgupload"
+// import Pay from "../payAndAddr"
+// import Fabric from "../fabric"
+// import About from "../about"
+// import Banks from "../banks"
+
+const Sheet  =  () => import(/* webpackChunkName: "workSheet" */ "../workSheet")
+const ColorAndNumber  =  () => import(/* webpackChunkName: "colorAndNumber" */ "../colorAndNumber")
+const Quality  =  () => import(/* webpackChunkName: "quality" */ "../quality")
+const Date  =  () => import(/* webpackChunkName: "date" */ "../date")
+const Imgupload =  () => import(/* webpackChunkName: "imgupload" */ "../imgupload")
+const Pay =  () => import(/* webpackChunkName: "payAndAddr" */ "../payAndAddr")
+const Fabric =  () => import(/* webpackChunkName: "fabric" */ "../fabric")
+const About =  () => import(/* webpackChunkName: "about" */ "../about")
+const Banks =  () => import(/* webpackChunkName: "banks" */ "../banks")
+
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 
@@ -97,6 +108,7 @@ export default {
 		])
 	},
 	beforeCreate(){
+		console.log(1231312312312)
     	this.BeforeReceipt().then( (res)=>{
 	        if(res.data.status ==200){
 	        }else {

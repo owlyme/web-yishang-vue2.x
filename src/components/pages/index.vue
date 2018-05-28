@@ -41,8 +41,10 @@
 </template>
 
 <script>
-import Footerinfo from "../footer"
-import Popup from '../pop-up'
+// import Footerinfo from "../footer"
+const Footerinfo  =  () => import(/* webpackChunkName: "footer" */ '../footer')
+const Popup  =  () => import(/* webpackChunkName: "popup" */ '../pop-up')
+// import Popup from '../pop-up'
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 export default {

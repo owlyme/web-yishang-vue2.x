@@ -3,15 +3,26 @@ import Router from 'vue-router'
 import Login from '@/components/login/login'
 
 
-const Main      =  resolve => require(['@/components/pages/main'], resolve)
-const Indexlist =  resolve => require(['@/components/pages/index'], resolve)
-  const Zizhu   =  resolve => require(['@/components/pages/zizhu'], resolve)
-  const Wuyou   =  resolve => require(['@/components/pages/wuyou'], resolve)
-  const Indent  =  resolve => require(['@/components/pages/indent'], resolve)
-  const IndentMain =  resolve => require(['@/components/pages/indentMsg'], resolve)
-  const Schedule =  resolve => require(['@/components/pages/schedule'], resolve)
-  const Detail =  resolve => require(['@/components/pages/detail'], resolve)
-  const News = resolve => require(["@/components/pages/news"], resolve);
+// const Main      =  resolve => require(['@/components/pages/main'], resolve)
+// const Indexlist =  resolve => require(['@/components/pages/index'], resolve)
+//   const Zizhu   =  resolve => require(['@/components/pages/zizhu'], resolve)
+//   const Wuyou   =  resolve => require(['@/components/pages/wuyou'], resolve)
+//   const Indent  =  resolve => require(['@/components/pages/indent'], resolve)
+//   const IndentMain =  resolve => require(['@/components/pages/indentMsg'], resolve)
+//   const Schedule =  resolve => require(['@/components/pages/schedule'], resolve)
+//   const Detail =  resolve => require(['@/components/pages/detail'], resolve)
+//   const News = resolve => require(["@/components/pages/news"], resolve);
+
+
+const Main      =  () => import(/* webpackChunkName: "main" */ '@/components/pages/main')
+const Indexlist =  () => import(/* webpackChunkName: "index" */ '@/components/pages/index')
+  const Zizhu   =  () => import(/* webpackChunkName: "zizhu" */ '@/components/pages/zizhu')
+  const Wuyou   =  () => import(/* webpackChunkName: "wuyou" */ '@/components/pages/wuyou')
+  const Indent  =  () => import(/* webpackChunkName: "indent" */ '@/components/pages/indent')
+  const IndentMain =  () => import(/* webpackChunkName: "indentmain" */ '@/components/pages/indentMsg')
+  const Schedule =  () => import(/* webpackChunkName: "schedule" */ '@/components/pages/schedule')
+  const Detail =  () => import(/* webpackChunkName: "detail" */ '@/components/pages/detail')
+  const News = () => import(/* webpackChunkName: "news" */ "@/components/pages/news");
 Vue.use(Router)
 
 const router = new Router({
@@ -42,7 +53,7 @@ const router = new Router({
 })
 
 
-const _VUE = new Vue();
+
 router.beforeEach((to, from, next) => {
   window.scrollTo(0,0)
   if (to.matched.some(record => record.meta.requiresAuth)) {

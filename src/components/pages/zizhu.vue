@@ -55,14 +55,25 @@
 </template>
 
 <script>
-import Sheet from "../workSheet"
-import ColorAndNumber from "../colorAndNumber"
-import Quality from "../quality"
-import Date from "../date"
-import Imgupload from "../imgupload"
-import Pay from "../payAndAddr"
-import Fabric from "../fabric"
-import About from "../about"
+// import Sheet from "../workSheet"
+// import ColorAndNumber from "../colorAndNumber"
+// import Quality from "../quality"
+// import Date from "../date"
+// import Imgupload from "../imgupload"
+// import Pay from "../payAndAddr"
+// import Fabric from "../fabric"
+// import About from "../about"
+
+
+const Sheet  =  () => import(/* webpackChunkName: "workSheet" */ "../workSheet")
+const ColorAndNumber  =  () => import(/* webpackChunkName: "colorAndNumber" */ "../colorAndNumber")
+const Quality  =  () => import(/* webpackChunkName: "quality" */ "../quality")
+const Date  =  () => import(/* webpackChunkName: "date" */ "../date")
+const Imgupload =  () => import(/* webpackChunkName: "imgupload" */ "../imgupload")
+const Pay =  () => import(/* webpackChunkName: "payAndAddr" */ "../payAndAddr")
+const Fabric =  () => import(/* webpackChunkName: "fabric" */ "../fabric")
+const About =  () => import(/* webpackChunkName: "about" */ "../about")
+
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 

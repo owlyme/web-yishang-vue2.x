@@ -74,9 +74,9 @@
 </template>
 
 <script>
-import Footerinfo from "../footer"
+// import Footerinfo from "../footer"  
+const Footerinfo  =  () => import(/* webpackChunkName: "footer" */ '../footer')
 import { mapMutations } from 'vuex'
-
 export default {
   name: 'login',
   components: { Footerinfo },
