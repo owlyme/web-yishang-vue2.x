@@ -3,15 +3,6 @@ import Router from 'vue-router'
 import Login from '@/components/login/login'
 
 
-// const Main      =  resolve => require(['@/components/pages/main'], resolve)
-// const Indexlist =  resolve => require(['@/components/pages/index'], resolve)
-//   const Zizhu   =  resolve => require(['@/components/pages/zizhu'], resolve)
-//   const Wuyou   =  resolve => require(['@/components/pages/wuyou'], resolve)
-//   const Indent  =  resolve => require(['@/components/pages/indent'], resolve)
-//   const IndentMain =  resolve => require(['@/components/pages/indentMsg'], resolve)
-//   const Schedule =  resolve => require(['@/components/pages/schedule'], resolve)
-//   const Detail =  resolve => require(['@/components/pages/detail'], resolve)
-//   const News = resolve => require(["@/components/pages/news"], resolve);
 
 
 const Main      =  () => import(/* webpackChunkName: "main" */ '@/components/pages/main')
